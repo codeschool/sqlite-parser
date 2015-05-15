@@ -1,6 +1,6 @@
 # Milestones for sql-query-parser
 
-- [ ] **[0.0.1]** In progress
+- [ ] **[0.1.0]** In progress
   - [ ] Basic query types `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `DROP`, `CREATE`, etc...
     - [ ] `SELECT`
     - [ ] `INSERT`
