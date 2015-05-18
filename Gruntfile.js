@@ -3,7 +3,7 @@ module.exports = function(grunt) {
     copy: {
       main: {
         files: [{
-          src: ['src/sql-grammar-codex.js'. 'src/sql-parser-util.js'],
+          src: ['src/sql-grammar-codex.js', 'src/sql-parser-util.js'],
           dest: 'lib/'
         }]
       }
