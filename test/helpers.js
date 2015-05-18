@@ -1,7 +1,7 @@
 var expect            = require('chai').expect,
     fs                = require('fs'),
     _                 = require('lodash'),
-    sqlQueryParser  = require('../index'),
+    sqlQueryParser  = require('../lib/index'),
     prettyjson        = require('prettyjson'),
     format, broadcast, isDefined, getTree, assertOkTree, assertErrorTree;
 

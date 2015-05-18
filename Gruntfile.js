@@ -1,11 +1,20 @@
 module.exports = function(grunt) {
   grunt.initConfig({
+    copy: {
+      main: {
+        files: [{
+          src: ['src/sql-grammar-codex.js'. 'src/sql-parser-util.js'],
+          dest: 'lib/'
+        }]
+      }
+    },
+    clean: ['lib'],
     shell: {
       pegjs: {
         options: {
           failOnError: true
         },
-        command: './node_modules/.bin/pegjs src/sql-grammar.pegjs src/sql-parser.js'
+        command: './node_modules/.bin/pegjs src/sql-grammar.pegjs lib/sql-parser.js'
       },
       test: {
         options: {
@@ -32,8 +41,10 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
-  grunt.registerTask('default', ['shell:pegjs']);
+  grunt.registerTask('default', ['shell:pegjs', 'copy:main']);
   grunt.registerTask('test', ['default', 'shell:test']);
   grunt.registerTask('debug', ['default', 'shell:debug', 'watch:debug']);
 };

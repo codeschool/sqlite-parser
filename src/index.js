@@ -1,4 +1,4 @@
-var sqlParser = require('./src/sql-parser'),
+var sqlParser = require('./sql-parser'),
     toStr = function (f) {
       return Object.prototype.toString.call(f);
     };
