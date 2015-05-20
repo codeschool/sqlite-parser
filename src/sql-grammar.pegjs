@@ -12,18 +12,191 @@
 
 /* Start Grammar */
 start
-  = s:(stmt)*
+  = s:( stmt )*
   {
     return {
       'statement': s
     };
   }
 
-expression
-  = _TODO_
+/**
+ * Expression definition reworked without left recursion for pegjs
+ * {@link https://www.sqlite.org/lang_expr.html}
+ */
+expression "Expression"
+  = expression_value
+  / expression_node
 
-expression_list
-  = expression ( comma expression )*
+expression_value
+  = literal_value
+  / bind_parameter
+  / id_column
+  / operation_binary
+  / function_call
+  / ( sym_open expression_node sym_close )
+  / expression_unary
+  / expression_cast
+  / expression_exists
+  / expression_case
+  / expression_raise
+
+expression_unary
+  = operator_unary expression
+
+expression_cast
+  = CAST sym_open expression AS name_type sym_close
+
+expression_exists
+  = ( ( NOT )? EXISTS )? stmt_select
+
+expression_case
+  = CASE ( expression )? ( WHEN expression THEN expression )+ ( ELSE expression )? END
+
+expression_raise
+  = RAISE sym_open ( IGNORE / ( ( ROLLBACK / ABORT / FAIL ) sym_comma error_message ) ) sym_close
+
+/* Expression Nodes */
+expression_node
+  = expression_collate
+  / expression_compare
+  / expression_null
+  / expression_is
+  / expression_between
+  / expression_in
+
+/** @note Removed expression on left-hand-side to remove recursion */
+expression_collate
+  = expression_value COLLATE name_collation
+
+/** @note Removed expression on left-hand-side to remove recursion */
+expression_compare
+  = expression_value ( NOT )? ( LIKE / GLOB / REGEXP / MATCH ) expression ( ESCAPE expression )?
+
+/** @note Removed expression on left-hand-side to remove recursion */
+expression_null
+  = expression_value ( ISNULL / NOTNULL / ( NOT NULL ) )
+
+/** @note Removed expression on left-hand-side to remove recursion */
+expression_is
+  = expression_value IS ( NOT )? expression
+
+/** @note Removed expression on left-hand-side to remove recursion */
+expression_between
+  = expression_value ( NOT )? BETWEEN expression AND expression
+
+/** @note Removed expression on left-hand-side to remove recursion */
+expression_in
+  = expression_value ( NOT )? IN ( ( sym_open ( stmt_select / expression_list ) sym_close ) / ( id_table ) )
+
+/**
+ * Literal value definition
+ * {@link https://www.sqlite.org/syntax/literal-value.html}
+ */
+literal_value "Literal Value"
+  = literal_number
+  / literal_string
+  / literal_blob
+  / NULL
+  / ( CURRENT_DATE / CURRENT_TIMESTAMP / CURRENT_TIME )
+
+/**
+ * Notes:
+ *    1) SQL uses single quotes for string literals.
+ *    2) Value is an identier or a string literal based on context.
+ * {@link https://www.sqlite.org/lang_keywords.html}
+ */
+literal_string
+  = literal_string_single
+
+literal_string_single
+  = sym_sglquote s:( literal_string_schar )* sym_sglquote
+  { return _u.textNode(s); }
+
+literal_string_schar
+  = ( "''" ) / ( [^\'] )
+
+literal_blob
+  = [x]i literal_string_single
+
+literal_number
+  = literal_number_decimal
+  / literal_number_hex
+
+literal_number_decimal
+  = ( ( ( number_digit )* ( sym_dot ( number_digit )* )? ) / ( sym_dot ( number_digit )+ ) ) ( "E" ( [\+\-] )? ( number_digit )+ )?
+
+literal_number_hex
+  = "0x"i ( number_hex )*
+
+number_hex
+  = [0-9a-f]i
+
+number_digit
+  = [0-9]
+
+/**
+ * Bind Parameters have several syntax variations:
+ * 1) "?" ( [0-9]+ )?
+ * 2) [\$\@\:] name_char+
+ * {@link https://www.sqlite.org/c3ref/bind_parameter_name.html}
+ */
+bind_parameter "Bind Parameter"
+  = bind_parameter_numbered
+  / bind_parameter_named
+  / bind_parameter_tcl
+
+/**
+ * Bind parameters start at index 1 instead of 0.
+ */
+bind_parameter_numbered
+  = sym_quest id:( [1-9] [0-9]* )? o
+  {
+    return {
+      'type': 'variable',
+      'format': 'numbered',
+      'suffix': null,
+      'name': ( _u.isOkay(id) ? parseInt(_u.textNode(id), 10) : null )
+    };
+  }
+
+bind_parameter_named
+  = [\:\@] name:( name_char )+ o
+  {
+    return {
+      'type': 'variable',
+      'format': 'named',
+      'suffix': null,
+      'name': _u.textNode(name)
+    };
+  }
+
+bind_parameter_tcl
+  = "$" name:( name_char / [\:] )+ o suffix:( bind_parameter_named_suffix )?
+  {
+    return {
+      'type': 'variable',
+      'format': 'tcl',
+      'suffix': suffix,
+      'name': _u.textNode(name)
+    };
+  }
+
+bind_parameter_named_suffix
+  = sym_dblquote n:( !sym_dblquote any )* sym_dblquote
+  { return _u.textNode(n); }
+
+operation_binary
+  = expression operator_binary expression
+
+expression_list "Expression List"
+  = expression ( sym_comma expression )*
+
+function_call
+  = name_function sym_open ( ( ( DISTINCT )? expression_list ) / ( select_sym_star ) )? sym_close
+
+error_message "Error Message"
+  = s:( literal_string )
+  { return _u.textNode(s); }
 
 stmt "Statement"
   = stmt_crud
@@ -34,10 +207,10 @@ stmt_crud
   = clause_with? stmt_crud_types
 
 clause_with "WITH Clause"
-  = WITH ( RECUSRIVE )? table_expression ( comma expression_table )*
+  = WITH ( RECURSIVE )? expression_table ( sym_comma expression_table )*
 
-expression_table
-  = name_table ( paren_open name_column ( comma name_column )* paren_close )? AS stmt_select
+expression_table "Table Expression"
+  = name_table ( sym_open name_column ( sym_comma name_column )* sym_close )? AS stmt_select
 
 stmt_crud_types
   = stmt_select
@@ -49,7 +222,7 @@ stmt_crud_types
 stmt_select "SELECT Statement"
   = select_loop
   ( ORDER BY select_order )?
-  ( LIMIT expression ( ( OFFSET / comma ) expression )? )?
+  ( LIMIT expression ( ( OFFSET / sym_comma ) expression )? )?
 
 select_loop
   = select_parts operator_compound
@@ -58,10 +231,75 @@ select_parts
   = select_parts_core
   / select_parts_values
 
-operator_compound
+operator_compound "Compound Operator"
   = ( UNION ( ALL )? )
   / INTERSECT
   / EXCEPT
+
+operator_unary "Unary Operator"
+  = sym_tilde
+  / sym_minus
+  / sym_plus
+  / NOT
+
+operator_binary "Binary Operator"
+  = binary_concat
+  / ( binary_multiply / binary_mod )
+  / ( binary_plus / binary_minus )
+  / ( binary_left / binary_right / binary_and / binary_or )
+  / ( binary_lt / binary_lte / binary_gt / binary_gte )
+  / ( binary_assign / binary_equal / binary_notequal / ( IS ( NOT )? ) / IN / LIKE / GLOB / MATCH / REGEXP )
+  / AND
+  / OR
+
+binary_concat "Or"
+  = sym_pipe sym_pipe
+
+binary_plus "Add"
+  = sym_plus
+
+binary_minus "Subtract"
+  = sym_minus
+
+binary_multiply "Multiply"
+  = sym_star
+
+binary_mod "Modulo"
+  = sym_mod
+
+binary_left "Shift Left"
+  = binary_lt binary_lt
+
+binary_right "Shift Right"
+  = binary_gt binary_gt
+
+binary_and "Logical AND"
+  = sym_amp
+
+binary_or "Logical OR"
+  = sym_pipe
+
+binary_lt "Less Than"
+  = sym_lt
+
+binary_gt "Greater Than"
+  = sym_gt
+
+binary_lte "Less Than Or Equal"
+  = binary_lt sym_equal
+
+binary_gte "Greater Than Or Equal"
+  = binary_gt sym_equal
+
+binary_assign "Assignment"
+  = sym_equal
+
+binary_equal "Equal"
+  = binary_assign binary_assign
+
+binary_notequal "Not Equal"
+  = ( sym_excl binary_equal )
+  / ( binary_lt binary_gt )
 
 select_parts_core
   = SELECT ( DISTINCT / ALL )? select_target
@@ -70,74 +308,95 @@ select_parts_core
   ( GROUP BY expression ( HAVING expression )? )?
 
 select_target
-  = _TODO_
+  = select_node ( sym_comma select_node )*
+
+select_node
+  = ( ( name_table sym_dot )? select_star )
+  / ( expression ( alias )? )
 
 select_source
   = select_source_loop
-  / select_source_join
+  / select_join_loop
 
 select_source_loop
-  = table_or_sub ( comma table_or_sub )*
+  = table_or_sub ( sym_comma table_or_sub )*
 
 table_or_sub
-  = table
-  / subquery
+  = ( ( id_table ( alias )? ) ( table_or_sub_index )? )
+  / ( sym_open ( select_source_loop / select_join_loop ) sym_close )
 
-table
-  = _TODO_
+table_or_sub_index
+  = ( INDEXED BY name_index )
+  / ( NOT INDEXED )
 
-subquery
-  = _TODO_
+alias
+  = AS name
 
-select_source_join
-  = table_or_sub ( join_operator table_or_sub ( join_condition )? )?
+select_join_loop
+  = table_or_sub ( select_join_clause )*
+
+select_join_clause
+  = join_operator table_or_sub ( join_condition )?
 
 join_operator
   = ( NATURAL )? ( ( LEFT ( OUTER )? ) / INNER / CROSS )? JOIN
 
 join_condition
   = ( ON expression )
-  / ( USING name_column ( comma name_column )* )
+  / ( USING name_column ( sym_comma name_column )* )
 
 select_parts_values
-  = VALUES paren_open expression_list paren_close
+  = VALUES sym_open expression_list sym_close
 
 select_order
   = expression ( COLLATE id_collation )? (ASC / DESC)?
+
+select_star "All Columns"
+  = binary_star
 
 id_database
   = name_database
 
 id_table
-  = ( id_database dot)? name_table
+  = ( id_database sym_dot )? name_table
 
 id_column
-  = ( id_table dot)? name_column
+  = ( id_table sym_dot )? name_column
 
 id_collation
   = name_collation
 
 /* TODO: FIX all name_* symbols */
-name_database
+name_database "Database Name"
   = name
 
-name_table
+name_table "Table Name"
   = name
 
-name_column
+name_column "Column Name"
   = name
 
-name_collation
+name_collation "Collation Name"
+  = name
+
+name_index "Index Name"
+  = name
+
+name_function "Function Name"
+  = name
+
+name_type "Type Name"
   = name
 
 /** {@link https://www.sqlite.org/lang_insert.html} */
 stmt_insert "INSERT Statement"
   = ( ( INSERT ( OR ( REPLACE / ROLLBACK / ABORT / FAIL / IGNORE ) )? ) / REPLACE )
-  ( INTO ( id_database / id_table ) ( open_paren name_column ( comma column_name )* close_paren )? )
+  ( INTO ( id_table ) ( sym_open name_column ( sym_comma name_column )* sym_close )? )
   insert_parts
 
+/* TODO: LEFT OFF HERE */
 insert_parts
-  = ( VALUES paren_open expression_list paren_close)
+  = ( VALUES sym_open expression_list sym_close)
   / ( stmt_select )
   / ( DEFAULT VALUES )
 
@@ -157,33 +416,76 @@ stmt_create "CREATE Statement"
 stmt_drop "DROP Statement"
   = any
 
+/* Naming rules */
+
+/* TODO: Replace me! */
+name_char
+  = [a-z0-9\-\_]i
+
+name
+  = name_bracketed
+  / name_backticked
+  / name_dblquoted
+  / name_unquoted
+
+name_unquoted
+  = n:( ( name_char+ ) ! reserved_words )
+  { return _u.textNode(n); }
+
+/** @note Non-standard legacy format */
+name_bracketed
+  = bracket_open o n:( name_unquoted ) o bracket_close
+  { return n; }
+
+name_dblquoted
+  = sym_dblquote n:( !sym_dblquote name_char )+ sym_dblquote
+  { return _u.textNode(n); }
+
+/** @note Non-standard legacy format */
+name_backticked
+  = quote_backtick n:( !quote_backtick name_char ) quote_backtick
+  { return _u.textNode(n); }
+
 /* Symbols */
-paren_open "Open Parenthesis"
+
+sym_open "Open Parenthesis"
   = "(" o
-paren_close "Close Parenthesis"
+sym_close "Close Parenthesis"
   = ")" o
-comma "Comma"
+sym_comma "Comma"
   = "," o
-dot "Period"
+sym_dot "Period"
   = "."
+sym_star "Asterisk"
+  = "*"
+sym_quest "Question Mark"
+  = "?"
+sym_sglquote "Single Quote"
+  = "'"
+sym_dblquote "Double Quote"
+  = '"'
+sym_tilde "Tilde"
+  = "~"
+sym_plus "Plus"
+  = "+"
+sym_minus "Minus"
+  = "-"
+sym_equal "Equal"
+  = "="
+sym_amp "Ampersand"
+  = "&"
+sym_pipe "Pipe"
+  = "|"
+sym_mod "Modulo"
+  = "%"
+sym_lt "Less Than"
+  = "<"
+sym_gt "Greater Than"
+  = ">"
+sym_excl "Exclamation"
+  = "!"
 
 /* Keywords */
-keywords
-  = ABORT / ACTION / ADD / AFTER / ALL / ALTER / ANALYZE / AND / AS / ASC /
-  ATTACH / AUTOINCREMENT / BEFORE / BEGIN / BETWEEN / BY / CASCADE / CASE /
-  CAST / CHECK / COLLATE / COLUMN / COMMIT / CONFLICT / CONSTRAINT / CREATE /
-  CROSS / CURRENT_DATE / CURRENT_TIME / CURRENT_TIMESTAMP / DATABASE / DEFAULT /
-  DEFERRABLE / DEFERRED / DELETE / DESC / DETACH / DISTINCT / DROP / EACH /
-  ELSE / END / ESCAPE / EXCEPT / EXCLUSIVE / EXISTS / EXPLAIN / FAIL / FOR /
-  FOREIGN / FROM / FULL / GLOB / GROUP / HAVING / IF / IGNORE / IMMEDIATE / IN /
-  INDEX / INDEXED / INITIALLY / INNER / INSERT / INSTEAD / INTERSECT / INTO /
-  IS / ISNULL / JOIN / KEY / LEFT / LIKE / LIMIT / MATCH / NATURAL / NO / NOT /
-  NOTNULL / NULL / OF / OFFSET / ON / OR / ORDER / OUTER / PLAN / PRAGMA /
-  PRIMARY / QUERY / RAISE / RECURSIVE / REFERENCES / REGEXP / REINDEX /
-  RELEASE / RENAME / REPLACE / RESTRICT / RIGHT / ROLLBACK / ROW / SAVEPOINT /
-  SELECT / SET / TABLE / TEMP / TEMPORARY / THEN / TO / TRANSACTION / TRIGGER /
-  UNION / UNIQUE / UPDATE / USING / VACUUM / VALUES / VIEW / VIRTUAL / WHEN /
-  WHERE / WITH / WITHOUT
 
 ABORT "ABORT Keyword"
   = "ABORT" e
@@ -434,16 +736,27 @@ WITH "WITH Keyword"
 WITHOUT "WITHOUT Keyword"
   = "WITHOUT" e
 
+reserved_words
+  = ABORT / ACTION / ADD / AFTER / ALL / ALTER / ANALYZE / AND / AS / ASC /
+  ATTACH / AUTOINCREMENT / BEFORE / BEGIN / BETWEEN / BY / CASCADE / CASE /
+  CAST / CHECK / COLLATE / COLUMN / COMMIT / CONFLICT / CONSTRAINT / CREATE /
+  CROSS / CURRENT_DATE / CURRENT_TIME / CURRENT_TIMESTAMP / DATABASE / DEFAULT /
+  DEFERRABLE / DEFERRED / DELETE / DESC / DETACH / DISTINCT / DROP / EACH /
+  ELSE / END / ESCAPE / EXCEPT / EXCLUSIVE / EXISTS / EXPLAIN / FAIL / FOR /
+  FOREIGN / FROM / FULL / GLOB / GROUP / HAVING / IF / IGNORE / IMMEDIATE / IN /
+  INDEX / INDEXED / INITIALLY / INNER / INSERT / INSTEAD / INTERSECT / INTO /
+  IS / ISNULL / JOIN / KEY / LEFT / LIKE / LIMIT / MATCH / NATURAL / NO / NOT /
+  NOTNULL / NULL / OF / OFFSET / ON / OR / ORDER / OUTER / PLAN / PRAGMA /
+  PRIMARY / QUERY / RAISE / RECURSIVE / REFERENCES / REGEXP / REINDEX /
+  RELEASE / RENAME / REPLACE / RESTRICT / RIGHT / ROLLBACK / ROW / SAVEPOINT /
+  SELECT / SET / TABLE / TEMP / TEMPORARY / THEN / TO / TRANSACTION / TRIGGER /
+  UNION / UNIQUE / UPDATE / USING / VACUUM / VALUES / VIEW / VIRTUAL / WHEN /
+  WHERE / WITH / WITHOUT
+
 /* Generic rules */
 
 any "Anything"
   = .
-
-/* TODO: Replace me! */
-name
-  = n:( name_char )+
-  ! keywords
-  { return textNode(n); }
 
 o "Optional Whitespace"
   = _*
