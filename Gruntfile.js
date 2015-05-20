@@ -3,12 +3,15 @@ module.exports = function(grunt) {
     copy: {
       main: {
         files: [{
-          src: ['src/sql-grammar-codex.js', 'src/sql-parser-util.js'],
+          filter: 'isFile',
+          expand: true,
+          cwd: 'src/',
+          src: ['*.js'],
           dest: 'lib/'
         }]
       }
     },
-    clean: ['lib'],
+    clean: ['lib/**'],
     shell: {
       pegjs: {
         options: {
