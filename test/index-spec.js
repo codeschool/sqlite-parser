@@ -4,6 +4,6 @@ var expect            = require('chai').expect
 describe('sql-query-parser', function() {
   it('basic select', function(done) {
     var resultTree = '{}';
-    tree.equals(this, done);
+    tree.ok(this, done);
   });
 });

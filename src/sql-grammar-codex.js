@@ -1,4 +1,4 @@
-var _u = require('./html-parser-util');
+var _u = require('./sql-parser-util');
 /**
  * Defaults for global settings
  * @param {Object} opts User options

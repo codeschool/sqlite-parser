@@ -430,7 +430,7 @@ name
   / name_unquoted
 
 name_unquoted
-  = n:( ( name_char+ ) ! reserved_words )
+  = n:( !reserved_words name_char )+
   { return _u.textNode(n); }
 
 /** @note Non-standard legacy format */
