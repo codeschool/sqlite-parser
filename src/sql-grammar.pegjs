@@ -25,15 +25,14 @@ start
  */
 expression "Expression"
   = expression_value
+  / ( sym_popen expression_node sym_pclose )
   / expression_node
 
 expression_value
   = literal_value
   / bind_parameter
   / id_column
-  / operation_binary
   / function_call
-  / ( sym_open expression_node sym_close )
   / expression_unary
   / expression_cast
   / expression_exists
@@ -44,7 +43,7 @@ expression_unary
   = operator_unary expression
 
 expression_cast
-  = CAST sym_open expression AS name_type sym_close
+  = CAST sym_popen expression AS name_type sym_pclose
 
 expression_exists
   = ( ( NOT )? EXISTS )? stmt_select
@@ -53,7 +52,7 @@ expression_case
   = CASE ( expression )? ( WHEN expression THEN expression )+ ( ELSE expression )? END
 
 expression_raise
-  = RAISE sym_open ( IGNORE / ( ( ROLLBACK / ABORT / FAIL ) sym_comma error_message ) ) sym_close
+  = RAISE sym_popen ( IGNORE / ( ( ROLLBACK / ABORT / FAIL ) sym_comma error_message ) ) sym_pclose
 
 /* Expression Nodes */
 expression_node
@@ -63,6 +62,7 @@ expression_node
   / expression_is
   / expression_between
   / expression_in
+  / operation_binary
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_collate
@@ -86,7 +86,7 @@ expression_between
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_in
-  = expression_value ( NOT )? IN ( ( sym_open ( stmt_select / expression_list ) sym_close ) / ( id_table ) )
+  = expression_value ( NOT )? IN ( ( sym_popen ( stmt_select / expression_list ) sym_pclose ) / ( id_table ) )
 
 /**
  * Literal value definition
@@ -185,14 +185,15 @@ bind_parameter_named_suffix
   = sym_dblquote n:( !sym_dblquote any )* sym_dblquote
   { return _u.textNode(n); }
 
+/** @note Removed expression on left-hand-side to remove recursion */
 operation_binary
-  = expression operator_binary expression
+  = expression_value operator_binary expression
 
 expression_list "Expression List"
   = expression ( sym_comma expression )*
 
 function_call
-  = name_function sym_open ( ( ( DISTINCT )? expression_list ) / ( select_sym_star ) )? sym_close
+  = name_function sym_popen ( ( ( DISTINCT )? expression_list ) / ( select_star ) )? sym_pclose
 
 error_message "Error Message"
   = s:( literal_string )
@@ -210,7 +211,7 @@ clause_with "WITH Clause"
   = WITH ( RECURSIVE )? expression_table ( sym_comma expression_table )*
 
 expression_table "Table Expression"
-  = name_table ( sym_open name_column ( sym_comma name_column )* sym_close )? AS stmt_select
+  = name_table ( sym_popen name_column ( sym_comma name_column )* sym_pclose )? AS stmt_select
 
 stmt_crud_types
   = stmt_select
@@ -323,7 +324,7 @@ select_source_loop
 
 table_or_sub
   = ( ( id_table ( alias )? ) ( table_or_sub_index )? )
-  / ( sym_open ( select_source_loop / select_join_loop ) sym_close )
+  / ( sym_popen ( select_source_loop / select_join_loop ) sym_pclose )
 
 table_or_sub_index
   = ( INDEXED BY name_index )
@@ -346,13 +347,13 @@ join_condition
   / ( USING name_column ( sym_comma name_column )* )
 
 select_parts_values
-  = VALUES sym_open expression_list sym_close
+  = VALUES sym_popen expression_list sym_pclose
 
 select_order
   = expression ( COLLATE id_collation )? (ASC / DESC)?
 
 select_star "All Columns"
-  = binary_star
+  = sym_star
 
 id_database
   = name_database
@@ -391,12 +392,12 @@ name_type "Type Name"
 /** {@link https://www.sqlite.org/lang_insert.html} */
 stmt_insert "INSERT Statement"
   = ( ( INSERT ( OR ( REPLACE / ROLLBACK / ABORT / FAIL / IGNORE ) )? ) / REPLACE )
-  ( INTO ( id_table ) ( sym_open name_column ( sym_comma name_column )* sym_close )? )
+  ( INTO ( id_table ) ( sym_popen name_column ( sym_comma name_column )* sym_pclose )? )
   insert_parts
 
 /* TODO: LEFT OFF HERE */
 insert_parts
-  = ( VALUES sym_open expression_list sym_close)
+  = ( VALUES sym_popen expression_list sym_pclose)
   / ( stmt_select )
   / ( DEFAULT VALUES )
 
@@ -434,7 +435,7 @@ name_unquoted
 
 /** @note Non-standard legacy format */
 name_bracketed
-  = bracket_open o n:( name_unquoted ) o bracket_close
+  = sym_bopen o n:( name_unquoted ) o sym_bclose
   { return n; }
 
 name_dblquoted
@@ -443,47 +444,53 @@ name_dblquoted
 
 /** @note Non-standard legacy format */
 name_backticked
-  = quote_backtick n:( !quote_backtick name_char ) quote_backtick
+  = sym_backtick n:( !sym_backtick name_char ) sym_backtick
   { return _u.textNode(n); }
 
 /* Symbols */
 
-sym_open "Open Parenthesis"
+sym_bopen "Open Bracket"
+  = "[" o
+sym_bclose "Close Bracket"
+  = "]" o
+sym_popen "Open Parenthesis"
   = "(" o
-sym_close "Close Parenthesis"
+sym_pclose "Close Parenthesis"
   = ")" o
 sym_comma "Comma"
   = "," o
 sym_dot "Period"
-  = "."
+  = "." o
 sym_star "Asterisk"
-  = "*"
+  = "*" o
 sym_quest "Question Mark"
-  = "?"
+  = "?" o
 sym_sglquote "Single Quote"
-  = "'"
+  = "'" o
 sym_dblquote "Double Quote"
-  = '"'
+  = '"' o
+sym_backtick "Backtick"
+  = "`" o
 sym_tilde "Tilde"
-  = "~"
+  = "~" o
 sym_plus "Plus"
-  = "+"
+  = "+" o
 sym_minus "Minus"
-  = "-"
+  = "-" o
 sym_equal "Equal"
-  = "="
+  = "=" o
 sym_amp "Ampersand"
-  = "&"
+  = "&" o
 sym_pipe "Pipe"
-  = "|"
+  = "|" o
 sym_mod "Modulo"
-  = "%"
+  = "%" o
 sym_lt "Less Than"
-  = "<"
+  = "<" o
 sym_gt "Greater Than"
-  = ">"
+  = ">" o
 sym_excl "Exclamation"
-  = "!"
+  = "!" o
 
 /* Keywords */
 
