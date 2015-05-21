@@ -25,8 +25,12 @@ start
  */
 expression "Expression"
   = expression_value
-  / ( sym_popen expression_node sym_pclose )
+  / expression_wrapped
   / expression_node
+
+expression_wrapped
+  = sym_popen n:( expression_node ) sym_pclose
+  { return n; }
 
 expression_value
   = literal_value
@@ -40,19 +44,109 @@ expression_value
   / expression_raise
 
 expression_unary
-  = operator_unary expression
+  = o:( operator_unary ) e:( expression )
+  {
+    return {
+      'type': 'expression',
+      'format': 'unary',
+      'variant': 'logical', // or { 'format': 'unary' }
+      'expression': e,
+      'modifier': o // TODO: could be { 'operator': o }
+    };
+  }
 
 expression_cast
-  = CAST sym_popen expression AS name_type sym_pclose
+  = CAST sym_popen e:( expression ) a:( alias ) sym_pclose
+  {
+    return {
+      'type': 'expression',
+      'format': 'unary',
+      'variant': 'cast',
+      'expression': e,
+      'modifier': a
+    };
+  }
 
 expression_exists
-  = ( ( NOT )? EXISTS )? stmt_select
+  = ( n:( NOT )? x:( EXISTS ) )? e:( stmt_select )
+  {
+    var mod = null, hasNot = _u.isOkay(n), hasExists = _u.isOkay(x);
+    if ( hasExists ) {
+      mod = ( hasNot ? 'NOT ' : '' ) + 'EXISTS';
+    }
+    return {
+      'type': 'expression',
+      'format': 'unary',
+      'variant': 'select',
+      'expression': e,
+      'modifier': mod
+    };
+  }
 
 expression_case
-  = CASE ( expression )? ( WHEN expression THEN expression )+ ( ELSE expression )? END
+  = CASE e:( expression )? w:( expression_case_when )+ s:( expression_case_else )? END
+  {
+    var cond = w;
+    if ( _u.isOkay(s) ) {
+      cond.push(s);
+    }
+    return {
+      'type': 'expression',
+      'format': 'binary', // TODO: Not sure about this
+      'variant': 'case',
+      'left': cond,
+      'right': e,
+      'modifier': null
+    };
+  }
+
+expression_case_when
+  = WHEN w:( expression ) THEN t:( expression )
+  {
+    return {
+      'type': 'condition',
+      'format': 'binary',
+      'variant': 'when',
+      'left': w,
+      'right': t,
+      'modifier': null
+    };
+  }
+
+expression_case_else
+  = ELSE e:( expression )
+  {
+    return {
+      'type': 'condition',
+      'format': 'else',
+      'expression': e,
+      'modifier': null
+    };
+  }
 
 expression_raise
-  = RAISE sym_popen ( IGNORE / ( ( ROLLBACK / ABORT / FAIL ) sym_comma error_message ) ) sym_pclose
+  = RAISE sym_popen a:( expression_raise_args ) sym_pclose
+  {
+    return {
+      'type': 'expression',
+      'format': 'unary',
+      'variant': 'raise',
+      'expression': a,
+      'modifier': null
+    };
+  }
+
+expression_raise_args
+  = raise_args_ignore
+  / raise_args_message
+
+raise_args_ignore
+  = f:( IGNORE )
+  { return _u.textNode(f); }
+
+raise_args_message
+  = f:( ROLLBACK / ABORT / FAIL ) sym_comma m:( error_message )
+  { return _u.textNode(f) + ', \'' + m + '\''; }
 
 /* Expression Nodes */
 expression_node
@@ -66,27 +160,120 @@ expression_node
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_collate
-  = expression_value COLLATE name_collation
+  = v:( expression_value ) COLLATE n:( name_collation )
+  {
+    return {
+      'type': 'expression',
+      'format': 'unary',
+      'variant': 'collate',
+      'expression': v,
+      'modifier': {
+        'type': 'name',
+        'name': n // TODO: could also be { 'name': n }
+      }
+    };
+  }
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_compare
-  = expression_value ( NOT )? ( LIKE / GLOB / REGEXP / MATCH ) expression ( ESCAPE expression )?
+  = v:( expression_value ) n:( NOT )? m:( LIKE / GLOB / REGEXP / MATCH ) e:( expression ) x:( expression_escape )?
+  {
+    return {
+      'type': 'expression',
+      'format': 'binary',
+      'variant': 'comparison',
+      'comparison': ( ( _u.isOkay(n) ? 'NOT ' : '' ) + _u.textNode(m) ),
+      'left': v,
+      'right': e,
+      'modifier': x
+    };
+  }
+
+expression_escape
+  = ESCAPE e:( expression )
+  {
+    return {
+      'type': 'expression',
+      'format': 'unary',
+      'variant': 'escape',
+      'expression': e,
+      'modifier': null
+    };
+  }
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_null
-  = expression_value ( ISNULL / NOTNULL / ( NOT NULL ) )
+  = v:( expression_value ) n:( ( IS / ( NOT o ) ) NULL )
+  {
+    return {
+      'type': 'expression',
+      'format': 'unary',
+      'variant': 'null',
+      'expression': v,
+      'modifier': _u.textNode(n)
+    };
+  }
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_is
-  = expression_value IS ( NOT )? expression
+  = v:( expression_value ) IS n:( NOT )? e:( expression )
+  {
+    return {
+      'type': 'expression',
+      'format': 'binary',
+      'variant': 'comparison',
+      'comparison': ( 'IS' + ( _u.isOkay(n) ? ' NOT' : '' ) ),
+      'left': v,
+      'right': e,
+      'modifier': null
+    };
+  }
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_between
-  = expression_value ( NOT )? BETWEEN expression AND expression
+  = v:( expression_value ) n:( NOT )? BETWEEN e1:( expression ) AND e2:( expression )
+  {
+    return {
+      'type': 'expression',
+      'format': 'binary',
+      'variant': 'comparison',
+      'comparison': ( ( _u.isOkay(n) ? ' NOT' : '' ) + 'BETWEEN' ),
+      'left': v,
+      'right': {
+        'type': 'expression',
+        'format': 'binary',
+        'variant': 'range',
+        'left': e1,
+        'right': e2,
+        'modifier': null
+      },
+      'modifier': null
+    };
+  }
+
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_in
-  = expression_value ( NOT )? IN ( ( sym_popen ( stmt_select / expression_list ) sym_pclose ) / ( id_table ) )
+  = v:( expression_value ) n:( NOT )? IN e:( expression_in_target )
+  {
+    return {
+      'type': 'expression',
+      'format': 'binary',
+      'variant': 'comparison',
+      'comparison': ( ( _u.isOkay(n) ? 'NOT ' : '' ) + 'IN' ),
+      'left': v,
+      'right': e,
+      'modifier': x
+    };
+  }
+
+expression_in_target
+  = expression_list_or_select
+  / id_table
+
+expression_list_or_select
+  = sym_popen e:( stmt_select / expression_list ) sym_pclose
+  { return e; }
 
 /**
  * Literal value definition
@@ -96,8 +283,28 @@ literal_value "Literal Value"
   = literal_number
   / literal_string
   / literal_blob
-  / NULL
-  / ( CURRENT_DATE / CURRENT_TIMESTAMP / CURRENT_TIME )
+  / literal_null
+  / literal_date
+
+literal_null
+  = n:( NULL )
+  {
+    return {
+      'type': 'literal',
+      'variant': 'keyword',
+      'value': _u.textNode(n)
+    };
+  }
+
+literal_date
+  = d:( CURRENT_DATE / CURRENT_TIMESTAMP / CURRENT_TIME )
+  {
+    return {
+      'type': 'literal',
+      'variant': 'keyword',
+      'value': _u.textNode(d)
+    };
+  }
 
 /**
  * Notes:
@@ -106,27 +313,56 @@ literal_value "Literal Value"
  * {@link https://www.sqlite.org/lang_keywords.html}
  */
 literal_string
-  = literal_string_single
+  = s:( literal_string_single )
+  {
+    return {
+      'type': 'literal',
+      'variant': 'string',
+      'value': _u.textNode(s)
+    };
+  }
 
 literal_string_single
   = sym_sglquote s:( literal_string_schar )* sym_sglquote
   { return _u.textNode(s); }
 
 literal_string_schar
-  = ( "''" ) / ( [^\'] )
+  = "''"
+  / [^\']
 
 literal_blob
-  = [x]i literal_string_single
+  = [x]i b:( literal_string_single )
+  {
+    return {
+      'type': 'literal',
+      'variant': 'blob',
+      'value': _u.textNode(b)
+    };
+  }
 
 literal_number
   = literal_number_decimal
   / literal_number_hex
 
 literal_number_decimal
-  = ( ( ( number_digit )* ( sym_dot ( number_digit )* )? ) / ( sym_dot ( number_digit )+ ) ) ( "E" ( [\+\-] )? ( number_digit )+ )?
+  = d:( ( ( number_digit )* ( sym_dot ( number_digit )* )? ) / ( sym_dot ( number_digit )+ ) ) e:( "E" ( [\+\-] )? ( number_digit )+ )?
+  {
+    return {
+      'type': 'literal',
+      'variant': 'decimal',
+      'value': _u.textNode(d) + ( _u.isOkay(e) ? _u.textNode(e) : '' )
+    };
+  }
 
 literal_number_hex
-  = "0x"i ( number_hex )*
+  = f:( "0x"i ) b:( number_hex )*
+  {
+    return {
+      'type': 'literal',
+      'variant': 'hexidecimal',
+      'value': _u.textNode(f) + ( _u.isOkay(b) ? _u.textNode(b) : '' )
+    };
+  }
 
 number_hex
   = [0-9a-f]i
@@ -187,17 +423,35 @@ bind_parameter_named_suffix
 
 /** @note Removed expression on left-hand-side to remove recursion */
 operation_binary
-  = expression_value operator_binary expression
+  = v:( expression_value ) o:( operator_binary ) e:( expression )
+  {
+    return {
+      'type': 'expression',
+      'format': 'binary',
+      'variant': 'operation',
+      'operation': o,
+      'left': v,
+      'right': e,
+      'modifier': null
+    };
+  }
 
 expression_list "Expression List"
-  = expression ( sym_comma expression )*
+  = f:( expression ) rest:( sym_comma expression )*
+  {
+    var first = [ f ];
+    return ( _u.isOkay(rest) ) ? first.concat(rest) : first;
+  }
+
+expression_list_rest
+  = sym_comma e:( expression )
+  { return e; }
 
 function_call
   = name_function sym_popen ( ( ( DISTINCT )? expression_list ) / ( select_star ) )? sym_pclose
 
 error_message "Error Message"
-  = s:( literal_string )
-  { return _u.textNode(s); }
+  = literal_string
 
 stmt "Statement"
   = stmt_crud
@@ -332,6 +586,12 @@ table_or_sub_index
 
 alias
   = AS name
+  {
+    return {
+      'type': 'alias',
+      'name': name
+    };
+  }
 
 select_join_loop
   = table_or_sub ( select_join_clause )*

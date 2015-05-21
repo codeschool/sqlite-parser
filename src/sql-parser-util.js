@@ -271,9 +271,8 @@ function textNode(elem) {
   /*
    * A text node has
    * - no leading or trailing whitespace
-   * - no consecutive whitespace characters
    */
-  return nodeToString(elem).replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ');
+  return nodeToString(elem).replace(/^\s+|\s+$/g, '');
 }
 
 // Escaping error messages
