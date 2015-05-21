@@ -24,17 +24,16 @@ start
  * {@link https://www.sqlite.org/lang_expr.html}
  */
 expression "Expression"
-  = expression_value
-  / expression_wrapped
+  = expression_wrapped
   / expression_node
+  / expression_value
 
 expression_wrapped
   = sym_popen n:( expression_node ) sym_pclose
   { return n; }
 
 expression_value
-  = literal_value
-  / bind_parameter
+  = bind_parameter
   / id_column
   / function_call
   / expression_unary
@@ -42,6 +41,7 @@ expression_value
   / expression_exists
   / expression_case
   / expression_raise
+  / literal_value
 
 expression_unary
   = o:( operator_unary ) e:( expression )
@@ -345,14 +345,32 @@ literal_number
   / literal_number_hex
 
 literal_number_decimal
-  = d:( ( ( number_digit )* ( sym_dot ( number_digit )* )? ) / ( sym_dot ( number_digit )+ ) ) e:( "E" ( [\+\-] )? ( number_digit )+ )?
+  = d:( number_decimal_node ) e:( number_decimal_exponent )?
   {
+    console.log(d)
     return {
       'type': 'literal',
       'variant': 'decimal',
-      'value': _u.textNode(d) + ( _u.isOkay(e) ? _u.textNode(e) : '' )
+      'value': d + ( _u.isOkay(e) ? e : '' )
     };
   }
+
+number_decimal_node
+  = number_decimal_full
+  / number_decimal_fraction
+
+number_decimal_full
+  = f:( number_digit )+ b:( number_decimal_fraction )?
+  { return _u.textNode(f) + ( _u.isOkay(b) ? b : ''); }
+
+number_decimal_fraction
+  = sym_dot d:( number_digit )+
+  { return '.' + _u.textNode(d); }
+
+/* TODO: Not sure about "E"i or just "E" */
+number_decimal_exponent
+  = e:( "E"i ) s:( [\+\-] )? d:( number_digit )+
+  { return _u.textNode(e) + ( _u.isOkay(s) ? _u.textNode(s) : '') + _u.textNode(d); }
 
 literal_number_hex
   = f:( "0x"i ) b:( number_hex )*
@@ -423,7 +441,7 @@ bind_parameter_named_suffix
 
 /** @note Removed expression on left-hand-side to remove recursion */
 operation_binary
-  = v:( expression_value ) o:( operator_binary ) e:( expression )
+  = v:( expression_value ) o o:( operator_binary ) o e:( expression )
   {
     return {
       'type': 'expression',
@@ -475,21 +493,124 @@ stmt_crud_types
 
 /** {@link https://www.sqlite.org/lang_select.html} */
 stmt_select "SELECT Statement"
-  = select_loop
-  ( ORDER BY select_order )?
-  ( LIMIT expression ( ( OFFSET / sym_comma ) expression )? )?
+  = s:( select_loop )
+  o:( ORDER BY select_order )?
+  l:( LIMIT expression ( ( OFFSET / sym_comma ) expression )? )?
 
 select_loop
-  = select_parts operator_compound
+  = s:( select_parts ) u:( select_loop_union )*
+  {
+    if ( _u.isOkay(u) ) {
+      // TODO: compound query
+    }
+    return s;
+  }
+
+select_loop_union
+  = c:( operator_compound ) s:( select_parts )
+  {
+    // TODO: compound query
+  }
 
 select_parts
   = select_parts_core
   / select_parts_values
 
+select_parts_core
+  = s:( select_core_select ) o
+    f:( select_core_from )? o
+    w:( select_core_where )? o
+    g:( select_core_group )?
+  {
+    // TODO: Not final syntax!
+    return {
+      'select': s,
+      'from': f,
+      'where': w,
+      'group_by': g
+    };
+  }
+
+select_core_select
+  = SELECT d:( DISTINCT / ALL )? t:( select_target )
+
+select_target
+  = select_node ( sym_comma select_node )*
+
+select_core_from
+  = FROM select_source
+
+select_core_where
+  = WHERE expression
+
+select_core_group
+  = GROUP BY expression ( HAVING expression )?
+
+select_node
+  = ( ( name_table sym_dot )? select_star )
+  / ( expression ( alias )? )
+
+select_source
+  = select_source_loop
+  / select_join_loop
+
+select_source_loop
+  = table_or_sub ( sym_comma table_or_sub )*
+
+table_or_sub
+  = ( ( id_table ( alias )? ) ( table_or_sub_index )? )
+  / ( sym_popen ( select_source_loop / select_join_loop ) sym_pclose )
+
+table_or_sub_index
+  = ( INDEXED BY name_index )
+  / ( NOT INDEXED )
+
+alias
+  = AS name
+  {
+    return {
+      'type': 'alias',
+      'name': name
+    };
+  }
+
+select_join_loop
+  = table_or_sub ( select_join_clause )*
+
+select_join_clause
+  = join_operator table_or_sub ( join_condition )?
+
+join_operator
+  = ( NATURAL )? ( ( LEFT ( OUTER )? ) / INNER / CROSS )? JOIN
+
+join_condition
+  = ( ON expression )
+  / ( USING name_column ( sym_comma name_column )* )
+
+select_parts_values
+  = VALUES sym_popen expression_list sym_pclose
+
+select_order
+  = e:( expression ) o c:( COLLATE id_collation )? o d:(ASC / DESC)?
+  {
+    // TODO: Not final format
+    return {
+      'type': 'order',
+      'direction': d,
+      'expression': e,
+      'modifier': c
+    };
+  }
+
+select_star "All Columns"
+  = sym_star
+
 operator_compound "Compound Operator"
   = ( UNION ( ALL )? )
   / INTERSECT
   / EXCEPT
+
+/* Unary and Binary Operators */
 
 operator_unary "Unary Operator"
   = sym_tilde
@@ -556,64 +677,7 @@ binary_notequal "Not Equal"
   = ( sym_excl binary_equal )
   / ( binary_lt binary_gt )
 
-select_parts_core
-  = SELECT ( DISTINCT / ALL )? select_target
-  ( FROM select_source )?
-  ( WHERE expression )?
-  ( GROUP BY expression ( HAVING expression )? )?
-
-select_target
-  = select_node ( sym_comma select_node )*
-
-select_node
-  = ( ( name_table sym_dot )? select_star )
-  / ( expression ( alias )? )
-
-select_source
-  = select_source_loop
-  / select_join_loop
-
-select_source_loop
-  = table_or_sub ( sym_comma table_or_sub )*
-
-table_or_sub
-  = ( ( id_table ( alias )? ) ( table_or_sub_index )? )
-  / ( sym_popen ( select_source_loop / select_join_loop ) sym_pclose )
-
-table_or_sub_index
-  = ( INDEXED BY name_index )
-  / ( NOT INDEXED )
-
-alias
-  = AS name
-  {
-    return {
-      'type': 'alias',
-      'name': name
-    };
-  }
-
-select_join_loop
-  = table_or_sub ( select_join_clause )*
-
-select_join_clause
-  = join_operator table_or_sub ( join_condition )?
-
-join_operator
-  = ( NATURAL )? ( ( LEFT ( OUTER )? ) / INNER / CROSS )? JOIN
-
-join_condition
-  = ( ON expression )
-  / ( USING name_column ( sym_comma name_column )* )
-
-select_parts_values
-  = VALUES sym_popen expression_list sym_pclose
-
-select_order
-  = expression ( COLLATE id_collation )? (ASC / DESC)?
-
-select_star "All Columns"
-  = sym_star
+/* Database, Table and Column IDs */
 
 id_database
   = name_database
