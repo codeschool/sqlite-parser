@@ -61,5 +61,5 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['clean:main', 'shell:pegjs', 'copy:main']);
   // grunt.registerTask('dist', ['default', 'clean:dist', 'browserify:dist']);
   grunt.registerTask('test', ['default', 'shell:test']);
-  grunt.registerTask('debug', ['default', 'watch:debug']);
+  grunt.registerTask('debug', ['default', 'shell:debug', 'watch:debug']);
 };
