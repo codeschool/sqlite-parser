@@ -2,12 +2,7 @@
 {
       // Parser utilities
   var _u = require('./sql-parser-util'),
-      esc = _u.escape,
-      // Codex of tag and attribute names
-      codex = require('./sql-grammar-codex')(options);
-
-  // Set error encoding
-  _u.setFormat(codex);
+      esc = _u.escape;
 }
 
 /* Start Grammar */
@@ -33,15 +28,15 @@ expression_wrapped
   { return n; }
 
 expression_value
-  = bind_parameter
-  / id_column
-  / function_call
-  / expression_unary
-  / expression_cast
+  = expression_cast
   / expression_exists
   / expression_case
   / expression_raise
+  / expression_unary
+  / bind_parameter
+  / function_call
   / literal_value
+  / id_column
 
 expression_unary
   = o:( operator_unary ) e:( expression )
@@ -324,7 +319,12 @@ literal_string
 
 literal_string_single
   = sym_sglquote s:( literal_string_schar )* sym_sglquote
-  { return _u.textNode(s); }
+  {
+    /**
+      * @note Unescaped the pairs of literal single quotation marks
+      */
+    return _u.textNode(s).replace(/\'{2}/g, "'");
+  }
 
 literal_string_schar
   = "''"
@@ -347,7 +347,6 @@ literal_number
 literal_number_decimal
   = d:( number_decimal_node ) e:( number_decimal_exponent )?
   {
-    console.log(d)
     return {
       'type': 'literal',
       'variant': 'decimal',
@@ -455,7 +454,7 @@ operation_binary
   }
 
 expression_list "Expression List"
-  = f:( expression ) rest:( sym_comma expression )*
+  = f:( expression ) rest:( expression_list_rest )*
   {
     var first = [ f ];
     return ( _u.isOkay(rest) ) ? first.concat(rest) : first;
@@ -466,7 +465,39 @@ expression_list_rest
   { return e; }
 
 function_call
-  = name_function sym_popen ( ( ( DISTINCT )? expression_list ) / ( select_star ) )? sym_pclose
+  = n:( name_function ) sym_popen a:( function_call_args )? sym_pclose
+  {
+    var func = {
+      'type': 'function',
+      'name': n,
+      'distinct': false,
+      'arguments': []
+    };
+    if ( _u.isOkay(a) ) {
+      // TODO: use a function to merge the two objects?
+      func['distinct'] = a['distinct'];
+      func['arguments'] = a['arguments'];
+    }
+    return func;
+  }
+
+function_call_args
+  = ( d:( DISTINCT )? e:( expression_list ) ) {
+    return {
+      'distinct': _u.isOkay(d),
+      'expression': e
+    };
+  }
+  / ( select_star ) {
+    return {
+      'distinct': false,
+      'expression': [{
+        'type': 'identifier',
+        'variant': 'star',
+        'value': s
+      }]
+    };
+  }
 
 error_message "Error Message"
   = literal_string
@@ -477,13 +508,17 @@ stmt "Statement"
   / stmt_drop
 
 stmt_crud
-  = clause_with? stmt_crud_types
+  = w:( clause_with )? o s:( stmt_crud_types )
+  {
+    s['with'] = w;
+    return s;
+  }
 
 clause_with "WITH Clause"
-  = WITH ( RECURSIVE )? expression_table ( sym_comma expression_table )*
+  = WITH r:( RECURSIVE )? f:( expression_table ) o r:( sym_comma expression_table )*
 
 expression_table "Table Expression"
-  = name_table ( sym_popen name_column ( sym_comma name_column )* sym_pclose )? AS stmt_select
+  = n:( name_table ) o a:( sym_popen name_column ( sym_comma name_column )* sym_pclose )? o AS s:( stmt_select )
 
 stmt_crud_types
   = stmt_select
@@ -493,12 +528,36 @@ stmt_crud_types
 
 /** {@link https://www.sqlite.org/lang_select.html} */
 stmt_select "SELECT Statement"
-  = s:( select_loop )
-  o:( ORDER BY select_order )?
-  l:( LIMIT expression ( ( OFFSET / sym_comma ) expression )? )?
+  = s:( select_loop ) o o:( select_order )? o l:( select_limit )?
+  {
+    if ( _u.isOkay(o) ) {
+      s['order'] = o;
+    }
+    if ( _u.isOkay(l) ) {
+      s['limit'] = l;
+    }
+    return s;
+  }
+
+select_order
+  = ORDER BY o d:( select_order_list )
+  { return d; }
+
+select_limit
+  = LIMIT o e:( expression ) o d:( select_limit_offset )?
+  {
+    return {
+      'start': e,
+      'offset': d
+    };
+  }
+
+select_limit_offset
+  = o:( OFFSET / sym_comma ) o e:( expression )
+  { return e; }
 
 select_loop
-  = s:( select_parts ) u:( select_loop_union )*
+  = s:( select_parts ) o u:( select_loop_union )*
   {
     if ( _u.isOkay(u) ) {
       // TODO: compound query
@@ -507,7 +566,7 @@ select_loop
   }
 
 select_loop_union
-  = c:( operator_compound ) s:( select_parts )
+  = c:( operator_compound ) o s:( select_parts )
   {
     // TODO: compound query
   }
@@ -517,62 +576,137 @@ select_parts
   / select_parts_values
 
 select_parts_core
-  = s:( select_core_select ) o
-    f:( select_core_from )? o
-    w:( select_core_where )? o
-    g:( select_core_group )?
+  = s:( select_core_select ) o f:( select_core_from )? o w:( select_core_where )? o g:( select_core_group )? o
   {
     // TODO: Not final syntax!
-    return {
-      'select': s,
+    var sel = {
+      'type': 'statement',
+      'variant': 'select',
       'from': f,
       'where': w,
-      'group_by': g
+      'group': g
     };
+    // TODO: use a function to merge the two objects?
+    sel['select'] = s['result'];
+    sel['modifier'] = s['modifier'];
+    return sel;
   }
 
 select_core_select
   = SELECT d:( DISTINCT / ALL )? t:( select_target )
+  {
+    return {
+      'result': t,
+      'modifier': d
+    };
+  }
 
 select_target
-  = select_node ( sym_comma select_node )*
+  = f:( select_node ) o r:( select_target_loop )*
+  {
+    var target = [ f ];
+    return _u.isOkay(r) ? target.concat(r) : target;
+  }
+
+select_target_loop
+  = sym_comma n:( select_node )
+  { return n; }
 
 select_core_from
-  = FROM select_source
+  = FROM s:( select_source )
+  { return s; }
 
 select_core_where
-  = WHERE expression
+  = WHERE e:( expression )
+  { return !_u.isArray(e) ? [ e ] : e; }
 
 select_core_group
-  = GROUP BY expression ( HAVING expression )?
+  = GROUP BY e:( expression ) h:( select_core_having )?
+  {
+    // TODO: format
+    return {
+      'expression': ( !_u.isArray(e) ? [ e ] : e ),
+      'having': h
+    };
+  }
+
+select_core_having
+  = HAVING e:( expression )
+  { return e; }
 
 select_node
-  = ( ( name_table sym_dot )? select_star )
-  / ( expression ( alias )? )
+  = select_node_star
+  / select_node_aliased
+
+select_node_star
+  = q:( select_node_star_qualified )? select_star
+  {
+    // TODO: format
+    return {
+      'expression': ( ( _u.isOkay(q) ? q : '' ) + '*' )
+    };
+  }
+
+select_node_star_qualified
+  = n:( name_table ) sym_dot
+  { return n + '.'; }
+
+select_node_aliased
+  = e:( expression ) a:( alias )?
+  {
+    // TODO: format
+    e['alias'] = a;
+    return e;
+  }
 
 select_source
   = select_source_loop
   / select_join_loop
 
 select_source_loop
-  = table_or_sub ( sym_comma table_or_sub )*
+  = f:( table_or_sub ) t:( source_loop_tail )*
+  {
+    var source = [ f ];
+    return ( _u.isOkay(t) ? source.concat(t) : source );
+  }
 
+source_loop_tail
+  = sym_comma t:( table_or_sub )
+  { return t; }
+
+/* TODO: Need to create rules for second pattern */
 table_or_sub
-  = ( ( id_table ( alias )? ) ( table_or_sub_index )? )
+  = table_or_sub_table
   / ( sym_popen ( select_source_loop / select_join_loop ) sym_pclose )
 
-table_or_sub_index
-  = ( INDEXED BY name_index )
-  / ( NOT INDEXED )
+table_or_sub_table
+  = d:( table_or_sub_table_id ) i:( table_or_sub_index )?
+  {
+    if ( _u.isOkay(i) ) {
+      d['index'] = i;
+    }
+    return d;
+  }
 
-alias
-  = AS name
+table_or_sub_table_id
+  = n:( id_table ) o a:( alias )?
+  {
+    n['alias'] = a;
+    return n;
+  }
+
+table_or_sub_index
+  = i:( ( INDEXED BY name_index ) / ( NOT INDEXED ) )
   {
     return {
-      'type': 'alias',
-      'name': name
+      'type': 'index',
+      'index': _u.textNode(i)
     };
   }
+
+alias
+  = AS n:( name )
+  { return n; }
 
 select_join_loop
   = table_or_sub ( select_join_clause )*
@@ -590,13 +724,23 @@ join_condition
 select_parts_values
   = VALUES sym_popen expression_list sym_pclose
 
-select_order
+select_order_list
+  = f:( select_order_list_item ) o b:( select_order_list_loop )?
+  {
+    var list = [ f ];
+    return _u.isOkay(b) ?  list.concat(b) : list;
+  }
+
+select_order_list_loop
+  = sym_comma o i:( select_order_list_item )
+  { return i; }
+
+select_order_list_item
   = e:( expression ) o c:( COLLATE id_collation )? o d:(ASC / DESC)?
   {
     // TODO: Not final format
     return {
-      'type': 'order',
-      'direction': d,
+      'direction': _u.textNode(d),
       'expression': e,
       'modifier': c
     };
@@ -618,15 +762,17 @@ operator_unary "Unary Operator"
   / sym_plus
   / NOT
 
+/* TODO: Needs return format refactoring */
 operator_binary "Binary Operator"
-  = binary_concat
+  = o:( binary_concat
   / ( binary_multiply / binary_mod )
   / ( binary_plus / binary_minus )
   / ( binary_left / binary_right / binary_and / binary_or )
   / ( binary_lt / binary_lte / binary_gt / binary_gte )
   / ( binary_assign / binary_equal / binary_notequal / ( IS ( NOT )? ) / IN / LIKE / GLOB / MATCH / REGEXP )
   / AND
-  / OR
+  / OR )
+  { return _u.textNode(o); }
 
 binary_concat "Or"
   = sym_pipe sym_pipe
@@ -680,13 +826,42 @@ binary_notequal "Not Equal"
 /* Database, Table and Column IDs */
 
 id_database
-  = name_database
+  = n:( name_database )
+  {
+    return {
+      'type': 'identifier',
+      'variant': 'database',
+      'name': n
+    };
+  }
 
 id_table
-  = ( id_database sym_dot )? name_table
+  = d:( id_table_qualified )? n:( name_table )
+  {
+    return {
+      'type': 'identifier',
+      'variant': 'table',
+      'name': ( ( _u.isOkay(d) ? d : '' ) + n )
+    };
+  }
+
+id_table_qualified
+  = d:( name_database ) sym_dot
+  { return d + '.'; }
 
 id_column
-  = ( id_table sym_dot )? name_column
+  = d:( id_table_qualified )? t:( id_column_qualified )? n:( name_column )
+  {
+    return {
+      'type': 'identifier',
+      'variant': 'column',
+      'name': ( ( _u.isOkay(d) ? d : '' ) + ( _u.isOkay(t) ? t : '' ) + n )
+    };
+  }
+
+id_column_qualified
+  = t:( name_table ) sym_dot
+  { return t + '.'; }
 
 id_collation
   = name_collation
