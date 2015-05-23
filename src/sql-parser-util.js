@@ -115,6 +115,7 @@ module.exports = {
   // String methods
   'nodeToString':         nodeToString,
   'textNode':             textNode,
+  'unescape':             unescape,
   // Type detection
   'typed':                typed,
   'isPlain':              isPlain,
