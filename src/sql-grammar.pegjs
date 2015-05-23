@@ -90,6 +90,7 @@ expression_case
     };
   }
 
+
 expression_case_when
   = WHEN w:( expression ) THEN t:( expression )
   {
