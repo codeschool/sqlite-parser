@@ -13,18 +13,21 @@ format = function (arg, ugly) {
 
 broadcast = function (args) {
   // Only broadcast when DEBUG=true is set in the environment
-  if (broadcast.canBroadcast) {
-    _.forEach(args, function (arg) {
-      if (isDefined(arg)) {
-        console.log('\n\n', format(arg), '\n');
-      }
-    });
-  }
+  _.forEach(args, function (arg) {
+    if (broadcast.shouldBroadcast(arg)) {
+      console.log('\n\n', format(arg), '\n');
+    }
+  });
 };
-
+broadcast.debug = (function (p) {
+  return isDefined(process) && _.has(process.env, 'DEBUG');
+})(process);
 broadcast.canBroadcast = (function (c, p) {
-  return ( isDefined(console) && isDefined(process) ? _.has(process.env, 'DEBUG') : false );
+  return isDefined(console) && broadcast.debug;
 })(console, process);
+broadcast.shouldBroadcast = function (msg) {
+  return broadcast.canBroadcast && isDefined(msg);
+};
 
 /**
 Load the source file for the current test and then try and generate the AST from it.
@@ -65,7 +68,7 @@ assertOkTree = function (that, done) {
     func = arguments[2];
   }
   getTree.apply(that, [that, options, function (err, ast) {
-    if (isDefined(err)) { broadcast(arguments); }
+    broadcast(arguments);
     expect(err).to.not.be.ok;
     expect(ast).to.be.ok;
     func.call(that);
@@ -93,7 +96,7 @@ assertErrorTree = function (obj, that, done) {
   if (_.isUndefined(obj)) { obj = {}; }
   else if (_.isString(obj)) { obj = { 'message': obj }; }
   getTree.apply(that, [that, options, function (err, ast) {
-    if (isDefined(ast)) { broadcast(arguments); }
+    broadcast(arguments);
     expect(ast).to.not.be.ok;
     if (obj == null) {
       expect(err).to.be.ok;
@@ -126,7 +129,7 @@ assertEqualsTree = function (obj, that, done) {
   }
   if (_.isUndefined(obj)) { obj = {}; }
   getTree.apply(that, [that, options, function (err, ast) {
-    if (isDefined(err)) { broadcast(arguments); }
+    broadcast(arguments);
     expect(err).to.not.be.ok;
     if (_.isString(obj)) {
       obj = JSON.parse(obj);
