@@ -77,7 +77,7 @@ expression_case
   = CASE e:( expression )? w:( expression_case_when )+ s:( expression_case_else )? END
   {
     var cond = w;
-    if ( _.isOkay(s) ) {
+    if (_.isOkay(s)) {
       cond.push(s);
     }
     return {
@@ -319,7 +319,7 @@ literal_string_single
     /**
       * @note Unescaped the pairs of literal single quotation marks
       */
-    return _.textNode(s).replace(/\'{2}/g, "'");
+    return _.unescape(_.textNode(s));
   }
 
 literal_string_schar
@@ -650,14 +650,12 @@ select_node_aliased
   }
 
 select_source
-  = select_source_loop
-  / select_join_loop
+  = select_join_loop
+  / select_source_loop
 
 select_source_loop
   = f:( table_or_sub ) t:( source_loop_tail )*
-  {
-    return _.compose([f, t], []);
-  }
+  { return _.compose([f, t], []); }
 
 source_loop_tail
   = sym_comma t:( table_or_sub )
@@ -665,8 +663,8 @@ source_loop_tail
 
 /* TODO: Need to create rules for second pattern */
 table_or_sub
-  = table_or_sub_table
-  / ( sym_popen ( select_source_loop / select_join_loop ) sym_pclose )
+  = table_or_sub_sub
+  / table_or_sub_table
 
 table_or_sub_table
   = d:( table_or_sub_table_id ) i:( table_or_sub_index )?
@@ -701,39 +699,76 @@ table_or_sub_index_node
     return _.textNode(n);
   }
 
+table_or_sub_sub
+  = sym_popen o l:( select_join_loop / select_source_loop ) o sym_pclose
+  { return l; }
+
 alias
   = AS n:( name )
   { return n; }
 
 select_join_loop
-  = t:( table_or_sub ) j:( select_join_clause )*
+  = t:( table_or_sub ) o j:( select_join_clause )*
   {
-    return _TODO_;
+    // TODO: format
+    return {
+      'type': 'join',
+      'source': t,
+      'join': j
+    };
   }
 
 select_join_clause
-  = o:( join_operator ) n:( table_or_sub ) c:( join_condition )?
+  = o:( join_operator ) o n:( table_or_sub ) o c:( join_condition )?
   {
-    return _TODO_;
+    // TODO: format
+    return _.extend({
+      'type': o,
+      'source': n,
+      'on': null,
+      'using': null
+    }, c);
   }
 
 join_operator
-  = n:( NATURAL )? t:( ( LEFT ( OUTER )? ) / INNER / CROSS )? j:( JOIN )
-  {
-    return _.compose([n, t, j]);
-  }
+  = n:( NATURAL )? o t:( ( LEFT (o OUTER )? ) / INNER / CROSS )? o j:( JOIN )
+  { return _.compose([n, t, j]); }
 
 join_condition
-  = ( ON expression )
-  / ( USING name_column ( sym_comma name_column )* )
+  = c:( join_condition_on / join_condition_using )
+  { return c; }
+
+join_condition_on
+  = ON e:( expression )
   {
-    return _TODO_;
+    return {
+      'on': e
+    };
   }
 
-select_parts_values
-  = VALUES sym_popen expression_list sym_pclose
+/* TODO: should it be name_column or id_column ? */
+join_condition_using
+  = USING f:( id_column ) o b:( join_condition_using_loop )*
   {
-    return _TODO_;
+    return {
+      'using': _.compose([f, b], [])
+    };
+  }
+
+/* TODO: should it be name_column or id_column ? */
+join_condition_using_loop
+  = sym_comma o n:( id_column )
+  { return n; }
+
+select_parts_values
+  = VALUES sym_popen o l:( expression_list ) o sym_pclose
+  {
+    // TODO: format
+    return {
+      'type': 'statement',
+      'variant': 'values',
+      'values': l
+    };
   }
 
 select_order_list
@@ -948,7 +983,8 @@ name
   / name_unquoted
 
 name_unquoted
-  = n:( !reserved_words name_char )+
+  = n:( name_char )+
+  ! ( reserved_words )
   { return _.textNode(n); }
 
 /** @note Non-standard legacy format */
@@ -1013,253 +1049,253 @@ sym_excl "Exclamation"
 /* Keywords */
 
 ABORT "ABORT Keyword"
-  = "ABORT" e
+  = "ABORT"i e
 ACTION "ACTION Keyword"
-  = "ACTION" e
+  = "ACTION"i e
 ADD "ADD Keyword"
-  = "ADD" e
+  = "ADD"i e
 AFTER "AFTER Keyword"
-  = "AFTER" e
+  = "AFTER"i e
 ALL "ALL Keyword"
-  = "ALL" e
+  = "ALL"i e
 ALTER "ALTER Keyword"
-  = "ALTER" e
+  = "ALTER"i e
 ANALYZE "ANALYZE Keyword"
-  = "ANALYZE" e
+  = "ANALYZE"i e
 AND "AND Keyword"
-  = "AND" e
+  = "AND"i e
 AS "AS Keyword"
-  = "AS" e
+  = "AS"i e
 ASC "ASC Keyword"
-  = "ASC" e
+  = "ASC"i e
 ATTACH "ATTACH Keyword"
-  = "ATTACH" e
+  = "ATTACH"i e
 AUTOINCREMENT "AUTOINCREMENT Keyword"
-  = "AUTOINCREMENT" e
+  = "AUTOINCREMENT"i e
 BEFORE "BEFORE Keyword"
-  = "BEFORE" e
+  = "BEFORE"i e
 BEGIN "BEGIN Keyword"
-  = "BEGIN" e
+  = "BEGIN"i e
 BETWEEN "BETWEEN Keyword"
-  = "BETWEEN" e
+  = "BETWEEN"i e
 BY "BY Keyword"
-  = "BY" e
+  = "BY"i e
 CASCADE "CASCADE Keyword"
-  = "CASCADE" e
+  = "CASCADE"i e
 CASE "CASE Keyword"
-  = "CASE" e
+  = "CASE"i e
 CAST "CAST Keyword"
-  = "CAST" e
+  = "CAST"i e
 CHECK "CHECK Keyword"
-  = "CHECK" e
+  = "CHECK"i e
 COLLATE "COLLATE Keyword"
-  = "COLLATE" e
+  = "COLLATE"i e
 COLUMN "COLUMN Keyword"
-  = "COLUMN" e
+  = "COLUMN"i e
 COMMIT "COMMIT Keyword"
-  = "COMMIT" e
+  = "COMMIT"i e
 CONFLICT "CONFLICT Keyword"
-  = "CONFLICT" e
+  = "CONFLICT"i e
 CONSTRAINT "CONSTRAINT Keyword"
-  = "CONSTRAINT" e
+  = "CONSTRAINT"i e
 CREATE "CREATE Keyword"
-  = "CREATE" e
+  = "CREATE"i e
 CROSS "CROSS Keyword"
-  = "CROSS" e
+  = "CROSS"i e
 CURRENT_DATE "CURRENT_DATE Keyword"
-  = "CURRENT_DATE" e
+  = "CURRENT_DATE"i e
 CURRENT_TIME "CURRENT_TIME Keyword"
-  = "CURRENT_TIME" e
+  = "CURRENT_TIME"i e
 CURRENT_TIMESTAMP "CURRENT_TIMESTAMP Keyword"
-  = "CURRENT_TIMESTAMP" e
+  = "CURRENT_TIMESTAMP"i e
 DATABASE "DATABASE Keyword"
-  = "DATABASE" e
+  = "DATABASE"i e
 DEFAULT "DEFAULT Keyword"
-  = "DEFAULT" e
+  = "DEFAULT"i e
 DEFERRABLE "DEFERRABLE Keyword"
-  = "DEFERRABLE" e
+  = "DEFERRABLE"i e
 DEFERRED "DEFERRED Keyword"
-  = "DEFERRED" e
+  = "DEFERRED"i e
 DELETE "DELETE Keyword"
-  = "DELETE" e
+  = "DELETE"i e
 DESC "DESC Keyword"
-  = "DESC" e
+  = "DESC"i e
 DETACH "DETACH Keyword"
-  = "DETACH" e
+  = "DETACH"i e
 DISTINCT "DISTINCT Keyword"
-  = "DISTINCT" e
+  = "DISTINCT"i e
 DROP "DROP Keyword"
-  = "DROP" e
+  = "DROP"i e
 EACH "EACH Keyword"
-  = "EACH" e
+  = "EACH"i e
 ELSE "ELSE Keyword"
-  = "ELSE" e
+  = "ELSE"i e
 END "END Keyword"
-  = "END" e
+  = "END"i e
 ESCAPE "ESCAPE Keyword"
-  = "ESCAPE" e
+  = "ESCAPE"i e
 EXCEPT "EXCEPT Keyword"
-  = "EXCEPT" e
+  = "EXCEPT"i e
 EXCLUSIVE "EXCLUSIVE Keyword"
-  = "EXCLUSIVE" e
+  = "EXCLUSIVE"i e
 EXISTS "EXISTS Keyword"
-  = "EXISTS" e
+  = "EXISTS"i e
 EXPLAIN "EXPLAIN Keyword"
-  = "EXPLAIN" e
+  = "EXPLAIN"i e
 FAIL "FAIL Keyword"
-  = "FAIL" e
+  = "FAIL"i e
 FOR "FOR Keyword"
-  = "FOR" e
+  = "FOR"i e
 FOREIGN "FOREIGN Keyword"
-  = "FOREIGN" e
+  = "FOREIGN"i e
 FROM "FROM Keyword"
-  = "FROM" e
+  = "FROM"i e
 FULL "FULL Keyword"
-  = "FULL" e
+  = "FULL"i e
 GLOB "GLOB Keyword"
-  = "GLOB" e
+  = "GLOB"i e
 GROUP "GROUP Keyword"
-  = "GROUP" e
+  = "GROUP"i e
 HAVING "HAVING Keyword"
-  = "HAVING" e
+  = "HAVING"i e
 IF "IF Keyword"
-  = "IF" e
+  = "IF"i e
 IGNORE "IGNORE Keyword"
-  = "IGNORE" e
+  = "IGNORE"i e
 IMMEDIATE "IMMEDIATE Keyword"
-  = "IMMEDIATE" e
+  = "IMMEDIATE"i e
 IN "IN Keyword"
-  = "IN" e
+  = "IN"i e
 INDEX "INDEX Keyword"
-  = "INDEX" e
+  = "INDEX"i e
 INDEXED "INDEXED Keyword"
-  = "INDEXED" e
+  = "INDEXED"i e
 INITIALLY "INITIALLY Keyword"
-  = "INITIALLY" e
+  = "INITIALLY"i e
 INNER "INNER Keyword"
-  = "INNER" e
+  = "INNER"i e
 INSERT "INSERT Keyword"
-  = "INSERT" e
+  = "INSERT"i e
 INSTEAD "INSTEAD Keyword"
-  = "INSTEAD" e
+  = "INSTEAD"i e
 INTERSECT "INTERSECT Keyword"
-  = "INTERSECT" e
+  = "INTERSECT"i e
 INTO "INTO Keyword"
-  = "INTO" e
+  = "INTO"i e
 IS "IS Keyword"
-  = "IS" e
+  = "IS"i e
 ISNULL "ISNULL Keyword"
-  = "ISNULL" e
+  = "ISNULL"i e
 JOIN "JOIN Keyword"
-  = "JOIN" e
+  = "JOIN"i e
 KEY "KEY Keyword"
-  = "KEY" e
+  = "KEY"i e
 LEFT "LEFT Keyword"
-  = "LEFT" e
+  = "LEFT"i e
 LIKE "LIKE Keyword"
-  = "LIKE" e
+  = "LIKE"i e
 LIMIT "LIMIT Keyword"
-  = "LIMIT" e
+  = "LIMIT"i e
 MATCH "MATCH Keyword"
-  = "MATCH" e
+  = "MATCH"i e
 NATURAL "NATURAL Keyword"
-  = "NATURAL" e
+  = "NATURAL"i e
 NO "NO Keyword"
-  = "NO" e
+  = "NO"i e
 NOT "NOT Keyword"
-  = "NOT" e
+  = "NOT"i e
 NOTNULL "NOTNULL Keyword"
-  = "NOTNULL" e
+  = "NOTNULL"i e
 NULL "NULL Keyword"
-  = "NULL" e
+  = "NULL"i e
 OF "OF Keyword"
-  = "OF" e
+  = "OF"i e
 OFFSET "OFFSET Keyword"
-  = "OFFSET" e
+  = "OFFSET"i e
 ON "ON Keyword"
-  = "ON" e
+  = "ON"i e
 OR "OR Keyword"
-  = "OR" e
+  = "OR"i e
 ORDER "ORDER Keyword"
-  = "ORDER" e
+  = "ORDER"i e
 OUTER "OUTER Keyword"
-  = "OUTER" e
+  = "OUTER"i e
 PLAN "PLAN Keyword"
-  = "PLAN" e
+  = "PLAN"i e
 PRAGMA "PRAGMA Keyword"
-  = "PRAGMA" e
+  = "PRAGMA"i e
 PRIMARY "PRIMARY Keyword"
-  = "PRIMARY" e
+  = "PRIMARY"i e
 QUERY "QUERY Keyword"
-  = "QUERY" e
+  = "QUERY"i e
 RAISE "RAISE Keyword"
-  = "RAISE" e
+  = "RAISE"i e
 RECURSIVE "RECURSIVE Keyword"
-  = "RECURSIVE" e
+  = "RECURSIVE"i e
 REFERENCES "REFERENCES Keyword"
-  = "REFERENCES" e
+  = "REFERENCES"i e
 REGEXP "REGEXP Keyword"
-  = "REGEXP" e
+  = "REGEXP"i e
 REINDEX "REINDEX Keyword"
-  = "REINDEX" e
+  = "REINDEX"i e
 RELEASE "RELEASE Keyword"
-  = "RELEASE" e
+  = "RELEASE"i e
 RENAME "RENAME Keyword"
-  = "RENAME" e
+  = "RENAME"i e
 REPLACE "REPLACE Keyword"
-  = "REPLACE" e
+  = "REPLACE"i e
 RESTRICT "RESTRICT Keyword"
-  = "RESTRICT" e
+  = "RESTRICT"i e
 RIGHT "RIGHT Keyword"
-  = "RIGHT" e
+  = "RIGHT"i e
 ROLLBACK "ROLLBACK Keyword"
-  = "ROLLBACK" e
+  = "ROLLBACK"i e
 ROW "ROW Keyword"
-  = "ROW" e
+  = "ROW"i e
 SAVEPOINT "SAVEPOINT Keyword"
-  = "SAVEPOINT" e
+  = "SAVEPOINT"i e
 SELECT "SELECT Keyword"
-  = "SELECT" e
+  = "SELECT"i e
 SET "SET Keyword"
-  = "SET" e
+  = "SET"i e
 TABLE "TABLE Keyword"
-  = "TABLE" e
+  = "TABLE"i e
 TEMP "TEMP Keyword"
-  = "TEMP" e
+  = "TEMP"i e
 TEMPORARY "TEMPORARY Keyword"
-  = "TEMPORARY" e
+  = "TEMPORARY"i e
 THEN "THEN Keyword"
-  = "THEN" e
+  = "THEN"i e
 TO "TO Keyword"
-  = "TO" e
+  = "TO"i e
 TRANSACTION "TRANSACTION Keyword"
-  = "TRANSACTION" e
+  = "TRANSACTION"i e
 TRIGGER "TRIGGER Keyword"
-  = "TRIGGER" e
+  = "TRIGGER"i e
 UNION "UNION Keyword"
-  = "UNION" e
+  = "UNION"i e
 UNIQUE "UNIQUE Keyword"
-  = "UNIQUE" e
+  = "UNIQUE"i e
 UPDATE "UPDATE Keyword"
-  = "UPDATE" e
+  = "UPDATE"i e
 USING "USING Keyword"
-  = "USING" e
+  = "USING"i e
 VACUUM "VACUUM Keyword"
-  = "VACUUM" e
+  = "VACUUM"i e
 VALUES "VALUES Keyword"
-  = "VALUES" e
+  = "VALUES"i e
 VIEW "VIEW Keyword"
-  = "VIEW" e
+  = "VIEW"i e
 VIRTUAL "VIRTUAL Keyword"
-  = "VIRTUAL" e
+  = "VIRTUAL"i e
 WHEN "WHEN Keyword"
-  = "WHEN" e
+  = "WHEN"i e
 WHERE "WHERE Keyword"
-  = "WHERE" e
+  = "WHERE"i e
 WITH "WITH Keyword"
-  = "WITH" e
+  = "WITH"i e
 WITHOUT "WITHOUT Keyword"
-  = "WITHOUT" e
+  = "WITHOUT"i e
 
 reserved_words
   = ABORT / ACTION / ADD / AFTER / ALL / ALTER / ANALYZE / AND / AS / ASC /
