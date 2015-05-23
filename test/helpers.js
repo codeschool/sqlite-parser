@@ -11,11 +11,11 @@ format = function (arg, ugly) {
                 ( prettyjson.render(arg, {}) );
 };
 
-broadcast = function (args) {
+broadcast = function (args, ugly) {
   // Only broadcast when DEBUG=true is set in the environment
   _.forEach(args, function (arg) {
     if (broadcast.shouldBroadcast(arg)) {
-      console.log('\n\n', format(arg), '\n');
+      console.log('\n\n', format(arg, ugly), '\n');
     }
   });
 };
