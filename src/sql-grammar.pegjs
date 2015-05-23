@@ -194,15 +194,23 @@ expression_escape
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_null
-  = v:( expression_value ) ( i:( IS / ( NOT o ) ) n:( NULL ) )
+  = v:( expression_value ) o n:( expression_null_nodes )
   {
     return {
       'type': 'expression',
       'format': 'unary',
       'variant': 'null',
       'expression': v,
-      'modifier': _.compose([i, n])
+      'modifier': n
     };
+  }
+
+expression_null_nodes
+  = i:( IS / NOT ) o n:( NULL ) {
+    return _.compose([i, n]);
+  }
+  / n:( ISNULL / NOTNULL ) {
+    return _.textNode(n);
   }
 
 /** @note Removed expression on left-hand-side to remove recursion */
@@ -432,6 +440,7 @@ bind_parameter_named_suffix
   { return _.compose([q1, n, q2], ''); }
 
 /** @note Removed expression on left-hand-side to remove recursion */
+/* TODO: Need to refactor this so that expr1 AND expr2 is grouped/associated correctly */
 operation_binary
   = v:( expression_value ) o o:( operator_binary ) o e:( expression )
   {
