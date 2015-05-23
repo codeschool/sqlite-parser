@@ -34,7 +34,7 @@ function isOkay(obj) {
 }
 
 function collapse(arr) {
-  if (isArray(arr) && arr.length) {
+  if ( isArray(arr) && arr.length ) {
     var i, len, n, obj, ref, v;
     obj = {};
     for (i = 0, len = arr.length; i < len; i++) {
@@ -58,16 +58,16 @@ function compose(args, glue) {
 }
 
 function stack(arr) {
-  return (isArray(arr) ?
+  return ( isArray(arr) ?
     arr.map(function (elem) {
       return elem[1];
-    }) : []);
+    }) : [] );
 }
 
 function nodeToString(node) {
   var elem = ((isArray(node) || isString(node)) ? node : []);
-  if (isArray(elem)) {
-    if (elem.length && isArray(elem[0])) {
+  if ( isArray(elem) ) {
+    if ( elem.length && isArray(elem[0]) ) {
       elem = stack(elem);
     }
     elem = elem.join('');
