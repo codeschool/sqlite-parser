@@ -1,15 +1,14 @@
 var expect            = require('chai').expect,
     fs                = require('fs'),
     _                 = require('lodash'),
-    sqlQueryParser  = require('../lib/index'),
+    sqlQueryParser    = require('../lib/index'),
     prettyjson        = require('prettyjson'),
-    format, broadcast, isDefined, getTree, assertOkTree, assertErrorTree;
-
+    format, broadcast, getTree, assertOkTree, assertErrorTree,
+    isDefined = function (arg) { return arg != null; };
 
 format = function (arg, ugly) {
-  return _.isObject(arg) || (_.isString(arg) && /^[\{\[].*[\{\[]$/.test(arg)) ?
-      (ugly ? JSON.stringify(arg) : prettyjson.render(arg, {})) :
-      arg;
+  return ugly ? ( _.isString(arg) ? arg : JSON.stringify(arg) ) :
+                ( prettyjson.render(arg, {}) );
 };
 
 broadcast = function (args) {
@@ -23,13 +22,9 @@ broadcast = function (args) {
   }
 };
 
-broadcast.canBroadcast = console != null && console.log != null &&
-                          process != null && process.env != null &&
-                          process.env.DEBUG != null;
-
-isDefined = function (arg) {
-  return arg != null;
-};
+broadcast.canBroadcast = (function (c, p) {
+  return ( isDefined(console) && isDefined(process) ? _.has(process.env, 'DEBUG') : false );
+})(console, process);
 
 /**
 Load the source file for the current test and then try and generate the AST from it.
@@ -43,9 +38,7 @@ Load the source file for the current test and then try and generate the AST from
 */
 getTree = function (that, callback) {
   var args = Array.prototype.slice.call(arguments, 1),
-      fileTitle = that.test.title.replace(/(?:\s+)([a-z0-9])/ig, function (matches, $1) {
-        return $1.toUpperCase();
-      }),
+      fileTitle = _.camelCase(that.test.title.trim()),
       filePath = __dirname + '/sql/' + fileTitle + '.sql';
   fs.readFile(filePath, "utf8", function(err, data) {
     if (err) {

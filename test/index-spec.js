@@ -3,7 +3,7 @@ var expect            = require('chai').expect
 
 describe('sql-query-parser', function() {
   it('basic select', function(done) {
-    var resultTree = '{}';
-    tree.ok(this, done);
+    var resultTree = '{"statement":[{"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"apples","alias":"a","index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":">","left":{"type":"identifier","variant":"column","name":"quantity"},"right":{"type":"literal","variant":"decimal","value":"1"},"modifier":null}],"group":{"expression":[{"type":"identifier","variant":"column","name":"type"}],"having":null},"result":[{"type":"identifier","variant":"column","name":"a.quantity","alias":null},{"type":"function","name":"SUM","distinct":false,"expression":[{"type":"identifier","variant":"column","name":"price"},{"type":"literal","variant":"decimal","value":"1.120"}],"alias":null},{"type":"identifier","variant":"column","name":"type","alias":null},{"type":"literal","variant":"string","value":"string\'s","alias":null}],"modifier":null,"order":null,"limit":null}]}';
+    tree.equals(resultTree, this, done);
   });
 });
