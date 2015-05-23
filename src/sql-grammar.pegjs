@@ -1,8 +1,7 @@
 /* Helper Functions */
 {
       // Parser utilities
-  var _u = require('./sql-parser-util'),
-      esc = _u.escape;
+  var _ = require('./sql-parser-util');
 }
 
 /* Start Grammar */
@@ -63,18 +62,14 @@ expression_cast
   }
 
 expression_exists
-  = ( n:( NOT )? x:( EXISTS ) )? e:( stmt_select )
+  = ( n:( NOT )? o x:( EXISTS ) )? e:( stmt_select )
   {
-    var mod = null, hasNot = _u.isOkay(n), hasExists = _u.isOkay(x);
-    if ( hasExists ) {
-      mod = ( hasNot ? 'NOT ' : '' ) + 'EXISTS';
-    }
     return {
       'type': 'expression',
       'format': 'unary',
       'variant': 'select',
       'expression': e,
-      'modifier': mod
+      'modifier': _.compose([n, x])
     };
   }
 
@@ -82,7 +77,7 @@ expression_case
   = CASE e:( expression )? w:( expression_case_when )+ s:( expression_case_else )? END
   {
     var cond = w;
-    if ( _u.isOkay(s) ) {
+    if ( _.isOkay(s) ) {
       cond.push(s);
     }
     return {
@@ -137,11 +132,11 @@ expression_raise_args
 
 raise_args_ignore
   = f:( IGNORE )
-  { return _u.textNode(f); }
+  { return _.textNode(f); }
 
 raise_args_message
   = f:( ROLLBACK / ABORT / FAIL ) sym_comma m:( error_message )
-  { return _u.textNode(f) + ', \'' + m + '\''; }
+  { return _.textNode(f) + ', \'' + m + '\''; }
 
 /* Expression Nodes */
 expression_node
@@ -177,7 +172,7 @@ expression_compare
       'type': 'expression',
       'format': 'binary',
       'variant': 'comparison',
-      'comparison': ( ( _u.isOkay(n) ? 'NOT ' : '' ) + _u.textNode(m) ),
+      'comparison': _.compose([n, m]),
       'left': v,
       'right': e,
       'modifier': x
@@ -198,26 +193,26 @@ expression_escape
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_null
-  = v:( expression_value ) n:( ( IS / ( NOT o ) ) NULL )
+  = v:( expression_value ) ( i:( IS / ( NOT o ) ) n:( NULL ) )
   {
     return {
       'type': 'expression',
       'format': 'unary',
       'variant': 'null',
       'expression': v,
-      'modifier': _u.textNode(n)
+      'modifier': _.compose([i, n])
     };
   }
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_is
-  = v:( expression_value ) IS n:( NOT )? e:( expression )
+  = v:( expression_value ) i:( IS ) n:( NOT )? e:( expression )
   {
     return {
       'type': 'expression',
       'format': 'binary',
       'variant': 'comparison',
-      'comparison': ( 'IS' + ( _u.isOkay(n) ? ' NOT' : '' ) ),
+      'comparison': _.compose([i, n]),
       'left': v,
       'right': e,
       'modifier': null
@@ -226,13 +221,13 @@ expression_is
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_between
-  = v:( expression_value ) n:( NOT )? BETWEEN e1:( expression ) AND e2:( expression )
+  = v:( expression_value ) n:( NOT )? b:( BETWEEN ) e1:( expression ) AND e2:( expression )
   {
     return {
       'type': 'expression',
       'format': 'binary',
       'variant': 'comparison',
-      'comparison': ( ( _u.isOkay(n) ? ' NOT' : '' ) + 'BETWEEN' ),
+      'comparison': _.compose([n, b]),
       'left': v,
       'right': {
         'type': 'expression',
@@ -249,13 +244,13 @@ expression_between
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_in
-  = v:( expression_value ) n:( NOT )? IN e:( expression_in_target )
+  = v:( expression_value ) n:( NOT )? i:( IN ) e:( expression_in_target )
   {
     return {
       'type': 'expression',
       'format': 'binary',
       'variant': 'comparison',
-      'comparison': ( ( _u.isOkay(n) ? 'NOT ' : '' ) + 'IN' ),
+      'comparison': _.compose([i, n]),
       'left': v,
       'right': e,
       'modifier': x
@@ -287,7 +282,7 @@ literal_null
     return {
       'type': 'literal',
       'variant': 'keyword',
-      'value': _u.textNode(n)
+      'value': _.textNode(n)
     };
   }
 
@@ -297,7 +292,7 @@ literal_date
     return {
       'type': 'literal',
       'variant': 'keyword',
-      'value': _u.textNode(d)
+      'value': _.textNode(d)
     };
   }
 
@@ -313,7 +308,7 @@ literal_string
     return {
       'type': 'literal',
       'variant': 'string',
-      'value': _u.textNode(s)
+      'value': _.textNode(s)
     };
   }
 
@@ -323,7 +318,7 @@ literal_string_single
     /**
       * @note Unescaped the pairs of literal single quotation marks
       */
-    return _u.textNode(s).replace(/\'{2}/g, "'");
+    return _.textNode(s).replace(/\'{2}/g, "'");
   }
 
 literal_string_schar
@@ -336,7 +331,7 @@ literal_blob
     return {
       'type': 'literal',
       'variant': 'blob',
-      'value': _u.textNode(b)
+      'value': _.textNode(b)
     };
   }
 
@@ -350,7 +345,7 @@ literal_number_decimal
     return {
       'type': 'literal',
       'variant': 'decimal',
-      'value': d + ( _u.isOkay(e) ? e : '' )
+      'value': _.compose([d, e], '')
     };
   }
 
@@ -360,16 +355,16 @@ number_decimal_node
 
 number_decimal_full
   = f:( number_digit )+ b:( number_decimal_fraction )?
-  { return _u.textNode(f) + ( _u.isOkay(b) ? b : ''); }
+  { return _.compose([f, b], ''); }
 
 number_decimal_fraction
-  = sym_dot d:( number_digit )+
-  { return '.' + _u.textNode(d); }
+  = t:( sym_dot ) d:( number_digit )+
+  { return _.compose([t, d], ''); }
 
 /* TODO: Not sure about "E"i or just "E" */
 number_decimal_exponent
   = e:( "E"i ) s:( [\+\-] )? d:( number_digit )+
-  { return _u.textNode(e) + ( _u.isOkay(s) ? _u.textNode(s) : '') + _u.textNode(d); }
+  { return _.compose([e, s, d], ''); }
 
 literal_number_hex
   = f:( "0x"i ) b:( number_hex )*
@@ -377,7 +372,7 @@ literal_number_hex
     return {
       'type': 'literal',
       'variant': 'hexidecimal',
-      'value': _u.textNode(f) + ( _u.isOkay(b) ? _u.textNode(b) : '' )
+      'value': _.compose([f, b], '')
     };
   }
 
@@ -402,41 +397,38 @@ bind_parameter "Bind Parameter"
  * Bind parameters start at index 1 instead of 0.
  */
 bind_parameter_numbered
-  = sym_quest id:( [1-9] [0-9]* )? o
+  = q:( sym_quest ) id:( [1-9] [0-9]* )? o
   {
     return {
       'type': 'variable',
       'format': 'numbered',
-      'suffix': null,
-      'name': ( _u.isOkay(id) ? parseInt(_u.textNode(id), 10) : null )
+      'name': _.compose([q, id], '')
     };
   }
 
 bind_parameter_named
-  = [\:\@] name:( name_char )+ o
+  = s:( [\:\@] ) name:( name_char )+ o
   {
     return {
       'type': 'variable',
       'format': 'named',
-      'suffix': null,
-      'name': _u.textNode(name)
+      'name': _.compose([s, name], '')
     };
   }
 
 bind_parameter_tcl
-  = "$" name:( name_char / [\:] )+ o suffix:( bind_parameter_named_suffix )?
+  = d:( "$" ) name:( name_char / [\:] )+ o suffix:( bind_parameter_named_suffix )?
   {
     return {
       'type': 'variable',
       'format': 'tcl',
-      'suffix': suffix,
-      'name': _u.textNode(name)
+      'name': _.compose([_.compose([d, name], ''), suffix])
     };
   }
 
 bind_parameter_named_suffix
-  = sym_dblquote n:( !sym_dblquote any )* sym_dblquote
-  { return _u.textNode(n); }
+  = q1:( sym_dblquote ) n:( !sym_dblquote any )* q2:( sym_dblquote )
+  { return _.compose([q1, n, q2], ''); }
 
 /** @note Removed expression on left-hand-side to remove recursion */
 operation_binary
@@ -456,8 +448,7 @@ operation_binary
 expression_list "Expression List"
   = f:( expression ) rest:( expression_list_rest )*
   {
-    var first = [ f ];
-    return ( _u.isOkay(rest) ) ? first.concat(rest) : first;
+    return _.compose([f, rest], []);
   }
 
 expression_list_rest
@@ -467,28 +458,22 @@ expression_list_rest
 function_call
   = n:( name_function ) sym_popen a:( function_call_args )? sym_pclose
   {
-    var func = {
+    return _.extend({
       'type': 'function',
       'name': n,
       'distinct': false,
-      'arguments': []
-    };
-    if ( _u.isOkay(a) ) {
-      // TODO: use a function to merge the two objects?
-      func['distinct'] = a['distinct'];
-      func['arguments'] = a['arguments'];
-    }
-    return func;
+      'expression': []
+    }, a);
   }
 
 function_call_args
   = ( d:( DISTINCT )? e:( expression_list ) ) {
     return {
-      'distinct': _u.isOkay(d),
+      'distinct': _.isOkay(d),
       'expression': e
     };
   }
-  / ( select_star ) {
+  / s:( select_star ) {
     return {
       'distinct': false,
       'expression': [{
@@ -510,12 +495,23 @@ stmt "Statement"
 stmt_crud
   = w:( clause_with )? o s:( stmt_crud_types )
   {
-    s['with'] = w;
-    return s;
+    return _.extend(s, w);
   }
 
 clause_with "WITH Clause"
-  = WITH r:( RECURSIVE )? f:( expression_table ) o r:( sym_comma expression_table )*
+  = WITH r:( RECURSIVE )? f:( expression_table ) o r:( clause_with_loop )*
+  {
+    // TODO: final format
+    return {
+      'type': 'with',
+      'recursive': isOkay(r),
+      'expression': _.compose([f, r], [])
+    };
+  }
+
+clause_with_loop
+  = sym_comma e:( expression_table )
+  { return e; }
 
 expression_table "Table Expression"
   = n:( name_table ) o a:( sym_popen name_column ( sym_comma name_column )* sym_pclose )? o AS s:( stmt_select )
@@ -530,13 +526,10 @@ stmt_crud_types
 stmt_select "SELECT Statement"
   = s:( select_loop ) o o:( select_order )? o l:( select_limit )?
   {
-    if ( _u.isOkay(o) ) {
-      s['order'] = o;
-    }
-    if ( _u.isOkay(l) ) {
-      s['limit'] = l;
-    }
-    return s;
+    return _.extend(s, {
+      'order': o,
+      'limit': l
+    });
   }
 
 select_order
@@ -559,7 +552,7 @@ select_limit_offset
 select_loop
   = s:( select_parts ) o u:( select_loop_union )*
   {
-    if ( _u.isOkay(u) ) {
+    if ( _.isOkay(u) ) {
       // TODO: compound query
     }
     return s;
@@ -579,17 +572,13 @@ select_parts_core
   = s:( select_core_select ) o f:( select_core_from )? o w:( select_core_where )? o g:( select_core_group )? o
   {
     // TODO: Not final syntax!
-    var sel = {
+    return _.extend({
       'type': 'statement',
       'variant': 'select',
       'from': f,
       'where': w,
       'group': g
-    };
-    // TODO: use a function to merge the two objects?
-    sel['select'] = s['result'];
-    sel['modifier'] = s['modifier'];
-    return sel;
+    }, s);
   }
 
 select_core_select
@@ -604,8 +593,7 @@ select_core_select
 select_target
   = f:( select_node ) o r:( select_target_loop )*
   {
-    var target = [ f ];
-    return _u.isOkay(r) ? target.concat(r) : target;
+    return _.compose([f, r], []);
   }
 
 select_target_loop
@@ -618,14 +606,14 @@ select_core_from
 
 select_core_where
   = WHERE e:( expression )
-  { return !_u.isArray(e) ? [ e ] : e; }
+  { return _.makeArray(e); }
 
 select_core_group
   = GROUP BY e:( expression ) h:( select_core_having )?
   {
     // TODO: format
     return {
-      'expression': ( !_u.isArray(e) ? [ e ] : e ),
+      'expression': _.makeArray(e),
       'having': h
     };
   }
@@ -639,24 +627,25 @@ select_node
   / select_node_aliased
 
 select_node_star
-  = q:( select_node_star_qualified )? select_star
+  = q:( select_node_star_qualified )? s:( select_star )
   {
     // TODO: format
     return {
-      'expression': ( ( _u.isOkay(q) ? q : '' ) + '*' )
+      'expression': _.compose([q, s], '')
     };
   }
 
 select_node_star_qualified
-  = n:( name_table ) sym_dot
-  { return n + '.'; }
+  = n:( name_table ) s:( sym_dot )
+  { return _.compose([n, s], ''); }
 
 select_node_aliased
   = e:( expression ) a:( alias )?
   {
     // TODO: format
-    e['alias'] = a;
-    return e;
+    return _.extend(e, {
+      'alias': a
+    });
   }
 
 select_source
@@ -666,8 +655,7 @@ select_source
 select_source_loop
   = f:( table_or_sub ) t:( source_loop_tail )*
   {
-    var source = [ f ];
-    return ( _u.isOkay(t) ? source.concat(t) : source );
+    return _.compose([f, t], []);
   }
 
 source_loop_tail
@@ -682,26 +670,34 @@ table_or_sub
 table_or_sub_table
   = d:( table_or_sub_table_id ) i:( table_or_sub_index )?
   {
-    if ( _u.isOkay(i) ) {
-      d['index'] = i;
-    }
-    return d;
+    return _.extend(d, {
+      'index': i
+    });
   }
 
 table_or_sub_table_id
   = n:( id_table ) o a:( alias )?
   {
-    n['alias'] = a;
-    return n;
+    return _.extend(n, {
+      'alias': a
+    });
   }
 
 table_or_sub_index
-  = i:( ( INDEXED BY name_index ) / ( NOT INDEXED ) )
+  = i:( table_or_sub_index_node )
   {
     return {
       'type': 'index',
-      'index': _u.textNode(i)
+      'index': i
     };
+  }
+
+table_or_sub_index_node
+  = ( INDEXED BY n:( name_index ) ) {
+    return _.textNode(n);
+  }
+  / n:( NOT INDEXED ) {
+    return _.textNode(n);
   }
 
 alias
@@ -709,26 +705,40 @@ alias
   { return n; }
 
 select_join_loop
-  = table_or_sub ( select_join_clause )*
+  = t:( table_or_sub ) j:( select_join_clause )*
+  {
+    return _TODO_;
+  }
 
 select_join_clause
-  = join_operator table_or_sub ( join_condition )?
+  = o:( join_operator ) n:( table_or_sub ) c:( join_condition )?
+  {
+    return _TODO_;
+  }
 
 join_operator
-  = ( NATURAL )? ( ( LEFT ( OUTER )? ) / INNER / CROSS )? JOIN
+  = n:( NATURAL )? t:( ( LEFT ( OUTER )? ) / INNER / CROSS )? j:( JOIN )
+  {
+    return _.compose([n, t, j]);
+  }
 
 join_condition
   = ( ON expression )
   / ( USING name_column ( sym_comma name_column )* )
+  {
+    return _TODO_;
+  }
 
 select_parts_values
   = VALUES sym_popen expression_list sym_pclose
+  {
+    return _TODO_;
+  }
 
 select_order_list
   = f:( select_order_list_item ) o b:( select_order_list_loop )?
   {
-    var list = [ f ];
-    return _u.isOkay(b) ?  list.concat(b) : list;
+    return _.compose([f, b], []);
   }
 
 select_order_list_loop
@@ -736,15 +746,23 @@ select_order_list_loop
   { return i; }
 
 select_order_list_item
-  = e:( expression ) o c:( COLLATE id_collation )? o d:(ASC / DESC)?
+  = e:( expression ) o c:( select_order_list_collate )? o d:( select_order_list_dir )?
   {
     // TODO: Not final format
     return {
-      'direction': _u.textNode(d),
+      'direction': _.textNode(d),
       'expression': e,
       'modifier': c
     };
   }
+
+select_order_list_collate
+  = COLLATE n:( id_collation )
+  { return n; }
+
+select_order_list_dir
+  = t:( ASC / DESC )
+  { return _.textNode(t); }
 
 select_star "All Columns"
   = sym_star
@@ -772,7 +790,7 @@ operator_binary "Binary Operator"
   / ( binary_assign / binary_equal / binary_notequal / ( IS ( NOT )? ) / IN / LIKE / GLOB / MATCH / REGEXP )
   / AND
   / OR )
-  { return _u.textNode(o); }
+  { return _.textNode(o); }
 
 binary_concat "Or"
   = sym_pipe sym_pipe
@@ -841,13 +859,13 @@ id_table
     return {
       'type': 'identifier',
       'variant': 'table',
-      'name': ( ( _u.isOkay(d) ? d : '' ) + n )
+      'name': _.compose([d, n], '')
     };
   }
 
 id_table_qualified
-  = d:( name_database ) sym_dot
-  { return d + '.'; }
+  = n:( name_database ) d:( sym_dot )
+  { return _.compose([n, d], ''); }
 
 id_column
   = d:( id_table_qualified )? t:( id_column_qualified )? n:( name_column )
@@ -855,13 +873,13 @@ id_column
     return {
       'type': 'identifier',
       'variant': 'column',
-      'name': ( ( _u.isOkay(d) ? d : '' ) + ( _u.isOkay(t) ? t : '' ) + n )
+      'name': _.compose([d, t, n], '')
     };
   }
 
 id_column_qualified
-  = t:( name_table ) sym_dot
-  { return t + '.'; }
+  = t:( name_table ) d:( sym_dot )
+  { return _.compose([t, d], ''); }
 
 id_collation
   = name_collation
@@ -930,7 +948,7 @@ name
 
 name_unquoted
   = n:( !reserved_words name_char )+
-  { return _u.textNode(n); }
+  { return _.textNode(n); }
 
 /** @note Non-standard legacy format */
 name_bracketed
@@ -939,12 +957,12 @@ name_bracketed
 
 name_dblquoted
   = sym_dblquote n:( !sym_dblquote name_char )+ sym_dblquote
-  { return _u.textNode(n); }
+  { return _.textNode(n); }
 
 /** @note Non-standard legacy format */
 name_backticked
   = sym_backtick n:( !sym_backtick name_char ) sym_backtick
-  { return _u.textNode(n); }
+  { return _.textNode(n); }
 
 /* Symbols */
 
