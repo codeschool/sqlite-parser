@@ -38,7 +38,7 @@ module.exports = function(grunt) {
       debug: {
         options: {
           failOnError: false,
-          debounceDelay: 2000,
+          debounceDelay: 500,
           forever: true
         },
         command: 'DEBUG=true ./node_modules/.bin/mocha test/index-spec.js --reporter="list"'
