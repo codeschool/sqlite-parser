@@ -21,11 +21,14 @@
   - [ ] Expressions `1 != 2`, `CAST banana AS INT`
     - Need to fix the grouping of expressions to allow for expressions to be logically organized.
       - Example: `WHERE 1 < 2 AND 3 < 4`
+
+        > ```
         >
-        >          AND                            <
-        >      /         \         versus     /       \
-        >     <           <                  1        AND
-        >  /     \     /     \                      /     \
-        > 1       2   3       4                    2       <
-        >                                               /     \
-        >                                              3       4
+        >           AND                            <
+        >       /         \         versus     /       \
+        >      <           <                  1        AND
+        >   /     \     /     \                      /     \
+        >  1       2   3       4                    2       <
+        >                                                /     \
+        >                                               3       4
+        > ```
