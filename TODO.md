@@ -21,13 +21,16 @@
       - [x] `ORDER BY`
       - [x] `GROUP BY`
       - [x] `HAVING`
-  - [ ] `INSERT`
+  - [x] `INSERT`
+    - [x] `INSERT INTO ... VALUES (...), (...)`
+    - [x] `INSERT INTO ... DEFAULT VALUES`
+    - [x] `INSERT INTO ... SELECT * FROM apples`
   - [ ] `UPDATE`
   - [ ] `DELETE`
   - [ ] `DROP`
   - [ ] `CREATE`
   - [ ] Expressions `1 != 2`, `CAST banana AS INT`
-    - Need to fix the grouping of expressions to allow for expressions to be logically organized.
+    - **BUG**: Need to fix the grouping of expressions to allow for expressions to be logically organized.
       - Example: `WHERE 1 < 2 AND 3 < 4`
 
         > ```
