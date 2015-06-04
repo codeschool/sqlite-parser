@@ -207,8 +207,8 @@ expression_compare
     return {
       'type': 'expression',
       'format': 'binary',
-      'variant': 'comparison',
-      'comparison': _.compose([n, m]),
+      'variant': 'operation',
+      'operation': _.compose([n, m]),
       'left': v,
       'right': e,
       'modifier': x
@@ -219,11 +219,8 @@ expression_escape
   = ESCAPE e e:( expression )
   {
     return {
-      'type': 'expression',
-      'format': 'unary',
-      'variant': 'escape',
-      'expression': e,
-      'modifier': null
+      'type': 'escape',
+      'expression': e
     };
   }
 
@@ -252,8 +249,8 @@ expression_is
     return {
       'type': 'expression',
       'format': 'binary',
-      'variant': 'comparison',
-      'comparison': _.compose([i, n]),
+      'variant': 'operation',
+      'operation': _.compose([i, n]),
       'left': v,
       'right': e,
       'modifier': null
@@ -267,16 +264,13 @@ expression_between
     return {
       'type': 'expression',
       'format': 'binary',
-      'variant': 'comparison',
-      'comparison': _.compose([n, b]),
+      'variant': 'operation',
+      'operation': _.compose([n, b]),
       'left': v,
       'right': {
-        'type': 'expression',
-        'format': 'binary',
-        'variant': 'range',
+        'type': 'range',
         'left': e1,
-        'right': e2,
-        'modifier': null
+        'right': e2
       },
       'modifier': null
     };
@@ -290,11 +284,11 @@ expression_in
     return {
       'type': 'expression',
       'format': 'binary',
-      'variant': 'comparison',
-      'comparison': _.compose([i, n]),
+      'variant': 'operation',
+      'operation': _.compose([n, i]),
       'left': v,
       'right': e,
-      'modifier': x
+      'modifier': null
     };
   }
 
@@ -1032,8 +1026,8 @@ operator_binary "Binary Operator"
   / binary_plus / binary_minus
   / binary_left / binary_right / binary_and / binary_or
   / binary_lt / binary_lte / binary_gt / binary_gte
-  / binary_lang / binary_notequal / binary_equal / binary_assign )
-  { return _.textNode(o); }
+  / binary_lang / binary_notequal / binary_equal )
+  { return _.keywordify(o); }
 
 binary_concat "Or"
   = sym_pipe sym_pipe
@@ -1051,10 +1045,10 @@ binary_mod "Modulo"
   = sym_mod
 
 binary_left "Shift Left"
-  = binary_lt binary_lt
+  = sym_lt sym_lt
 
 binary_right "Shift Right"
-  = binary_gt binary_gt
+  = sym_gt sym_gt
 
 binary_and "Logical AND"
   = sym_amp
@@ -1069,32 +1063,27 @@ binary_gt "Greater Than"
   = sym_gt
 
 binary_lte "Less Than Or Equal"
-  = binary_lt sym_equal
+  = sym_lt sym_equal
 
 binary_gte "Greater Than Or Equal"
-  = binary_gt sym_equal
-
-binary_assign "Assignment"
-  = sym_equal
+  = sym_gt sym_equal
 
 binary_equal "Equal"
-  = binary_assign binary_assign
+  = sym_equal ( sym_equal )?
 
 binary_notequal "Not Equal"
-  = ( sym_excl binary_assign )
-  / ( binary_lt binary_gt )
+  = ( sym_excl sym_equal )
+  / ( sym_lt sym_gt )
 
 binary_lang
   = binary_lang_isnt
   / binary_lang_misc
 
 binary_lang_isnt "IS"
-  = i:( IS ) e n:( NOT e )?
-  { return _.compose([i, n]); }
+  = ( IS ) e ( NOT e )?
 
 binary_lang_misc "Misc Binary Operator"
-  = m:( IN / LIKE / GLOB / MATCH / REGEXP ) e
-  { return _.textNode(m); }
+  = IN / LIKE / GLOB / MATCH / REGEXP
 
 /* Database, Table and Column IDs */
 
