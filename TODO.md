@@ -5,7 +5,15 @@
     - [ ] Sub-queries `SELECT * FROM (SELECT * FROM b)`
     - [x] Functions, aggregation, etc... `SELECT COUNT(*) FROM apples`
     - [ ] Compound queries `SELECT * FROM a UNION SELECT * FROM b`
-    - [x] Aliases `SELECT * FROM apples AS a`
+    - [ ] Aliases `SELECT * FROM apples AS a`
+      - [x] `apples AS unquoted_name`
+      - [x] `apples no_as`
+      - [x] `apples containsWhereKeyword` and `apples AS floatDatatype`
+        - [ ] **BUG**: Currently, paradoxically working for all keywords everything except `INT`, `INTEGER`, `INT2` but still working for `BIGINT`, `MEDIUMINT`...
+        - [x] Do not allow **unquoted** alias as exact match for a keyword or datatype name `apples AS VARCHAR`, `apples AS Join`
+      - [x] `apples AS [inBrackets]`
+      - [x] ```apples AS `backticks````
+      - [x] `apples AS "Double Quoted with Spaces"`
     - [ ] `JOIN` types `INNER`, `OUTER`, `LEFT`
     - [x] Query modifiers `WHERE`, `GROUP BY`, `HAVING`
       - [x] `WHERE`
