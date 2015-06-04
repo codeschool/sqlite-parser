@@ -43,10 +43,10 @@ describe('sql-query-parser', function() {
 
   // CREATE statement
 
-  // it('basic create', function(done) {
-  //   var resultTree = '{}';
-  //   tree.equals(resultTree, this, done);
-  // });
+  it('basic create', function(done) {
+    var resultTree = '{}';
+    tree.equals(resultTree, this, done);
+  });
 
 
   // it('binary concatenation', function(done) {
