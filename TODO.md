@@ -36,75 +36,75 @@
   - [ ] Datatypes
     - [x] SQLite
 
-      | Expression             | Resulting Affinity |
-      |:---------------------- | ------------------:|
-      | INT                    | INTEGER            |
-      | INTEGER                | INTEGER            |
-      | TINYINT                | INTEGER            |
-      | SMALLINT               | INTEGER            |
-      | MEDIUMINT              | INTEGER            |
-      | BIGINT                 | INTEGER            |
-      | UNSIGNED BIG           | INTEGER            |
-      | INT2                   | INTEGER            |
-      | INT8	                 | INTEGER            |
-      | CHARACTER(20)          | TEXT               |
-      | VARCHAR(255)           | TEXT               |
-      | VARYING CHARACTER(255) | TEXT               |
-      | NCHAR(55)              | TEXT               |
-      | NATIVE CHARACTER(70)   | TEXT               |
-      | NVARCHAR(100)          | TEXT               |
-      | TEXT                   | TEXT               |
-      | CLOB	                 | TEXT               |
-      | BLOB                   | NONE               |
-      | no datatype specified	 | NONE               |
-      | REAL                   | REAL               |
-      | DOUBLE                 | REAL               |
-      | DOUBLE PRECISION       | REAL               |
-      | FLOAT	                 | REAL               |
-      | NUMERIC                | NUMERIC            |
-      | DECIMAL(10,5)          | NUMERIC            |
-      | BOOLEAN                | NUMERIC            |
-      | DATE                   | NUMERIC            |
-      | DATETIME	             | NUMERIC            |
+      | Expression                  | Resulting Affinity |
+      |:--------------------------- | ------------------:|
+      | INT                         | INTEGER            |
+      | INTEGER                     | INTEGER            |
+      | TINYINT                     | INTEGER            |
+      | SMALLINT                    | INTEGER            |
+      | MEDIUMINT                   | INTEGER            |
+      | BIGINT                      | INTEGER            |
+      | UNSIGNED BIG                | INTEGER            |
+      | INT2                        | INTEGER            |
+      | INT8	                      | INTEGER            |
+      | CHARACTER(20)               | TEXT               |
+      | VARCHAR(255)                | TEXT               |
+      | VARYING CHARACTER(255)      | TEXT               |
+      | NCHAR(55)                   | TEXT               |
+      | NATIVE CHARACTER(70)        | TEXT               |
+      | NVARCHAR(100)               | TEXT               |
+      | TEXT                        | TEXT               |
+      | CLOB	                      | TEXT               |
+      | BLOB                        | NONE               |
+      | no datatype specified	      | NONE               |
+      | REAL                        | REAL               |
+      | DOUBLE                      | REAL               |
+      | DOUBLE PRECISION            | REAL               |
+      | FLOAT	                      | REAL               |
+      | NUMERIC                     | NUMERIC            |
+      | DECIMAL(10,5)               | NUMERIC            |
+      | BOOLEAN                     | NUMERIC            |
+      | DATE                        | NUMERIC            |
+      | DATETIME	                  | NUMERIC            |
 
     - [ ] PostgreSQL
 
-      | Name                   | Aliases            |
-      |:---------------------- | ------------------:|
-      | bigint                 | int8	              |
-      | bigserial	             | serial8	          |
-      | bit [ (n) ]	 	         |                    |
-      | bit varying [ (n) ]	   | varbit	            |
-      | boolean	               | bool	              |
-      | box	 	                 |                    |
-      | bytea	 	               |                    |
-      | character [ (n) ]	     | char [ (n) ]       |
-      | character varying [ (n) ] |	varchar [ (n) ] |
-      | cidr                   |                    |
-      | circle                 |                    |
-      | date                   |                    |
-      | double precision	     | float8             |
-      | inet	 	               |                    |
-      | integer	               | int, int4	        |
-      | interval [ fields ] [ (p) ] |               |
-      | json                   |                    |
-      | line	 	               |                    |
-      | lseg	                 |                    |
-      | macaddr	               |                    |
-      | money	                 |                    |
-      | numeric [ (p, s) ]     | decimal [ (p, s) ] |
-      | path                   |                    |
-      | point                  |                    |
-      | polygon	               |                    |
-      | real	                 | float4             |
-      | smallint               | int2               |
-      | smallserial	           | serial2            |
-      | serial                 | serial4            |
-      | text                   |                    |
-      | time [ (p) ] 	         | timetz             |
-      | timestamp [ (p) ]      | timestamptz	      |
-      | tsquery                |                    |
-      | tsvector               |                    |
-      | txid_snapshot	         |                    |
-      | uuid                   |                    |
-      | xml                    |                    |
+      | Name                        | Aliases            |
+      |:--------------------------- | ------------------:|
+      | bigint                      | int8	             |
+      | bigserial	                  | serial8	           |
+      | bit [ (n) ]	 	              |                    |
+      | bit varying [ (n) ]	        | varbit	           |
+      | boolean	                    | bool	             |
+      | box	 	                      |                    |
+      | bytea	 	                    |                    |
+      | character [ (n) ]	          | char [ (n) ]       |
+      | character varying [ (n) ]   |	varchar [ (n) ]    |
+      | cidr                        |                    |
+      | circle                      |                    |
+      | date                        |                    |
+      | double precision	          | float8             |
+      | inet	 	                    |                    |
+      | integer	                    | int, int4	         |
+      | interval [ fields ] [ (p) ] |                    |
+      | json                        |                    |
+      | line	 	                    |                    |
+      | lseg	                      |                    |
+      | macaddr	                    |                    |
+      | money	                      |                    |
+      | numeric [ (p, s) ]          | decimal [ (p, s) ] |
+      | path                        |                    |
+      | point                       |                    |
+      | polygon	                    |                    |
+      | real	                      | float4             |
+      | smallint                    | int2               |
+      | smallserial	                | serial2            |
+      | serial                      | serial4            |
+      | text                        |                    |
+      | time [ (p) ] 	              | timetz             |
+      | timestamp [ (p) ]           | timestamptz	      |
+      | tsquery                     |                    |
+      | tsvector                    |                    |
+      | txid_snapshot	              |                    |
+      | uuid                        |                    |
+      | xml                         |                    |
