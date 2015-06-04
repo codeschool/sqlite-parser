@@ -1,12 +1,5 @@
 module.exports = function(grunt) {
   grunt.initConfig({
-    // browserify: {
-    //   dist: {
-    //     require: ['lib/sql-grammar-codex.js', 'lib/sql-parser-util.js', 'lib/sql-parser.js'],
-    //     src: ['lib/index.js'],
-    //     dest: 'dist/sql-tag-validator.js'
-    //   }
-    // },
     copy: {
       main: {
         files: [{
@@ -42,12 +35,18 @@ module.exports = function(grunt) {
           forever: true
         },
         command: 'DEBUG=true ./node_modules/.bin/mocha test/index-spec.js --reporter="list"'
+      },
+      json: {
+        options: {
+          failOnError: false
+        },
+        command: 'UGLY=true DEBUG=true ./node_modules/.bin/mocha test/index-spec.js --reporter="list"'
       }
     },
     watch: {
       debug: {
         files: ['Gruntfile.js', 'test/*.js', 'src/*.js', 'src/*.pegjs', 'test/sql/*.sql', 'index.js'],
-        tasks: ['default', 'shell:debug']
+        tasks: ['default', 'shell:ugly']
       }
     }
   });
@@ -56,10 +55,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  // grunt.loadNpmTasks('grunt-browserify');
 
   grunt.registerTask('default', ['clean:main', 'shell:pegjs', 'copy:main']);
-  // grunt.registerTask('dist', ['default', 'clean:dist', 'browserify:dist']);
   grunt.registerTask('test', ['default', 'shell:test']);
+  grunt.registerTask('rebuild', ['default', 'shell:debug']);
   grunt.registerTask('debug', ['default', 'shell:debug', 'watch:debug']);
+  grunt.registerTask('json', ['default', 'shell:json']);
 };
