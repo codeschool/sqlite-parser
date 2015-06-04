@@ -1187,19 +1187,19 @@ datatype_none
 
 /* TODO: Complete */
 stmt_update "UPDATE Statement"
-  = any
+  = _TODO_
 
 /* TODO: Complete */
 stmt_delete "DELETE Statement"
-  = any
+  = _TODO_
 
 /* TODO: Complete */
 stmt_create "CREATE Statement"
-  = any
+  = _TODO_
 
 /* TODO: Complete */
 stmt_drop "DROP Statement"
-  = any
+  = _TODO_
 
 /* Naming rules */
 
