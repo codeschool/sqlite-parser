@@ -349,7 +349,7 @@ literal_null
   {
     return {
       'type': 'literal',
-      'variant': 'keyword',
+      'variant': 'null',
       'value': _.textNode(n)
     };
   }
@@ -359,7 +359,7 @@ literal_date
   {
     return {
       'type': 'literal',
-      'variant': 'keyword',
+      'variant': 'date',
       'value': _.textNode(d)
     };
   }
@@ -574,9 +574,8 @@ error_message "Error Message"
   = literal_string
 
 stmt "Statement"
-  = stmt_crud
-  / stmt_create
-  / stmt_drop
+  = s:( stmt_crud / stmt_create / stmt_drop ) o ( sym_semi )?
+  { return s; }
 
 stmt_crud
   = w:( clause_with )? o s:( stmt_crud_types )
@@ -895,6 +894,123 @@ select_order_list_dir
 select_star "All Columns"
   = sym_star
 
+/** {@link https://www.sqlite.org/lang_insert.html} */
+stmt_insert "INSERT Statement"
+  = k:( insert_keyword ) o t:( insert_target ) o p:( insert_parts )
+  {
+    // TODO: Not final syntax!
+    return _.extend({
+      'type': 'statement',
+      'variant': 'insert',
+      'into': null,
+      'action': null,
+      'or': null,
+      'result': []
+    }, k, t, p);
+  }
+
+insert_keyword
+  = insert_keyword_ins
+  / insert_keyword_repl
+
+insert_keyword_ins
+  = a:( INSERT ) e m:( insert_keyword_mod )?
+  {
+    return _.extend({
+      'action': _.keywordify(a)
+    }, m);
+  }
+
+insert_keyword_repl
+  = a:( REPLACE ) e
+  {
+    return {
+      'action': _.keywordify(a)
+    };
+  }
+
+insert_keyword_mod
+  = OR e m:( REPLACE / ROLLBACK / ABORT / FAIL / IGNORE )
+  {
+    return {
+      'or': _.keywordify(m)
+    };
+  }
+
+insert_target
+  = INTO e id:( id_table ) o cols:( insert_target_cols )?
+  {
+    return {
+      'into': _.extend({
+        'target': id,
+        'columns': null
+      }, cols)
+    };
+  }
+
+insert_target_cols
+  = sym_popen f:( insert_target_colname ) o b:( target_cols_loop )* sym_pclose
+  {
+    return {
+      'columns': _.compose([f, b], [])
+    };
+  }
+
+target_cols_loop
+  = sym_comma c:( insert_target_colname ) o
+  { return c; }
+
+insert_target_colname
+  = n:( name_column )
+  {
+    return {
+      'type': 'identifier',
+      'variant': 'column',
+      'name': n
+    };
+  }
+
+insert_parts
+  = r:( insert_value / stmt_select / insert_default ) o
+  {
+    return {
+      'result': r
+    };
+  }
+
+insert_value
+  = VALUES o r:( insert_values_list )
+  { return r; }
+
+insert_values_list
+  = f:( insert_values ) o b:( insert_values_loop )*
+  { return _.compose([f, b], []); }
+
+insert_values_loop
+  = sym_comma e:( insert_values ) o
+  { return e; }
+
+insert_values
+  = sym_popen e:( expression_list ) sym_pclose
+  {
+    return {
+      'type': 'statement',
+      'variant': 'values',
+      'values': e
+    };
+  }
+
+  /* TODO: This doesn't seem like the right format for this variant */
+insert_default
+  = d:( DEFAULT ) e v:( VALUES )
+  {
+    return {
+      'type': 'statement',
+      'variant': 'default',
+      'values': _.compose([d, v])
+    };
+  }
+
 /* TODO: Not finished */
 operator_compound "Compound Operator"
   = ( UNION ( e ALL )? )
@@ -1080,18 +1196,6 @@ datatype_none
   = t:( "BLOB"i )
   { return _.keywordify(t); }
 
-/** {@link https://www.sqlite.org/lang_insert.html} */
-stmt_insert "INSERT Statement"
-  = ( ( INSERT ( OR ( REPLACE / ROLLBACK / ABORT / FAIL / IGNORE ) )? ) / REPLACE )
-  ( INTO ( id_table ) ( sym_popen name_column ( sym_comma name_column )* sym_pclose )? )
-  insert_parts
-
-/* TODO: LEFT OFF HERE */
-insert_parts
-  = ( VALUES sym_popen expression_list sym_pclose)
-  / ( stmt_select )
-  / ( DEFAULT VALUES )
-
 /* TODO: Complete */
 stmt_update "UPDATE Statement"
   = any
@@ -1192,6 +1296,8 @@ sym_gt "Greater Than"
   = s:( ">" ) o { return _.textNode(s); }
 sym_excl "Exclamation"
   = s:( "!" ) o { return _.textNode(s); }
+sym_semi "Semicolon"
+  = s:( ";" ) o { return _.textNode(s); }
 
 /* Keywords */
 
