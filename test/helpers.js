@@ -6,31 +6,25 @@ var expect            = require('chai').expect,
     format, broadcast, getTree, assertOkTree, assertErrorTree,
     isDefined = function (arg) { return arg != null; };
 
-format = function (arg) {
-  return broadcast.ugly ? ( _.isString(arg) ? arg : JSON.stringify(arg) ) :
-                ( prettyjson.render(arg, {}) );
-};
-
-broadcast = function (args, ugly) {
+broadcast = function broadcast(args) {
   // Only broadcast when DEBUG=true is set in the environment
+  var formatted;
   _.forEach(args, function (arg) {
-    if (broadcast.shouldBroadcast(arg)) {
-      console.log('\n\n', format(arg, ugly), '\n');
+    if (broadcast.should(arg)) {
+      formatted = broadcast.ugly ? ( _.isString(arg) ? arg : JSON.stringify(arg) ) :
+                                   ( prettyjson.render(arg, {}) );
+      console.log('\n\n', formatted, '\n');
     }
   });
 };
-broadcast.debug = (function (p) {
-  return isDefined(process) && _.has(process.env, 'DEBUG');
-})(process);
-broadcast.canBroadcast = (function (c, p) {
-  return isDefined(console) && broadcast.debug;
-})(console, process);
-broadcast.shouldBroadcast = function (msg) {
-  return broadcast.canBroadcast && isDefined(msg);
-};
-broadcast.ugly = (function (p) {
-  return broadcast.shouldBroadcast && _.has(process.env, 'UGLY');
-})(process);
+(function (b, c, p) {
+  b.debug = isDefined(p) && _.has(p.env, 'DEBUG');
+  b.can = isDefined(c) && b.debug;
+  b.should = function (msg) {
+    return b.can && isDefined(msg);
+  };
+  b.ugly = b.should && _.has(p.env, 'UGLY');
+})(broadcast, console, process);
 
 /**
 Load the source file for the current test and then try and generate the AST from it.
