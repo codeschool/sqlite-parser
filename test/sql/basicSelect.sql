@@ -1,3 +1,3 @@
-SELECT DISTINCT bees.*, CAST(430.120 AS VARCHAR(20))
-FROM bees
-WHERE 1 != 2
+SELECT *
+FROM bananas
+WHERE color = 'red'
