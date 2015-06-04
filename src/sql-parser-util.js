@@ -53,7 +53,7 @@ function compose(args, glue) {
     glue = ' ';
   }
   res = args.reduce(function (prev, cur) {
-    return conc ? (isOkay(cur) ? prev.concat(cur) : cur) :
+    return conc ? (isOkay(cur) ? prev.concat(cur) : prev) :
                   (prev + (isOkay(cur) ? textNode(cur) + glue : ''));
   }, start);
   return conc ? res : res.trim();
@@ -107,15 +107,71 @@ function extend() {
   return first;
 }
 
+function has(thing, item) {
+  var k, v, len;
+  if (isArray(thing)) {
+    if (isString(item)) {
+      // thing is an array, find substring item
+      return thing.indexOf(item) !== -1;
+    } else {
+      // thing is an array, find item in array
+      return findWhere(thing, item) !== undefined;
+    }
+  } else if (isPlain(thing)) {
+    // thing is an object
+    if (isPlain(item)) {
+      // item is an object, find each prop key and value in item within thing
+      for (k in item) {
+        v = item[k];
+        if (!(thing.hasOwnProperty(k) && thing[k] === v)) {
+          return false;
+        }
+      }
+      return true;
+    } else if (isArray(item)) {
+      // item is an array, find each string prop within thing
+      for (i = 0, len = item.length; i < len; i++) {
+        k = item[i];
+        if (!thing.hasOwnProperty(k)) {
+          return false;
+        }
+      }
+      return true;
+    } else {
+      // thing is an object, item is a string, find item string in thing
+      return thing.hasOwnProperty(item);
+    }
+  }
+  return false;
+}
+
+function findWhere(arr, props) {
+  var i, len, val;
+  for (i = 0, len = arr.length; i < len; i++) {
+    val = arr[i];
+    if (has(val, props)) {
+      return val;
+    }
+  }
+  return null;
+}
+
+function keywordify(elem) {
+  return textNode(elem).toUpperCase();
+}
+
 module.exports = {
   // Array methods
   'stack':                stack,
   'collapse':             collapse,
   'compose':              compose,
+  'findWhere':            findWhere,
+  'has':                  has,
   // String methods
   'nodeToString':         nodeToString,
   'textNode':             textNode,
   'unescape':             unescape,
+  'keywordify':           keywordify,
   // Type detection
   'typed':                typed,
   'isPlain':              isPlain,

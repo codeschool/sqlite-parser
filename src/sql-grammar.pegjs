@@ -18,12 +18,47 @@ start
  * {@link https://www.sqlite.org/lang_expr.html}
  */
 expression "Expression"
-  = expression_wrapped
-  / expression_node
-  / expression_value
+  = expressions
+  / expression_types
+
+/*
+  TODO: Need to fix the grouping of expressions to allow for expressions
+        to be logically organized.
+
+  Example: WHERE 1 < 2 AND 3 < 4
+
+           AND                             <
+        /         \         versus     /       \
+       <           <                  1        AND
+    /     \     /     \                      /     \
+  1        2   3       4                    2       <
+                                                 /     \
+                                                3       4
+*/
+expressions
+  = f:( expression_types ) o b:( expression_loop )
+  {
+    return {
+      'type': 'expression',
+      'format': 'binary',
+      'variant': 'operation',
+      'operation': b[0],
+      'left': f,
+      'right': b[1],
+      'modifier': null
+    };
+  }
+
+expression_loop
+  = c:( binary_loop_concat ) o e:( expression )
+  { return [c, e]; }
+
+expression_types
+  = t:( expression_wrapped / expression_node / expression_value ) o
+  { return t; }
 
 expression_wrapped
-  = sym_popen n:( expression_node ) sym_pclose
+  = sym_popen o n:( expression_node / expression_value ) o sym_pclose
   { return n; }
 
 expression_value
@@ -38,7 +73,7 @@ expression_value
   / id_column
 
 expression_unary
-  = o:( operator_unary ) e:( expression )
+  = o:( operator_unary ) o e:( expression )
   {
     return {
       'type': 'expression',
@@ -50,7 +85,7 @@ expression_unary
   }
 
 expression_cast
-  = CAST sym_popen e:( expression ) a:( alias ) sym_pclose
+  = CAST o sym_popen e:( expression ) o a:( type_alias ) o sym_pclose
   {
     return {
       'type': 'expression',
@@ -61,8 +96,12 @@ expression_cast
     };
   }
 
+type_alias
+  = AS e d:( type_definition )
+  { return d; }
+
 expression_exists
-  = ( n:( NOT )? o x:( EXISTS ) )? e:( stmt_select )
+  = ( n:( NOT e )? x:( EXISTS e ) )? o e:( stmt_select )
   {
     return {
       'type': 'expression',
@@ -74,7 +113,7 @@ expression_exists
   }
 
 expression_case
-  = CASE e:( expression )? w:( expression_case_when )+ s:( expression_case_else )? END
+  = CASE e e:( expression )? o w:( expression_case_when )+ o s:( expression_case_else )? e END
   {
     var cond = w;
     if (_.isOkay(s)) {
@@ -92,7 +131,7 @@ expression_case
 
 
 expression_case_when
-  = WHEN w:( expression ) THEN t:( expression )
+  = WHEN e w:( expression ) o THEN e t:( expression )
   {
     return {
       'type': 'condition',
@@ -105,7 +144,7 @@ expression_case_when
   }
 
 expression_case_else
-  = ELSE e:( expression )
+  = ELSE e e:( expression )
   {
     return {
       'type': 'condition',
@@ -116,7 +155,7 @@ expression_case_else
   }
 
 expression_raise
-  = RAISE sym_popen a:( expression_raise_args ) sym_pclose
+  = RAISE sym_popen o a:( expression_raise_args ) o sym_pclose
   {
     return {
       'type': 'expression',
@@ -136,7 +175,7 @@ raise_args_ignore
   { return _.textNode(f); }
 
 raise_args_message
-  = f:( ROLLBACK / ABORT / FAIL ) sym_comma m:( error_message )
+  = f:( ROLLBACK / ABORT / FAIL ) o sym_comma o m:( error_message )
   { return _.textNode(f) + ', \'' + m + '\''; }
 
 /* Expression Nodes */
@@ -151,7 +190,7 @@ expression_node
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_collate
-  = v:( expression_value ) COLLATE n:( name_collation )
+  = v:( expression_value ) o COLLATE e n:( name_collation )
   {
     return {
       'type': 'expression',
@@ -167,7 +206,7 @@ expression_collate
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_compare
-  = v:( expression_value ) n:( NOT )? m:( LIKE / GLOB / REGEXP / MATCH ) e:( expression ) x:( expression_escape )?
+  = v:( expression_value ) o n:( NOT e )? m:( LIKE / GLOB / REGEXP / MATCH ) e e:( expression ) o x:( expression_escape )?
   {
     return {
       'type': 'expression',
@@ -181,7 +220,7 @@ expression_compare
   }
 
 expression_escape
-  = ESCAPE e:( expression )
+  = ESCAPE e e:( expression )
   {
     return {
       'type': 'expression',
@@ -209,13 +248,10 @@ expression_null_nodes
   = i:( IS / NOT ) o n:( NULL ) {
     return _.compose([i, n]);
   }
-  / n:( ISNULL / NOTNULL ) {
-    return _.textNode(n);
-  }
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_is
-  = v:( expression_value ) i:( IS ) n:( NOT )? e:( expression )
+  = v:( expression_value ) o i:( IS e ) n:( NOT e )? e:( expression )
   {
     return {
       'type': 'expression',
@@ -230,7 +266,7 @@ expression_is
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_between
-  = v:( expression_value ) n:( NOT )? b:( BETWEEN ) e1:( expression ) AND e2:( expression )
+  = v:( expression_value ) o n:( NOT e )? b:( BETWEEN e ) e1:( expression ) AND e e2:( expression )
   {
     return {
       'type': 'expression',
@@ -253,7 +289,7 @@ expression_between
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_in
-  = v:( expression_value ) n:( NOT )? i:( IN ) e:( expression_in_target )
+  = v:( expression_value ) o n:( NOT e )? i:( IN e ) e:( expression_in_target )
   {
     return {
       'type': 'expression',
@@ -271,8 +307,35 @@ expression_in_target
   / id_table
 
 expression_list_or_select
-  = sym_popen e:( stmt_select / expression_list ) sym_pclose
+  = sym_popen o e:( stmt_select / expression_list ) o sym_pclose
   { return e; }
+
+
+/**
+ * Type definitions
+ */
+ type_definition "Type Definition"
+  = n:( datatype_types ) o a:( type_definition_args )?
+  {
+    return _.extend({
+      'type': 'datatype',
+      'format': n[0],
+      'affinity': n[1],
+      'expression': [] // datatype definition arguments
+    }, a);
+  }
+
+type_definition_args
+  = sym_popen a1:( literal_number_signed ) o a2:( definition_args_loop )? sym_pclose
+  {
+    return {
+      'expression': _.compose([a1, a2], [])
+    };
+  }
+
+definition_args_loop
+  = sym_comma o n:( literal_number_signed ) o
+  { return n; }
 
 /**
  * Literal value definition
@@ -286,7 +349,7 @@ literal_value "Literal Value"
   / literal_date
 
 literal_null
-  = n:( NULL )
+  = n:( NULL ) o
   {
     return {
       'type': 'literal',
@@ -296,7 +359,7 @@ literal_null
   }
 
 literal_date
-  = d:( CURRENT_DATE / CURRENT_TIMESTAMP / CURRENT_TIME )
+  = d:( CURRENT_DATE / CURRENT_TIMESTAMP / CURRENT_TIME ) o
   {
     return {
       'type': 'literal',
@@ -342,6 +405,19 @@ literal_blob
       'variant': 'blob',
       'value': _.textNode(b)
     };
+  }
+
+number_sign
+  = s:( sym_plus / sym_minus )
+  { return _.textNode(s); }
+
+literal_number_signed
+  = s:( number_sign )? n:( literal_number )
+  {
+    if (_.isOkay(s)) {
+      n['value'] = _.compose([s, n['value']]);
+    }
+    return n;
   }
 
 literal_number
@@ -455,8 +531,12 @@ operation_binary
     };
   }
 
+binary_loop_concat
+  = c:( AND / OR ) o
+  { return _.textNode(c); }
+
 expression_list "Expression List"
-  = f:( expression ) rest:( expression_list_rest )*
+  = f:( expression ) o rest:( expression_list_rest )*
   {
     return _.compose([f, rest], []);
   }
@@ -477,13 +557,7 @@ function_call
   }
 
 function_call_args
-  = ( d:( DISTINCT )? e:( expression_list ) ) {
-    return {
-      'distinct': _.isOkay(d),
-      'expression': e
-    };
-  }
-  / s:( select_star ) {
+  = s:( select_star ) {
     return {
       'distinct': false,
       'expression': [{
@@ -491,6 +565,12 @@ function_call_args
         'variant': 'star',
         'value': s
       }]
+    };
+  }
+  / ( d:( DISTINCT e )? e:( expression_list ) ) {
+    return {
+      'distinct': _.isOkay(d),
+      'expression': e
     };
   }
 
@@ -509,7 +589,7 @@ stmt_crud
   }
 
 clause_with "WITH Clause"
-  = WITH r:( RECURSIVE )? f:( expression_table ) o r:( clause_with_loop )*
+  = WITH e r:( RECURSIVE e )? f:( expression_table ) o r:( clause_with_loop )*
   {
     // TODO: final format
     return {
@@ -523,8 +603,9 @@ clause_with_loop
   = sym_comma e:( expression_table )
   { return e; }
 
+/* TODO: This isn't done */
 expression_table "Table Expression"
-  = n:( name_table ) o a:( sym_popen name_column ( sym_comma name_column )* sym_pclose )? o AS s:( stmt_select )
+  = n:( name_table ) o a:( sym_popen name_column ( sym_comma name_column )* sym_pclose )? o AS e s:( stmt_select )
 
 stmt_crud_types
   = stmt_select
@@ -543,11 +624,11 @@ stmt_select "SELECT Statement"
   }
 
 select_order
-  = ORDER BY o d:( select_order_list )
+  = ORDER e BY e d:( select_order_list )
   { return d; }
 
 select_limit
-  = LIMIT o e:( expression ) o d:( select_limit_offset )?
+  = LIMIT e e:( expression ) o d:( select_limit_offset )?
   {
     return {
       'start': e,
@@ -556,7 +637,7 @@ select_limit
   }
 
 select_limit_offset
-  = o:( OFFSET / sym_comma ) o e:( expression )
+  = o:( ( OFFSET e ) / sym_comma ) e:( expression )
   { return e; }
 
 select_loop
@@ -592,12 +673,17 @@ select_parts_core
   }
 
 select_core_select
-  = SELECT d:( DISTINCT / ALL )? t:( select_target )
+  = SELECT e d:( DISTINCT / ALL )? o t:( select_target )
   {
-    return {
+    var mod = {};
+    if (_.isOkay(d)) {
+      mod[_.textNode(d).toLowerCase()] = true;
+    }
+    return _.extend({
       'result': t,
-      'modifier': d
-    };
+      'distinct': false,
+      'all': false
+    }, mod);
   }
 
 select_target
@@ -611,15 +697,15 @@ select_target_loop
   { return n; }
 
 select_core_from
-  = FROM s:( select_source )
+  = FROM e s:( select_source )
   { return s; }
 
 select_core_where
-  = WHERE e:( expression )
+  = WHERE e e:( expression )
   { return _.makeArray(e); }
 
 select_core_group
-  = GROUP BY e:( expression ) h:( select_core_having )?
+  = GROUP e BY e e:( expression ) h:( select_core_having )?
   {
     // TODO: format
     return {
@@ -629,7 +715,7 @@ select_core_group
   }
 
 select_core_having
-  = HAVING e:( expression )
+  = HAVING e e:( expression )
   { return e; }
 
 select_node
@@ -639,9 +725,10 @@ select_node
 select_node_star
   = q:( select_node_star_qualified )? s:( select_star )
   {
-    // TODO: format
     return {
-      'expression': _.compose([q, s], '')
+      'type': 'identifier',
+      'variant': 'star',
+      'value': _.compose([q, s], '')
     };
   }
 
@@ -701,10 +788,10 @@ table_or_sub_index
   }
 
 table_or_sub_index_node
-  = ( INDEXED BY n:( name_index ) ) {
+  = ( INDEXED e BY e n:( name_index ) o ) {
     return _.textNode(n);
   }
-  / n:( NOT INDEXED ) {
+  / n:( NOT e INDEXED o ) {
     return _.textNode(n);
   }
 
@@ -717,7 +804,7 @@ alias
   { return n; }
 
 select_join_loop
-  = t:( table_or_sub ) o j:( select_join_clause )*
+  = t:( table_or_sub ) o j:( select_join_clause )+
   {
     // TODO: format
     return {
@@ -740,7 +827,7 @@ select_join_clause
   }
 
 join_operator
-  = n:( NATURAL )? o t:( ( LEFT (o OUTER )? ) / INNER / CROSS )? o j:( JOIN )
+  = n:( NATURAL e )? o ( t:( ( LEFT ( e OUTER )? ) / INNER / CROSS ) e )? j:( JOIN ) e
   { return _.compose([n, t, j]); }
 
 join_condition
@@ -748,7 +835,7 @@ join_condition
   { return c; }
 
 join_condition_on
-  = ON e:( expression )
+  = ON e e:( expression )
   {
     return {
       'on': e
@@ -757,7 +844,7 @@ join_condition_on
 
 /* TODO: should it be name_column or id_column ? */
 join_condition_using
-  = USING f:( id_column ) o b:( join_condition_using_loop )*
+  = USING e f:( id_column ) o b:( join_condition_using_loop )*
   {
     return {
       'using': _.compose([f, b], [])
@@ -766,11 +853,11 @@ join_condition_using
 
 /* TODO: should it be name_column or id_column ? */
 join_condition_using_loop
-  = sym_comma o n:( id_column )
+  = sym_comma n:( id_column )
   { return n; }
 
 select_parts_values
-  = VALUES sym_popen o l:( expression_list ) o sym_pclose
+  = VALUES o sym_popen l:( expression_list ) o sym_pclose
   {
     // TODO: format
     return {
@@ -787,7 +874,7 @@ select_order_list
   }
 
 select_order_list_loop
-  = sym_comma o i:( select_order_list_item )
+  = sym_comma i:( select_order_list_item )
   { return i; }
 
 select_order_list_item
@@ -802,18 +889,19 @@ select_order_list_item
   }
 
 select_order_list_collate
-  = COLLATE n:( id_collation )
+  = COLLATE e n:( id_collation )
   { return n; }
 
 select_order_list_dir
-  = t:( ASC / DESC )
+  = t:( ASC / DESC ) o
   { return _.textNode(t); }
 
 select_star "All Columns"
   = sym_star
 
+/* TODO: Not finished */
 operator_compound "Compound Operator"
-  = ( UNION ( ALL )? )
+  = ( UNION ( e ALL )? )
   / INTERSECT
   / EXCEPT
 
@@ -828,13 +916,11 @@ operator_unary "Unary Operator"
 /* TODO: Needs return format refactoring */
 operator_binary "Binary Operator"
   = o:( binary_concat
-  / ( binary_multiply / binary_mod )
-  / ( binary_plus / binary_minus )
-  / ( binary_left / binary_right / binary_and / binary_or )
-  / ( binary_lt / binary_lte / binary_gt / binary_gte )
-  / ( binary_assign / binary_equal / binary_notequal / ( IS ( NOT )? ) / IN / LIKE / GLOB / MATCH / REGEXP )
-  / AND
-  / OR )
+  / binary_multiply / binary_mod
+  / binary_plus / binary_minus
+  / binary_left / binary_right / binary_and / binary_or
+  / binary_lt / binary_lte / binary_gt / binary_gte
+  / binary_lang / binary_notequal / binary_equal / binary_assign )
   { return _.textNode(o); }
 
 binary_concat "Or"
@@ -883,8 +969,20 @@ binary_equal "Equal"
   = binary_assign binary_assign
 
 binary_notequal "Not Equal"
-  = ( sym_excl binary_equal )
+  = ( sym_excl binary_assign )
   / ( binary_lt binary_gt )
+
+binary_lang
+  = binary_lang_isnt
+  / binary_lang_misc
+
+binary_lang_isnt "IS"
+  = i:( IS ) e n:( NOT e )?
+  { return _.compose([i, n]); }
+
+binary_lang_misc "Misc Binary Operator"
+  = m:( IN / LIKE / GLOB / MATCH / REGEXP ) e
+  { return _.textNode(m); }
 
 /* Database, Table and Column IDs */
 
@@ -948,8 +1046,44 @@ name_index "Index Name"
 name_function "Function Name"
   = name
 
-name_type "Type Name"
-  = name
+/* Column datatypes */
+
+datatype_types
+  = t:( datatype_text ) { return [t, 'TEXT']; }
+  / t:( datatype_real ) { return [t, 'REAL']; }
+  / t:( datatype_numeric ) { return [t, 'NUMERIC']; }
+  / t:( datatype_integer ) { return [t, 'INTEGER']; }
+  / t:( datatype_none ) { return [t, 'NONE']; }
+
+datatype_text
+  = t:( ( ( "N"i )? ( "VAR"i )? "CHAR"i )
+  / ( ( "TINY"i / "MEDIUM"i / "LONG"i )? "TEXT"i )
+  / "CLOB"i )
+  { return _.keywordify(t); }
+
+datatype_real
+  = t:( ( "DOUBLE"i ( e "PRECISION"i )? )
+  / "FLOAT"i
+  / "REAL"i )
+  { return _.keywordify(t); }
+
+datatype_numeric
+  = t:( "NUMERIC"i
+  / "DECIMAL"i
+  / "BOOLEAN"i
+  / ( "DATE"i ( "TIME"i )? )
+  / ( "TIME"i ( "STAMP"i )? ) )
+  { return _.keywordify(t); }
+
+datatype_integer
+  = t:( ( ( "BIG"i / "MEDIUM"i / "SMALL"i / "TINY"i )? "INT"i )
+  / ( "INT"i ( "2" / "4" / "8" ) )
+  / "INTEGER"i )
+  { return _.keywordify(t); }
+
+datatype_none
+  = t:( "BLOB"i )
+  { return _.keywordify(t); }
 
 /** {@link https://www.sqlite.org/lang_insert.html} */
 stmt_insert "INSERT Statement"
@@ -992,8 +1126,7 @@ name
   / name_unquoted
 
 name_unquoted
-  = n:( name_char )+
-  ! ( reserved_words )
+  = !reserved_words n:( name_char )+
   { return _.textNode(n); }
 
 /** @note Non-standard legacy format */
@@ -1013,298 +1146,298 @@ name_backticked
 /* Symbols */
 
 sym_bopen "Open Bracket"
-  = "[" o
+  = s:( "[" ) o { return _.textNode(s); }
 sym_bclose "Close Bracket"
-  = "]" o
+  = s:( "]" ) o { return _.textNode(s); }
 sym_popen "Open Parenthesis"
-  = "(" o
+  = s:( "(" ) o { return _.textNode(s); }
 sym_pclose "Close Parenthesis"
-  = ")" o
+  = s:( ")" ) o { return _.textNode(s); }
 sym_comma "Comma"
-  = "," o
+  = s:( "," ) o { return _.textNode(s); }
 sym_dot "Period"
-  = "." o
+  = s:( "." ) o { return _.textNode(s); }
 sym_star "Asterisk"
-  = "*" o
+  = s:( "*" ) o { return _.textNode(s); }
 sym_quest "Question Mark"
-  = "?" o
+  = s:( "?" ) o { return _.textNode(s); }
 sym_sglquote "Single Quote"
-  = "'" o
+  = s:( "'" ) o { return _.textNode(s); }
 sym_dblquote "Double Quote"
-  = '"' o
+  = s:( '"' ) o { return _.textNode(s); }
 sym_backtick "Backtick"
-  = "`" o
+  = s:( "`" ) o { return _.textNode(s); }
 sym_tilde "Tilde"
-  = "~" o
+  = s:( "~" ) o { return _.textNode(s); }
 sym_plus "Plus"
-  = "+" o
+  = s:( "+" ) o { return _.textNode(s); }
 sym_minus "Minus"
-  = "-" o
+  = s:( "-" ) o { return _.textNode(s); }
 sym_equal "Equal"
-  = "=" o
+  = s:( "=" ) o { return _.textNode(s); }
 sym_amp "Ampersand"
-  = "&" o
+  = s:( "&" ) o { return _.textNode(s); }
 sym_pipe "Pipe"
-  = "|" o
+  = s:( "|" ) o { return _.textNode(s); }
 sym_mod "Modulo"
-  = "%" o
+  = s:( "%" ) o { return _.textNode(s); }
 sym_lt "Less Than"
-  = "<" o
+  = s:( "<" ) o { return _.textNode(s); }
 sym_gt "Greater Than"
-  = ">" o
+  = s:( ">" ) o { return _.textNode(s); }
 sym_excl "Exclamation"
-  = "!" o
+  = s:( "!" ) o { return _.textNode(s); }
 
 /* Keywords */
 
 ABORT "ABORT Keyword"
-  = "ABORT"i e
+  = "ABORT"i
 ACTION "ACTION Keyword"
-  = "ACTION"i e
+  = "ACTION"i
 ADD "ADD Keyword"
-  = "ADD"i e
+  = "ADD"i
 AFTER "AFTER Keyword"
-  = "AFTER"i e
+  = "AFTER"i
 ALL "ALL Keyword"
-  = "ALL"i e
+  = "ALL"i
 ALTER "ALTER Keyword"
-  = "ALTER"i e
+  = "ALTER"i
 ANALYZE "ANALYZE Keyword"
-  = "ANALYZE"i e
+  = "ANALYZE"i
 AND "AND Keyword"
-  = "AND"i e
+  = "AND"i
 AS "AS Keyword"
-  = "AS"i e
+  = "AS"i
 ASC "ASC Keyword"
-  = "ASC"i e
+  = "ASC"i
 ATTACH "ATTACH Keyword"
-  = "ATTACH"i e
+  = "ATTACH"i
 AUTOINCREMENT "AUTOINCREMENT Keyword"
-  = "AUTOINCREMENT"i e
+  = "AUTOINCREMENT"i
 BEFORE "BEFORE Keyword"
-  = "BEFORE"i e
+  = "BEFORE"i
 BEGIN "BEGIN Keyword"
-  = "BEGIN"i e
+  = "BEGIN"i
 BETWEEN "BETWEEN Keyword"
-  = "BETWEEN"i e
+  = "BETWEEN"i
 BY "BY Keyword"
-  = "BY"i e
+  = "BY"i
 CASCADE "CASCADE Keyword"
-  = "CASCADE"i e
+  = "CASCADE"i
 CASE "CASE Keyword"
-  = "CASE"i e
+  = "CASE"i
 CAST "CAST Keyword"
-  = "CAST"i e
+  = "CAST"i
 CHECK "CHECK Keyword"
-  = "CHECK"i e
+  = "CHECK"i
 COLLATE "COLLATE Keyword"
-  = "COLLATE"i e
+  = "COLLATE"i
 COLUMN "COLUMN Keyword"
-  = "COLUMN"i e
+  = "COLUMN"i
 COMMIT "COMMIT Keyword"
-  = "COMMIT"i e
+  = "COMMIT"i
 CONFLICT "CONFLICT Keyword"
-  = "CONFLICT"i e
+  = "CONFLICT"i
 CONSTRAINT "CONSTRAINT Keyword"
-  = "CONSTRAINT"i e
+  = "CONSTRAINT"i
 CREATE "CREATE Keyword"
-  = "CREATE"i e
+  = "CREATE"i
 CROSS "CROSS Keyword"
-  = "CROSS"i e
+  = "CROSS"i
 CURRENT_DATE "CURRENT_DATE Keyword"
-  = "CURRENT_DATE"i e
+  = "CURRENT_DATE"i
 CURRENT_TIME "CURRENT_TIME Keyword"
-  = "CURRENT_TIME"i e
+  = "CURRENT_TIME"i
 CURRENT_TIMESTAMP "CURRENT_TIMESTAMP Keyword"
-  = "CURRENT_TIMESTAMP"i e
+  = "CURRENT_TIMESTAMP"i
 DATABASE "DATABASE Keyword"
-  = "DATABASE"i e
+  = "DATABASE"i
 DEFAULT "DEFAULT Keyword"
-  = "DEFAULT"i e
+  = "DEFAULT"i
 DEFERRABLE "DEFERRABLE Keyword"
-  = "DEFERRABLE"i e
+  = "DEFERRABLE"i
 DEFERRED "DEFERRED Keyword"
-  = "DEFERRED"i e
+  = "DEFERRED"i
 DELETE "DELETE Keyword"
-  = "DELETE"i e
+  = "DELETE"i
 DESC "DESC Keyword"
-  = "DESC"i e
+  = "DESC"i
 DETACH "DETACH Keyword"
-  = "DETACH"i e
+  = "DETACH"i
 DISTINCT "DISTINCT Keyword"
-  = "DISTINCT"i e
+  = "DISTINCT"i
 DROP "DROP Keyword"
-  = "DROP"i e
+  = "DROP"i
 EACH "EACH Keyword"
-  = "EACH"i e
+  = "EACH"i
 ELSE "ELSE Keyword"
-  = "ELSE"i e
+  = "ELSE"i
 END "END Keyword"
-  = "END"i e
+  = "END"i
 ESCAPE "ESCAPE Keyword"
-  = "ESCAPE"i e
+  = "ESCAPE"i
 EXCEPT "EXCEPT Keyword"
-  = "EXCEPT"i e
+  = "EXCEPT"i
 EXCLUSIVE "EXCLUSIVE Keyword"
-  = "EXCLUSIVE"i e
+  = "EXCLUSIVE"i
 EXISTS "EXISTS Keyword"
-  = "EXISTS"i e
+  = "EXISTS"i
 EXPLAIN "EXPLAIN Keyword"
-  = "EXPLAIN"i e
+  = "EXPLAIN"i
 FAIL "FAIL Keyword"
-  = "FAIL"i e
+  = "FAIL"i
 FOR "FOR Keyword"
-  = "FOR"i e
+  = "FOR"i
 FOREIGN "FOREIGN Keyword"
-  = "FOREIGN"i e
+  = "FOREIGN"i
 FROM "FROM Keyword"
-  = "FROM"i e
+  = "FROM"i
 FULL "FULL Keyword"
-  = "FULL"i e
+  = "FULL"i
 GLOB "GLOB Keyword"
-  = "GLOB"i e
+  = "GLOB"i
 GROUP "GROUP Keyword"
-  = "GROUP"i e
+  = "GROUP"i
 HAVING "HAVING Keyword"
-  = "HAVING"i e
+  = "HAVING"i
 IF "IF Keyword"
-  = "IF"i e
+  = "IF"i
 IGNORE "IGNORE Keyword"
-  = "IGNORE"i e
+  = "IGNORE"i
 IMMEDIATE "IMMEDIATE Keyword"
-  = "IMMEDIATE"i e
+  = "IMMEDIATE"i
 IN "IN Keyword"
-  = "IN"i e
+  = "IN"i
 INDEX "INDEX Keyword"
-  = "INDEX"i e
+  = "INDEX"i
 INDEXED "INDEXED Keyword"
-  = "INDEXED"i e
+  = "INDEXED"i
 INITIALLY "INITIALLY Keyword"
-  = "INITIALLY"i e
+  = "INITIALLY"i
 INNER "INNER Keyword"
-  = "INNER"i e
+  = "INNER"i
 INSERT "INSERT Keyword"
-  = "INSERT"i e
+  = "INSERT"i
 INSTEAD "INSTEAD Keyword"
-  = "INSTEAD"i e
+  = "INSTEAD"i
 INTERSECT "INTERSECT Keyword"
-  = "INTERSECT"i e
+  = "INTERSECT"i
 INTO "INTO Keyword"
-  = "INTO"i e
+  = "INTO"i
 IS "IS Keyword"
-  = "IS"i e
+  = "IS"i
 ISNULL "ISNULL Keyword"
-  = "ISNULL"i e
+  = "ISNULL"i
 JOIN "JOIN Keyword"
-  = "JOIN"i e
+  = "JOIN"i
 KEY "KEY Keyword"
-  = "KEY"i e
+  = "KEY"i
 LEFT "LEFT Keyword"
-  = "LEFT"i e
+  = "LEFT"i
 LIKE "LIKE Keyword"
-  = "LIKE"i e
+  = "LIKE"i
 LIMIT "LIMIT Keyword"
-  = "LIMIT"i e
+  = "LIMIT"i
 MATCH "MATCH Keyword"
-  = "MATCH"i e
+  = "MATCH"i
 NATURAL "NATURAL Keyword"
-  = "NATURAL"i e
+  = "NATURAL"i
 NO "NO Keyword"
-  = "NO"i e
+  = "NO"i
 NOT "NOT Keyword"
-  = "NOT"i e
+  = "NOT"i
 NOTNULL "NOTNULL Keyword"
-  = "NOTNULL"i e
+  = "NOTNULL"i
 NULL "NULL Keyword"
-  = "NULL"i e
+  = "NULL"i
 OF "OF Keyword"
-  = "OF"i e
+  = "OF"i
 OFFSET "OFFSET Keyword"
-  = "OFFSET"i e
+  = "OFFSET"i
 ON "ON Keyword"
-  = "ON"i e
+  = "ON"i
 OR "OR Keyword"
-  = "OR"i e
+  = "OR"i
 ORDER "ORDER Keyword"
-  = "ORDER"i e
+  = "ORDER"i
 OUTER "OUTER Keyword"
-  = "OUTER"i e
+  = "OUTER"i
 PLAN "PLAN Keyword"
-  = "PLAN"i e
+  = "PLAN"i
 PRAGMA "PRAGMA Keyword"
-  = "PRAGMA"i e
+  = "PRAGMA"i
 PRIMARY "PRIMARY Keyword"
-  = "PRIMARY"i e
+  = "PRIMARY"i
 QUERY "QUERY Keyword"
-  = "QUERY"i e
+  = "QUERY"i
 RAISE "RAISE Keyword"
-  = "RAISE"i e
+  = "RAISE"i
 RECURSIVE "RECURSIVE Keyword"
-  = "RECURSIVE"i e
+  = "RECURSIVE"i
 REFERENCES "REFERENCES Keyword"
-  = "REFERENCES"i e
+  = "REFERENCES"i
 REGEXP "REGEXP Keyword"
-  = "REGEXP"i e
+  = "REGEXP"i
 REINDEX "REINDEX Keyword"
-  = "REINDEX"i e
+  = "REINDEX"i
 RELEASE "RELEASE Keyword"
-  = "RELEASE"i e
+  = "RELEASE"i
 RENAME "RENAME Keyword"
-  = "RENAME"i e
+  = "RENAME"i
 REPLACE "REPLACE Keyword"
-  = "REPLACE"i e
+  = "REPLACE"i
 RESTRICT "RESTRICT Keyword"
-  = "RESTRICT"i e
+  = "RESTRICT"i
 RIGHT "RIGHT Keyword"
-  = "RIGHT"i e
+  = "RIGHT"i
 ROLLBACK "ROLLBACK Keyword"
-  = "ROLLBACK"i e
+  = "ROLLBACK"i
 ROW "ROW Keyword"
-  = "ROW"i e
+  = "ROW"i
 SAVEPOINT "SAVEPOINT Keyword"
-  = "SAVEPOINT"i e
+  = "SAVEPOINT"i
 SELECT "SELECT Keyword"
-  = "SELECT"i e
+  = "SELECT"i
 SET "SET Keyword"
-  = "SET"i e
+  = "SET"i
 TABLE "TABLE Keyword"
-  = "TABLE"i e
+  = "TABLE"i
 TEMP "TEMP Keyword"
-  = "TEMP"i e
+  = "TEMP"i
 TEMPORARY "TEMPORARY Keyword"
-  = "TEMPORARY"i e
+  = "TEMPORARY"i
 THEN "THEN Keyword"
-  = "THEN"i e
+  = "THEN"i
 TO "TO Keyword"
-  = "TO"i e
+  = "TO"i
 TRANSACTION "TRANSACTION Keyword"
-  = "TRANSACTION"i e
+  = "TRANSACTION"i
 TRIGGER "TRIGGER Keyword"
-  = "TRIGGER"i e
+  = "TRIGGER"i
 UNION "UNION Keyword"
-  = "UNION"i e
+  = "UNION"i
 UNIQUE "UNIQUE Keyword"
-  = "UNIQUE"i e
+  = "UNIQUE"i
 UPDATE "UPDATE Keyword"
-  = "UPDATE"i e
+  = "UPDATE"i
 USING "USING Keyword"
-  = "USING"i e
+  = "USING"i
 VACUUM "VACUUM Keyword"
-  = "VACUUM"i e
+  = "VACUUM"i
 VALUES "VALUES Keyword"
-  = "VALUES"i e
+  = "VALUES"i
 VIEW "VIEW Keyword"
-  = "VIEW"i e
+  = "VIEW"i
 VIRTUAL "VIRTUAL Keyword"
-  = "VIRTUAL"i e
+  = "VIRTUAL"i
 WHEN "WHEN Keyword"
-  = "WHEN"i e
+  = "WHEN"i
 WHERE "WHERE Keyword"
-  = "WHERE"i e
+  = "WHERE"i
 WITH "WITH Keyword"
-  = "WITH"i e
+  = "WITH"i
 WITHOUT "WITHOUT Keyword"
-  = "WITHOUT"i e
+  = "WITHOUT"i
 
 reserved_words
   = ABORT / ACTION / ADD / AFTER / ALL / ALTER / ANALYZE / AND / AS / ASC /
