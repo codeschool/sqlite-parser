@@ -113,38 +113,34 @@ expression_exists
   }
 
 expression_case
-  = CASE e e:( expression )? o w:( expression_case_when )+ o s:( expression_case_else )? e END
+  = CASE e e:( expression )? o w:( expression_case_when )+ o s:( expression_case_else )? o END o
   {
-    var cond = w;
-    if (_.isOkay(s)) {
-      cond.push(s);
-    }
+    // TODO: Not sure about this
     return {
       'type': 'expression',
-      'format': 'binary', // TODO: Not sure about this
+      'format': 'binary',
       'variant': 'case',
-      'left': cond,
-      'right': e,
+      'case': e,
+      'expression': _.compose([w, s], []),
       'modifier': null
     };
   }
 
 
 expression_case_when
-  = WHEN e w:( expression ) o THEN e t:( expression )
+  = WHEN e w:( expression ) o THEN e t:( expression ) o
   {
     return {
       'type': 'condition',
-      'format': 'binary',
-      'variant': 'when',
-      'left': w,
-      'right': t,
+      'format': 'when',
+      'condition': w,
+      'expression': t,
       'modifier': null
     };
   }
 
 expression_case_else
-  = ELSE e e:( expression )
+  = ELSE e e:( expression ) o
   {
     return {
       'type': 'condition',
@@ -737,7 +733,7 @@ select_node_star_qualified
   { return _.compose([n, s], ''); }
 
 select_node_aliased
-  = e:( expression ) a:( alias )?
+  = e:( expression ) o a:( alias )?
   {
     // TODO: format
     return _.extend(e, {
@@ -800,7 +796,7 @@ table_or_sub_sub
   { return l; }
 
 alias
-  = AS n:( name )
+  = a:( AS e )? n:( name )
   { return n; }
 
 select_join_loop
@@ -1076,9 +1072,8 @@ datatype_numeric
   { return _.keywordify(t); }
 
 datatype_integer
-  = t:( ( ( "BIG"i / "MEDIUM"i / "SMALL"i / "TINY"i )? "INT"i )
-  / ( "INT"i ( "2" / "4" / "8" ) )
-  / "INTEGER"i )
+  = t:( ( "INT"i ( "2" / "4" / "8" / "EGER"i ) )
+  / ( ( "BIG"i / "MEDIUM"i / "SMALL"i / "TINY"i )? "INT"i ) )
   { return _.keywordify(t); }
 
 datatype_none
@@ -1119,28 +1114,38 @@ stmt_drop "DROP Statement"
 name_char
   = [a-z0-9\-\_]i
 
+name_char_quoted
+  = [a-z0-9\-\_ ]i
+
 name
   = name_bracketed
   / name_backticked
   / name_dblquoted
   / name_unquoted
 
+reserved_collect
+  = f:( name_char ) rest:( name_char )*
+  { return _.compose([f, rest], ''); }
+
+reserved_nodes
+  = ( reserved_words / datatype_types ) !name_char
+
 name_unquoted
-  = !reserved_words n:( name_char )+
+  = !reserved_nodes n:( name_char+ )
   { return _.textNode(n); }
 
 /** @note Non-standard legacy format */
 name_bracketed
-  = sym_bopen o n:( name_unquoted ) o sym_bclose
-  { return n; }
+  = sym_bopen n:( !sym_bclose name_char_quoted )+ o sym_bclose
+  { return _.textNode(n); }
 
 name_dblquoted
-  = sym_dblquote n:( !sym_dblquote name_char )+ sym_dblquote
+  = '"' n:( !'"' name_char_quoted )+ '"'
   { return _.textNode(n); }
 
 /** @note Non-standard legacy format */
 name_backticked
-  = sym_backtick n:( !sym_backtick name_char ) sym_backtick
+  = '`' n:( !'`' name_char_quoted )+ '`'
   { return _.textNode(n); }
 
 /* Symbols */
@@ -1440,21 +1445,21 @@ WITHOUT "WITHOUT Keyword"
   = "WITHOUT"i
 
 reserved_words
-  = ABORT / ACTION / ADD / AFTER / ALL / ALTER / ANALYZE / AND / AS / ASC /
-  ATTACH / AUTOINCREMENT / BEFORE / BEGIN / BETWEEN / BY / CASCADE / CASE /
-  CAST / CHECK / COLLATE / COLUMN / COMMIT / CONFLICT / CONSTRAINT / CREATE /
-  CROSS / CURRENT_DATE / CURRENT_TIME / CURRENT_TIMESTAMP / DATABASE / DEFAULT /
-  DEFERRABLE / DEFERRED / DELETE / DESC / DETACH / DISTINCT / DROP / EACH /
-  ELSE / END / ESCAPE / EXCEPT / EXCLUSIVE / EXISTS / EXPLAIN / FAIL / FOR /
-  FOREIGN / FROM / FULL / GLOB / GROUP / HAVING / IF / IGNORE / IMMEDIATE / IN /
-  INDEX / INDEXED / INITIALLY / INNER / INSERT / INSTEAD / INTERSECT / INTO /
-  IS / ISNULL / JOIN / KEY / LEFT / LIKE / LIMIT / MATCH / NATURAL / NO / NOT /
-  NOTNULL / NULL / OF / OFFSET / ON / OR / ORDER / OUTER / PLAN / PRAGMA /
-  PRIMARY / QUERY / RAISE / RECURSIVE / REFERENCES / REGEXP / REINDEX /
-  RELEASE / RENAME / REPLACE / RESTRICT / RIGHT / ROLLBACK / ROW / SAVEPOINT /
-  SELECT / SET / TABLE / TEMP / TEMPORARY / THEN / TO / TRANSACTION / TRIGGER /
-  UNION / UNIQUE / UPDATE / USING / VACUUM / VALUES / VIEW / VIRTUAL / WHEN /
-  WHERE / WITH / WITHOUT
+  = r:( ABORT / ACTION / ADD / AFTER / ALL / ALTER / ANALYZE / AND / AS / ASC /
+    ATTACH / AUTOINCREMENT / BEFORE / BEGIN / BETWEEN / BY / CASCADE / CASE /
+    CAST / CHECK / COLLATE / COLUMN / COMMIT / CONFLICT / CONSTRAINT / CREATE /
+    CROSS / CURRENT_DATE / CURRENT_TIME / CURRENT_TIMESTAMP / DATABASE / DEFAULT /
+    DEFERRABLE / DEFERRED / DELETE / DESC / DETACH / DISTINCT / DROP / EACH /
+    ELSE / END / ESCAPE / EXCEPT / EXCLUSIVE / EXISTS / EXPLAIN / FAIL / FOR /
+    FOREIGN / FROM / FULL / GLOB / GROUP / HAVING / IF / IGNORE / IMMEDIATE / IN /
+    INDEX / INDEXED / INITIALLY / INNER / INSERT / INSTEAD / INTERSECT / INTO /
+    IS / ISNULL / JOIN / KEY / LEFT / LIKE / LIMIT / MATCH / NATURAL / NO / NOT /
+    NOTNULL / NULL / OF / OFFSET / ON / OR / ORDER / OUTER / PLAN / PRAGMA /
+    PRIMARY / QUERY / RAISE / RECURSIVE / REFERENCES / REGEXP / REINDEX /
+    RELEASE / RENAME / REPLACE / RESTRICT / RIGHT / ROLLBACK / ROW / SAVEPOINT /
+    SELECT / SET / TABLE / TEMP / TEMPORARY / THEN / TO / TRANSACTION / TRIGGER /
+    UNION / UNIQUE / UPDATE / USING / VACUUM / VALUES / VIEW / VIRTUAL / WHEN /
+    WHERE / WITH / WITHOUT ) { return _.keywordify(r); }
 
 /* Generic rules */
 
