@@ -6,8 +6,8 @@ var expect            = require('chai').expect,
     format, broadcast, getTree, assertOkTree, assertErrorTree,
     isDefined = function (arg) { return arg != null; };
 
-format = function (arg, ugly) {
-  return ugly ? ( _.isString(arg) ? arg : JSON.stringify(arg) ) :
+format = function (arg) {
+  return broadcast.ugly ? ( _.isString(arg) ? arg : JSON.stringify(arg) ) :
                 ( prettyjson.render(arg, {}) );
 };
 
@@ -28,6 +28,9 @@ broadcast.canBroadcast = (function (c, p) {
 broadcast.shouldBroadcast = function (msg) {
   return broadcast.canBroadcast && isDefined(msg);
 };
+broadcast.ugly = (function (p) {
+  return broadcast.shouldBroadcast && _.has(process.env, 'UGLY');
+})(process);
 
 /**
 Load the source file for the current test and then try and generate the AST from it.
