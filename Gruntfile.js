@@ -46,7 +46,7 @@ module.exports = function(grunt) {
     watch: {
       debug: {
         files: ['Gruntfile.js', 'test/*.js', 'src/*.js', 'src/*.pegjs', 'test/sql/*.sql', 'index.js'],
-        tasks: ['default', 'shell:ugly']
+        tasks: ['default', 'shell:debug']
       }
     }
   });
