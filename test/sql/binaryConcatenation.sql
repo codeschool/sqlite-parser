@@ -1,3 +1,3 @@
 SELECT *
 FROM bananas
-WHERE color = 'red' AND color != 'blue'
+WHERE 1 != 2 AND color != 'blue' OR pees == crackers

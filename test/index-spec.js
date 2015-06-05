@@ -2,7 +2,7 @@ var expect            = require('chai').expect
     tree              = require('./helpers');
 
 describe('sql-query-parser', function() {
-
+  
   // SELECT statement
 
   it('basic select', function(done) {
@@ -49,8 +49,8 @@ describe('sql-query-parser', function() {
   });
 
 
-  // it('binary concatenation', function(done) {
-  //   var resultTree = '{}';
-  //   tree.equals(resultTree, this, done);
-  // });
+  it('binary concatenation', function(done) {
+    var resultTree = '{"statement":[{"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"bananas","alias":null,"index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":"AND","left":{"type":"expression","format":"binary","variant":"operation","operation":"!=","left":{"type":"literal","variant":"decimal","value":"1"},"right":{"type":"literal","variant":"decimal","value":"2"},"modifier":null},"right":{"type":"expression","format":"binary","variant":"operation","operation":"OR","left":{"type":"expression","format":"binary","variant":"operation","operation":"!=","left":{"type":"identifier","variant":"column","name":"color"},"right":{"type":"literal","variant":"string","value":"blue"},"modifier":null},"right":{"type":"expression","format":"binary","variant":"operation","operation":"==","left":{"type":"identifier","variant":"column","name":"pees"},"right":{"type":"identifier","variant":"column","name":"crackers"},"modifier":null},"modifier":null},"modifier":null}],"group":null,"result":[{"type":"identifier","variant":"star","value":"*"}],"distinct":false,"all":false,"order":null,"limit":null}]}';
+    tree.equals(resultTree, this, done);
+  });
 });
