@@ -1,55 +1,269 @@
 # Milestones for sql-query-parser
 
 ## **[0.1.0]** In progress
-- [x] `SELECT`
-  - [ ] Sub-queries `SELECT * FROM (SELECT * FROM b)`
-  - [x] Functions, aggregation, etc... `SELECT COUNT(*) FROM apples`
-  - [ ] Compound queries `SELECT * FROM a UNION SELECT * FROM b`
-  - [ ] Aliases `SELECT * FROM apples AS a`
-    - [x] `apples AS unquoted_name`
-    - [x] `apples no_as`
-    - [x] `apples containsWhereKeyword` and `apples AS floatDatatype`
-      - [ ] **BUG**: Currently, paradoxically working for all keywords everything except `INT`, `INTEGER`, `INT2` but still working for `BIGINT`, `MEDIUMINT`...
-      - [x] Do not allow **unquoted** alias as exact match for a keyword or datatype name `apples AS VARCHAR`, `apples AS Join`
-    - [x] `apples AS [inBrackets]`
-    - [x] ```apples AS `backticks````
-    - [x] `apples AS "Double Quoted with Spaces"`
-  - [ ] `JOIN` types `INNER`, `OUTER`, `LEFT`
-  - [x] Query modifiers `WHERE`, `GROUP BY`, `HAVING`
+- [x] `SELECT` **TODO: Need tests**
+  - [ ] Sub-queries
+
+    ``` sql
+    SELECT *
+    FROM (
+      SELECT *
+      FROM b
+    ) AS z
+    ```
+
+    - [ ] *Has spec*
+  - [x] Functions `SUM()`, aggregation `*`, etc...
+
+    ``` sql
+    SELECT COUNT(*)
+    FROM apples
+    ```
+
+    - [ ] *Has spec*
+  - [ ] Compound queries
+
+    ``` sql
+    SELECT *
+    FROM a
+    UNION
+    SELECT *
+    FROM b
+    ```
+
+      - [ ] *Has spec*
+
+  - [x] Alternate syntax
+
+    ``` sql
+    VALUES (1, 2, 'hat')
+    ORDER BY id DESC
+    ```
+
+  - [x] `JOIN` types `INNER`, `OUTER`, `LEFT` **TODO: Need tests**
+    - [x] Joins on tables and/or sub-queries
+      - [ ] *Has spec*
+    - [x] `USING`
+
+      ``` sql
+      SELECT *
+      FROM bees
+        JOIN inventory AS i USING i.name, i.type
+      ```
+
+      - [ ] *Has spec*
+
+  - [x] Query modifiers `WHERE`, `GROUP BY`, `HAVING` **TODO: Need tests**
     - [x] `WHERE`
+      - [ ] *Has spec*
     - [x] `FROM`
+      - [ ] *Has spec*
     - [x] `ORDER BY`
+      - [ ] *Has spec*
     - [x] `GROUP BY`
-    - [x] `HAVING`
-- [x] `INSERT`
-  - [x] `INSERT INTO ... VALUES (...), (...)`
-  - [x] `INSERT INTO ... DEFAULT VALUES`
-  - [x] `INSERT INTO ... SELECT * FROM apples`
+      - [ ] *Has spec*
+    - [x] `HAVING`  
+      - [ ] *Has spec*
+    - [ ] `LIMIT`
+      - [ ] *Has spec*
+- [x] `INSERT` **TODO: Need tests**
+  - [x] Basic
+
+    ``` sql
+    INSERT INTO bees (a, b, c)
+    VALUES (1, 2, 'hey'), (2, 3, 'yo')
+    ```
+
+    - [ ] *Has spec*
+  - [x] Default values
+
+    ``` sql
+    INSERT INTO apples (a, b, c)
+    DEFAULT VALUES
+    ```
+
+    - [ ] *Has spec*
+  - [x] Insert into select
+
+    ``` sql
+    INSERT INTO apples (a, b, c)
+    SELECT * FROM apples
+    ```
+
+    - [ ] *Has spec*
 - [ ] `UPDATE`
 - [ ] `DELETE`
 - [ ] `DROP`
 - [ ] `CREATE`
-- [ ] Expressions `1 != 2`, `CAST banana AS INT`
+- [ ] Indexed sources in queries
+
+  ``` sql
+  SELECT *
+  FROM bees AS b INDEXED BY bees_index
+  ```
+
+- [ ] Aliases `SELECT * FROM apples AS a` **TODO: Need tests**
+  - [x] `apples AS unquoted_name`
+    - [x] *Has spec*
+  - [x] `apples no_as`
+    - [x] *Has spec*
+  - [x] `apples containsWhereKeyword` and `apples AS floatDatatype`
+    - [x] *Has spec*
+    - [ ] **BUG**: Currently, paradoxically working for all keywords everything except `INT`, `INTEGER`, `INT2` but still working for `BIGINT`, `MEDIUMINT`...
+    - [x] Do not allow **unquoted** alias as exact match for a keyword or datatype name `apples AS VARCHAR`, `apples AS Join`
+  - [x] `apples AS [inBrackets]`
+    - [x] *Has spec*
+  - [x] ```apples AS `backticks````
+    - [x] *Has spec*
+  - [x] `apples AS "Double Quoted with Spaces"`
+    - [x] *Has spec*
+- [ ] Expressions  **TODO: Need tests**
   - [x] `CAST banana AS INT`
-  - [x] `CASE WHEN apple > 1 THEN 'YES' ELSE 'NO' END`
-  - [x] `bees NOT IN (SELECT * FROM apples)`
-  - [ ] additional tests for each expression type needed
-  - [x] **BUG**: Need to fix the grouping of expressions to allow for expressions to be logically organized.
-    - Example: `WHERE 1 < 2 AND 3 < 4`
+    - [x] *Has spec*
+  - [x] `CASE`
 
-      > ```
-      >
-      >           AND                            <
-      >       /         \         versus     /       \
-      >      <           <                  1        AND
-      >   /     \     /     \                      /     \
-      >  1       2   3       4                    2       <
-      >                                                /     \
-      >                                               3       4
-      > ```
+    ``` sql
+    SELECT CASE WHEN apple > 1 THEN 'YES' ELSE 'NO' END
+    FROM apples
+    ```
 
-    - **FIXED: now grouping correctly when using binary AND / OR**
+    - [x] *Has spec*
+  - [x] Binary `IN`
 
+    ``` sql  
+    SELECT *
+    FROM hats
+    WHERE bees NOT IN (SELECT * FROM apples)
+    ```
+
+    - [x] *Has spec*
+  - [ ] Unary
+
+    ``` sql
+    SELECT NOT bees AS [b]
+    FROM hats
+    ```
+
+    - [ ] *Has spec*
+  - [ ] `RAISE`
+
+    ``` sql
+    RAISE (ROLLBACK, 'hey there!')
+    ```
+
+    - [ ] *Has spec*
+  - [ ] `COLLATE`
+
+    ``` sql
+    bees COLLATE bees_collation
+    ```
+
+    - [ ] *Has spec*
+  - [ ] `LIKE`
+
+    ``` sql
+    SELECT *
+    FROM hats
+    WHERE bees LIKE '%somebees%'
+    ```
+
+    - [ ] *Has spec*
+  - [ ] `ESCAPE`
+
+    ``` sql
+    SELECT ESCAPE expr
+    FROM hats
+    ```
+
+    - [ ] *Has spec*
+  - [ ] Binary `IS`, `IS NOT`
+
+    ``` sql
+    SELECT *
+    FROM hats
+    WHERE ham IS NOT NULL
+    ```
+
+    - [ ] *Has spec*
+  - [ ] `BETWEEN`
+
+    ``` sql
+    SELECT *
+    FROM hats
+    WHERE x BETWEEN 2 AND 3
+    ```
+
+    - [ ] *Has spec*
+  - [x] Expression lists
+
+    ``` sql
+    SELECT expr1, expr2, expr3
+    FROM hats
+    ```
+
+    - [x] *Has spec*
+  - [ ] Binary operation
+
+    ``` sql
+    SELECT *
+    FROM hats
+    WHERE 2 != 3
+    ```
+
+    - [ ] *Has spec*
+  - [ ] Functions
+
+    ``` sql
+    SELECT MYFUNC(col, 1.2, 'str')
+    ```
+    - [ ] *Has spec*
+  - [ ] Table expressions
+
+    ``` sql
+    WITH ham AS (
+      SELECT type
+      FROM hams
+    )
+    SELECT *
+    FROM inventory
+      INNER JOIN ham
+        ON inventory.variety = ham.type
+    ```
+
+      - [ ] *Has spec*
+
+  - [x] Logical grouping `1 == 2 AND 2 == 3`
+    - [x] *Has spec*
+    - [x] **BUG**: Need to fix the grouping of expressions to allow for expressions to be logically organized.
+      - Example:
+
+        ``` sql
+        SELECT *
+        FROM bees
+        WHERE 1 < 2 AND 3 < 4
+        ```
+
+        > ```
+        >
+        >           AND                            <
+        >       /         \         versus     /       \
+        >      <           <                  1        AND
+        >   /     \     /     \                      /     \
+        >  1       2   3       4                    2       <
+        >                                                /     \
+        >                                               3       4
+        > ```
+
+      - **FIXED: now grouping correctly when using binary AND / OR**
+- [ ] Literals
+  - [ ] `'string'`
+  - [ ] Decimal, Hex, Exponent `12`, `1.2`, `1E-9`, `0xe1e3`
+  - [ ] Signed number `-2.001`
+- [ ] Bind parameters
+  - [ ] Numbered `?`, `?12`
+  - [ ] Named `@bees`
+  - [ ] TCL `$hey "Hey There"`
+- [ ] BLOB `X'stuff'`
 - [ ] Datatypes
   - [x] SQLite
 
