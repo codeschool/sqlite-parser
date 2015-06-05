@@ -34,7 +34,7 @@
   - [x] `CASE WHEN apple > 1 THEN 'YES' ELSE 'NO' END`
   - [x] `bees NOT IN (SELECT * FROM apples)`
   - [ ] additional tests for each expression type needed
-  - [x] **BUG**: Need to fix the grouping of expressions to allow for expressions to be logically organized. **FIXED: now grouping correctly when using binary AND / OR**
+  - [x] **BUG**: Need to fix the grouping of expressions to allow for expressions to be logically organized.
     - Example: `WHERE 1 < 2 AND 3 < 4`
 
       > ```
@@ -47,6 +47,8 @@
       >                                                /     \
       >                                               3       4
       > ```
+
+    - **FIXED: now grouping correctly when using binary AND / OR**
 
 - [ ] Datatypes
   - [x] SQLite
