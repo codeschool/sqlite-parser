@@ -30,7 +30,11 @@
 - [ ] `DROP`
 - [ ] `CREATE`
 - [ ] Expressions `1 != 2`, `CAST banana AS INT`
-  - **BUG**: Need to fix the grouping of expressions to allow for expressions to be logically organized.
+  - [x] `CAST banana AS INT`
+  - [x] `CASE WHEN apple > 1 THEN 'YES' ELSE 'NO' END`
+  - [x] `bees NOT IN (SELECT * FROM apples)`
+  - [ ] additional tests for each expression type needed
+  - [x] **BUG**: Need to fix the grouping of expressions to allow for expressions to be logically organized. **FIXED: now grouping correctly when using binary AND / OR**
     - Example: `WHERE 1 < 2 AND 3 < 4`
 
       > ```
