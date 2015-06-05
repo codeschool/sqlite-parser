@@ -2,13 +2,18 @@ var expect            = require('chai').expect
     tree              = require('./helpers');
 
 describe('sql-query-parser', function() {
-  
+
   // SELECT statement
 
   it('basic select', function(done) {
     var resultTree = '{"statement":[{"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"bananas","alias":null,"index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":"=","left":{"type":"identifier","variant":"column","name":"color"},"right":{"type":"literal","variant":"string","value":"red"},"modifier":null}],"group":null,"result":[{"type":"identifier","variant":"star","value":"*"}],"distinct":false,"all":false,"order":null,"limit":null}]}';
     tree.equals(resultTree, this, done);
   });
+
+    it('select alt syntax', function(done) {
+      var resultTree = '{"statement":[{"type":"statement","variant":"select","result":[{"type":"statement","variant":"values","values":[{"type":"literal","variant":"decimal","value":"1"},{"type":"literal","variant":"decimal","value":"2"},{"type":"literal","variant":"decimal","value":"3"}]},{"type":"statement","variant":"values","values":[{"type":"literal","variant":"decimal","value":"4"},{"type":"literal","variant":"decimal","value":"5"},{"type":"literal","variant":"decimal","value":"6"}]}],"from":null,"where":null,"group":null,"order":[{"direction":"DESC","expression":{"type":"identifier","variant":"column","name":"ham"},"modifier":null}],"limit":null}]}';
+      tree.equals(resultTree, this, done);
+    });
 
   // Aliases
 
@@ -45,7 +50,9 @@ describe('sql-query-parser', function() {
 
   it('basic create', function(done) {
     var resultTree = '{}';
-    tree.equals(resultTree, this, done);
+    // TODO: swap out these lines when CREATE statement parsing is ready
+    // tree.equals(resultTree, this, done);
+    tree.error(null, this, done);
   });
 
 
