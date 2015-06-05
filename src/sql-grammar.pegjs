@@ -18,44 +18,25 @@ start
  * {@link https://www.sqlite.org/lang_expr.html}
  */
 expression "Expression"
-  = expressions
-  / expression_types
+  = t:( expression_concat / expression_types ) o
+  { return t; }
 
-/*
-  TODO: Need to fix the grouping of expressions to allow for expressions
-        to be logically organized.
+expression_types
+  = expression_wrapped / expression_node / expression_value
 
-  Example: WHERE 1 < 2 AND 3 < 4
-
-           AND                             <
-        /         \         versus     /       \
-       <           <                  1        AND
-    /     \     /     \                      /     \
-  1        2   3       4                    2       <
-                                                 /     \
-                                                3       4
-*/
-expressions
-  = f:( expression_types ) o b:( expression_loop )
+expression_concat
+  = l:( expression_types ) o o:( binary_loop_concat ) o r:( expression )
   {
     return {
       'type': 'expression',
       'format': 'binary',
       'variant': 'operation',
-      'operation': b[0],
-      'left': f,
-      'right': b[1],
+      'operation': o,
+      'left': l,
+      'right': r,
       'modifier': null
     };
   }
-
-expression_loop
-  = c:( binary_loop_concat ) o e:( expression )
-  { return [c, e]; }
-
-expression_types
-  = t:( expression_wrapped / expression_node / expression_value ) o
-  { return t; }
 
 expression_wrapped
   = sym_popen o n:( expression_node / expression_value ) o sym_pclose
@@ -506,9 +487,8 @@ bind_parameter_named_suffix
   { return _.compose([q1, n, q2], ''); }
 
 /** @note Removed expression on left-hand-side to remove recursion */
-/* TODO: Need to refactor this so that expr1 AND expr2 is grouped/associated correctly */
 operation_binary
-  = v:( expression_value ) o o:( operator_binary ) o e:( expression )
+  = v:( expression_value ) o o:( operator_binary ) o e:( expression_types )
   {
     return {
       'type': 'expression',
@@ -522,7 +502,7 @@ operation_binary
   }
 
 binary_loop_concat
-  = c:( AND / OR ) o
+  = c:( AND / OR )
   { return _.textNode(c); }
 
 expression_list "Expression List"
