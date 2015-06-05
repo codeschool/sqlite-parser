@@ -726,7 +726,6 @@ source_loop_tail
   = sym_comma t:( table_or_sub )
   { return t; }
 
-/* TODO: Need to create rules for second pattern */
 table_or_sub
   = table_or_sub_sub
   / table_or_sub_table
@@ -747,6 +746,7 @@ table_or_sub_table_id
     });
   }
 
+/* TODO: Need final format */
 table_or_sub_index
   = i:( table_or_sub_index_node )
   {
@@ -826,13 +826,16 @@ join_condition_using_loop
   { return n; }
 
 select_parts_values
-  = VALUES o sym_popen l:( expression_list ) o sym_pclose
+  = VALUES o l:( insert_values_list )
   {
     // TODO: format
     return {
       'type': 'statement',
-      'variant': 'values',
-      'values': l
+      'variant': 'select',
+      'result': l,
+      'from': null,
+      'where': null,
+      'group': null
     };
   }
 
