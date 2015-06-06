@@ -292,7 +292,7 @@ expression_list_or_select
       'type': 'datatype',
       'format': n[0],
       'affinity': n[1],
-      'expression': [] // datatype definition arguments
+      'args': [] // datatype definition arguments
     }, a);
   }
 
@@ -300,7 +300,7 @@ type_definition_args
   = sym_popen a1:( literal_number_signed ) o a2:( definition_args_loop )? sym_pclose
   {
     return {
-      'expression': _.compose([a1, a2], [])
+      'args': _.compose([a1, a2], [])
     };
   }
 
@@ -522,7 +522,7 @@ function_call
       'type': 'function',
       'name': n,
       'distinct': false,
-      'expression': []
+      'args': []
     }, a);
   }
 
@@ -530,7 +530,7 @@ function_call_args
   = s:( select_star ) {
     return {
       'distinct': false,
-      'expression': [{
+      'args': [{
         'type': 'identifier',
         'variant': 'star',
         'value': s
@@ -540,7 +540,7 @@ function_call_args
   / ( d:( DISTINCT e )? e:( expression_list ) ) {
     return {
       'distinct': _.isOkay(d),
-      'expression': e
+      'args': e
     };
   }
 
@@ -850,23 +850,18 @@ select_order_list_loop
   { return i; }
 
 select_order_list_item
-  = e:( expression ) o c:( select_order_list_collate )? o d:( select_order_list_dir )?
+  = e:( expression ) o c:( column_collate )? o d:( select_order_list_dir )?
   {
     // TODO: Not final format
     return {
-      'direction': _.textNode(d),
+      'direction': _.textNode(d) /*|| 'ASC'*/,
       'expression': e,
-      'modifier': c
+      'collate': c
     };
   }
 
-select_order_list_collate
-  = COLLATE e n:( id_collation )
-  { return n; }
-
 select_order_list_dir
-  = t:( ASC / DESC ) o
-  { return _.textNode(t); }
+  = primary_column_dir
 
 select_star "All Columns"
   = sym_star
@@ -915,7 +910,7 @@ insert_keyword_mod
   }
 
 insert_target
-  = INTO e id:( id_table ) o cols:( insert_target_cols )?
+  = INTO e id:( id_table ) o cols:( loop_columns )?
   {
     return {
       'into': _.extend({
@@ -925,19 +920,19 @@ insert_target
     };
   }
 
-insert_target_cols
-  = sym_popen f:( insert_target_colname ) o b:( target_cols_loop )* sym_pclose
+loop_columns
+  = sym_popen f:( loop_name_column ) o b:( loop_column_tail )* sym_pclose
   {
     return {
       'columns': _.compose([f, b], [])
     };
   }
 
-target_cols_loop
-  = sym_comma c:( insert_target_colname ) o
+loop_column_tail
+  = sym_comma c:( loop_name_column ) o
   { return c; }
 
-insert_target_colname
+loop_name_column
   = n:( name_column )
   {
     return {
@@ -1109,7 +1104,14 @@ id_column_qualified
   { return _.compose([t, d], ''); }
 
 id_collation
-  = name_collation
+  = n:( name_collation )
+  {
+    return {
+      'type': 'identifier',
+      'variant': 'collation',
+      'name': n
+    };
+  }
 
 /* TODO: FIX all name_* symbols */
 name_database "Database Name"
@@ -1119,6 +1121,12 @@ name_table "Table Name"
   = name
 
 name_column "Column Name"
+  = name
+
+name_constraint_table "Table Constraint Name"
+  = name
+
+name_constraint_column "Column Constraint Name"
   = name
 
 name_collation "Collation Name"
@@ -1178,6 +1186,382 @@ stmt_delete "DELETE Statement"
 
 /* TODO: Complete */
 stmt_create "CREATE Statement"
+  = create_index
+  / create_table
+  / create_trigger
+  / create_view
+  / create_virtual
+
+create_index "CREATE Index"
+  = _TODO_
+
+create_table "CREATE Table"
+  = CREATE e tmp:( create_table_tmp )? TABLE e ne:( create_table_ine )? id:( id_table ) e s:( create_table_source )
+  {
+    return _.extend({
+      'type': 'statement',
+      'variant': 'create',
+      'format': 'table',
+      'temporary': _.isOkay(tmp),
+      'name': id['name'],
+      'condition': null,
+      'modifier': null,
+      'definition': []
+    }, s, ne);
+  }
+
+create_table_tmp
+  = t:( TEMP / TEMPORARY ) e
+  { return _.keywordify(t); }
+
+create_table_ine
+  = i:( IF ) e n:( NOT ) e e:( EXISTS ) e
+  {
+    return {
+      'condition': _.keywordify(_.compose([i, n, e]))
+    };
+  }
+
+create_table_source
+  = table_source_def
+  / table_source_select
+
+table_source_def
+  = sym_popen s:( source_def_loop ) o sym_pclose r:( source_def_rowid )?
+  {
+    return {
+      'definition': s,
+      'modifier': r
+    };
+  }
+
+source_def_rowid
+  = r:( WITHOUT e ROWID ) o
+  { return _.keywordify(r); }
+
+source_def_loop
+  = f:( source_def_types ) o b:( source_def_tail )*
+  { return _.compose([f, b], []); }
+
+source_def_tail
+  = sym_comma t:( source_def_types ) o
+  { return t; }
+
+source_def_types
+  = source_def_columns
+  / table_constraint
+
+source_def_columns
+  = n:( name_column ) e t:( column_type ) o c:( column_constraints )?
+  {
+    return _.extend({
+      'type': 'definition',
+      'variant': 'column',
+      'name': n,
+      'definition': (_.isOkay(c) ? c : [])
+    }, t);
+  }
+
+column_type
+  = t:( type_definition )
+  {
+    return {
+      'datatype': t
+    };
+  }
+
+column_constraints
+  = f:( column_constraint ) b:( column_constraint_tail )*
+  { return _.compose([f, b], []); }
+
+column_constraint_tail
+  = e c:( column_constraint )
+  { return c; }
+
+/** {@link https://www.sqlite.org/syntax/column-constraint.html} */
+column_constraint "Column Constraint"
+  = n:( column_constraint_name )? o c:( column_constraint_types )
+  {
+    return _.extend({
+      'name': n
+    }, c);
+  }
+
+column_constraint_name
+  = CONSTRAINT e n:( name_constraint_column )
+  { return n; }
+
+column_constraint_types
+  = column_constraint_primary
+  / column_constraint_null
+  / constraint_check
+  / column_constraint_default
+  / column_constraint_collate
+  / foreign_clause
+
+column_constraint_primary
+  = p:( col_primary_start ) o d:( col_primary_dir )? o c:( primary_conflict )? o a:( col_primary_auto )?
+  {
+    return _.extend(p, c, d, a);
+  }
+
+col_primary_start
+  = s:( PRIMARY e KEY )
+  {
+    return {
+      'type': 'constraint',
+      'variant': _.key(s),
+      'conflict': null,
+      'direction': null,
+      'modififer': null,
+      'autoincrement': false
+    };
+  }
+
+col_primary_dir
+  = d:( primary_column_dir )
+  {
+    return {
+      'direction': _.key(d)
+    };
+  }
+
+col_primary_auto
+  = a:( AUTOINCREMENT )
+  {
+    return {
+      'autoincrement': true
+    };
+  }
+
+column_constraint_null
+  = s:( ( NOT e NULL ) / ( UNIQUE ) ) e c:( primary_conflict )?
+  {
+    return _.extend({
+      'type': 'constraint',
+      'variant': _.key(s),
+      'conflict': null
+    }, c);
+  }
+
+column_constraint_default
+  = s:( DEFAULT ) v:( col_default_val )
+  {
+    return {
+      'type': 'constraint',
+      'variant': _.key(s),
+      'value': v
+    };
+  }
+
+col_default_val
+  = ( o v:( expression_wrapped ) ) { return v; }
+  / ( e v:( literal_number_signed ) ) { return v; }
+  / ( e v:( literal_value ) ) { return v; }
+
+column_constraint_collate
+  = c:( column_collate )
+  {
+    return {
+      'type': 'constraint',
+      'variant': 'collate',
+      'collate': c
+    };
+  }
+
+/** {@link https://www.sqlite.org/syntax/table-constraint.html} */
+table_constraint
+  = n:( table_constraint_name )? o c:( table_constraint_types )
+  {
+    return _.extend({
+      'type': 'constraint',
+      'variant': 'table',
+      'name': n,
+      'expression': null,
+      'result': []
+    }, c);
+  }
+
+table_constraint_name
+  = CONSTRAINT e n:( name_constraint_table )
+  { return n; }
+
+table_constraint_types
+  = table_constraint_primary
+  / constraint_check
+  / table_constraint_foreign
+
+table_constraint_primary
+  = k:( primary_start ) e c:( primary_columns ) e t:( primary_conflict )?
+  {
+    return {
+      'result': c,
+      'expression': _.extend(k, t)
+    };
+  }
+
+primary_start
+  = s:( ( PRIMARY e KEY )
+  / ( UNIQUE ) )
+  {
+    return {
+      'type': 'constraint',
+      'variant': _.key(s),
+      'conflict': null
+    };
+  }
+
+primary_columns
+  = f:( primary_column ) e b:( primary_column_tail )*
+  { return _.compose([f, b], []); }
+
+primary_column "Indexed Column"
+  = e:( name_column ) e c:( column_collate )? e d:( primary_column_dir )?
+  {
+    // TODO: Not final format
+    return {
+      'type': 'identifier',
+      'variant': 'column',
+      'format': 'indexed',
+      'direction': _.key(d) /*|| "ASC"*/,
+      'name': e,
+      'collate': c
+    };
+  }
+
+column_collate
+  = COLLATE e n:( id_collation )
+  { return n; }
+
+primary_column_dir
+  = t:( ASC / DESC ) o
+  { return _.textNode(t); }
+
+primary_column_tail
+  = sym_comma c:( primary_column )
+  { return c; }
+
+primary_conflict
+  = o:( ON ) e c:( CONFLICT ) e t:( ROLLBACK / ABORT / FAIL / IGNORE / REPLACE )
+  {
+    return {
+      'conflict': _.key(t)
+    };
+  }
+
+constraint_check
+  = k:( CHECK ) o c:( expression_wrapped )
+  {
+    return {
+      'format': _.key(k),
+      'expression': c
+    };
+  }
+
+table_constraint_foreign
+  = k:( foreign_start ) o l:( loop_columns ) o c:( foreign_clause )
+  {
+    return {
+      'expression': _.extend(k, c),
+      'result': l
+    };
+  }
+
+foreign_start
+  = k:( FOREIGN e KEY )
+  {
+    return {
+      'variant': _.key(k),
+      'references': null,
+      'action': null,
+      'deferrable': null
+    };
+  }
+
+/** {@link https://www.sqlite.org/syntax/foreign-key-clause.html} */
+foreign_clause
+  = r:( foreign_references ) o a:( foreign_actions )? o d:( foreign_deferrable )?
+  {
+    return {
+      'type': 'constraint',
+      'references': r,
+      'action': a,
+      'deferrable': d
+    };
+  }
+
+foreign_references
+  = REFERENCES e t:( id_table ) o c:( loop_columns )?
+  {
+    // TODO: FORMAT?
+    return {
+      'type': 'expression',
+      'variant': 'list',
+      'format': 'column',
+      'source': t,
+      'result': c
+    };
+  }
+
+foreign_actions
+  = f:( foreign_action ) b:( foreign_actions_tail )*
+  { return _.collect([f, b], []); }
+
+foreign_actions_tail
+  = e a:( foreign_action )
+  { return a; }
+
+/* TODO: action format? */
+foreign_action
+  = foreign_action_on
+  / foreign_action_match
+
+foreign_action_on
+  = m:( ON ) e a:( DELETE / UPDATE ) e n:( action_on_action )
+  {
+    return {
+      'type': 'action',
+      'variant': _.key(m),
+      'action': n
+    };
+  }
+
+action_on_action
+  = a:( ( SET e ( NULL / DEFAULT ) )
+  / ( CASCADE / RESTRICT )
+  / ( NO e ACTION ) )
+  { return _.key(a); }
+
+/* TODO: name format? */
+foreign_action_match
+  = m:( MATCH ) e n:( name )
+  {
+    return {
+      'type': 'action',
+      'variant': _.key(m),
+      'action': n
+    };
+  }
+
+foreign_deferrable
+  = n:( NOT e )? d:( DEFERRABLE ) i:( e INITIALLY e ( DEFERRED / IMMEDIATE ) )?
+  { return _.collect([n, d, i]); }
+
+table_source_select
+  = AS e s:( stmt_select )
+  {
+    return {
+      'result': s
+    };
+  }
+
+create_trigger "CREATE Trigger"
+  = _TODO_
+
+create_view "CREATE View"
+  = _TODO_
+
+create_virtual "CREATE Virtual Table"
   = _TODO_
 
 /* TODO: Complete */
@@ -1477,6 +1861,8 @@ ROLLBACK "ROLLBACK Keyword"
   = "ROLLBACK"i
 ROW "ROW Keyword"
   = "ROW"i
+ROWID "ROWID Keyword"
+  = "ROWID"i
 SAVEPOINT "SAVEPOINT Keyword"
   = "SAVEPOINT"i
 SELECT "SELECT Keyword"
