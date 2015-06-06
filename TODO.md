@@ -95,6 +95,34 @@
 - [ ] `DELETE`
 - [ ] `DROP`
 - [ ] `CREATE`
+  - [x] Table format
+    - [x] Basic format
+        - [x] *Has spec*
+    - [x] Table constraints **TODO: Need tests**
+      - [x] `PRIMARY KEY`
+        - [ ] *Has spec*
+      - [x] `CHECK`
+        - [ ] *Has spec*
+      - [x] `FOREIGN KEY`
+        - [ ] *Has spec*
+  - [x] Column format
+    - [x] Basic format
+      - [x] *Has spec*
+    - [x] Column constraints **TODO: Need tests**
+      - [x] `PRIMARY KEY`
+        - [ ] *Has spec*  
+      - [x] `NOT NULL`, `UNIQUE`
+        - [ ] *Has spec*  
+      - [x] `CHECK`
+        - [ ] *Has spec*  
+      - [x] `DEFAULT`
+        - [ ] *Has spec*  
+      - [x] `COLLATE`
+        - [ ] *Has spec*  
+      - [x] `FOREIGN KEY`
+        - [ ] *Has spec*  
+  - [ ] Create table `AS SELECT`
+    - [ ] *Has spec*
 - [ ] Indexed sources in queries
 
   ``` sql
@@ -264,6 +292,28 @@
   - [ ] Named `@bees`
   - [ ] TCL `$hey "Hey There"`
 - [ ] BLOB `X'stuff'`
+- AST
+  - [x] Initial AST Format
+
+    ``` json
+    {
+      "statement": [
+        {
+          "type": "statement",
+          "variant": "select"
+        },
+        {
+          "type": "statement",
+          "variant": "create"
+        }
+      ]
+    }
+    ```
+
+  - [ ] **BUG: AST should output normalized (lowercased) values for case-insentive data (e.g.: datatypes, keywords, etc...)**
+  - [ ] **ISSUE:** Need to normalize format across all statement types (e.g.: `CREATE TABLE`, `SELECT`)
+    - [ ] Normalize `CREATE`, `SELECT`, `INSERT`, `UPDATE`, `DROP`, `DELETE`
+    - [ ] Constraint versus Clause versus Condition (Table Constraint, Column Constraint, etc...)
 - [ ] Datatypes
   - [x] SQLite
 
