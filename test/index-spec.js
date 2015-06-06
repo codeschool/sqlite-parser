@@ -49,12 +49,9 @@ describe('sql-query-parser', function() {
   // CREATE statement
 
   it('basic create', function(done) {
-    var resultTree = '{}';
-    // TODO: swap out these lines when CREATE statement parsing is ready
-    // tree.equals(resultTree, this, done);
-    tree.error(null, this, done);
+    var resultTree = '{"statement":[{"type":"statement","variant":"create","format":"table","temporary":false,"name":"advertisements","condition":null,"modifier":null,"definition":[{"type":"definition","variant":"column","name":"id","definition":[{"name":null,"type":"constraint","variant":"primary key","conflict":null,"direction":null,"modififer":null,"autoincrement":false}],"datatype":{"type":"datatype","format":"INT","affinity":"INTEGER","args":[]}},{"type":"definition","variant":"column","name":"name","definition":[],"datatype":{"type":"datatype","format":"VARCHAR","affinity":"TEXT","args":[{"type":"literal","variant":"decimal","value":"50"}]}},{"type":"definition","variant":"column","name":"category","definition":[],"datatype":{"type":"datatype","format":"VARCHAR","affinity":"TEXT","args":[{"type":"literal","variant":"decimal","value":"15"}]}},{"type":"definition","variant":"column","name":"cost","definition":[],"datatype":{"type":"datatype","format":"INT","affinity":"INTEGER","args":[]}}]}]}';
+    tree.equals(resultTree, this, done);
   });
-
 
   it('binary concatenation', function(done) {
     var resultTree = '{"statement":[{"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"bananas","alias":null,"index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":"AND","left":{"type":"expression","format":"binary","variant":"operation","operation":"!=","left":{"type":"literal","variant":"decimal","value":"1"},"right":{"type":"literal","variant":"decimal","value":"2"},"modifier":null},"right":{"type":"expression","format":"binary","variant":"operation","operation":"OR","left":{"type":"expression","format":"binary","variant":"operation","operation":"!=","left":{"type":"identifier","variant":"column","name":"color"},"right":{"type":"literal","variant":"string","value":"blue"},"modifier":null},"right":{"type":"expression","format":"binary","variant":"operation","operation":"==","left":{"type":"identifier","variant":"column","name":"pees"},"right":{"type":"identifier","variant":"column","name":"crackers"},"modifier":null},"modifier":null},"modifier":null}],"group":null,"result":[{"type":"identifier","variant":"star","value":"*"}],"distinct":false,"all":false,"order":null,"limit":null}]}';
