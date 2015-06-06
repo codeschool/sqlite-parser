@@ -160,6 +160,10 @@ function keywordify(elem) {
   return textNode(elem).toUpperCase();
 }
 
+function key(elem) {
+  return textNode(elem).toLowerCase();
+}
+
 module.exports = {
   // Array methods
   'stack':                stack,
@@ -172,6 +176,7 @@ module.exports = {
   'textNode':             textNode,
   'unescape':             unescape,
   'keywordify':           keywordify,
+  'key':                  key,
   // Type detection
   'typed':                typed,
   'isPlain':              isPlain,
