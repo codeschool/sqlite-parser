@@ -92,39 +92,50 @@
 
     - [ ] *Has spec*
 - [x] `UPDATE`
-    - [ ] *Has spec*
+  - [x] Basic format
+    - [x] *Has spec*
+  - [x] Limit update format
+    - [x] *Has spec*
 - [x] `DELETE`
-    - [ ] *Has spec*
+  - [x] Basic format
+    - [x] *Has spec*
+  - [x] Limit update format
+    - [x] *Has spec*
 - [x] `DROP`
     - [ ] *Has spec*
 - [ ] `CREATE`
   - [x] Table format
     - [x] Basic format
-        - [x] *Has spec*
-    - [x] Table constraints **TODO: Need tests**
-      - [x] `PRIMARY KEY`
-        - [ ] *Has spec*
-      - [x] `CHECK`
-        - [ ] *Has spec*
-      - [x] `FOREIGN KEY`
-        - [ ] *Has spec*
-  - [x] Column format
-    - [x] Basic format
       - [x] *Has spec*
-    - [x] Column constraints **TODO: Need tests**
-      - [x] `PRIMARY KEY`
-        - [ ] *Has spec*  
-      - [x] `NOT NULL`, `UNIQUE`
-        - [ ] *Has spec*  
-      - [x] `CHECK`
-        - [ ] *Has spec*  
-      - [x] `DEFAULT`
-        - [ ] *Has spec*  
-      - [x] `COLLATE`
-        - [ ] *Has spec*  
-      - [x] `FOREIGN KEY`
-        - [ ] *Has spec*  
+      - [x] Table constraints **TODO: Need tests**
+        - [x] `PRIMARY KEY`
+          - [ ] *Has spec*
+        - [x] `CHECK`
+          - [ ] *Has spec*
+        - [x] `FOREIGN KEY`
+          - [ ] *Has spec*
+      - [x] Column constraints **TODO: Need tests**
+        - [x] `PRIMARY KEY`
+          - [ ] *Has spec*  
+        - [x] `NOT NULL`, `UNIQUE`
+          - [ ] *Has spec*  
+        - [x] `CHECK`
+          - [ ] *Has spec*  
+        - [x] `DEFAULT`
+          - [ ] *Has spec*  
+        - [x] `COLLATE`
+          - [ ] *Has spec*  
+        - [x] `FOREIGN KEY`
+          - [ ] *Has spec*  
   - [ ] Create table `AS SELECT`
+    - [ ] *Has spec*
+  - [ ] Create `INDEX`
+    - [ ] *Has spec*
+  - [ ] Create `TRIGGER`
+    - [ ] *Has spec*
+  - [ ] Create `VIEW`
+    - [ ] *Has spec*
+  - [ ] Create `VIRTUAL` table
     - [ ] *Has spec*
 - [ ] Indexed sources in queries
 
