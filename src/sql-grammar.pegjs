@@ -1229,11 +1229,11 @@ update_columns_tail
   { return c; }
 
 update_column
-  = f:( name_column ) o sym_equal e:( expression_types ) o
+  = f:( id_column ) o sym_equal e:( expression_types ) o
   {
     return {
       'type': 'assignment',
-      'name': f,
+      'target': f,
       'value': e
     };
   }
@@ -1286,7 +1286,7 @@ create_table "CREATE Table"
       'variant': 'create',
       'format': 'table',
       'temporary': _.isOkay(tmp),
-      'name': id['name'],
+      'target': id,
       'condition': null,
       'modifier': null,
       'definition': []
@@ -1648,13 +1648,13 @@ create_virtual "CREATE Virtual Table"
   = _TODO_
 
 stmt_drop "DROP Table Statement"
-  = s:( drop_start ) t:( drop_types ) i:( drop_ie )? q:( drop_name ) o
+  = s:( drop_start ) t:( drop_types ) i:( drop_ie )? q:( id_table ) o
   {
     return {
       'type': 'statement',
       'variant': s,
       'format': t,
-      'name': _.textNode(q),
+      'target': q,
       'condition': i
     };
   }
@@ -1670,10 +1670,6 @@ drop_types
 drop_ie
   = i:( IF ) e e:( EXISTS ) e
   { return _.key(_.compose([i, e])); }
-
-drop_name
-  = q:( name_database sym_dot )? n:( name )
-  { return _.compose([q, n], ''); }
 
 /* Naming rules */
 
