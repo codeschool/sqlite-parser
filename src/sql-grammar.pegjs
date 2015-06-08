@@ -1648,9 +1648,35 @@ create_view "CREATE View"
 create_virtual "CREATE Virtual Table"
   = _TODO_
 
-/* TODO: Complete */
-stmt_drop "DROP Statement"
-  = _TODO_
+stmt_drop "DROP Table Statement"
+  = s:( drop_start ) t:( drop_types ) ( drop_ie )? q:( drop_name ) o
+  {
+    return {
+      'type': 'statement',
+      'variant': s,
+      'format': t,
+      'name': _.textNode(q),
+      'condition': null,
+      'modifier': null,
+      'definition': []
+    };
+  }
+
+drop_start
+  = s:( DROP ) e
+  { return _.key(s); }
+
+drop_types
+  = t:( TABLE / INDEX / TRIGGER / VIEW ) e
+  { return _.key(t); }
+
+drop_ie
+  = i:( IF ) e e:( EXISTS ) e
+  { return _.key(_.compose([i, e])); }
+
+drop_name
+  = q:( name_database sym_dot )? n:( name )
+  { return _.compose([q, n], ''); }
 
 /* Naming rules */
 
