@@ -3,18 +3,6 @@ var expect            = require('chai').expect
 
 describe('sql-query-parser', function() {
 
-  // SELECT statement
-
-  it('basic select', function(done) {
-    var resultTree = '{"statement":[{"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"bananas","alias":null,"index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":"=","left":{"type":"identifier","variant":"column","name":"color"},"right":{"type":"literal","variant":"string","value":"red"},"modifier":null}],"group":null,"result":[{"type":"identifier","variant":"star","value":"*"}],"distinct":false,"all":false,"order":null,"limit":null}]}';
-    tree.equals(resultTree, this, done);
-  });
-
-    it('select alt syntax', function(done) {
-      var resultTree = '{"statement":[{"type":"statement","variant":"select","result":[{"type":"statement","variant":"values","values":[{"type":"literal","variant":"decimal","value":"1"},{"type":"literal","variant":"decimal","value":"2"},{"type":"literal","variant":"decimal","value":"3"}]},{"type":"statement","variant":"values","values":[{"type":"literal","variant":"decimal","value":"4"},{"type":"literal","variant":"decimal","value":"5"},{"type":"literal","variant":"decimal","value":"6"}]}],"from":null,"where":null,"group":null,"order":[{"direction":"DESC","expression":{"type":"identifier","variant":"column","name":"ham"},"collate":null}],"limit":null}]}';
-      tree.equals(resultTree, this, done);
-    });
-
   // Aliases
 
   it('aliases', function(done) {
@@ -34,15 +22,27 @@ describe('sql-query-parser', function() {
     tree.equals(resultTree, this, done);
   });
 
+  // SELECT statement
+
+  it('basic select', function(done) {
+    var resultTree = '{"statement":[{"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"bananas","alias":null,"index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":"=","left":{"type":"identifier","variant":"column","name":"color"},"right":{"type":"literal","variant":"string","value":"red"},"modifier":null}],"group":null,"result":[{"type":"identifier","variant":"star","value":"*"}],"distinct":false,"all":false,"order":null,"limit":null}]}';
+    tree.equals(resultTree, this, done);
+  });
+
+  it('select alt syntax', function(done) {
+    var resultTree = '{"statement":[{"type":"statement","variant":"select","result":[{"type":"statement","variant":"values","values":[{"type":"literal","variant":"decimal","value":"1"},{"type":"literal","variant":"decimal","value":"2"},{"type":"literal","variant":"decimal","value":"3"}]},{"type":"statement","variant":"values","values":[{"type":"literal","variant":"decimal","value":"4"},{"type":"literal","variant":"decimal","value":"5"},{"type":"literal","variant":"decimal","value":"6"}]}],"from":null,"where":null,"group":null,"order":[{"direction":"DESC","expression":{"type":"identifier","variant":"column","name":"ham"},"collate":null}],"limit":null}]}';
+    tree.equals(resultTree, this, done);
+  });
+
   // UPDATE Statement
 
   it('basic update', function(done) {
-    var resultTree = '{"statement":[{"type":"statement","variant":"update","into":{"type":"identifier","variant":"table","name":"bees","alias":null,"index":null},"where":[{"type":"expression","format":"binary","variant":"operation","operation":"not in","left":{"type":"identifier","variant":"column","name":"name"},"right":{"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"bee_names","alias":null,"index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":"<","left":{"type":"identifier","variant":"column","name":"size"},"right":{"type":"literal","variant":"decimal","value":"3.14"},"modifier":null}],"group":null,"result":[{"type":"identifier","variant":"column","name":"name","alias":null}],"distinct":false,"all":false,"order":null,"limit":null},"modifier":null}],"set":[{"type":"assignment","name":"name","value":{"type":"literal","variant":"string","value":"drone"}},{"type":"assignment","name":"wings","value":{"type":"literal","variant":"decimal","value":"2"}}],"order":null,"limit":null}]}';
+    var resultTree = '{"statement":[{"type":"statement","variant":"update","into":{"type":"identifier","variant":"table","name":"bees","alias":null,"index":null},"where":[{"type":"expression","format":"binary","variant":"operation","operation":"not in","left":{"type":"identifier","variant":"column","name":"name"},"right":{"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"bee_names","alias":null,"index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":"<","left":{"type":"identifier","variant":"column","name":"size"},"right":{"type":"literal","variant":"decimal","value":"3.14"},"modifier":null}],"group":null,"result":[{"type":"identifier","variant":"column","name":"name","alias":null}],"distinct":false,"all":false,"order":null,"limit":null},"modifier":null}],"set":[{"type":"assignment","target":{"type":"identifier","variant":"column","name":"name"},"value":{"type":"literal","variant":"string","value":"drone"}},{"type":"assignment","target":{"type":"identifier","variant":"column","name":"wings"},"value":{"type":"literal","variant":"decimal","value":"2"}}],"order":null,"limit":null}]}';
     tree.equals(resultTree, this, done);
   });
 
   it('update limit', function(done) {
-    var resultTree = '{"statement":[{"type":"statement","variant":"update","into":{"type":"identifier","variant":"table","name":"bees","alias":null,"index":null},"where":[{"type":"expression","format":"binary","variant":"operation","operation":"!=","left":{"type":"identifier","variant":"column","name":"name"},"right":{"type":"literal","variant":"string","value":"nicholas"},"modifier":null}],"set":[{"type":"assignment","name":"name","value":{"type":"literal","variant":"string","value":"drone"}},{"type":"assignment","name":"wings","value":{"type":"literal","variant":"decimal","value":"2"}}],"order":null,"limit":{"start":{"type":"literal","variant":"decimal","value":"2"},"offset":{"type":"literal","variant":"decimal","value":"10"}}}]}';
+    var resultTree = '{"statement":[{"type":"statement","variant":"update","into":{"type":"identifier","variant":"table","name":"bees","alias":null,"index":null},"where":[{"type":"expression","format":"binary","variant":"operation","operation":"!=","left":{"type":"identifier","variant":"column","name":"name"},"right":{"type":"literal","variant":"string","value":"nicholas"},"modifier":null}],"set":[{"type":"assignment","target":{"type":"identifier","variant":"column","name":"name"},"value":{"type":"literal","variant":"string","value":"drone"}},{"type":"assignment","target":{"type":"identifier","variant":"column","name":"wings"},"value":{"type":"literal","variant":"decimal","value":"2"}}],"order":null,"limit":{"start":{"type":"literal","variant":"decimal","value":"2"},"offset":{"type":"literal","variant":"decimal","value":"10"}}}]}';
     tree.equals(resultTree, this, done);
   });
 
@@ -73,12 +73,24 @@ describe('sql-query-parser', function() {
   // CREATE statement
 
   it('basic create', function(done) {
-    var resultTree = '{"statement":[{"type":"statement","variant":"create","format":"table","temporary":false,"name":"advertisements","condition":null,"modifier":null,"definition":[{"type":"definition","variant":"column","name":"id","definition":[{"name":null,"type":"constraint","variant":"primary key","conflict":null,"direction":null,"modififer":null,"autoincrement":false}],"datatype":{"type":"datatype","format":"int","affinity":"integer","args":[]}},{"type":"definition","variant":"column","name":"name","definition":[],"datatype":{"type":"datatype","format":"varchar","affinity":"text","args":[{"type":"literal","variant":"decimal","value":"50"}]}},{"type":"definition","variant":"column","name":"category","definition":[],"datatype":{"type":"datatype","format":"varchar","affinity":"text","args":[{"type":"literal","variant":"decimal","value":"15"}]}},{"type":"definition","variant":"column","name":"cost","definition":[],"datatype":{"type":"datatype","format":"int","affinity":"integer","args":[]}}]}]}';
+    var resultTree = '{"statement":[{"type":"statement","variant":"create","format":"table","temporary":false,"target":{"type":"identifier","variant":"table","name":"advertisements"},"condition":null,"modifier":null,"definition":[{"type":"definition","variant":"column","name":"id","definition":[{"name":null,"type":"constraint","variant":"primary key","conflict":null,"direction":null,"modififer":null,"autoincrement":false}],"datatype":{"type":"datatype","format":"int","affinity":"integer","args":[]}},{"type":"definition","variant":"column","name":"name","definition":[],"datatype":{"type":"datatype","format":"varchar","affinity":"text","args":[{"type":"literal","variant":"decimal","value":"50"}]}},{"type":"definition","variant":"column","name":"category","definition":[],"datatype":{"type":"datatype","format":"varchar","affinity":"text","args":[{"type":"literal","variant":"decimal","value":"15"}]}},{"type":"definition","variant":"column","name":"cost","definition":[],"datatype":{"type":"datatype","format":"int","affinity":"integer","args":[]}}]}]}';
     tree.equals(resultTree, this, done);
   });
 
   it('binary concatenation', function(done) {
     var resultTree = '{"statement":[{"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"bananas","alias":null,"index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":"and","left":{"type":"expression","format":"binary","variant":"operation","operation":"!=","left":{"type":"literal","variant":"decimal","value":"1"},"right":{"type":"literal","variant":"decimal","value":"2"},"modifier":null},"right":{"type":"expression","format":"binary","variant":"operation","operation":"or","left":{"type":"expression","format":"binary","variant":"operation","operation":"!=","left":{"type":"identifier","variant":"column","name":"color"},"right":{"type":"literal","variant":"string","value":"blue"},"modifier":null},"right":{"type":"expression","format":"binary","variant":"operation","operation":"==","left":{"type":"identifier","variant":"column","name":"pees"},"right":{"type":"identifier","variant":"column","name":"crackers"},"modifier":null},"modifier":null},"modifier":null}],"group":null,"result":[{"type":"identifier","variant":"star","value":"*"}],"distinct":false,"all":false,"order":null,"limit":null}]}';
+    tree.equals(resultTree, this, done);
+  });
+
+  // DROP statement
+
+  it('basic drop', function(done) {
+    var resultTree = '{"statement":[{"type":"statement","variant":"drop","format":"table","target":{"type":"identifier","variant":"table","name":"beeStuff"},"condition":null}]}';
+    tree.equals(resultTree, this, done);
+  });
+
+  it('drop alt syntax', function(done) {
+    var resultTree = '{"statement":[{"type":"statement","variant":"drop","format":"table","target":{"type":"identifier","variant":"table","name":"hive.beeStuff"},"condition":"if exists"}]}';
     tree.equals(resultTree, this, done);
   });
 });
