@@ -562,9 +562,11 @@ clause_with "WITH Clause"
   {
     // TODO: final format
     return {
-      'type': 'with',
-      'recursive': isOkay(r),
-      'expression': _.compose([f, r], [])
+      'with': {
+        'type': 'with',
+        'recursive': isOkay(r),
+        'expression': _.compose([f, r], [])
+      }
     };
   }
 
@@ -584,7 +586,7 @@ stmt_crud_types
 
 /** {@link https://www.sqlite.org/lang_select.html} */
 stmt_select "SELECT Statement"
-  = s:( select_loop ) o o:( select_order )? o l:( select_limit )?
+  = s:( select_loop ) o o:( stmt_core_order )? o l:( stmt_core_limit )?
   {
     return _.extend(s, {
       'order': o,
@@ -592,12 +594,12 @@ stmt_select "SELECT Statement"
     });
   }
 
-select_order
-  = ORDER e BY e d:( select_order_list )
+stmt_core_order
+  = ORDER e BY e d:( stmt_core_order_list )
   { return d; }
 
-select_limit
-  = LIMIT e e:( expression ) o d:( select_limit_offset )?
+stmt_core_limit
+  = LIMIT e e:( expression ) o d:( stmt_core_limit_offset )?
   {
     return {
       'start': e,
@@ -605,7 +607,7 @@ select_limit
     };
   }
 
-select_limit_offset
+stmt_core_limit_offset
   = o:( ( OFFSET e ) / sym_comma ) e:( expression )
   { return e; }
 
@@ -629,7 +631,7 @@ select_parts
   / select_parts_values
 
 select_parts_core
-  = s:( select_core_select ) o f:( select_core_from )? o w:( select_core_where )? o g:( select_core_group )? o
+  = s:( select_core_select ) o f:( select_core_from )? o w:( stmt_core_where )? o g:( select_core_group )? o
   {
     // TODO: Not final syntax!
     return _.extend({
@@ -669,7 +671,7 @@ select_core_from
   = FROM e s:( select_source )
   { return s; }
 
-select_core_where
+stmt_core_where
   = WHERE e e:( expression )
   { return _.makeArray(e); }
 
@@ -839,18 +841,18 @@ select_parts_values
     };
   }
 
-select_order_list
-  = f:( select_order_list_item ) o b:( select_order_list_loop )?
+stmt_core_order_list
+  = f:( stmt_core_order_list_item ) o b:( stmt_core_order_list_loop )?
   {
     return _.compose([f, b], []);
   }
 
-select_order_list_loop
-  = sym_comma i:( select_order_list_item )
+stmt_core_order_list_loop
+  = sym_comma i:( stmt_core_order_list_item )
   { return i; }
 
-select_order_list_item
-  = e:( expression ) o c:( column_collate )? o d:( select_order_list_dir )?
+stmt_core_order_list_item
+  = e:( expression ) o c:( column_collate )? o d:( stmt_core_order_list_dir )?
   {
     // TODO: Not final format
     return {
@@ -860,11 +862,15 @@ select_order_list_item
     };
   }
 
-select_order_list_dir
+stmt_core_order_list_dir
   = primary_column_dir
 
 select_star "All Columns"
   = sym_star
+
+stmt_fallback_types
+  = k:( REPLACE / ROLLBACK / ABORT / FAIL / IGNORE )
+  { return k; }
 
 /** {@link https://www.sqlite.org/lang_insert.html} */
 stmt_insert "INSERT Statement"
@@ -889,7 +895,7 @@ insert_keyword_ins
   = a:( INSERT ) e m:( insert_keyword_mod )?
   {
     return _.extend({
-      'action': _.keywordify(a)
+      'action': _.key(a)
     }, m);
   }
 
@@ -897,15 +903,15 @@ insert_keyword_repl
   = a:( REPLACE ) e
   {
     return {
-      'action': _.keywordify(a)
+      'action': _.key(a)
     };
   }
 
 insert_keyword_mod
-  = OR e m:( REPLACE / ROLLBACK / ABORT / FAIL / IGNORE )
+  = OR e m:( stmt_fallback_types )
   {
     return {
-      'or': _.keywordify(m)
+      'or': _.key(m)
     };
   }
 
@@ -1005,7 +1011,7 @@ operator_binary "Binary Operator"
   / binary_left / binary_right / binary_and / binary_or
   / binary_lt / binary_lte / binary_gt / binary_gte
   / binary_lang / binary_notequal / binary_equal )
-  { return _.keywordify(o); }
+  { return _.key(o); }
 
 binary_concat "Or"
   = sym_pipe sym_pipe
@@ -1141,23 +1147,23 @@ name_function "Function Name"
 /* Column datatypes */
 
 datatype_types
-  = t:( datatype_text ) { return [t, 'TEXT']; }
-  / t:( datatype_real ) { return [t, 'REAL']; }
-  / t:( datatype_numeric ) { return [t, 'NUMERIC']; }
-  / t:( datatype_integer ) { return [t, 'INTEGER']; }
-  / t:( datatype_none ) { return [t, 'NONE']; }
+  = t:( datatype_text ) { return [t, 'text']; }
+  / t:( datatype_real ) { return [t, 'real']; }
+  / t:( datatype_numeric ) { return [t, 'numeric']; }
+  / t:( datatype_integer ) { return [t, 'integer']; }
+  / t:( datatype_none ) { return [t, 'none']; }
 
 datatype_text
   = t:( ( ( "N"i )? ( "VAR"i )? "CHAR"i )
   / ( ( "TINY"i / "MEDIUM"i / "LONG"i )? "TEXT"i )
   / "CLOB"i )
-  { return _.keywordify(t); }
+  { return _.key(t); }
 
 datatype_real
   = t:( ( "DOUBLE"i ( e "PRECISION"i )? )
   / "FLOAT"i
   / "REAL"i )
-  { return _.keywordify(t); }
+  { return _.key(t); }
 
 datatype_numeric
   = t:( "NUMERIC"i
@@ -1165,20 +1171,76 @@ datatype_numeric
   / "BOOLEAN"i
   / ( "DATE"i ( "TIME"i )? )
   / ( "TIME"i ( "STAMP"i )? ) )
-  { return _.keywordify(t); }
+  { return _.key(t); }
 
 datatype_integer
   = t:( ( "INT"i ( "2" / "4" / "8" / "EGER"i ) )
   / ( ( "BIG"i / "MEDIUM"i / "SMALL"i / "TINY"i )? "INT"i ) )
-  { return _.keywordify(t); }
+  { return _.key(t); }
 
 datatype_none
   = t:( "BLOB"i )
-  { return _.keywordify(t); }
+  { return _.key(t); }
 
-/* TODO: Complete */
+/**
+ * @note Includes limited update syntax {@link https://www.sqlite.org/syntax/update-stmt-limited.html}
+ */
 stmt_update "UPDATE Statement"
-  = _TODO_
+  = u:( clause_with ) o s:( update_start ) f:( update_fallback )? t:( table_or_sub_table ) o u:( update_set ) w:( update_where )? o o:( stmt_core_order )? o l:( stmt_core_limit )?
+  {
+    // TODO: Not final syntax!
+    return _.extend({
+      'type': 'statement',
+      'variant': s,
+      'into': t,
+      'where': w,
+      'set': [],
+      'order': o,
+      'limit': l
+    }, u, f, c);
+  }
+
+update_start
+  = s:( UPDATE ) e
+  { return _.key(s); }
+
+update_fallback
+  = OR e t:( stmt_fallback_types ) e
+  {
+    return {
+      'or': _.key(t)
+    };
+  }
+
+update_set
+  = SET e c:( update_columns ) o
+  {
+    return {
+      'set': c
+    };
+  }
+
+update_columns
+  = f:( update_column ) b:( update_columns_tail )*
+  { return _.compose([f, b], []); }
+
+update_columns_tail
+  = o sym_comma c:( update_column )
+  { return c; }
+
+update_column
+  = f:( name_column ) o sym_equal e:( expression_types ) o
+  {
+    return {
+      'type': 'assignment',
+      'name': f,
+      'value': e
+    };
+  }
+
+update_where
+  = w:( stmt_core_where ) o
+  { return w; }
 
 /* TODO: Complete */
 stmt_delete "DELETE Statement"
@@ -1212,13 +1274,13 @@ create_table "CREATE Table"
 
 create_table_tmp
   = t:( TEMP / TEMPORARY ) e
-  { return _.keywordify(t); }
+  { return _.key(t); }
 
 create_table_ine
   = i:( IF ) e n:( NOT ) e e:( EXISTS ) e
   {
     return {
-      'condition': _.keywordify(_.compose([i, n, e]))
+      'condition': _.key(_.compose([i, n, e]))
     };
   }
 
@@ -1237,7 +1299,7 @@ table_source_def
 
 source_def_rowid
   = r:( WITHOUT e ROWID ) o
-  { return _.keywordify(r); }
+  { return _.key(r); }
 
 source_def_loop
   = f:( source_def_types ) o b:( source_def_tail )*
@@ -1442,7 +1504,7 @@ primary_column_tail
   { return c; }
 
 primary_conflict
-  = o:( ON ) e c:( CONFLICT ) e t:( ROLLBACK / ABORT / FAIL / IGNORE / REPLACE )
+  = o:( ON ) e c:( CONFLICT ) e t:( stmt_fallback_types )
   {
     return {
       'conflict': _.key(t)
@@ -1923,7 +1985,7 @@ reserved_words
     RELEASE / RENAME / REPLACE / RESTRICT / RIGHT / ROLLBACK / ROW / SAVEPOINT /
     SELECT / SET / TABLE / TEMP / TEMPORARY / THEN / TO / TRANSACTION / TRIGGER /
     UNION / UNIQUE / UPDATE / USING / VACUUM / VALUES / VIEW / VIRTUAL / WHEN /
-    WHERE / WITH / WITHOUT ) { return _.keywordify(r); }
+    WHERE / WITH / WITHOUT ) { return _.key(r); }
 
 /* Generic rules */
 
@@ -1941,4 +2003,4 @@ _ "Whitespace"
 
 /* TODO: Everything with this symbol */
 _TODO_
-  = "TODO" e
+  = "__TODO__"
