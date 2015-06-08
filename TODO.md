@@ -91,9 +91,12 @@
     ```
 
     - [ ] *Has spec*
-- [ ] `UPDATE`
-- [ ] `DELETE`
-- [ ] `DROP`
+- [x] `UPDATE`
+    - [ ] *Has spec*
+- [x] `DELETE`
+    - [ ] *Has spec*
+- [x] `DROP`
+    - [ ] *Has spec*
 - [ ] `CREATE`
   - [x] Table format
     - [x] Basic format
