@@ -31,7 +31,7 @@ expression_concat
       'type': 'expression',
       'format': 'binary',
       'variant': 'operation',
-      'operation': o,
+      'operation': _.key(o),
       'left': l,
       'right': r,
       'modifier': null
@@ -189,7 +189,7 @@ expression_compare
       'type': 'expression',
       'format': 'binary',
       'variant': 'operation',
-      'operation': _.compose([n, m]),
+      'operation': _.key(_.compose([n, m])),
       'left': v,
       'right': e,
       'modifier': x
@@ -231,7 +231,7 @@ expression_is
       'type': 'expression',
       'format': 'binary',
       'variant': 'operation',
-      'operation': _.compose([i, n]),
+      'operation': _.key(_.compose([i, n])),
       'left': v,
       'right': e,
       'modifier': null
@@ -246,7 +246,7 @@ expression_between
       'type': 'expression',
       'format': 'binary',
       'variant': 'operation',
-      'operation': _.compose([n, b]),
+      'operation': _.key(_.compose([n, b])),
       'left': v,
       'right': {
         'type': 'range',
@@ -266,7 +266,7 @@ expression_in
       'type': 'expression',
       'format': 'binary',
       'variant': 'operation',
-      'operation': _.compose([n, i]),
+      'operation': _.key(_.compose([n, i])),
       'left': v,
       'right': e,
       'modifier': null
@@ -494,7 +494,7 @@ operation_binary
       'type': 'expression',
       'format': 'binary',
       'variant': 'operation',
-      'operation': o,
+      'operation': _.key(o),
       'left': v,
       'right': e,
       'modifier': null
@@ -1186,7 +1186,7 @@ datatype_none
  * @note Includes limited update syntax {@link https://www.sqlite.org/syntax/update-stmt-limited.html}
  */
 stmt_update "UPDATE Statement"
-  = u:( clause_with ) o s:( update_start ) f:( update_fallback )? t:( table_qualified ) o u:( update_set ) w:( update_where )? o o:( stmt_core_order )? o l:( stmt_core_limit )?
+  = u:( clause_with )? o s:( update_start ) f:( update_fallback )? t:( table_qualified ) o u:( update_set ) w:( update_where )? o o:( stmt_core_order )? o l:( stmt_core_limit )?
   {
     // TODO: Not final syntax!
     return _.extend({
@@ -1197,7 +1197,7 @@ stmt_update "UPDATE Statement"
       'set': [],
       'order': o,
       'limit': l
-    }, u, f, c);
+    }, u, f);
   }
 
 update_start
@@ -1246,7 +1246,7 @@ update_where
  * @note Includes limited update syntax {@link https://www.sqlite.org/syntax/delete-stmt-limited.html}
  */
 stmt_delete "DELETE Statement"
-  = u:( clause_with ) o s:( delete_start ) t:( table_qualified ) o w:( delete_where )? o o:( stmt_core_order )? o l:( stmt_core_limit )?
+  = u:( clause_with )? o s:( delete_start ) t:( table_qualified ) o w:( delete_where )? o o:( stmt_core_order )? o l:( stmt_core_limit )?
   {
     // TODO: Not final syntax!
     return _.extend({
@@ -1254,7 +1254,6 @@ stmt_delete "DELETE Statement"
       'variant': s,
       'from': t,
       'where': w,
-      'set': [],
       'order': o,
       'limit': l
     }, u);
