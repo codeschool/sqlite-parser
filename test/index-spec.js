@@ -3,7 +3,7 @@ var expect            = require('chai').expect
 
 describe('sql-query-parser', function() {
 
-  // select statement
+  // SELECT statement
 
   it('basic select', function(done) {
     var resultTree = '{"statement":[{"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"bananas","alias":null,"index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":"=","left":{"type":"identifier","variant":"column","name":"color"},"right":{"type":"literal","variant":"string","value":"red"},"modifier":null}],"group":null,"result":[{"type":"identifier","variant":"star","value":"*"}],"distinct":false,"all":false,"order":null,"limit":null}]}';
@@ -34,7 +34,31 @@ describe('sql-query-parser', function() {
     tree.equals(resultTree, this, done);
   });
 
-  // insert Statement
+  // UPDATE Statement
+
+  it('basic update', function(done) {
+    var resultTree = '{"statement":[{"type":"statement","variant":"update","into":{"type":"identifier","variant":"table","name":"bees","alias":null,"index":null},"where":[{"type":"expression","format":"binary","variant":"operation","operation":"not in","left":{"type":"identifier","variant":"column","name":"name"},"right":{"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"bee_names","alias":null,"index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":"<","left":{"type":"identifier","variant":"column","name":"size"},"right":{"type":"literal","variant":"decimal","value":"3.14"},"modifier":null}],"group":null,"result":[{"type":"identifier","variant":"column","name":"name","alias":null}],"distinct":false,"all":false,"order":null,"limit":null},"modifier":null}],"set":[{"type":"assignment","name":"name","value":{"type":"literal","variant":"string","value":"drone"}},{"type":"assignment","name":"wings","value":{"type":"literal","variant":"decimal","value":"2"}}],"order":null,"limit":null}]}';
+    tree.equals(resultTree, this, done);
+  });
+
+  it('update limit', function(done) {
+    var resultTree = '{"statement":[{"type":"statement","variant":"update","into":{"type":"identifier","variant":"table","name":"bees","alias":null,"index":null},"where":[{"type":"expression","format":"binary","variant":"operation","operation":"!=","left":{"type":"identifier","variant":"column","name":"name"},"right":{"type":"literal","variant":"string","value":"nicholas"},"modifier":null}],"set":[{"type":"assignment","name":"name","value":{"type":"literal","variant":"string","value":"drone"}},{"type":"assignment","name":"wings","value":{"type":"literal","variant":"decimal","value":"2"}}],"order":null,"limit":{"start":{"type":"literal","variant":"decimal","value":"2"},"offset":{"type":"literal","variant":"decimal","value":"10"}}}]}';
+    tree.equals(resultTree, this, done);
+  });
+
+  // DELETE Statement
+
+  it('basic delete', function(done) {
+    var resultTree = '{"statement":[{"type":"statement","variant":"delete","from":{"type":"identifier","variant":"table","name":"bees","alias":null,"index":null},"where":[{"type":"expression","format":"binary","variant":"operation","operation":"or","left":{"type":"expression","format":"binary","variant":"operation","operation":"=","left":{"type":"identifier","variant":"column","name":"status"},"right":{"type":"literal","variant":"string","value":"stung"},"modifier":null},"right":{"type":"expression","format":"binary","variant":"operation","operation":"=","left":{"type":"identifier","variant":"column","name":"status"},"right":{"type":"literal","variant":"string","value":"eaten"},"modifier":null},"modifier":null}],"order":null,"limit":null}]}';
+    tree.equals(resultTree, this, done);
+  });
+
+  it('delete limit', function(done) {
+    var resultTree = '{"statement":[{"type":"statement","variant":"delete","from":{"type":"identifier","variant":"table","name":"bees","alias":null,"index":null},"where":[{"type":"expression","format":"binary","variant":"operation","operation":"or","left":{"type":"expression","format":"binary","variant":"operation","operation":"=","left":{"type":"identifier","variant":"column","name":"status"},"right":{"type":"literal","variant":"string","value":"stung"},"modifier":null},"right":{"type":"expression","format":"binary","variant":"operation","operation":"=","left":{"type":"identifier","variant":"column","name":"status"},"right":{"type":"literal","variant":"string","value":"eaten"},"modifier":null},"modifier":null}],"order":null,"limit":{"start":{"type":"literal","variant":"decimal","value":"10"},"offset":{"type":"literal","variant":"decimal","value":"5"}}}]}';
+    tree.equals(resultTree, this, done);
+  });
+
+  // INSERT Statement
 
   it('basic insert', function(done) {
     var resultTree = '{"statement":[{"type":"statement","variant":"insert","into":{"target":{"type":"identifier","variant":"table","name":"concessions"},"columns":[{"type":"identifier","variant":"column","name":"item"},{"type":"identifier","variant":"column","name":"size"},{"type":"identifier","variant":"column","name":"id"},{"type":"identifier","variant":"column","name":"price"}]},"action":"insert","or":null,"result":[{"type":"statement","variant":"values","values":[{"type":"literal","variant":"string","value":"Nachos"},{"type":"literal","variant":"string","value":"Regular"},{"type":"literal","variant":"null","value":"null"},{"type":"literal","variant":"null","value":"null"}]},{"type":"statement","variant":"values","values":[{"type":"literal","variant":"string","value":"Pizza"},{"type":"literal","variant":"null","value":"null"},{"type":"literal","variant":"decimal","value":"8"},{"type":"literal","variant":"decimal","value":"2.00"}]}]}]}';
@@ -54,7 +78,7 @@ describe('sql-query-parser', function() {
   });
 
   it('binary concatenation', function(done) {
-    var resultTree = '{"statement":[{"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"bananas","alias":null,"index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":"AND","left":{"type":"expression","format":"binary","variant":"operation","operation":"!=","left":{"type":"literal","variant":"decimal","value":"1"},"right":{"type":"literal","variant":"decimal","value":"2"},"modifier":null},"right":{"type":"expression","format":"binary","variant":"operation","operation":"OR","left":{"type":"expression","format":"binary","variant":"operation","operation":"!=","left":{"type":"identifier","variant":"column","name":"color"},"right":{"type":"literal","variant":"string","value":"blue"},"modifier":null},"right":{"type":"expression","format":"binary","variant":"operation","operation":"==","left":{"type":"identifier","variant":"column","name":"pees"},"right":{"type":"identifier","variant":"column","name":"crackers"},"modifier":null},"modifier":null},"modifier":null}],"group":null,"result":[{"type":"identifier","variant":"star","value":"*"}],"distinct":false,"all":false,"order":null,"limit":null}]}';
+    var resultTree = '{"statement":[{"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"bananas","alias":null,"index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":"and","left":{"type":"expression","format":"binary","variant":"operation","operation":"!=","left":{"type":"literal","variant":"decimal","value":"1"},"right":{"type":"literal","variant":"decimal","value":"2"},"modifier":null},"right":{"type":"expression","format":"binary","variant":"operation","operation":"or","left":{"type":"expression","format":"binary","variant":"operation","operation":"!=","left":{"type":"identifier","variant":"column","name":"color"},"right":{"type":"literal","variant":"string","value":"blue"},"modifier":null},"right":{"type":"expression","format":"binary","variant":"operation","operation":"==","left":{"type":"identifier","variant":"column","name":"pees"},"right":{"type":"identifier","variant":"column","name":"crackers"},"modifier":null},"modifier":null},"modifier":null}],"group":null,"result":[{"type":"identifier","variant":"star","value":"*"}],"distinct":false,"all":false,"order":null,"limit":null}]}';
     tree.equals(resultTree, this, done);
   });
 });
