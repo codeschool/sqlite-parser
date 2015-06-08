@@ -730,17 +730,17 @@ source_loop_tail
 
 table_or_sub
   = table_or_sub_sub
-  / table_or_sub_table
+  / table_qualified
 
-table_or_sub_table
-  = d:( table_or_sub_table_id ) i:( table_or_sub_index )?
+table_qualified
+  = d:( table_qualified_id ) i:( table_or_sub_index )?
   {
     return _.extend(d, {
       'index': i
     });
   }
 
-table_or_sub_table_id
+table_qualified_id
   = n:( id_table ) o a:( alias )?
   {
     return _.extend(n, {
@@ -1186,7 +1186,7 @@ datatype_none
  * @note Includes limited update syntax {@link https://www.sqlite.org/syntax/update-stmt-limited.html}
  */
 stmt_update "UPDATE Statement"
-  = u:( clause_with ) o s:( update_start ) f:( update_fallback )? t:( table_or_sub_table ) o u:( update_set ) w:( update_where )? o o:( stmt_core_order )? o l:( stmt_core_limit )?
+  = u:( clause_with ) o s:( update_start ) f:( update_fallback )? t:( table_qualified ) o u:( update_set ) w:( update_where )? o o:( stmt_core_order )? o l:( stmt_core_limit )?
   {
     // TODO: Not final syntax!
     return _.extend({
@@ -1242,9 +1242,31 @@ update_where
   = w:( stmt_core_where ) o
   { return w; }
 
-/* TODO: Complete */
+/**
+ * @note Includes limited update syntax {@link https://www.sqlite.org/syntax/delete-stmt-limited.html}
+ */
 stmt_delete "DELETE Statement"
-  = _TODO_
+  = u:( clause_with ) o s:( delete_start ) t:( table_qualified ) o w:( delete_where )? o o:( stmt_core_order )? o l:( stmt_core_limit )?
+  {
+    // TODO: Not final syntax!
+    return _.extend({
+      'type': 'statement',
+      'variant': s,
+      'from': t,
+      'where': w,
+      'set': [],
+      'order': o,
+      'limit': l
+    }, u);
+  }
+
+delete_start
+  = s:( DELETE ) e FROM e
+  { return _.key(s); }
+
+delete_where
+  = w:( stmt_core_where ) o
+  { return w; }
 
 /* TODO: Complete */
 stmt_create "CREATE Statement"
