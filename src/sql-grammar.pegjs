@@ -1649,16 +1649,14 @@ create_virtual "CREATE Virtual Table"
   = _TODO_
 
 stmt_drop "DROP Table Statement"
-  = s:( drop_start ) t:( drop_types ) ( drop_ie )? q:( drop_name ) o
+  = s:( drop_start ) t:( drop_types ) i:( drop_ie )? q:( drop_name ) o
   {
     return {
       'type': 'statement',
       'variant': s,
       'format': t,
       'name': _.textNode(q),
-      'condition': null,
-      'modifier': null,
-      'definition': []
+      'condition': i
     };
   }
 
