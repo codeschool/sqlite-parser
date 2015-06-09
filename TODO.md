@@ -137,6 +137,24 @@
     - [ ] *Has spec*
   - [ ] Create `VIRTUAL` table
     - [ ] *Has spec*
+- [x] Multiple queries in batch
+
+  ``` sql
+  CREATE TABLE Actors (
+    name varchar(50),
+    country varchar(50),
+    salary integer
+  );
+
+  INSERT INTO Actors (name, country, salary) VALUES
+    ('Vivien Leigh', 'IN', 150000),
+    ('Clark Gable', 'USA', 120000),
+    ('Olivia de Havilland', 'Japan', 30000),
+    ('Hattie McDaniel', 'USA', 45000);
+  ```
+
+  - [x] Full-featured (multiple, related statements) tests *(have: 2)*
+
 - [ ] Indexed sources in queries
 
   ``` sql
@@ -159,6 +177,13 @@
     - [x] *Has spec*
   - [x] `apples AS "Double Quoted with Spaces"`
     - [x] *Has spec*
+  - [x] **Single-quoted aliases are invalid in most SQL dialects**
+
+    ``` sql
+    SELECT hat AS 'The Hat'
+    FROM dinosaurs
+    ```
+
 - [ ] Expressions  **TODO: Need tests**
   - [x] `CAST banana AS INT`
     - [x] *Has spec*
