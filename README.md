@@ -70,32 +70,6 @@ var sqlQueryParser = require('sql-query-parser'),
 var ast = sqlQueryParser(sampleSQL);
 ```
 
-### Passing in options
-
-Currently, you can provide global settings such as the output format
-for the validation messages.
-
-``` javascript
-var sqlQueryParser = require('sql-query-parser'),
-  sampleSQL = "SELECT type, quantity " +
-               "FROM apples " +
-               "WHERE amount > 1 " +
-               "ORDER BY type";
-
-sqlQueryParser(sampleSQL, {
-  'settings': {
-    // Set output format for validation error messages
-    'format': 'plain' // 'plain', 'html', or 'markdown'
-  }
-}, function (err, ast) {
-  if (err) {
-    throw err;
-  } else {
-    console.log(ast);
-  }
-});
-```
-
 ## AST
 
 **NOTE: The SQLite AST is a work-in-progress and subject to change.**
