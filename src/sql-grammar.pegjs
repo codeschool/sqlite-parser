@@ -506,13 +506,13 @@ binary_loop_concat
   { return _.textNode(c); }
 
 expression_list "Expression List"
-  = f:( expression ) o rest:( expression_list_rest )*
+  = f:( expression ) rest:( expression_list_rest )*
   {
     return _.compose([f, rest], []);
   }
 
 expression_list_rest
-  = sym_comma e:( expression )
+  = o sym_comma e:( expression )
   { return e; }
 
 function_call
@@ -1354,16 +1354,16 @@ column_type
   }
 
 column_constraints
-  = f:( column_constraint ) b:( column_constraint_tail )*
+  = f:( column_constraint ) b:( column_constraint_tail )* o
   { return _.compose([f, b], []); }
 
 column_constraint_tail
-  = e c:( column_constraint )
+  = o c:( column_constraint )
   { return c; }
 
 /** {@link https://www.sqlite.org/syntax/column-constraint.html} */
 column_constraint "Column Constraint"
-  = n:( column_constraint_name )? o c:( column_constraint_types )
+  = n:( column_constraint_name )? c:( column_constraint_types )
   {
     return _.extend({
       'name': n
@@ -1371,7 +1371,7 @@ column_constraint "Column Constraint"
   }
 
 column_constraint_name
-  = CONSTRAINT e n:( name_constraint_column )
+  = CONSTRAINT e n:( name_constraint_column ) o
   { return n; }
 
 column_constraint_types
@@ -1380,16 +1380,24 @@ column_constraint_types
   / constraint_check
   / column_constraint_default
   / column_constraint_collate
-  / foreign_clause
+  / column_constraint_foreign
+
+column_constraint_foreign
+  = f:( foreign_clause )
+  {
+    return _.extend({
+      'variant': 'foreign key'
+    }, f);
+  }
 
 column_constraint_primary
-  = p:( col_primary_start ) o d:( col_primary_dir )? o c:( primary_conflict )? o a:( col_primary_auto )?
+  = p:( col_primary_start ) d:( col_primary_dir )? c:( primary_conflict )? a:( col_primary_auto )? o
   {
     return _.extend(p, c, d, a);
   }
 
 col_primary_start
-  = s:( PRIMARY e KEY )
+  = s:( PRIMARY e KEY ) o
   {
     return {
       'type': 'constraint',
@@ -1397,12 +1405,12 @@ col_primary_start
       'conflict': null,
       'direction': null,
       'modififer': null,
-      'autoincrement': false
+      'autoIncrement': false
     };
   }
 
 col_primary_dir
-  = d:( primary_column_dir )
+  = d:( primary_column_dir ) o
   {
     return {
       'direction': _.key(d)
@@ -1410,22 +1418,27 @@ col_primary_dir
   }
 
 col_primary_auto
-  = a:( AUTOINCREMENT )
+  = a:( AUTOINCREMENT ) o
   {
     return {
-      'autoincrement': true
+      'autoIncrement': true
     };
   }
 
 column_constraint_null
-  = s:( ( NOT e NULL ) / ( UNIQUE ) ) e c:( primary_conflict )?
+  = s:( constraint_null_types ) c:( primary_conflict )? o
   {
     return _.extend({
       'type': 'constraint',
-      'variant': _.key(s),
+      'variant': s,
       'conflict': null
     }, c);
   }
+
+constraint_null_types
+  = t:( ( NOT e NULL )
+  / UNIQUE ) o
+  { return _.key(t); }
 
 column_constraint_default
   = s:( DEFAULT ) v:( col_default_val )
@@ -1525,7 +1538,7 @@ primary_column_tail
   { return c; }
 
 primary_conflict
-  = o:( ON ) e c:( CONFLICT ) e t:( stmt_fallback_types )
+  = o:( ON ) e c:( CONFLICT ) e t:( stmt_fallback_types ) o
   {
     return {
       'conflict': _.key(t)
@@ -1555,7 +1568,8 @@ foreign_start
   {
     return {
       'variant': _.key(k),
-      'references': null,
+      'target': null,
+      'columns': null,
       'action': null,
       'deferrable': null
     };
@@ -1565,12 +1579,11 @@ foreign_start
 foreign_clause
   = r:( foreign_references ) o a:( foreign_actions )? o d:( foreign_deferrable )?
   {
-    return {
+    return _.extend({
       'type': 'constraint',
-      'references': r,
       'action': a,
       'deferrable': d
-    };
+    }, r);
   }
 
 foreign_references
@@ -1578,11 +1591,8 @@ foreign_references
   {
     // TODO: FORMAT?
     return {
-      'type': 'expression',
-      'variant': 'list',
-      'format': 'column',
-      'source': t,
-      'result': c
+      'target': t,
+      'columns': c
     };
   }
 
