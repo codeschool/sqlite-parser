@@ -58,7 +58,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', ['clean:main', 'shell:pegjs', 'copy:main']);
   grunt.registerTask('test', ['default', 'shell:test']);
-  grunt.registerTask('rebuild', ['default', 'shell:debug']);
   grunt.registerTask('debug', ['default', 'shell:debug', 'watch:debug']);
   grunt.registerTask('json', ['default', 'shell:json']);
 };
