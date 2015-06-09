@@ -156,24 +156,14 @@ There are three options for the test helpers exposed by `tree`:
   - `tree.error("This is the error message", this, done)` assert an error `message`
   - `tree.error({'line': 2}, this, done)` assert an object of properties that each exist in the error
 
-You can pass in an `options` object as the _2nd-to-last argument_ in each method:
-
-  ``` javascript
-  var options = {
-    'settings': {
-      'format': 'html'
-    }
-  };
-  tree.ok(this, options, done);
-  ```
-
 ``` javascript
-// test/sql/basicSelect.sql
+// uses: test/sql/basicSelect.sql
 it('basic select', function(done) {
-  tree.ok(this, done);
+  var resultTree = '{"statement":[{"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"bananas","alias":null,"index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":"=","left":{"type":"identifier","variant":"column","name":"color"},"right":{"type":"literal","variant":"string","value":"red"},"modifier":null}],"group":null,"result":[{"type":"identifier","variant":"star","value":"*"}],"distinct":false,"all":false,"order":null,"limit":null}]}';
+  tree.equals(resultTree, this, done);
 });
 
-// test/sql/invalidUpdate2.sql
+// uses: test/sql/invalidUpdate2.sql
 it('invalid update 2', function(done) {
   tree.error({
     'message': 'Unexpected FROM keyword found',
