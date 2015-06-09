@@ -1,26 +1,13 @@
-var sqlParser = require('./sql-parser');
+var Promise     = Promise || require('promise/lib/es6-extensions'),
+    sqlParser   = require('./sql-parser');
 
-function sqlQueryParser(source, callback) {
-  if (Object.prototype.toString.call(callback) !== '[object Function]') {
-    return sqlParser(source, sqlQueryParser._options);
-  }
-
-  // Async
-  setTimeout((function (ctx, s, o, f) {
-    return function () {
-      var ast, err;
-      try {
-        ast = sqlParser.parse(s, o);
-      } catch (e) {
-        err = e;
-      }
-      f.apply(ctx, [err, ast]);
-    };
-  })(this, source, sqlQueryParser._options, callback), 0);
-};
+function sqlQueryParser(source) {
+  return new Promise(function(resolve) {
+    resolve(sqlParser.parse(source));
+  });
+}
 
 sqlQueryParser.NAME = "sql-query-parser";
-sqlQueryParser.VERSION = "0.0.1";
-sqlQueryParser._options = {};
+sqlQueryParser.VERSION = "0.0.2";
 
 module.exports = sqlQueryParser;
