@@ -1,6 +1,6 @@
 var expect            = require('chai').expect,
     fs                = require('fs'),
-    Promise           = Promise || require('promise'),
+    Promise           = require('promise'),
     read              = Promise.denodeify(fs.readFile),
     _                 = require('lodash'),
     sqlQueryParser    = require('../lib/index'),
