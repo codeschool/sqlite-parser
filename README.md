@@ -4,6 +4,8 @@ This library takes SQL queries, provided as a string, and generates an
 AST. An error will be generated describing what is malformed in the source query
 code if the AST cannot be generated.
 
+**This parser is written against the [SQLite 3 spec](https://www.sqlite.org/lang.html).**
+
 Note: this project is work-in-progress and is **not fully spec-compliant**.
 
 The parser implements the basic components of the SQLite 3 spec, such as:
@@ -92,6 +94,69 @@ sqlQueryParser(sampleSQL, {
     console.log(ast);
   }
 });
+```
+
+## AST
+
+**NOTE: The SQLite AST is a work-in-progress and subject to change.**
+
+### Example
+
+You can provide one or more SQL statements at a time. The resulting AST object
+has, at the highest level, a `statement` key that consists of an array containing
+the parsed statements.
+
+#### Input SQL
+
+``` sql
+SELECT
+ MIN(salary) AS "MinSalary",
+ MAX(salary) AS "MaxSalary"
+FROM
+ Actors
+```
+
+#### Result AST
+
+```
+statement:
+ -
+  type:     statement
+  variant:  select
+  from:
+    -
+      type:    identifier
+      variant: table
+      name:    Actors
+      alias:   null
+      index:   null
+  where:    null
+  group:    null
+  result:
+    -
+      type:     function
+      name:     MIN
+      distinct: false
+      args:
+        -
+          type:    identifier
+          variant: column
+          name:    salary
+      alias:    MinSalary
+    -
+      type:     function
+      name:     MAX
+      distinct: false
+      args:
+        -
+          type:    identifier
+          variant: column
+          name:    salary
+      alias:    MaxSalary
+  distinct: false
+  all:      false
+  order:    null
+  limit:    null
 ```
 
 ## Contributing
