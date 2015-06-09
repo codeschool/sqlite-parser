@@ -1,20 +1,22 @@
 {
   "name": "sql-query-parser",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "lib/index.js",
   "private": true,
   "author": "Code School",
-  "contributors": [
-    {
-      "name": "Nick Wronski",
-      "url": "https://github.com/nwronski"
-    }
-  ],
+  "contributors": [{
+    "name": "Nick Wronski",
+    "url": "https://github.com/nwronski"
+  }],
   "license": "MIT",
-  "description": "PEG.js implentation of SQLite query parser",
+  "description": "PEG.js implentation of SQLite 3 query parser",
   "repository": "git@github.com:codeschool/sqlQueryParser.git",
+  "bugs": {
+    "url": "https://github.com/codeschool/sqlQueryParser/issues"
+  },
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "debug": "grunt debug"
   },
   "devDependencies": {
     "chai": "^1.9.1",
@@ -28,5 +30,7 @@
     "pegjs": "^0.8.0",
     "prettyjson": "^1.1.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "promise": "^7.0.1"
+  }
 }

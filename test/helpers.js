@@ -1,5 +1,7 @@
 var expect            = require('chai').expect,
     fs                = require('fs'),
+    Promise           = Promise || require('promise'),
+    read              = Promise.denodeify(fs.readFile),
     _                 = require('lodash'),
     sqlQueryParser    = require('../lib/index'),
     prettyjson        = require('prettyjson'),
@@ -16,6 +18,7 @@ broadcast = function broadcast(args) {
       console.log('\n\n', formatted, '\n');
     }
   });
+  return args;
 };
 (function (b, c, p) {
   b.debug = isDefined(p) && _.has(p.env, 'DEBUG');
@@ -36,18 +39,12 @@ Load the source file for the current test and then try and generate the AST from
 @param [Function] callback
   The function to call when sqlQueryParser has generated the AST or an error.
 */
-getTree = function (that, callback) {
-  var args = Array.prototype.slice.call(arguments, 1),
-      fileTitle = _.camelCase(that.test.title.trim()),
+getTree = function (that) {
+  var fileTitle = _.camelCase(that.test.title.trim()),
       filePath = __dirname + '/sql/' + fileTitle + '.sql';
-  fs.readFile(filePath, "utf8", function(err, data) {
-    if (err) {
-      callback(err);
-    } else {
-      args.unshift(data);
-      sqlQueryParser.apply(that, args);
-    };
-  });
+  return read(filePath, "utf8")
+  .then(sqlQueryParser)
+  .then(broadcast);
 };
 
 /**
@@ -59,12 +56,11 @@ Assert that the current file returns an AST without errors.
   The function to call when the test is completed
 */
 assertOkTree = function (that, done) {
-  getTree.apply(that, [that, function (err, ast) {
-    broadcast(arguments);
-    expect(err).to.not.be.ok;
-    expect(ast).to.be.ok;
-    done.call(that);
-  }]);
+  return getTree(that)
+  .then(function (tree) {
+    return done();
+  })
+  .catch(done);
 };
 
 /**
@@ -80,21 +76,23 @@ given object.
   The function to call when the test is completed
 */
 assertErrorTree = function (obj, that, done) {
-  if (_.isUndefined(obj)) { obj = {}; }
-  else if (_.isString(obj)) { obj = { 'message': obj }; }
-  getTree.apply(that, [that, function (err, ast) {
-    broadcast(arguments);
-    expect(ast).to.not.be.ok;
-    if (obj == null) {
-      expect(err).to.be.ok;
-    } else {
-      _.forEach(obj, function (v, k) {
-        expect(err).to.include.keys(k);
-        expect(err[k]).to.equal(v);
-      });
+  return getTree(that)
+  .then(function () {
+    return done(Error("Returned a tree instead of an error!"));
+  })
+  .catch(function (err) {
+    if (_.isUndefined(obj)) {
+      obj = {};
+    } else if (_.isString(obj)) {
+      obj = { 'message': obj };
     }
-    done.call(that);
-  }]);
+    _.forEach(obj, function (v, k) {
+      expect(err).to.include.keys(k);
+      expect(err[k]).to.equal(v);
+    });
+    return done();
+  })
+  .catch(done);
 };
 
 /**
@@ -109,16 +107,18 @@ given object.
   The function to call when the test is completed
 */
 assertEqualsTree = function (obj, that, done) {
-  if (_.isUndefined(obj)) { obj = {}; }
-  getTree.apply(that, [that, function (err, ast) {
-    broadcast(arguments);
-    expect(err).to.not.be.ok;
+  return getTree(that)
+  .then(function (tree) {
+    if (_.isUndefined(obj)) {
+      obj = {};
+    }
     if (_.isString(obj)) {
       obj = JSON.parse(obj);
     }
-    expect(ast).to.deep.equal(obj);
-    done.call(that);
-  }]);
+    expect(tree).to.deep.equal(obj);
+    return done();
+  })
+  .catch(done);
 };
 
 module.exports = {
