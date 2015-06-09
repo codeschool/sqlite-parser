@@ -1,21 +1,8 @@
-var sqlParser = require('./sql-parser'),
-    toStr = function (f) {
-      return Object.prototype.toString.call(f);
-    };
+var sqlParser = require('./sql-parser');
 
 function sqlQueryParser(source, callback) {
-  var options = sqlQueryParser._options, func = callback;
-  if (arguments.length > 2) {
-    options = callback;
-    func = arguments[2];
-  }
-
-  if (toStr(func) !== '[object Function]') {
-    // Sync
-    if (toStr(func) === '[object Object]') {
-      options = func;
-    }
-    return sqlParser(source, options);
+  if (Object.prototype.toString.call(callback) !== '[object Function]') {
+    return sqlParser(source, sqlQueryParser._options);
   }
 
   // Async
@@ -29,15 +16,11 @@ function sqlQueryParser(source, callback) {
       }
       f.apply(ctx, [err, ast]);
     };
-  })(this, source, options, func), 0);
+  })(this, source, sqlQueryParser._options, callback), 0);
 };
 
 sqlQueryParser.NAME = "sql-query-parser";
 sqlQueryParser.VERSION = "0.0.1";
 sqlQueryParser._options = {};
-
-sqlQueryParser.setOptions = function(options) {
-  this._options = options != null ? options : {};
-};
 
 module.exports = sqlQueryParser;

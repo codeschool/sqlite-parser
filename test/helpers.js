@@ -59,16 +59,11 @@ Assert that the current file returns an AST without errors.
   The function to call when the test is completed
 */
 assertOkTree = function (that, done) {
-  var options = {}, func = done;
-  if (arguments.length > 2) {
-    options = done;
-    func = arguments[2];
-  }
-  getTree.apply(that, [that, options, function (err, ast) {
+  getTree.apply(that, [that, function (err, ast) {
     broadcast(arguments);
     expect(err).to.not.be.ok;
     expect(ast).to.be.ok;
-    func.call(that);
+    done.call(that);
   }]);
 };
 
@@ -85,14 +80,9 @@ given object.
   The function to call when the test is completed
 */
 assertErrorTree = function (obj, that, done) {
-  var options = {}, func = done;
-  if (arguments.length > 3) {
-    options = done;
-    func = arguments[3];
-  }
   if (_.isUndefined(obj)) { obj = {}; }
   else if (_.isString(obj)) { obj = { 'message': obj }; }
-  getTree.apply(that, [that, options, function (err, ast) {
+  getTree.apply(that, [that, function (err, ast) {
     broadcast(arguments);
     expect(ast).to.not.be.ok;
     if (obj == null) {
@@ -103,7 +93,7 @@ assertErrorTree = function (obj, that, done) {
         expect(err[k]).to.equal(v);
       });
     }
-    func.call(that);
+    done.call(that);
   }]);
 };
 
@@ -119,20 +109,15 @@ given object.
   The function to call when the test is completed
 */
 assertEqualsTree = function (obj, that, done) {
-  var options = {}, func = done;
-  if (arguments.length > 3) {
-    options = done;
-    func = arguments[3];
-  }
   if (_.isUndefined(obj)) { obj = {}; }
-  getTree.apply(that, [that, options, function (err, ast) {
+  getTree.apply(that, [that, function (err, ast) {
     broadcast(arguments);
     expect(err).to.not.be.ok;
     if (_.isString(obj)) {
       obj = JSON.parse(obj);
     }
     expect(ast).to.deep.equal(obj);
-    func.call(that);
+    done.call(that);
   }]);
 };
 
