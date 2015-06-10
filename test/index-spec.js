@@ -1,4 +1,5 @@
-var tree              = require('./helpers');
+var tree              = require('./helpers'),
+    expect            = require('chai').expect;
 
 describe('sql-query-parser', function() {
 
@@ -110,6 +111,45 @@ describe('sql-query-parser', function() {
   it('full featured 2', function(done) {
     var resultTree = '{"statement":[{"type":"statement","variant":"create","format":"table","temporary":false,"target":{"type":"identifier","variant":"table","name":"Actors"},"condition":null,"modifier":null,"definition":[{"type":"definition","variant":"column","name":"id","definition":[{"name":null,"type":"constraint","variant":"primary key","conflict":null,"direction":null,"modififer":null,"autoIncrement":false}],"datatype":{"type":"datatype","format":"int","affinity":"integer","args":[]}},{"type":"definition","variant":"column","name":"name","definition":[{"name":null,"type":"constraint","variant":"not null","conflict":null},{"name":null,"type":"constraint","variant":"unique","conflict":null}],"datatype":{"type":"datatype","format":"varchar","affinity":"text","args":[{"type":"literal","variant":"decimal","value":"50"}]}}]},{"type":"statement","variant":"insert","into":{"target":{"type":"identifier","variant":"table","name":"Actors"},"columns":[{"type":"identifier","variant":"column","name":"name"}]},"action":"insert","modifier":null,"or":null,"result":[{"type":"statement","variant":"values","values":[{"type":"literal","variant":"string","value":"Vivien Leigh"}]},{"type":"statement","variant":"values","values":[{"type":"literal","variant":"string","value":"Clark Gable"}]},{"type":"statement","variant":"values","values":[{"type":"literal","variant":"string","value":"Olivia de Havilland"}]}]},{"type":"statement","variant":"create","format":"table","temporary":false,"target":{"type":"identifier","variant":"table","name":"Movies"},"condition":null,"modifier":null,"definition":[{"type":"definition","variant":"column","name":"id","definition":[{"name":null,"type":"constraint","variant":"primary key","conflict":null,"direction":null,"modififer":null,"autoIncrement":false}],"datatype":{"type":"datatype","format":"int","affinity":"integer","args":[]}},{"type":"definition","variant":"column","name":"title","definition":[{"name":null,"type":"constraint","variant":"not null","conflict":null},{"name":null,"type":"constraint","variant":"unique","conflict":null}],"datatype":{"type":"datatype","format":"varchar","affinity":"text","args":[{"type":"literal","variant":"decimal","value":"50"}]}}]},{"type":"statement","variant":"insert","into":{"target":{"type":"identifier","variant":"table","name":"Movies"},"columns":[{"type":"identifier","variant":"column","name":"title"}]},"action":"insert","modifier":null,"or":null,"result":[{"type":"statement","variant":"values","values":[{"type":"literal","variant":"string","value":"Don Juan"}]},{"type":"statement","variant":"values","values":[{"type":"literal","variant":"string","value":"The Lost World"}]},{"type":"statement","variant":"values","values":[{"type":"literal","variant":"string","value":"Peter Pan"}]},{"type":"statement","variant":"values","values":[{"type":"literal","variant":"string","value":"Robin Hood"}]},{"type":"statement","variant":"values","values":[{"type":"literal","variant":"string","value":"Wolfman"}]}]},{"type":"statement","variant":"create","format":"table","temporary":false,"target":{"type":"identifier","variant":"table","name":"Actors_Movies"},"condition":null,"modifier":null,"definition":[{"type":"definition","variant":"column","name":"actor_id","definition":[{"name":null,"variant":"foreign key","type":"constraint","action":null,"deferrable":null,"target":{"type":"identifier","variant":"table","name":"actors"},"columns":null}],"datatype":{"type":"datatype","format":"int","affinity":"integer","args":[]}},{"type":"definition","variant":"column","name":"movie_id","definition":[{"name":null,"variant":"foreign key","type":"constraint","action":null,"deferrable":null,"target":{"type":"identifier","variant":"table","name":"movies"},"columns":null}],"datatype":{"type":"datatype","format":"int","affinity":"integer","args":[]}}]},{"type":"statement","variant":"insert","into":{"target":{"type":"identifier","variant":"table","name":"Actors_Movies"},"columns":[{"type":"identifier","variant":"column","name":"actor_id"},{"type":"identifier","variant":"column","name":"movie_id"}]},"action":"insert","modifier":null,"or":null,"result":[{"type":"statement","variant":"values","values":[{"type":"literal","variant":"decimal","value":"2"},{"type":"literal","variant":"decimal","value":"5"}]}]}]}';
     tree.equals(resultTree, this, done);
+  });
+
+  // Misc.
+
+  describe('sql-tree utility tests', function() {
+
+    var resultTree, Tree;
+
+    before(function() {
+      resultTree  = '{"statement":[{"modifier":null,"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"bananas","alias":null,"index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":"=","left":{"type":"identifier","variant":"column","name":"color"},"right":{"type":"literal","variant":"string","value":"red"},"modifier":null}],"group":null,"result":[{"type":"identifier","variant":"star","name":"*"}],"distinct":false,"all":false,"order":null,"limit":null}]}',
+      Tree        = require('../lib/sql-tree');
+    });
+
+    it('creates a tree navigator', function() {
+      expect(Tree(resultTree).raw()).to.be.instanceof(Array);
+    });
+
+    it('navigates a tree using statement()', function() {
+      expect(Tree(resultTree).statement('select').raw()).to.include.keys('where');
+    });
+
+    it('navigates a tree using clause()', function() {
+      expect(Tree(resultTree).statement('select').clause('where').raw()).to.have.length.of.at.least(1);
+    });
+
+    it('navigates a tree using has()', function() {
+      expect(Tree(resultTree).statement('select').clause('where').has({
+        'type': 'expression',
+        'format': 'binary'
+      })).to.be.true;
+    });
+
+    it('navigates a tree using eachOf()', function() {
+      expect(Tree(resultTree).statement('select').clause('where').any({
+        'type': 'expression',
+        'format': 'binary'
+      }).eachOf(['identifier', 'literal'])).to.be.true;
+    });
+
   });
 
 });

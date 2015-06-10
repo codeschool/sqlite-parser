@@ -11,4 +11,4 @@ INSERT INTO foods (item, size, id, price)
   FROM bananas
   WHERE color != 'red'
 
-END TRANSACTION
+COMMIT
