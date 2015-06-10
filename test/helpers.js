@@ -11,7 +11,7 @@ var expect            = require('chai').expect,
 broadcast = function broadcast(args) {
   // Only broadcast when DEBUG=true is set in the environment
   var formatted;
-  _.forEach(args, function (arg) {
+  _.forEach((_.isArray(args) ? args : [args]), function (arg) {
     if (broadcast.should(arg)) {
       formatted = broadcast.ugly ? ( _.isString(arg) ? arg : JSON.stringify(arg) ) :
                                    ( prettyjson.render(arg, {}) );
