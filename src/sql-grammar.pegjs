@@ -9,7 +9,7 @@ start
   = s:( stmt )*
   {
     return {
-      'statement': s
+      'statement': (_.isOkay(s) ? s : [])
     };
   }
 
@@ -531,9 +531,9 @@ function_call_args
     return {
       'distinct': false,
       'args': [{
-        'type': 'identifier',
+        'type': autoIncrement,
         'variant': 'star',
-        'value': s
+        'name': s
       }]
     };
   }
@@ -548,14 +548,129 @@ error_message "Error Message"
   = literal_string
 
 stmt "Statement"
-  = s:( stmt_crud / stmt_create / stmt_drop ) o ( sym_semi )?
-  { return s; }
+  = m:( stmt_modifier )? o s:( stmt_nodes ) o ( sym_semi )?
+  {
+    return _.extend({
+      'modifier': null
+    }, m, s);
+  }
+
+stmt_modifier
+  = e:( EXPLAIN ) e q:( QUERY e PLAN e )?
+  {
+    // TODO: Format?
+    return {
+      'modifier': {
+        'type': _.key(e),
+        'explain': 'query plan'
+      }
+    };
+  }
+
+stmt_nodes
+  = stmt_crud
+  / stmt_create
+  / stmt_drop
+  / stmt_transaction
+  / stmt_alter
+  / stmt_rollback
+
+/*stmt_nodes
+  = stmt_crud
+  / stmt_create
+  / stmt_drop
+  / stmt_transaction
+  / stmt_alter*/
+
+/*stmt_transaction
+  = stmt_commit
+  / stmt_rollback
+  / stmt_begin*/
+
+stmt_transaction
+  = b:( stmt_begin ) s:( stmt )* e:( stmt_commit )
+  {
+    return {
+      'type': 'statement',
+      'variant': 'transaction',
+      'statement': _.isOkay(s) ? s : [],
+      'modifier': b
+    };
+  }
+
+stmt_commit
+  = s:( COMMIT / END ) ( e TRANSACTION )? o
+  {
+    // return {
+    //   'type': 'statement',
+    //   'variant': 'transaction',
+    //   'action': 'commit'
+    // };
+    return _.key(s);
+  }
+
+stmt_begin
+  = s:( BEGIN ) e m:( ( DEFERRED / IMMEDIATE / EXCLUSIVE ) e )? ( TRANSACTION e )?
+  {
+    // TODO: Format
+    // return {
+    //   'type': 'statement',
+    //   'variant': 'transaction',
+    //   'action': _.key(s),
+    //   'modifier': _.key(m)
+    // };
+    return _.key(m);
+  }
+
+stmt_rollback
+  = s:( ROLLBACK ) e ( TRANSACTION e )? n:( rollback_savepoint )?
+  {
+    return {
+      'type': 'statement',
+      'variant': 'transaction',
+      'action': _.key(s),
+      'savepoint': n
+    };
+  }
+
+rollback_savepoint
+  = TO e ( SAVEPOINT e )? n:( id_savepoint ) e
+  { return n; }
+
+stmt_alter
+  = s:( ALTER e TABLE ) e n:( id_table ) e:( alter_action ) o
+  {
+    return {
+      'type': 'statement',
+      'variant': _.key(s)
+    };
+  }
+
+alter_action
+  = alter_action_rename
+  / alter_action_add
+
+alter_action_rename
+  = s:( RENAME ) e TO e n:( id_table )
+  {
+    return {
+      'action': _.key(s),
+      'name': n
+    };
+  }
+
+alter_action_add
+  = s:( ADD ) e ( COLUMN e )? d:( source_def_column )
+  {
+    return {
+      'action': _.key(s),
+      'definition': d
+    };
+  }
 
 stmt_crud
   = w:( clause_with )? o s:( stmt_crud_types )
-  {
-    return _.extend(s, w);
-  }
+  { return _.extend(s, w); }
 
 clause_with "WITH Clause"
   = WITH e r:( RECURSIVE e )? f:( expression_table ) o r:( clause_with_loop )*
@@ -699,7 +814,7 @@ select_node_star
     return {
       'type': 'identifier',
       'variant': 'star',
-      'value': _.compose([q, s], '')
+      'name': _.compose([q, s], '')
     };
   }
 
@@ -1119,6 +1234,16 @@ id_collation
     };
   }
 
+id_savepoint
+  = n:( name )
+  {
+    return {
+      'type': 'identifier',
+      'variant': 'savepoint',
+      'name': n
+    };
+  }
+
 /* TODO: FIX all name_* symbols */
 name_database "Database Name"
   = name
@@ -1331,17 +1456,19 @@ source_def_tail
   { return t; }
 
 source_def_types
-  = source_def_columns
+  = source_def_column
   / table_constraint
 
-source_def_columns
-  = n:( name_column ) e t:( column_type ) o c:( column_constraints )?
+/** {@link https://www.sqlite.org/syntaxdiagrams.html#column-def} */
+source_def_column
+  = n:( name_column ) e t:( column_type )? o c:( column_constraints )?
   {
     return _.extend({
       'type': 'definition',
       'variant': 'column',
       'name': n,
-      'definition': (_.isOkay(c) ? c : [])
+      'definition': (_.isOkay(c) ? c : []),
+      'datatype': null
     }, t);
   }
 
