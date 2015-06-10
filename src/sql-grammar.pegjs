@@ -1404,7 +1404,7 @@ create_index "CREATE Index"
   = _TODO_
 
 create_table "CREATE Table"
-  = CREATE e tmp:( create_table_tmp )? TABLE e ne:( create_table_ine )? id:( id_table ) e s:( create_table_source )
+  = CREATE e tmp:( create_table_tmp )? TABLE e ne:( create_ine )? id:( id_table ) e s:( create_table_source )
   {
     return _.extend({
       'type': 'statement',
@@ -1422,7 +1422,7 @@ create_table_tmp
   = t:( TEMP / TEMPORARY ) e
   { return _.key(t); }
 
-create_table_ine
+create_ine
   = i:( IF ) e n:( NOT ) e e:( EXISTS ) e
   {
     return {
