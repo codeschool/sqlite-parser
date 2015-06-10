@@ -137,6 +137,35 @@
     - [ ] *Has spec*
   - [ ] Create `VIRTUAL` table
     - [ ] *Has spec*
+- [x] `ALTER TABLE` **TODO: Need tests**
+  - [ ] *Has spec*
+- [x] Transaction statement types **TODO: Need tests**
+
+  ``` sql
+  BEGIN IMMEDIATE TRANSACTION
+  CREATE TABLE foods (
+    id int PRIMARY KEY,
+    item varchar(50),
+    size varchar(15),
+    price int
+  );
+
+  INSERT INTO foods (item, size, id, price)
+    SELECT 'banana', size, null, price
+    FROM bananas
+    WHERE color != 'red'
+
+  COMMIT
+  ```
+
+  - [x] `BEGIN`
+    - [x] *Has spec*
+  - [x] `COMMIT`, `END`
+    - [x] *Has spec*
+  - [x] `ROLLBACK`
+    - [ ] *Has spec*
+- [x] Query plan `EXPLAIN QUERY PLAN stmt` **TODO: Need tests**
+  - [ ] *Has spec*
 - [x] Multiple queries in batch
 
   ``` sql
