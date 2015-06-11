@@ -1823,10 +1823,6 @@ name
   / name_dblquoted
   / name_unquoted
 
-reserved_collect
-  = f:( name_char ) rest:( name_char )*
-  { return _.compose([f, rest], ''); }
-
 reserved_nodes
   = ( reserved_words / datatype_types ) !name_char
 
