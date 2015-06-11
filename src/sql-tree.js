@@ -89,17 +89,14 @@ module.exports = function (Promise, _, sqlQueryParser) {
                         return _.isString(thing) ? {'type': thing} : thing;
                       });
                     },
-    'binary':       function () {
-                      return Tree.any({
+    'binary':       function (props) {
+                      return Tree.any(_.extend({
                         'type': 'expression',
                         'format': 'binary'
-                      });
+                      }, props));
                     },
-    'string':       function () {
-                      return Tree.any({
-                        'type': 'literal',
-                        'variant': 'string'
-                      });
+    'string':       function (value) {
+                      return Tree._nameMatcher('literal', 'value', value);
                     },
     'identifier':   function (name) {
                       return Tree._nameMatcher('identifier', 'name', name);
