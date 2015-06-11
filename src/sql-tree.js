@@ -111,7 +111,7 @@ module.exports = function (Promise, _, sqlQueryParser) {
                       }
                       if (_.isRegExp(name)) {
                         search = function (v) {
-                          return _.has(v, 'type') && v['type'] === base && v[key].test(name);
+                          return _.has(v, 'type') && v['type'] === base && name.test(v[key]);
                         };
                       } else {
                         search = _.extend({
