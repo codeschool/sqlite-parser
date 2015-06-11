@@ -15,6 +15,6 @@ function sqlQueryParser(source, blocking) {
   }) : parser.parse(source);
 }
 sqlQueryParser['NAME'] = "sql-query-parser";
-sqlQueryParser['VERSION'] = "0.0.2";
+sqlQueryParser['VERSION'] = "0.0.3";
 
 module.exports = sqlQueryParser;
