@@ -4,10 +4,12 @@
   "main": "lib/index.js",
   "private": true,
   "author": "Code School",
-  "contributors": [{
-    "name": "Nick Wronski",
-    "url": "https://github.com/nwronski"
-  }],
+  "contributors": [
+    {
+      "name": "Nick Wronski",
+      "url": "https://github.com/nwronski"
+    }
+  ],
   "license": "MIT",
   "description": "PEG.js implentation of SQLite 3 query parser",
   "repository": "git@github.com:codeschool/sqlQueryParser.git",
@@ -19,7 +21,8 @@
     "debug": "grunt debug"
   },
   "devDependencies": {
-    "chai": "^1.9.1",
+    "chai": "^3.0.0",
+    "chai-as-promised": "^5.1.0",
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-copy": "^0.8.0",
