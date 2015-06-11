@@ -531,7 +531,7 @@ function_call_args
     return {
       'distinct': false,
       'args': [{
-        'type': autoIncrement,
+        'type': 'identifier',
         'variant': 'star',
         'name': s
       }]
