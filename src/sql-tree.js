@@ -24,145 +24,179 @@ module.exports = function (Promise, _, sqlQueryParser) {
   };
 
   _.mixin(Tree, {
-    'safe': function (tree) {
-      return _.has(tree, 'statement') && !_.has(tree, 'type') ? tree['statement'] : tree;
-    },
-    'all': function all(things) {
-      return function (tree) {
-        var collect = _(Tree.matchable(things))
-        .map(ref, function (thing) {
-          return _.findWhere(tree, thing);
-        })
-        .flatten()
-        .reduce(Tree.found())
-        .value();
-        return !_.isEmpty(collect) ? collect : null;
-      };
-    },
-    'any': function any(things) {
-      return function (tree) {
-        var i, len, ref, res, thing;
+    'safe':         function (tree) {
+                      return _.has(tree, 'statement') && !_.has(tree, 'type') ?
+                        tree['statement'] :
+                        tree;
+                    },
+    'all':          function all(things) {
+                      return function (tree) {
+                        var collect = _(Tree.matchable(things))
+                        .map(ref, function (thing) {
+                          return _.findWhere(tree, thing);
+                        })
+                        .flatten()
+                        .reduce(Tree.found())
+                        .value();
+                        return !_.isEmpty(collect) ? collect : null;
+                      };
+                    },
+    'any':          function any(things) {
+                      return function (tree) {
+                        var i, len, ref, res, thing;
 
-        ref = Tree.matchable(things);
-        for (i = 0, len = ref.length; i < len; i++) {
-          thing = ref[i];
-          res = _.findWhere(tree, thing);
-          if (res != null) {
-            return res;
-          }
-        }
-        return null;
-      };
-    },
-    'eachOf': function eachOf(things) {
-      return function (tree) {
-        return _.all(Tree.matchable(things), function (thing) {
-          return _.isFunction(thing) ? thing(tree) != null : Tree.any(thing)(tree);
-        });
-      };
-    },
-    'anyOf': function anyOf(things) {
-      return function (tree) {
-        return Tree.any(things)(tree) != null;
-      };
-    },
-    'clause': function clause(prop) {
-      return function (tree) {
-        return _.result(tree, prop);
-      };
-    },
-    'statement': function statement(stmt) {
-      return Tree.any({
-        'type': 'statement',
-        'variant': stmt
-      });
-    },
-    'matchable': function matchable(things) {
-      if (!_.isArray(things)) {
-        things = [things];
-      }
-      return _.map(things, function(thing) {
-        return _.isString(thing) ? {'type': thing} : thing;
-      });
-    },
-    'binary': function () {
-      return Tree.any({
-        'type': 'expression',
-        'format': 'binary'
-      });
-    },
-    'string': function () {
-      return Tree.any({
-        'type': 'literal',
-        'variant': 'string'
-      });
-    },
-    'identifier': function (name) {
-      return Tree._nameMatcher('identifier', 'name', name);
-    },
+                        ref = Tree.matchable(things);
+                        for (i = 0, len = ref.length; i < len; i++) {
+                          thing = ref[i];
+                          res = _.findWhere(tree, thing);
+                          if (res != null) {
+                            return res;
+                          }
+                        }
+                        return null;
+                      };
+                    },
+    'eachOf':       function eachOf(things) {
+                      return function (tree) {
+                        return _.all(Tree.matchable(things), function (thing) {
+                          return _.isFunction(thing) ? thing(tree) != null : Tree.any(thing)(tree);
+                        });
+                      };
+                    },
+    'anyOf':        function anyOf(things) {
+                      return function (tree) {
+                        return Tree.any(things)(tree) != null;
+                      };
+                    },
+    'clause':       function clause(prop) {
+                      return function (tree) {
+                        return _.result(tree, prop);
+                      };
+                    },
+    'statement':    function statement(stmt) {
+                      return Tree.any({
+                        'type': 'statement',
+                        'variant': stmt
+                      });
+                    },
+    'matchable':    function matchable(things) {
+                      if (!_.isArray(things)) {
+                        things = [things];
+                      }
+                      return _.map(things, function(thing) {
+                        return _.isString(thing) ? {'type': thing} : thing;
+                      });
+                    },
+    'binary':       function () {
+                      return Tree.any({
+                        'type': 'expression',
+                        'format': 'binary'
+                      });
+                    },
+    'string':       function () {
+                      return Tree.any({
+                        'type': 'literal',
+                        'variant': 'string'
+                      });
+                    },
+    'identifier':   function (name) {
+                      return Tree._nameMatcher('identifier', 'name', name);
+                    },
     '_nameMatcher': function (base, key, input) {
-      var name = {}, search;
-      if (_.isString(input)) {
-        name[key] = input;
-      } else {
-        name = input;
-      }
-      if (_.isRegExp(name)) {
-        search = function (v) {
-          return _.has(v, 'type') && v['type'] === base && v[key].test(name);
-        };
-      } else {
-        search = _.extend({
-          'type': base
-        }, name);
-      }
-      return Tree.any(search);
-    },
-    'select':       function () { return Tree.statement('select'); },
-    'create':       function () { return Tree.statement('create'); },
-    'insert':       function () { return Tree.statement('insert'); },
-    'drop':         function () { return Tree.statement('drop'); },
-    'delete':       function () { return Tree.statement('delete'); },
-    'update':       function () { return Tree.statement('update'); },
-    'transaction':  function () { return Tree.statement('transaction'); },
-    'where':        function () { return Tree.clause('where'); },
-    'from':         function () { return Tree.clause('from'); },
-    'order':        function () { return Tree.clause('order'); },
-    'limit':        function () { return Tree.clause('limit'); },
-    'results':      function () { return Tree.clause('result'); },
-    'having':       function () { return Tree.clause('having'); },
-    'group':        function () { return Tree.clause('group'); },
+                      var name = {}, search;
+                      if (_.isString(input)) {
+                        name[key] = input;
+                      } else {
+                        name = input;
+                      }
+                      if (_.isRegExp(name)) {
+                        search = function (v) {
+                          return _.has(v, 'type') && v['type'] === base && v[key].test(name);
+                        };
+                      } else {
+                        search = _.extend({
+                          'type': base
+                        }, name);
+                      }
+                      return Tree.any(search);
+                    },
+    'select':       function () {
+                      return Tree.statement('select');
+                    },
+    'create':       function () {
+                      return Tree.statement('create');
+                    },
+    'insert':       function () {
+                      return Tree.statement('insert');
+                    },
+    'drop':         function () {
+                      return Tree.statement('drop');
+                    },
+    'delete':       function () {
+                      return Tree.statement('delete');
+                    },
+    'update':       function () {
+                      return Tree.statement('update');
+                    },
+    'transaction':  function () {
+                      return Tree.statement('transaction');
+                    },
+    'where':        function () {
+                      return Tree.clause('where');
+                    },
+    'from':         function () {
+                      return Tree.clause('from');
+                    },
+    'order':        function () {
+                      return Tree.clause('order');
+                    },
+    'limit':        function () {
+                      return Tree.clause('limit');
+                    },
+    'results':      function () {
+                      return Tree.clause('result');
+                    },
+    'having':       function () {
+                      return Tree.clause('having');
+                    },
+    'group':        function () {
+                      return Tree.clause('group');
+                    },
     'column':       function (name) {
-      return Tree.any({
-        'type': 'definition',
-        'variant': 'column',
-        'name': name
-      });
-    },
-    'constraints':   function () { return Tree.clause('definition'); },
-    'constraint':    function (type) {
-      return Tree.any({
-        'type': 'constraint',
-        'variant': type
-      });
-    },
+                      return Tree.any({
+                        'type': 'definition',
+                        'variant': 'column',
+                        'name': name
+                      });
+                    },
+    'constraints':  function () {
+                      return Tree.clause('definition');
+                    },
+    'constraint':   function (type) {
+                      return Tree.any({
+                        'type': 'constraint',
+                        'variant': type
+                      });
+                    },
     'datatype':     function (type) {
-      return Tree._nameMatcher('datatype', 'format', type);
-    },
-    'func': function (name) {
-      return Tree._nameMatcher('function', 'name', name);
-    },
-    'args': function () { return Tree.clause('args'); },
-    'found': function () {
-      return function (tree) {
-        return _.isBoolean(tree) ? _.isEqual(true, tree) : !_.isEmpty(tree);
-      };
-    },
-    'equal': function (val) {
-      return function (tree) {
-        return _.isEqual(tree, val);
-      }
-    }
+                      return Tree._nameMatcher('datatype', 'format', type);
+                    },
+    'func':         function (name) {
+                      return Tree._nameMatcher('function', 'name', name);
+                    },
+    'args':         function () {
+                      return Tree.clause('args');
+                    },
+    'found':        function () {
+                      return function (tree) {
+                        return _.isBoolean(tree) ? _.isEqual(true, tree) : !_.isEmpty(tree);
+                      };
+                    },
+    'equal':        function (val) {
+                      return function (tree) {
+                        return _.isEqual(tree, val);
+                      }
+                    }
   });
 
   return Tree;
