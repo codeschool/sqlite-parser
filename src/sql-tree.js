@@ -65,7 +65,9 @@ module.exports = function (Promise, _, sqlQueryParser) {
                     },
     'anyOf':        function anyOf(things) {
                       return function (tree) {
-                        return Tree.any(things)(tree) != null;
+                        return _.any(Tree.matchable(things), function (thing) {
+                          return _.isFunction(thing) ? thing(tree) != null : Tree.any(thing)(tree);
+                        });
                       };
                     },
     'clause':       function clause(prop) {
