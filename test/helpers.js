@@ -86,11 +86,15 @@ assertErrorTree = function (obj, that, done) {
     } else if (_.isString(obj)) {
       obj = { 'message': obj };
     }
-    _.forEach(obj, function (v, k) {
-      expect(err).to.include.keys(k);
-      expect(err[k]).to.equal(v);
+    return Promise.all(_.map(obj, function (v, k) {
+      return new Promise(function (acc, rej) {
+        expect(err).to.include.keys(k);
+        expect(err[k]).to.equal(v);
+        acc();
+      });
+    })).then(function () {
+      done();
     });
-    return done();
   })
   .catch(done);
 };
