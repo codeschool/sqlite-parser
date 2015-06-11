@@ -144,40 +144,34 @@ describe('sql-tree', function() {
 
   it('navigates a tree using statement()', function() {
     var ast = Tree(resultTree)
-    .then(Tree.statement('select'));
+    .then(Tree.select());
 
     expect(ast).to.eventually.include.keys('where');
   });
 
   it('navigates a tree using clause()', function() {
     var ast = Tree(resultTree)
-    .then(Tree.statement('select'))
-    .then(Tree.clause('where'));
+    .then(Tree.select())
+    .then(Tree.where());
 
     expect(ast).to.eventually.have.length.of.at.least(1);
   });
 
   it('navigates a tree using has()', function() {
     var ast = Tree(resultTree)
-    .then(Tree.statement('select'))
-    .then(Tree.clause('where'))
-    .then(Tree.has({
-      'type': 'expression',
-      'format': 'binary'
-    }));
+    .then(Tree.select())
+    .then(Tree.where())
+    .then(Tree.binary());
 
     expect(ast).to.eventually.be.true;
   });
 
   it('navigates a tree using eachOf()', function() {
     var ast = Tree(resultTree)
-    .then(Tree.statement('select'))
-    .then(Tree.clause('where'))
-    .then(Tree.any({
-      'type': 'expression',
-      'format': 'binary'
-    }))
-    .then(Tree.eachOf(['identifier', 'literal']));
+    .then(Tree.select())
+    .then(Tree.where())
+    .then(Tree.binary())
+    .then(Tree.eachOf([Tree.identifier(), Tree.string()]));
 
     expect(ast).to.eventually.be.true;
   });
