@@ -1,5 +1,10 @@
 var tree              = require('./helpers'),
-    expect            = require('chai').expect;
+    chai              = require('chai'),
+    chaiAsPromised    = require('chai-as-promised'),
+    expect;
+
+chai.use(chaiAsPromised);
+expect = chai.expect;
 
 describe('sql-query-parser', function() {
 
@@ -113,43 +118,59 @@ describe('sql-query-parser', function() {
     tree.equals(resultTree, this, done);
   });
 
-  // Misc.
+});
 
-  describe('sql-tree utility tests', function() {
+describe('sql-tree', function() {
 
-    var resultTree, Tree;
+  var resultTree, Tree;
 
-    before(function() {
-      resultTree  = '{"statement":[{"modifier":null,"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"bananas","alias":null,"index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":"=","left":{"type":"identifier","variant":"column","name":"color"},"right":{"type":"literal","variant":"string","value":"red"},"modifier":null}],"group":null,"result":[{"type":"identifier","variant":"star","name":"*"}],"distinct":false,"all":false,"order":null,"limit":null}]}',
-      Tree        = require('../lib/sql-tree');
-    });
+  before(function() {
+    resultTree  = '{"statement":[{"modifier":null,"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"bananas","alias":null,"index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":"=","left":{"type":"identifier","variant":"column","name":"color"},"right":{"type":"literal","variant":"string","value":"red"},"modifier":null}],"group":null,"result":[{"type":"identifier","variant":"star","name":"*"}],"distinct":false,"all":false,"order":null,"limit":null}]}',
+    Tree        = require('../lib/sql-tree');
+  });
 
-    it('creates a tree navigator', function() {
-      expect(Tree(resultTree).raw()).to.be.instanceof(Array);
-    });
+  it('creates a tree navigator', function() {
+    expect(Tree(resultTree)).to.eventually.be.instanceof(Array);
+  });
 
-    it('navigates a tree using statement()', function() {
-      expect(Tree(resultTree).statement('select').raw()).to.include.keys('where');
-    });
+  it('navigates a tree using statement()', function() {
+    var ast = Tree(resultTree)
+    .then(Tree.statement('select'));
 
-    it('navigates a tree using clause()', function() {
-      expect(Tree(resultTree).statement('select').clause('where').raw()).to.have.length.of.at.least(1);
-    });
+    expect(ast).to.eventually.include.keys('where');
+  });
 
-    it('navigates a tree using has()', function() {
-      expect(Tree(resultTree).statement('select').clause('where').has({
-        'type': 'expression',
-        'format': 'binary'
-      })).to.be.true;
-    });
+  it('navigates a tree using clause()', function() {
+    var ast = Tree(resultTree)
+    .then(Tree.statement('select'))
+    .then(Tree.clause('where'));
 
-    it('navigates a tree using eachOf()', function() {
-      expect(Tree(resultTree).statement('select').clause('where').any({
-        'type': 'expression',
-        'format': 'binary'
-      }).eachOf(['identifier', 'literal'])).to.be.true;
-    });
+    expect(ast).to.eventually.have.length.of.at.least(1);
+  });
 
+  it('navigates a tree using has()', function() {
+    var ast = Tree(resultTree)
+    .then(Tree.statement('select'))
+    .then(Tree.clause('where'))
+    .then(Tree.has({
+      'type': 'expression',
+      'format': 'binary'
+    }));
+
+    expect(ast).to.eventually.be.true;
+  });
+
+  it('navigates a tree using eachOf()', function() {
+    var ast = Tree(resultTree)
+    .then(Tree.statement('select'))
+    .then(Tree.clause('where'))
+    .then(Tree.any({
+      'type': 'expression',
+      'format': 'binary'
+    }))
+    .then(Tree.eachOf(['identifier', 'literal']));
+
+    expect(ast).to.eventually.be.true;
   });
 
 });
