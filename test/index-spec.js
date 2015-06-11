@@ -135,7 +135,7 @@ describe('sql-tree', function() {
 
   before(function() {
     resultTree  = '{"statement":[{"modifier":null,"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"bananas","alias":null,"index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":"=","left":{"type":"identifier","variant":"column","name":"color"},"right":{"type":"literal","variant":"string","value":"red"},"modifier":null}],"group":null,"result":[{"type":"identifier","variant":"star","name":"*"}],"distinct":false,"all":false,"order":null,"limit":null}]}',
-    Tree        = require('../lib/sql-tree');
+    Tree        = require('../lib/index').tree;
   });
 
   it('creates a tree navigator', function() {
