@@ -15,7 +15,7 @@ function sqlQueryParser(source, blocking) {
   }) : parser.parse(source);
 }
 sqlQueryParser['NAME'] = "sql-query-parser";
-sqlQueryParser['VERSION'] = "0.0.3";
+sqlQueryParser['VERSION'] = "0.0.4";
 sqlQueryParser['tree'] = require('./sql-tree');
 
 module.exports = sqlQueryParser;
