@@ -118,6 +118,15 @@ describe('sql-query-parser', function() {
     tree.equals(resultTree, this, done);
   });
 
+  // Parse error
+
+  it('parse error 1', function(done) {
+    tree.error({
+      'message': 'Expected Statement or end of input but "f" found.',
+      'line': 3
+    }, this, done);
+  });
+
 });
 
 describe('sql-tree', function() {
