@@ -20,22 +20,25 @@ module.exports = function (Promise, _, sqlQueryParser) {
   };
 
   _.mixin(Tree, {
-    'has': function has(thing) {
-      return function(tree) {
-        return _.findWhere(tree, thing) != null;
-      };
-    },
     'any': function any(things) {
       return function (tree) {
-        return _.find(Tree.matchable(things), function (thing) {
-          return Tree.has(thing)(tree);
-        });
+        var i, len, ref, res, thing;
+
+        ref = Tree.matchable(things);
+        for (i = 0, len = ref.length; i < len; i++) {
+          thing = ref[i];
+          res = _.findWhere(tree, thing);
+          if (res != null) {
+            return res;
+          }
+        }
+        return null;
       };
     },
     'eachOf': function eachOf(things) {
       return function (tree) {
         return _.all(Tree.matchable(things), function (thing) {
-          return Tree.has(thing)(tree);
+          return _.isFunction(thing) ? thing(tree) != null : Tree.any(thing)(tree);
         });
       };
     },
@@ -50,12 +53,10 @@ module.exports = function (Promise, _, sqlQueryParser) {
       };
     },
     'statement': function statement(stmt) {
-      return function (tree) {
-        return Tree.any({
-          'type': 'statement',
-          'variant': stmt
-        });
-      };
+      return Tree.any({
+        'type': 'statement',
+        'variant': stmt
+      });
     },
     'matchable': function matchable(things) {
       if (!_.isArray(things)) {
