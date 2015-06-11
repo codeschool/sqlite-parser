@@ -10,10 +10,10 @@ if (p && Object.prototype.toString.call(p.resolve()) === '[object Promise]' && !
   prom = p;
 }
 
-function sqlQueryParser(source, blocking) {
-  return blocking ? new prom(function(resolve) {
+function sqlQueryParser(source) {
+  return new prom(function(resolve) {
     resolve(parser.parse(source));
-  }) : parser.parse(source);
+  });
 }
 sqlQueryParser['NAME'] = "sql-query-parser";
 sqlQueryParser['VERSION'] = "0.0.4";
