@@ -1,10 +1,5 @@
 var tree              = require('./helpers'),
-    chai              = require('chai'),
-    chaiAsPromised    = require('chai-as-promised'),
-    expect;
-
-chai.use(chaiAsPromised);
-expect = chai.expect;
+    expect            = require('chai').expect;
 
 describe('sql-query-parser', function() {
 
@@ -138,42 +133,59 @@ describe('sql-tree', function() {
     Tree        = require('../lib/index').tree;
   });
 
-  it('creates a tree navigator', function() {
-    expect(Tree(resultTree)).to.eventually.be.instanceof(Array);
+  it('creates a tree navigator', function(done) {
+    Tree(resultTree)
+    .then(function (ast) {
+      expect(ast).to.be.instanceof(Array);
+      done();
+    })
+    .catch(done);
   });
 
-  it('navigates a tree using statement()', function() {
-    var ast = Tree(resultTree)
-    .then(Tree.select());
-
-    expect(ast).to.eventually.include.keys('where');
-  });
-
-  it('navigates a tree using clause()', function() {
-    var ast = Tree(resultTree)
+  it('navigates a tree using statement()', function(done) {
+    Tree(resultTree)
     .then(Tree.select())
-    .then(Tree.where());
-
-    expect(ast).to.eventually.have.length.of.at.least(1);
+    .then(function (ast) {
+      expect(ast).to.include.keys('where');
+      done();
+    })
+    .catch(done);
   });
 
-  it('navigates a tree using has()', function() {
-    var ast = Tree(resultTree)
+  it('navigates a tree using clause()', function(done) {
+    Tree(resultTree)
     .then(Tree.select())
     .then(Tree.where())
-    .then(Tree.binary());
-
-    expect(ast).to.eventually.be.true;
+    .then(function (ast) {
+      expect(ast).to.have.length.of.at.least(1);
+      done();
+    })
+    .catch(done);
   });
 
-  it('navigates a tree using eachOf()', function() {
-    var ast = Tree(resultTree)
+  it('navigates a tree to a part that is not there', function(done) {
+    Tree(resultTree)
+    .then(Tree.select())
+    .then(Tree.where())
+    .then(Tree.order())
+    .then(function (ast) {
+      expect(ast).to.be.undefined;
+      done();
+    })
+    .catch(done);
+  });
+
+  it('navigates a tree using eachOf()', function(done) {
+    Tree(resultTree)
     .then(Tree.select())
     .then(Tree.where())
     .then(Tree.binary())
-    .then(Tree.eachOf([Tree.identifier(), Tree.string()]));
-
-    expect(ast).to.eventually.be.true;
+    .then(Tree.eachOf([Tree.identifier(), Tree.string()]))
+    .then(function (ast) {
+      expect(ast).to.be.true;
+      done();
+    })
+    .catch(done);
   });
 
 });
