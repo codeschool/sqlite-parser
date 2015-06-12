@@ -749,6 +749,13 @@ select_parts_core
   = s:( select_core_select ) o f:( select_core_from )? o w:( stmt_core_where )? o g:( select_core_group )? o
   {
     // TODO: Not final syntax!
+    if (!_.isArray(f)) {
+      if (!_.isOkay(f)) {
+        f = [];
+      } else {
+        f = [f];
+      }
+    }
     return _.extend({
       'type': 'statement',
       'variant': 'select',
@@ -894,9 +901,10 @@ select_join_loop
   {
     // TODO: format
     return {
-      'type': 'join',
+      'type': 'map',
+      'variant': 'join',
       'source': t,
-      'join': j
+      'map': j
     };
   }
 
@@ -905,7 +913,8 @@ select_join_clause
   {
     // TODO: format
     return _.extend({
-      'type': o,
+      'type': 'join',
+      'variant': _.key(o),
       'source': n,
       'on': null,
       'using': null
