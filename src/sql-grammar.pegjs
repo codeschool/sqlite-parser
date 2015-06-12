@@ -913,7 +913,7 @@ select_join_clause
   }
 
 join_operator
-  = n:( NATURAL e )? o ( t:( ( LEFT ( e OUTER )? ) / INNER / CROSS ) e )? j:( JOIN ) e
+  = n:( NATURAL e )? o ( t:( ( ( LEFT / RIGHT / FULL ) ( e OUTER )? ) / INNER / CROSS ) e )? j:( JOIN ) e
   { return _.compose([n, t, j]); }
 
 join_condition

@@ -1,4 +1,4 @@
-# sql-query-parser
+# sqlite-parser
 
 This library takes SQL queries, provided as a string, and generates an
 AST. An error will be generated describing what is malformed in the source query
@@ -18,7 +18,7 @@ The parser implements the basic components of the SQLite 3 spec, such as:
 ## Install
 
 ```
-npm install sql-query-parser
+npm install sqlite-parser
 ```
 
 ## Usage
@@ -28,10 +28,10 @@ containing SQL to parse. The method returns a promise that resolves to the
 AST object generated from the source string.
 
 ``` javascript
-var sqlQueryParser  = require('sql-query-parser'),
-    sampleSQL       = "SELECT type, quantity FROM apples WHERE amount > 1";
+var sqliteParser  = require('sqlite-parser'),
+    sampleSQL     = "SELECT type, quantity FROM apples WHERE amount > 1";
 
-sqlQueryParser(sampleSQL)
+sqliteParser(sampleSQL)
 .then(function (tree) {
   // AST generated
   console.log(tree);
@@ -128,17 +128,21 @@ There are three options for the test helpers exposed by `tree`:
   - `tree.error({'line': 2}, this, done)` assert an object of properties that each exist in the error
 
 ``` javascript
-// uses: test/sql/basicSelect.sql
-it('basic select', function(done) {
-  var resultTree = '{"statement":[{"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"bananas","alias":null,"index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":"=","left":{"type":"identifier","variant":"column","name":"color"},"right":{"type":"literal","variant":"string","value":"red"},"modifier":null}],"group":null,"result":[{"type":"identifier","variant":"star","value":"*"}],"distinct":false,"all":false,"order":null,"limit":null}]}';
-  tree.equals(resultTree, this, done);
-});
+var tree = require('./helpers');
 
-// uses: test/sql/invalidUpdate2.sql
-it('invalid update 2', function(done) {
-  tree.error({
-    'message': 'Unexpected FROM keyword found',
-    'line': 5
-  }, this, done);
+describe('sqlite-parser', function() {
+  // uses: test/sql/basicSelect.sql
+  it('basic select', function(done) {
+    var resultTree = '{"statement":[{"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"bananas","alias":null,"index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":"=","left":{"type":"identifier","variant":"column","name":"color"},"right":{"type":"literal","variant":"string","value":"red"},"modifier":null}],"group":null,"result":[{"type":"identifier","variant":"star","value":"*"}],"distinct":false,"all":false,"order":null,"limit":null}]}';
+    tree.equals(resultTree, this, done);
+  });
+
+  // uses: test/sql/invalidUpdate2.sql
+  it('invalid update 2', function(done) {
+    tree.error({
+      'message': 'Unexpected FROM keyword found',
+      'line': 5
+    }, this, done);
+  });
 });
 ```

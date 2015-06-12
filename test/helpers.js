@@ -3,7 +3,7 @@ var expect            = require('chai').expect,
     Promise           = require('promise'),
     read              = Promise.denodeify(fs.readFile),
     _                 = require('lodash'),
-    sqlQueryParser    = require('../lib/index'),
+    sqliteParser      = require('../lib/index'),
     prettyjson        = require('prettyjson'),
     format, broadcast, getTree, assertOkTree, assertErrorTree,
     isDefined = function (arg) { return arg != null; };
@@ -37,13 +37,13 @@ Load the source file for the current test and then try and generate the AST from
 @param [Object] that
   The context of the running test
 @param [Function] callback
-  The function to call when sqlQueryParser has generated the AST or an error.
+  The function to call when sqliteParser has generated the AST or an error.
 */
 getTree = function (that) {
   var fileTitle = _.camelCase(that.test.title.trim()),
       filePath = __dirname + '/sql/' + fileTitle + '.sql';
   return read(filePath, "utf8")
-  .then(sqlQueryParser)
+  .then(sqliteParser)
   .then(broadcast);
 };
 
