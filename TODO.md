@@ -1,4 +1,4 @@
-# Milestones for sql-query-parser
+# Milestones for sqlite-parser
 
 ## **[0.1.0]** In progress
 - [x] `SELECT` **TODO: Need tests**

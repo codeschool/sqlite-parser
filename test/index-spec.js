@@ -1,7 +1,6 @@
-var tree              = require('./helpers'),
-    expect            = require('chai').expect;
+var tree              = require('./helpers');
 
-describe('sql-query-parser', function() {
+describe('sqlite-parser', function() {
 
   // Aliases
 
