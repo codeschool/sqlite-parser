@@ -926,12 +926,20 @@ join_operator
   { return _.compose([n, t, j]); }
 
 join_operator_types
-  = t:( operator_types_hand / INNER / CROSS ) e
-  { return _.textNode(t); }
+  = operator_types_hand
+  / operator_types_misc
 
 operator_types_hand
-  = t:( LEFT / RIGHT / FULL ) o:( e OUTER )?
+  = t:( LEFT / RIGHT / FULL ) e o:( types_hand_outer )?
   { return _.compose([t, o]); }
+
+types_hand_outer
+  = t:( OUTER ) e
+  { return t; }
+
+operator_types_misc
+  = t:( INNER / CROSS ) e
+  { return t; }
 
 join_condition
   = c:( join_condition_on / join_condition_using )
