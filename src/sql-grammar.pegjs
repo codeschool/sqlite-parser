@@ -922,8 +922,16 @@ select_join_clause
   }
 
 join_operator
-  = n:( NATURAL e )? o t:( ( ( ( LEFT / RIGHT / FULL ) ( e OUTER )? ) / INNER / CROSS ) e )? j:( JOIN ) e
+  = n:( NATURAL e )? o t:( join_operator_types )? j:( JOIN ) e
   { return _.compose([n, t, j]); }
+
+join_operator_types
+  = t:( operator_types_hand / INNER / CROSS ) e
+  { return _.textNode(t); }
+
+operator_types_hand
+  = t:( LEFT / RIGHT / FULL ) o:( e OUTER )?
+  { return _.compose([t, o]); }
 
 join_condition
   = c:( join_condition_on / join_condition_using )
