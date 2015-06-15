@@ -198,7 +198,8 @@
     - [x] *Has spec*
   - [x] `apples containsWhereKeyword` and `apples AS floatDatatype`
     - [x] *Has spec*
-    - [ ] **BUG**: Currently, paradoxically working for all keywords everything except `INT`, `INTEGER`, `INT2` but still working for `BIGINT`, `MEDIUMINT`...
+    - [x] **BUG**: Currently, paradoxically working for all keywords everything except `INT`, `INTEGER`, `INT2` but still working for `BIGINT`, `MEDIUMINT`...
+      - **FIXED: fixed by changing order of reserved_nodes rule symbols**
     - [x] Do not allow **unquoted** alias as exact match for a keyword or datatype name `apples AS VARCHAR`, `apples AS Join`
   - [x] `apples AS [inBrackets]`
     - [x] *Has spec*
