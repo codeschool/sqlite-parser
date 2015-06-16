@@ -1640,7 +1640,7 @@ table_constraint_types
   / table_constraint_foreign
 
 table_constraint_primary
-  = k:( primary_start ) e c:( primary_columns ) e t:( primary_conflict )?
+  = k:( primary_start ) o c:( primary_columns ) e t:( primary_conflict )?
   {
     return {
       'result': c,
@@ -1660,11 +1660,11 @@ primary_start
   }
 
 primary_columns
-  = f:( primary_column ) e b:( primary_column_tail )*
+  = f:( primary_column ) o b:( primary_column_tail )*
   { return _.compose([f, b], []); }
 
 primary_column "Indexed Column"
-  = e:( name_column ) e c:( column_collate )? e d:( primary_column_dir )?
+  = e:( name_column ) o c:( column_collate )? o d:( primary_column_dir )? o
   {
     // TODO: Not final format
     return {
@@ -1686,7 +1686,7 @@ primary_column_dir
   { return _.textNode(t); }
 
 primary_column_tail
-  = sym_comma c:( primary_column )
+  = sym_comma c:( primary_column ) o
   { return c; }
 
 primary_conflict
@@ -1702,13 +1702,13 @@ constraint_check
   {
     return {
       'type': 'constraint',
-      'format': _.key(k),
+      'variant': _.key(k),
       'expression': c
     };
   }
 
 table_constraint_foreign
-  = k:( foreign_start ) o l:( loop_columns ) o c:( foreign_clause )
+  = k:( foreign_start ) o l:( loop_columns ) o c:( foreign_clause ) o
   {
     return {
       'expression': _.extend(k, c),
@@ -1731,7 +1731,7 @@ foreign_start
 
 /** {@link https://www.sqlite.org/syntax/foreign-key-clause.html} */
 foreign_clause
-  = r:( foreign_references ) o a:( foreign_actions )? o d:( foreign_deferrable )?
+  = r:( foreign_references ) a:( foreign_actions )? d:( foreign_deferrable )?
   {
     return _.extend({
       'type': 'constraint',
@@ -1744,14 +1744,13 @@ foreign_references
   = REFERENCES e t:( id_table ) o c:( loop_columns )?
   {
     // TODO: FORMAT?
-    return {
-      'target': t,
-      'columns': c
-    };
+    return _.extend({
+      'target': t
+    }, c);
   }
 
 foreign_actions
-  = f:( foreign_action ) b:( foreign_actions_tail )*
+  = f:( foreign_action ) o b:( foreign_actions_tail )* o
   { return _.collect([f, b], []); }
 
 foreign_actions_tail
