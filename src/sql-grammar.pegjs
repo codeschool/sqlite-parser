@@ -82,16 +82,20 @@ type_alias
   { return d; }
 
 expression_exists
-  = ( n:( NOT e )? x:( EXISTS e ) )? o e:( stmt_select )
+  = n:( expression_exists_ne ) o e:( stmt_select )
   {
     return {
       'type': 'expression',
       'format': 'unary',
       'variant': 'select',
       'expression': e,
-      'modifier': _.compose([n, x])
+      'modifier': n
     };
   }
+
+expression_exists_ne
+  = n:( NOT e )? x:( EXISTS ) o
+  { return _.compose([n, x]); }
 
 expression_case
   = CASE e e:( expression )? o w:( expression_case_when )+ o s:( expression_case_else )? o END o
@@ -163,6 +167,7 @@ expression_node
   / expression_is
   / expression_between
   / expression_in
+  / stmt_select
   / operation_binary
 
 /** @note Removed expression on left-hand-side to remove recursion */
