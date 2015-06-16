@@ -1149,7 +1149,7 @@ operator_binary "Binary Operator"
   / binary_multiply / binary_mod
   / binary_plus / binary_minus
   / binary_left / binary_right / binary_and / binary_or
-  / binary_lt / binary_lte / binary_gt / binary_gte
+  / binary_lte / binary_lt / binary_gte / binary_gt
   / binary_lang / binary_notequal / binary_equal )
   { return _.key(o); }
 
@@ -1701,6 +1701,7 @@ constraint_check
   = k:( CHECK ) o c:( expression_wrapped )
   {
     return {
+      'type': 'constraint',
       'format': _.key(k),
       'expression': c
     };
@@ -1719,6 +1720,7 @@ foreign_start
   = k:( FOREIGN e KEY )
   {
     return {
+      'type': 'constraint',
       'variant': _.key(k),
       'target': null,
       'columns': null,
