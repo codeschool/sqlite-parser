@@ -1118,7 +1118,7 @@ insert_values
     };
   }
 
-  /* TODO: This doesn't seem like the right format for this variant */
+/* TODO: This doesn't seem like the right format for this variant */
 insert_default
   = d:( DEFAULT ) e v:( VALUES )
   {
@@ -1204,10 +1204,12 @@ binary_lang
   / binary_lang_misc
 
 binary_lang_isnt "IS"
-  = ( IS ) e ( NOT e )?
+  = i:( IS ) e n:( NOT e )?
+  { return _.key(_.compose([i, n])); }
 
 binary_lang_misc "Misc Binary Operator"
-  = IN / LIKE / GLOB / MATCH / REGEXP
+  = m:( IN / LIKE / GLOB / MATCH / REGEXP )
+  { return _.key(m); }
 
 /* Database, Table and Column IDs */
 
@@ -1481,8 +1483,8 @@ source_def_tail
   { return t; }
 
 source_def_types
-  = source_def_column
-  / table_constraint
+  = table_constraint
+  / source_def_column
 
 /** {@link https://www.sqlite.org/syntaxdiagrams.html#column-def} */
 source_def_column
@@ -1619,14 +1621,13 @@ column_constraint_collate
 
 /** {@link https://www.sqlite.org/syntax/table-constraint.html} */
 table_constraint
-  = n:( table_constraint_name )? o c:( table_constraint_types )
+  = n:( table_constraint_name )? o c:( table_constraint_types ) o
   {
     return _.extend({
-      'type': 'constraint',
-      'variant': 'table',
+      'type': 'definition',
+      'variant': 'constraint',
       'name': n,
-      'expression': null,
-      'result': []
+      'expression': null
     }, c);
   }
 
@@ -1635,22 +1636,21 @@ table_constraint_name
   { return n; }
 
 table_constraint_types
-  = table_constraint_primary
+  = table_constraint_foreign
+  / table_constraint_primary
   / constraint_check
-  / table_constraint_foreign
 
 table_constraint_primary
-  = k:( primary_start ) o c:( primary_columns ) e t:( primary_conflict )?
+  = k:( primary_start ) o c:( primary_columns ) t:( primary_conflict )?
   {
     return {
-      'result': c,
-      'expression': _.extend(k, t)
+      'expression': _.extend(k, t),
+      'columns': c
     };
   }
 
 primary_start
-  = s:( ( PRIMARY e KEY )
-  / ( UNIQUE ) )
+  = s:( primary_start_normal / primary_start_unique ) o
   {
     return {
       'type': 'constraint',
@@ -1659,8 +1659,16 @@ primary_start
     };
   }
 
+primary_start_normal
+  = p:( PRIMARY ) e k:( KEY )
+  { return _.compose([p, k]); }
+
+primary_start_unique
+  = u:( UNIQUE )
+  { return _.textNode(u); }
+
 primary_columns
-  = f:( primary_column ) o b:( primary_column_tail )*
+  = sym_popen f:( primary_column ) o b:( primary_column_tail )* sym_pclose
   { return _.compose([f, b], []); }
 
 primary_column "Indexed Column"
@@ -1710,18 +1718,17 @@ constraint_check
 table_constraint_foreign
   = k:( foreign_start ) o l:( loop_columns ) o c:( foreign_clause ) o
   {
-    return {
-      'expression': _.extend(k, c),
-      'result': l
-    };
+    return _.extend({
+      'expression': _.extend(k, c)
+    }, l);
   }
 
 foreign_start
-  = k:( FOREIGN e KEY )
+  = f:( FOREIGN ) e k:( KEY )
   {
     return {
       'type': 'constraint',
-      'variant': _.key(k),
+      'variant': _.key(_.compose([f, k])),
       'target': null,
       'columns': null,
       'action': null,
