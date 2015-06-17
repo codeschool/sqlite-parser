@@ -890,7 +890,7 @@ table_or_sub
   / table_qualified
 
 table_qualified
-  = d:( table_qualified_id ) o i:( table_or_sub_index_node )?
+  = d:( table_qualified_id ) o i:( table_or_sub_index_node )
   {
     return _.extend(d, i);
   }
@@ -905,7 +905,7 @@ table_qualified_id
 
 
 table_or_sub_index_node
-  = i:( index_node_indexed / index_node_none )
+  = i:( index_node_indexed / index_node_none )?
   {
     return {
       'index': i
