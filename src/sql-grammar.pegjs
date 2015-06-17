@@ -66,12 +66,12 @@ expression_unary
   }
 
 expression_cast
-  = CAST o sym_popen e:( expression ) o a:( type_alias ) o sym_pclose
+  = s:( CAST ) o sym_popen e:( expression ) o a:( type_alias ) o sym_pclose
   {
     return {
       'type': 'expression',
       'format': 'unary',
-      'variant': 'cast',
+      'variant': _.key(s),
       'expression': e,
       'modifier': a
     };
@@ -98,13 +98,13 @@ expression_exists_ne
   { return _.compose([n, x]); }
 
 expression_case
-  = CASE e e:( expression )? o w:( expression_case_when )+ o s:( expression_case_else )? o END o
+  = t:( CASE ) e e:( expression )? o w:( expression_case_when )+ o s:( expression_case_else )? o END o
   {
     // TODO: Not sure about this
     return {
       'type': 'expression',
       'format': 'binary',
-      'variant': 'case',
+      'variant': _.key(t),
       'case': e,
       'expression': _.compose([w, s], []),
       'modifier': null
@@ -113,11 +113,11 @@ expression_case
 
 
 expression_case_when
-  = WHEN e w:( expression ) o THEN e t:( expression ) o
+  = s:( WHEN ) e w:( expression ) o THEN e t:( expression ) o
   {
     return {
       'type': 'condition',
-      'format': 'when',
+      'format': _.key(s),
       'condition': w,
       'expression': t,
       'modifier': null
@@ -125,23 +125,23 @@ expression_case_when
   }
 
 expression_case_else
-  = ELSE e e:( expression ) o
+  = s:( ELSE ) e e:( expression ) o
   {
     return {
       'type': 'condition',
-      'format': 'else',
+      'format': _.key(s),
       'expression': e,
       'modifier': null
     };
   }
 
 expression_raise
-  = RAISE sym_popen o a:( expression_raise_args ) o sym_pclose
+  = s:( RAISE ) o sym_popen o a:( expression_raise_args ) o sym_pclose
   {
     return {
       'type': 'expression',
       'format': 'unary',
-      'variant': 'raise',
+      'variant': _.key(s),
       'expression': a,
       'modifier': null
     };
@@ -153,7 +153,7 @@ expression_raise_args
 
 raise_args_ignore
   = f:( IGNORE )
-  { return _.textNode(f); }
+  { return _.key(f); }
 
 raise_args_message
   = f:( ROLLBACK / ABORT / FAIL ) o sym_comma o m:( error_message )
@@ -172,12 +172,12 @@ expression_node
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_collate
-  = v:( expression_value ) o COLLATE e n:( name_collation )
+  = v:( expression_value ) o s:( COLLATE ) e n:( name_collation )
   {
     return {
       'type': 'expression',
       'format': 'unary',
-      'variant': 'collate',
+      'variant': _.key(s),
       'expression': v,
       'modifier': {
         'type': 'name',
@@ -202,10 +202,10 @@ expression_compare
   }
 
 expression_escape
-  = ESCAPE e e:( expression )
+  = s:( ESCAPE ) e e:( expression )
   {
     return {
-      'type': 'escape',
+      'type': _.key(s),
       'expression': e
     };
   }
@@ -225,7 +225,7 @@ expression_null
 
 expression_null_nodes
   = i:( IS / NOT ) o n:( NULL ) {
-    return _.compose([i, n]);
+    return _.key(_.compose([i, n]));
   }
 
 /** @note Removed expression on left-hand-side to remove recursion */
@@ -245,7 +245,7 @@ expression_is
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_between
-  = v:( expression_value ) o n:( NOT e )? b:( BETWEEN e ) e1:( expression ) AND e e2:( expression )
+  = v:( expression_value ) o n:( NOT e )? b:( BETWEEN ) e e1:( expression ) o s:( AND ) e e2:( expression )
   {
     return {
       'type': 'expression',
@@ -254,7 +254,10 @@ expression_between
       'operation': _.key(_.compose([n, b])),
       'left': v,
       'right': {
-        'type': 'range',
+        'type': 'expression',
+        'format': 'binary',
+        'variant': 'range',
+        'operation': _.key(s),
         'left': e1,
         'right': e2
       },
@@ -265,7 +268,7 @@ expression_between
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_in
-  = v:( expression_value ) o n:( NOT e )? i:( IN e ) e:( expression_in_target )
+  = v:( expression_value ) o n:( NOT e )? i:( IN ) e e:( expression_in_target )
   {
     return {
       'type': 'expression',
@@ -283,7 +286,7 @@ expression_in_target
   / id_table
 
 expression_list_or_select
-  = sym_popen o e:( stmt_select / expression_list ) o sym_pclose
+  = sym_popen e:( stmt_select / expression_list ) o sym_pclose
   { return e; }
 
 
@@ -330,7 +333,7 @@ literal_null
     return {
       'type': 'literal',
       'variant': 'null',
-      'value': _.textNode(n)
+      'value': _.key(n)
     };
   }
 
@@ -340,7 +343,7 @@ literal_date
     return {
       'type': 'literal',
       'variant': 'date',
-      'value': _.textNode(d)
+      'value': _.key(d)
     };
   }
 
@@ -356,7 +359,7 @@ literal_string
     return {
       'type': 'literal',
       'variant': 'string',
-      'value': _.textNode(s)
+      'value': s
     };
   }
 
@@ -365,6 +368,7 @@ literal_string_single
   {
     /**
       * @note Unescaped the pairs of literal single quotation marks
+      * @note Not sure if the BLOB type should be un-escaped
       */
     return _.unescape(_.textNode(s));
   }
@@ -379,7 +383,7 @@ literal_blob
     return {
       'type': 'literal',
       'variant': 'blob',
-      'value': _.textNode(b)
+      'value': b
     };
   }
 
@@ -478,7 +482,7 @@ bind_parameter_named
   }
 
 bind_parameter_tcl
-  = d:( "$" ) name:( name_char / [\:] )+ o suffix:( bind_parameter_named_suffix )?
+  = d:( "$" ) name:( name_char / ":" )+ o suffix:( bind_parameter_named_suffix )?
   {
     return {
       'type': 'variable',
@@ -508,20 +512,20 @@ operation_binary
 
 binary_loop_concat
   = c:( AND / OR ) e
-  { return _.textNode(c); }
+  { return _.key(c); }
 
 expression_list "Expression List"
-  = f:( expression ) rest:( expression_list_rest )*
+  = f:( expression ) o rest:( expression_list_rest )*
   {
     return _.compose([f, rest], []);
   }
 
 expression_list_rest
-  = o sym_comma e:( expression )
+  = sym_comma e:( expression ) o
   { return e; }
 
 function_call
-  = n:( name_function ) sym_popen a:( function_call_args )? sym_pclose
+  = n:( name_function ) sym_popen a:( function_call_args )? o sym_pclose
   {
     return _.extend({
       'type': 'function',
@@ -532,7 +536,12 @@ function_call
   }
 
 function_call_args
-  = s:( select_star ) {
+  = call_args_star
+  / call_args_list
+
+call_args_star
+  = s:( select_star )
+  {
     return {
       'distinct': false,
       'args': [{
@@ -542,7 +551,10 @@ function_call_args
       }]
     };
   }
-  / ( d:( DISTINCT e )? e:( expression_list ) ) {
+
+call_args_list
+  = d:( DISTINCT e )? e:( expression_list )
+  {
     return {
       'distinct': _.isOkay(d),
       'args': e
@@ -550,7 +562,8 @@ function_call_args
   }
 
 error_message "Error Message"
-  = literal_string
+  = m:( literal_string )
+  { return m; }
 
 stmt "Statement"
   = m:( stmt_modifier )? o s:( stmt_nodes ) o ( sym_semi )?
@@ -561,7 +574,7 @@ stmt "Statement"
   }
 
 stmt_modifier
-  = e:( EXPLAIN ) e q:( QUERY e PLAN e )?
+  = e:( EXPLAIN ) e q:( QUERY e PLAN)? o
   {
     // TODO: Format?
     return {
@@ -580,18 +593,6 @@ stmt_nodes
   / stmt_alter
   / stmt_rollback
 
-/*stmt_nodes
-  = stmt_crud
-  / stmt_create
-  / stmt_drop
-  / stmt_transaction
-  / stmt_alter*/
-
-/*stmt_transaction
-  = stmt_commit
-  / stmt_rollback
-  / stmt_begin*/
-
 stmt_transaction
   = b:( stmt_begin ) s:( stmt )* e:( stmt_commit )
   {
@@ -604,46 +605,38 @@ stmt_transaction
   }
 
 stmt_commit
-  = s:( COMMIT / END ) ( e TRANSACTION )? o
+  = s:( COMMIT / END ) t:( e TRANSACTION )? o
   {
-    // return {
-    //   'type': 'statement',
-    //   'variant': 'transaction',
-    //   'action': 'commit'
-    // };
-    return _.key(s);
+    return _.key(_.compose([s, t]));
   }
 
 stmt_begin
-  = s:( BEGIN ) e m:( ( DEFERRED / IMMEDIATE / EXCLUSIVE ) e )? ( TRANSACTION e )?
+  = s:( BEGIN ) e m:( stmt_begin_modifier )? t:( TRANSACTION e )?
   {
-    // TODO: Format
-    // return {
-    //   'type': 'statement',
-    //   'variant': 'transaction',
-    //   'action': _.key(s),
-    //   'modifier': _.key(m)
-    // };
     return _.key(m);
   }
+
+stmt_begin_modifier
+  = m:( DEFERRED / IMMEDIATE / EXCLUSIVE ) e
+  { return _.key(m); }
 
 stmt_rollback
   = s:( ROLLBACK ) e ( TRANSACTION e )? n:( rollback_savepoint )?
   {
     return {
       'type': 'statement',
-      'variant': 'transaction',
+      'variant': 'rollback',
       'action': _.key(s),
       'savepoint': n
     };
   }
 
 rollback_savepoint
-  = TO e ( SAVEPOINT e )? n:( id_savepoint ) e
+  = TO e ( SAVEPOINT e )? n:( id_savepoint ) o
   { return n; }
 
 stmt_alter
-  = s:( ALTER e TABLE ) e n:( id_table ) e:( alter_action ) o
+  = s:( ALTER e TABLE ) e n:( id_table ) o e:( alter_action ) o
   {
     return {
       'type': 'statement',
@@ -665,7 +658,7 @@ alter_action_rename
   }
 
 alter_action_add
-  = s:( ADD ) e ( COLUMN e )? d:( source_def_column )
+  = s:( ADD ) e ( action_add_modifier )? d:( source_def_column )
   {
     return {
       'action': _.key(s),
@@ -673,18 +666,22 @@ alter_action_add
     };
   }
 
+action_add_modifier
+  = s:( COLUMN ) e
+  { return _.key(s); }
+
 stmt_crud
   = w:( clause_with )? o s:( stmt_crud_types )
   { return _.extend(s, w); }
 
 clause_with "WITH Clause"
-  = WITH e r:( RECURSIVE e )? f:( expression_table ) o r:( clause_with_loop )*
+  = s:( WITH ) e r:( RECURSIVE e )? f:( expression_table ) o r:( clause_with_loop )*
   {
     // TODO: final format
     return {
       'with': {
-        'type': 'with',
-        'recursive': isOkay(r),
+        'type': _.key(s),
+        'recursive': _.isOkay(r),
         'expression': _.compose([f, r], [])
       }
     };
@@ -694,9 +691,16 @@ clause_with_loop
   = sym_comma e:( expression_table )
   { return e; }
 
-/* TODO: This isn't done */
 expression_table "Table Expression"
-  = n:( name_table ) o a:( sym_popen name_column ( sym_comma name_column )* sym_pclose )? o AS e s:( stmt_select )
+  = n:( name_table ) o a:( loop_columns )? o AS o sym_popen s:( stmt_select ) o sym_pclose o
+  {
+    return _.extend({
+      'type': 'expression',
+      'format': 'table',
+      'name': _.key(n),
+      'expression': s
+    }, a);
+  }
 
 stmt_crud_types
   = stmt_select
@@ -719,7 +723,7 @@ stmt_core_order
   { return d; }
 
 stmt_core_limit
-  = LIMIT e e:( expression ) o d:( stmt_core_limit_offset )?
+  = s:( LIMIT ) e e:( expression ) o d:( stmt_core_limit_offset )?
   {
     return {
       'start': e,
@@ -728,9 +732,18 @@ stmt_core_limit
   }
 
 stmt_core_limit_offset
-  = o:( ( OFFSET e ) / sym_comma ) e:( expression )
+  = o:( limit_offset_variant ) e:( expression )
   { return e; }
 
+limit_offset_variant
+  = limit_offset_variant_name
+  / sym_comma
+
+limit_offset_variant_name
+  = s:( OFFSET ) e
+  { return _.key(s); }
+
+/* TODO: Not yet implemented */
 select_loop
   = s:( select_parts ) o u:( select_loop_union )*
   {
@@ -740,8 +753,9 @@ select_loop
     return s;
   }
 
+/* TODO: Not yet implemented */
 select_loop_union
-  = c:( operator_compound ) o s:( select_parts )
+  = c:( operator_compound ) o s:( select_parts ) o
   {
     // TODO: compound query
   }
@@ -771,17 +785,33 @@ select_parts_core
   }
 
 select_core_select
-  = SELECT e d:( DISTINCT / ALL )? o t:( select_target )
+  = SELECT e d:( select_modifier )? o t:( select_target )
   {
-    var mod = {};
-    if (_.isOkay(d)) {
-      mod[_.textNode(d).toLowerCase()] = true;
-    }
     return _.extend({
       'result': t,
       'distinct': false,
       'all': false
-    }, mod);
+    }, d);
+  }
+
+select_modifier
+  = select_modifier_distinct
+  / select_modifier_all
+
+select_modifier_distinct
+  = s:( DISTINCT ) e
+  {
+    return {
+      'distinct': true
+    };
+  }
+
+select_modifier_all
+  = s:( ALL ) e
+  {
+    return {
+      'all': true
+    };
   }
 
 select_target
@@ -791,7 +821,7 @@ select_target
   }
 
 select_target_loop
-  = sym_comma n:( select_node )
+  = sym_comma n:( select_node ) o
   { return n; }
 
 select_core_from
@@ -848,11 +878,11 @@ select_source
   / select_source_loop
 
 select_source_loop
-  = f:( table_or_sub ) t:( source_loop_tail )*
+  = f:( table_or_sub ) o t:( source_loop_tail )*
   { return _.compose([f, t], []); }
 
 source_loop_tail
-  = sym_comma t:( table_or_sub )
+  = sym_comma t:( table_or_sub ) o
   { return t; }
 
 table_or_sub
@@ -860,11 +890,9 @@ table_or_sub
   / table_qualified
 
 table_qualified
-  = d:( table_qualified_id ) i:( table_or_sub_index )?
+  = d:( table_qualified_id ) o i:( table_or_sub_index_node )?
   {
-    return _.extend(d, {
-      'index': i
-    });
+    return _.extend(d, i);
   }
 
 table_qualified_id
@@ -875,23 +903,22 @@ table_qualified_id
     });
   }
 
-/* TODO: Need final format */
-table_or_sub_index
-  = i:( table_or_sub_index_node )
+
+table_or_sub_index_node
+  = i:( index_node_indexed / index_node_none )
   {
     return {
-      'type': 'index',
       'index': i
     };
   }
 
-table_or_sub_index_node
-  = ( INDEXED e BY e n:( name_index ) o ) {
-    return _.textNode(n);
-  }
-  / n:( NOT e INDEXED o ) {
-    return _.textNode(n);
-  }
+index_node_indexed
+  = s:( INDEXED ) e BY e n:( name_index ) o
+  { return n; }
+
+index_node_none
+  = NOT e INDEXED o
+  { return null; }
 
 table_or_sub_sub
   = sym_popen o l:( select_join_loop / select_source_loop ) o sym_pclose
@@ -927,8 +954,12 @@ select_join_clause
   }
 
 join_operator
-  = n:( NATURAL e )? o t:( join_operator_types )? j:( JOIN ) e
+  = n:( join_operator_natural )? o t:( join_operator_types )? j:( JOIN )
   { return _.compose([n, t, j]); }
+
+join_operator_natural
+  = n:( NATURAL ) e
+  { return _.textNode(n); }
 
 join_operator_types
   = operator_types_hand
@@ -940,18 +971,18 @@ operator_types_hand
 
 types_hand_outer
   = t:( OUTER ) e
-  { return t; }
+  { return _.textNode(t); }
 
 operator_types_misc
   = t:( INNER / CROSS ) e
-  { return t; }
+  { return _.textNode(t); }
 
 join_condition
   = c:( join_condition_on / join_condition_using )
   { return c; }
 
 join_condition_on
-  = ON e e:( expression )
+  = s:( ON ) e e:( expression )
   {
     return {
       'on': e
@@ -960,7 +991,7 @@ join_condition_on
 
 /* TODO: should it be name_column or id_column ? */
 join_condition_using
-  = USING e f:( id_column ) o b:( join_condition_using_loop )*
+  = s:( USING ) e f:( id_column ) o b:( join_condition_using_loop )*
   {
     return {
       'using': _.compose([f, b], [])
@@ -969,11 +1000,11 @@ join_condition_using
 
 /* TODO: should it be name_column or id_column ? */
 join_condition_using_loop
-  = sym_comma n:( id_column )
+  = sym_comma n:( id_column ) o
   { return n; }
 
 select_parts_values
-  = VALUES o l:( insert_values_list )
+  = s:( VALUES ) o l:( insert_values_list )
   {
     // TODO: format
     return {
@@ -993,7 +1024,7 @@ stmt_core_order_list
   }
 
 stmt_core_order_list_loop
-  = sym_comma i:( stmt_core_order_list_item )
+  = sym_comma i:( stmt_core_order_list_item ) o
   { return i; }
 
 stmt_core_order_list_item
@@ -1053,7 +1084,7 @@ insert_keyword_repl
   }
 
 insert_keyword_mod
-  = OR e m:( stmt_fallback_types )
+  = s:( OR ) e m:( stmt_fallback_types )
   {
     return {
       'or': _.key(m)
@@ -1061,7 +1092,7 @@ insert_keyword_mod
   }
 
 insert_target
-  = INTO e id:( id_table ) o cols:( loop_columns )?
+  = s:( INTO ) e id:( id_table ) o cols:( loop_columns )?
   {
     return {
       'into': _.extend({
@@ -1102,7 +1133,7 @@ insert_parts
   }
 
 insert_value
-  = VALUES o r:( insert_values_list )
+  = s:( VALUES ) o r:( insert_values_list )
   { return r; }
 
 insert_values_list
@@ -1114,7 +1145,7 @@ insert_values_loop
   { return e; }
 
 insert_values
-  = sym_popen e:( expression_list ) sym_pclose
+  = sym_popen e:( expression_list ) o sym_pclose
   {
     return {
       'type': 'statement',
@@ -1928,6 +1959,8 @@ sym_excl "Exclamation"
   = s:( "!" ) o { return _.textNode(s); }
 sym_semi "Semicolon"
   = s:( ";" ) o { return _.textNode(s); }
+sym_colon "Colon"
+  = s:( ":" ) o { return _.textNode(s); }
 
 /* Keywords */
 
