@@ -184,14 +184,16 @@
 
   - [x] Full-featured (multiple, related statements) tests *(have: 2)*
 
-- [ ] Indexed sources in queries
+- [x] Indexed sources in queries
 
   ``` sql
   SELECT *
   FROM bees AS b INDEXED BY bees_index
   ```
 
-- [ ] Aliases `SELECT * FROM apples AS a` **TODO: Need tests**
+  - [ ] *Has spec*
+
+- [x] Aliases `SELECT * FROM apples AS a`
   - [x] `apples AS unquoted_name`
     - [x] *Has spec*
   - [x] `apples no_as`
@@ -234,7 +236,7 @@
     ```
 
     - [x] *Has spec*
-  - [ ] Unary
+  - [x] Unary
 
     ``` sql
     SELECT NOT bees AS [b]
@@ -242,21 +244,21 @@
     ```
 
     - [ ] *Has spec*
-  - [ ] `RAISE`
+  - [x] `RAISE`
 
     ``` sql
     RAISE (ROLLBACK, 'hey there!')
     ```
 
     - [ ] *Has spec*
-  - [ ] `COLLATE`
+  - [x] `COLLATE`
 
     ``` sql
     bees COLLATE bees_collation
     ```
 
     - [ ] *Has spec*
-  - [ ] `LIKE`
+  - [x] `LIKE`
 
     ``` sql
     SELECT *
@@ -273,7 +275,7 @@
     ```
 
     - [ ] *Has spec*
-  - [ ] Binary `IS`, `IS NOT`
+  - [x] Binary `IS`, `IS NOT`
 
     ``` sql
     SELECT *
@@ -282,7 +284,7 @@
     ```
 
     - [ ] *Has spec*
-  - [ ] `BETWEEN`
+  - [x] `BETWEEN`
 
     ``` sql
     SELECT *
@@ -299,7 +301,7 @@
     ```
 
     - [x] *Has spec*
-  - [ ] Binary operation
+  - [x] Binary operation
 
     ``` sql
     SELECT *
@@ -308,13 +310,13 @@
     ```
 
     - [ ] *Has spec*
-  - [ ] Functions
+  - [x] Functions
 
     ``` sql
     SELECT MYFUNC(col, 1.2, 'str')
     ```
     - [ ] *Has spec*
-  - [ ] Table expressions
+  - [x] Table expressions
 
     ``` sql
     WITH ham AS (
@@ -352,15 +354,22 @@
         > ```
 
       - **FIXED: now grouping correctly when using binary AND / OR**
-- [ ] Literals
+- [x] Literals
   - [ ] `'string'`
+      - [ ] *Has spec*
   - [ ] Decimal, Hex, Exponent `12`, `1.2`, `1E-9`, `0xe1e3`
+      - [ ] *Has spec*
   - [ ] Signed number `-2.001`
-- [ ] Bind parameters
+      - [ ] *Has spec*
+- [x] Bind parameters
   - [ ] Numbered `?`, `?12`
+      - [ ] *Has spec*
   - [ ] Named `@bees`
+      - [ ] *Has spec*
   - [ ] TCL `$hey "Hey There"`
-- [ ] BLOB `X'stuff'`
+      - [ ] *Has spec*
+- [x] BLOB `X'stuff'`
+    - [ ] *Has spec*
 - AST
   - [x] Initial AST Format
 
@@ -382,7 +391,7 @@
   - [ ] **BUG: AST should output normalized (lowercased) values for case-insentive data (e.g.: datatypes, keywords, etc...)**
   - [ ] **ISSUE:** Need to normalize format across all statement types (e.g.: `CREATE TABLE`, `SELECT`)
     - [ ] Normalize `CREATE`, `SELECT`, `INSERT`, `UPDATE`, `DROP`, `DELETE`
-    - [ ] Constraint versus Clause versus Condition (Table Constraint, Column Constraint, etc...)
+    - [x] Constraint versus Clause versus Condition (Table Constraint, Column Constraint, etc...)
 - [ ] Datatypes
   - [x] SQLite
 
