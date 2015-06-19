@@ -16,7 +16,7 @@ function sqliteParser(source) {
   });
 }
 sqliteParser['NAME'] = "sqlite-parser";
-sqliteParser['VERSION'] = "0.0.9";
+sqliteParser['VERSION'] = "0.1.0";
 
 /**!
  * sqlite-parser

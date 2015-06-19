@@ -6,12 +6,29 @@
 
 /* Start Grammar */
 start
-  = s:( stmt )*
+  = s:( stmt_list )?
   {
     return {
       'statement': (_.isOkay(s) ? s : [])
     };
   }
+
+stmt_list
+  = stmt_list_multiple
+  / stmt_list_single
+
+stmt_list_single
+  = f:( stmt ) c:( sym_semi )?
+  { return [f]; }
+
+stmt_list_multiple
+  = f:( stmt ) o b:( stmt_list_tail )+ c:( sym_semi )?
+  { return _.compose([f, b], []); }
+
+/* TODO: Note - you need semicolon between multiple statements, otherwise can omit */
+stmt_list_tail
+  = ( sym_semi ) s:( stmt ) o
+  { return s; }
 
 /**
  * Expression definition reworked without left recursion for pegjs
@@ -497,7 +514,7 @@ bind_parameter_tcl
   }
 
 bind_parameter_named_suffix
-  = q1:( sym_dblquote ) n:( !sym_dblquote any )* q2:( sym_dblquote )
+  = q1:( sym_dblquote ) n:( !sym_dblquote match_all )* q2:( sym_dblquote )
   { return _.compose([q1, n, q2], ''); }
 
 /** @note Removed expression on left-hand-side to remove recursion */
@@ -571,7 +588,7 @@ error_message "Error Message"
   { return m; }
 
 stmt "Statement"
-  = m:( stmt_modifier )? o s:( stmt_nodes ) o ( sym_semi )?
+  = m:( stmt_modifier )? s:( stmt_nodes ) o
   {
     return _.extend({
       'modifier': null
@@ -599,7 +616,7 @@ stmt_nodes
   / stmt_rollback
 
 stmt_transaction
-  = b:( stmt_begin ) s:( stmt )* e:( stmt_commit )
+  = b:( stmt_begin ) s:( stmt_list )? e:( stmt_commit )
   {
     return {
       'type': 'statement',
@@ -752,7 +769,7 @@ limit_offset_variant_name
 select_loop
   = s:( select_parts ) o u:( select_loop_union )*
   {
-    if (_.isOkay(u) && u.length) {
+    if (_.isArray(u) && u.length) {
       // TODO: Not final format
       return {
         'type': 'statement',
@@ -1979,6 +1996,10 @@ sym_semi "Semicolon"
   = s:( ";" ) o { return _.textNode(s); }
 sym_colon "Colon"
   = s:( ":" ) o { return _.textNode(s); }
+sym_fslash "Forward Slash"
+  = s:( "/" ) o { return _.textNode(s); }
+sym_bslash "Backslash"
+  = s:( "\\" ) o { return _.textNode(s); }
 
 /* Keywords */
 
@@ -2234,7 +2255,11 @@ WITHOUT "WITHOUT Keyword"
   = "WITHOUT"i
 
 reserved_words
-  = r:( ABORT / ACTION / ADD / AFTER / ALL / ALTER / ANALYZE / AND / AS / ASC /
+  = r:( reserved_word_list )
+  { return _.key(r); }
+
+reserved_word_list
+  = ABORT / ACTION / ADD / AFTER / ALL / ALTER / ANALYZE / AND / AS / ASC /
     ATTACH / AUTOINCREMENT / BEFORE / BEGIN / BETWEEN / BY / CASCADE / CASE /
     CAST / CHECK / COLLATE / COLUMN / COMMIT / CONFLICT / CONSTRAINT / CREATE /
     CROSS / CURRENT_DATE / CURRENT_TIME / CURRENT_TIMESTAMP / DATABASE / DEFAULT /
@@ -2242,27 +2267,68 @@ reserved_words
     ELSE / END / ESCAPE / EXCEPT / EXCLUSIVE / EXISTS / EXPLAIN / FAIL / FOR /
     FOREIGN / FROM / FULL / GLOB / GROUP / HAVING / IGNORE / IMMEDIATE /
     INDEX / INDEXED / INITIALLY / INNER / INSERT / INSTEAD / INTERSECT / INTO /
-    ISNULL / JOIN / KEY / LEFT / LIKE / LIMIT / MATCH / NATURAL / NOT /
-    NOTNULL / NULL / OFFSET / ORDER / OUTER / PLAN / PRAGMA /
+    ISNULL / JOIN / KEY / LEFT / LIKE / LIMIT / MATCH / NATURAL /
+    NOTNULL / OFFSET / ORDER / OUTER / PLAN / PRAGMA /
     PRIMARY / QUERY / RAISE / RECURSIVE / REFERENCES / REGEXP / REINDEX /
     RELEASE / RENAME / REPLACE / RESTRICT / RIGHT / ROLLBACK / ROW / SAVEPOINT /
     SELECT / SET / TABLE / TEMP / TEMPORARY / THEN / TO / TRANSACTION / TRIGGER /
     UNION / UNIQUE / UPDATE / USING / VACUUM / VALUES / VIEW / VIRTUAL / WHEN /
-    WHERE / WITH / WITHOUT / IN / IS / OF / ON / OR / IF / NO ) { return _.key(r); }
+    WHERE / WITH / WITHOUT / NULL / NOT / IN / IS / OF / ON / OR / IF / NO
 
 /* Generic rules */
 
-any "Anything"
+/* TODO: Not returning anything in AST for comments, should decide what to do with them */
+comment
+  = comment_line
+  / comment_block
+  { return null; }
+
+comment_line "SQL Line Comment"
+  = sym_minus sym_minus ( !whitespace_line match_all )*
+
+comment_block "SQL Block Comment"
+  = comment_block_start comment_block_feed comment_block_end o
+
+comment_block_start
+  = sym_fslash sym_star
+
+comment_block_end
+  = sym_star sym_fslash
+
+comment_block_body
+  = ( !( comment_block_end ) match_all )+
+
+block_body_nodes
+  = comment_block_body / comment_block
+
+comment_block_feed
+  = block_body_nodes ( o block_body_nodes )*
+
+match_all "Anything"
   = .
+  /*= [\s\S]*/
 
 o "Optional Whitespace"
-  = _*
+  = n:( whitespace_nodes )*
+  { return n; }
 
 e "Enforced Whitespace"
-  = _+
+  = n:( whitespace_nodes )+
+  { return n; }
 
-_ "Whitespace"
-  = [ \f\n\r\t\v]
+whitespace_nodes
+  = whitespace
+  / comment
+
+whitespace "Whitespace"
+  = whitespace_space
+  / whitespace_line
+
+whitespace_space
+  = [ \t]
+
+whitespace_line
+  = [\n\v\f\r]
 
 /* TODO: Everything with this symbol */
 _TODO_

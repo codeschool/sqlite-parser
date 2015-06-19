@@ -116,9 +116,14 @@ describe('sqlite-parser', function() {
 
   it('parse error 1', function(done) {
     tree.error({
-      'message': 'Expected Statement or end of input but "f" found.',
+      'message': 'Expected Semicolon or end of input but "f" found.',
       'line': 3
     }, this, done);
+  });
+
+  it('comments', function (done) {
+    var resultTree = '{"statement":[{"modifier":null,"type":"statement","variant":"select","from":[],"where":null,"group":null,"result":[{"type":"literal","variant":"decimal","value":"1","alias":null}],"distinct":false,"all":false,"order":null,"limit":null},{"modifier":null,"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"Rooms","alias":"hat","index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":">","left":{"type":"identifier","variant":"column","name":"seats"},"right":{"type":"literal","variant":"decimal","value":"75"},"modifier":null}],"group":null,"result":[{"type":"identifier","variant":"column","name":"movie_id","alias":null}],"distinct":false,"all":false,"order":null,"limit":null},{"modifier":null,"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"hats","alias":null,"index":null}],"where":null,"group":null,"result":[{"type":"literal","variant":"decimal","value":"2","alias":null}],"distinct":false,"all":false,"order":null,"limit":null}]}';
+    tree.equals(resultTree, this, done);
   });
 
 });

@@ -193,6 +193,31 @@
 
   - [ ] *Has spec*
 
+- [x] Comments
+  - [x] Line comments
+
+    ``` sql
+    SELECT *
+    FROM hats --happy table
+    WHERE color = 'black'
+    ```
+
+    - [x] *Has spec*
+  - [x] Block comments
+
+    ``` sql
+    /*
+     * This is a /* nested */
+     * C-style block comment as allowed
+     * in SQL spec
+     */
+    SELECT *
+    FROM hats
+    WHERE color = 'black'
+    ```
+
+    - [x] *Has spec*
+
 - [x] Aliases `SELECT * FROM apples AS a`
   - [x] `apples AS unquoted_name`
     - [x] *Has spec*
