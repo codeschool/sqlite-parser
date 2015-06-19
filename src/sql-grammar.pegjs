@@ -135,16 +135,16 @@ expression_case_else
     };
   }
 
+/* TODO: Needs final format */
 expression_raise
   = s:( RAISE ) o sym_popen o a:( expression_raise_args ) o sym_pclose
   {
-    return {
+    return _.extend({
       'type': 'expression',
       'format': 'unary',
       'variant': _.key(s),
-      'expression': a,
       'modifier': null
-    };
+    }, a);
   }
 
 expression_raise_args
@@ -157,7 +157,12 @@ raise_args_ignore
 
 raise_args_message
   = f:( ROLLBACK / ABORT / FAIL ) o sym_comma o m:( error_message )
-  { return _.textNode(f) + ', \'' + m + '\''; }
+  {
+    return {
+      'modifier': _.key(f),
+      'message': m
+    };
+  }
 
 /* Expression Nodes */
 expression_node
@@ -202,7 +207,7 @@ expression_compare
   }
 
 expression_escape
-  = s:( ESCAPE ) e e:( expression )
+  = s:( ESCAPE ) o e:( expression )
   {
     return {
       'type': _.key(s),
@@ -743,21 +748,31 @@ limit_offset_variant_name
   = s:( OFFSET ) e
   { return _.key(s); }
 
-/* TODO: Not yet implemented */
 select_loop
   = s:( select_parts ) o u:( select_loop_union )*
   {
-    if ( _.isOkay(u) ) {
-      // TODO: compound query
+    if (_.isOkay(u)) {
+      // TODO: Not final format
+      return {
+        'type': 'statement',
+        'variant': 'compound',
+        'statement': s,
+        'compound': u
+      };
+    } else {
+      return s;
     }
-    return s;
   }
 
-/* TODO: Not yet implemented */
+/* TODO: Not final format */
 select_loop_union
   = c:( operator_compound ) o s:( select_parts ) o
   {
-    // TODO: compound query
+    return {
+      'type': 'compound',
+      'variant': c,
+      'statement': s
+    };
   }
 
 select_parts
@@ -767,21 +782,13 @@ select_parts
 select_parts_core
   = s:( select_core_select ) o f:( select_core_from )? o w:( stmt_core_where )? o g:( select_core_group )? o
   {
-    // TODO: Not final syntax!
-    if (!_.isArray(f)) {
-      if (!_.isOkay(f)) {
-        f = [];
-      } else {
-        f = [f];
-      }
-    }
     return _.extend({
       'type': 'statement',
       'variant': 'select',
-      'from': f,
+      'from': [],
       'where': w,
       'group': g
-    }, s);
+    }, s, f);
   }
 
 select_core_select
@@ -816,24 +823,26 @@ select_modifier_all
 
 select_target
   = f:( select_node ) o r:( select_target_loop )*
-  {
-    return _.compose([f, r], []);
-  }
+  { return _.compose([f, r], []); }
 
 select_target_loop
   = sym_comma n:( select_node ) o
   { return n; }
 
 select_core_from
-  = FROM e s:( select_source )
-  { return s; }
+  = s:( FROM ) e s:( select_source )
+  {
+    return {
+      'from': s
+    };
+  }
 
 stmt_core_where
-  = WHERE e e:( expression )
+  = s:( WHERE ) e e:( expression )
   { return _.makeArray(e); }
 
 select_core_group
-  = GROUP e BY e e:( expression ) h:( select_core_having )?
+  = s:( GROUP ) e BY e e:( expression ) h:( select_core_having )?
   {
     // TODO: format
     return {
@@ -843,7 +852,7 @@ select_core_group
   }
 
 select_core_having
-  = HAVING e e:( expression )
+  = s:( HAVING ) e e:( expression )
   { return e; }
 
 select_node
@@ -1165,11 +1174,17 @@ insert_default
     };
   }
 
-/* TODO: Not finished */
 operator_compound "Compound Operator"
-  = ( UNION ( e ALL )? )
-  / INTERSECT
-  / EXCEPT
+  = s:( compound_union / INTERSECT / EXCEPT )
+  { return _.key(s); }
+
+compound_union
+  = s:( UNION ) a:( compound_union_all )?
+  { return _.compose([s, a]); }
+
+compound_union_all
+  = e a:( ALL )
+  { return a; }
 
 /* Unary and Binary Operators */
 

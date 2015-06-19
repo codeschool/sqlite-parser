@@ -2,7 +2,7 @@
 
 ## **[0.1.0]** In progress
 - [x] `SELECT` **TODO: Need tests**
-  - [ ] Sub-queries
+  - [x] Sub-queries
 
     ``` sql
     SELECT *
@@ -21,7 +21,7 @@
     ```
 
     - [ ] *Has spec*
-  - [ ] Compound queries
+  - [x] Compound queries
 
     ``` sql
     SELECT *
@@ -64,7 +64,7 @@
       - [ ] *Has spec*
     - [x] `HAVING`  
       - [ ] *Has spec*
-    - [ ] `LIMIT`
+    - [x] `LIMIT`
       - [ ] *Has spec*
 - [x] `INSERT` **TODO: Need tests**
   - [x] Basic
@@ -103,7 +103,7 @@
     - [x] *Has spec*
 - [x] `DROP`
     - [ ] *Has spec*
-- [ ] `CREATE`
+- [x] `CREATE`
   - [x] Table format
     - [x] Basic format
       - [x] *Has spec*
@@ -267,10 +267,10 @@
     ```
 
     - [ ] *Has spec*
-  - [ ] `ESCAPE`
+  - [x] `ESCAPE`
 
     ``` sql
-    SELECT ESCAPE expr
+    SELECT bees NOT LIKE '%hive' ESCAPE hat > 1
     FROM hats
     ```
 
@@ -355,18 +355,18 @@
 
       - **FIXED: now grouping correctly when using binary AND / OR**
 - [x] Literals
-  - [ ] `'string'`
+  - [x] `'string'`
       - [ ] *Has spec*
-  - [ ] Decimal, Hex, Exponent `12`, `1.2`, `1E-9`, `0xe1e3`
+  - [x] Decimal, Hex, Exponent `12`, `1.2`, `1E-9`, `0xe1e3`
       - [ ] *Has spec*
-  - [ ] Signed number `-2.001`
+  - [x] Signed number `-2.001`
       - [ ] *Has spec*
 - [x] Bind parameters
-  - [ ] Numbered `?`, `?12`
+  - [x] Numbered `?`, `?12`
       - [ ] *Has spec*
-  - [ ] Named `@bees`
+  - [x] Named `@bees`
       - [ ] *Has spec*
-  - [ ] TCL `$hey "Hey There"`
+  - [x] TCL `$hey "Hey There"`
       - [ ] *Has spec*
 - [x] BLOB `X'stuff'`
     - [ ] *Has spec*
