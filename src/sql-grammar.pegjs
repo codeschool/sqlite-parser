@@ -703,7 +703,8 @@ expression_table "Table Expression"
       'type': 'expression',
       'format': 'table',
       'name': _.key(n),
-      'expression': s
+      'expression': s,
+      'columns': null
     }, a);
   }
 
@@ -751,7 +752,7 @@ limit_offset_variant_name
 select_loop
   = s:( select_parts ) o u:( select_loop_union )*
   {
-    if (_.isOkay(u)) {
+    if (_.isOkay(u) && u.length) {
       // TODO: Not final format
       return {
         'type': 'statement',
@@ -1770,7 +1771,8 @@ table_constraint_foreign
   = k:( foreign_start ) o l:( loop_columns ) o c:( foreign_clause ) o
   {
     return _.extend({
-      'expression': _.extend(k, c)
+      'expression': _.extend(k, c),
+      'columns': null
     }, l);
   }
 
@@ -1803,7 +1805,8 @@ foreign_references
   {
     // TODO: FORMAT?
     return _.extend({
-      'target': t
+      'target': t,
+      'columns': null
     }, c);
   }
 
