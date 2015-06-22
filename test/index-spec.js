@@ -69,15 +69,22 @@ describe('sqlite-parser', function() {
     tree.equals(resultTree, this, done);
   });
 
-  // CREATE statement
+  // CREATE TABLE statement
 
-  it('basic create', function(done) {
+  it('basic create table', function(done) {
     var resultTree = '{"statement":[{"type":"statement","variant":"create","modifier":null,"format":"table","temporary":false,"target":{"type":"identifier","variant":"table","name":"advertisements"},"condition":null,"modifier":null,"definition":[{"type":"definition","variant":"column","name":"id","definition":[{"name":null,"type":"constraint","variant":"primary key","conflict":null,"direction":null,"modififer":null,"autoIncrement":false}],"datatype":{"type":"datatype","format":"int","affinity":"integer","args":[]}},{"type":"definition","variant":"column","name":"name","definition":[],"datatype":{"type":"datatype","format":"varchar","affinity":"text","args":[{"type":"literal","variant":"decimal","value":"50"}]}},{"type":"definition","variant":"column","name":"category","definition":[],"datatype":{"type":"datatype","format":"varchar","affinity":"text","args":[{"type":"literal","variant":"decimal","value":"15"}]}},{"type":"definition","variant":"column","name":"cost","definition":[],"datatype":{"type":"datatype","format":"int","affinity":"integer","args":[]}}]}]}';
     tree.equals(resultTree, this, done);
   });
 
   it('binary concatenation', function(done) {
     var resultTree = '{"statement":[{"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"bananas","alias":null,"index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":"and","left":{"type":"expression","format":"binary","variant":"operation","operation":"!=","left":{"type":"literal","variant":"decimal","value":"1"},"right":{"type":"literal","variant":"decimal","value":"2"},"modifier":null},"right":{"type":"expression","format":"binary","variant":"operation","operation":"or","left":{"type":"expression","format":"binary","variant":"operation","operation":"!=","left":{"type":"identifier","variant":"column","name":"color"},"right":{"type":"literal","variant":"string","value":"blue"},"modifier":null},"right":{"type":"expression","format":"binary","variant":"operation","operation":"==","left":{"type":"identifier","variant":"column","name":"pees"},"right":{"type":"identifier","variant":"column","name":"crackers"},"modifier":null},"modifier":null},"modifier":null}],"group":null,"result":[{"type":"identifier","variant":"star","name":"*"}],"distinct":false,"all":false,"order":null,"modifier":null,"limit":null}]}';
+    tree.equals(resultTree, this, done);
+  });
+
+  // CREATE INDEX statement
+
+  it('basic create index', function(done) {
+    var resultTree = '{"statement":[{"modifier":null,"type":"statement","variant":"create","format":"index","target":{"type":"identifier","variant":"index","name":"bees.hive_state"},"where":[{"type":"expression","format":"binary","variant":"operation","operation":">","left":{"type":"identifier","variant":"column","name":"anger"},"right":{"type":"literal","variant":"decimal","value":"0"},"modifier":null}],"on":{"target":"hive","columns":[{"type":"identifier","variant":"column","format":"indexed","direction":"asc","name":"happiness","collate":null},{"type":"identifier","variant":"column","format":"indexed","direction":"desc","name":"anger","collate":null}]},"condition":null,"unique":false}]}';
     tree.equals(resultTree, this, done);
   });
 
