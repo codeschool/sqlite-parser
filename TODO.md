@@ -2,6 +2,33 @@
 
 ## **[0.2.0]** In progress
 
+- [ ] Missing specs
+
+- [ ] Expression grouping issues
+  ``` sql
+  `anger` != null AND NOT `happiness`
+  ```
+
+  ``` sql
+  `happiness` NOT NULL AND `anger` > 0
+  ```
+
+  ``` sql
+  `happiness` IS NOT NULL AND `anger` > 0
+  ```
+
+  ``` sql
+  `happiness` ISNULL AND `anger` >
+  ```
+
+  ``` sql
+  `anger` > 0 AND `happiness` IS NOT NULL
+  ```
+
+  ``` sql
+  NOT `happiness` AND `anger` > 0
+  ```
+
 - [x] Create `INDEX`
   - [x] *Has spec*
 - [ ] Create `TRIGGER`
