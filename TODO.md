@@ -1,6 +1,59 @@
 # Milestones for sqlite-parser
 
-## **[0.1.0]** In progress
+## **[0.2.0]** In progress
+
+- [x] Create `INDEX`
+  - [x] *Has spec*
+- [ ] Create `TRIGGER`
+  - [ ] *Has spec*
+- [ ] Create `VIEW`
+  - [ ] *Has spec*
+- [ ] Create `VIRTUAL` table
+  - [ ] *Has spec*
+
+- [ ] PostgreSQL datatypes
+
+  | Name                        | Aliases            |
+  |:--------------------------- | ------------------:|
+  | bigint                      | int8	             |
+  | bigserial	                  | serial8	           |
+  | bit [ (n) ]	 	              |                    |
+  | bit varying [ (n) ]	        | varbit	           |
+  | boolean	                    | bool	             |
+  | box	 	                      |                    |
+  | bytea	 	                    |                    |
+  | character [ (n) ]	          | char [ (n) ]       |
+  | character varying [ (n) ]   |	varchar [ (n) ]    |
+  | cidr                        |                    |
+  | circle                      |                    |
+  | date                        |                    |
+  | double precision	          | float8             |
+  | inet	 	                    |                    |
+  | integer	                    | int, int4	         |
+  | interval [ fields ] [ (p) ] |                    |
+  | json                        |                    |
+  | line	 	                    |                    |
+  | lseg	                      |                    |
+  | macaddr	                    |                    |
+  | money	                      |                    |
+  | numeric [ (p, s) ]          | decimal [ (p, s) ] |
+  | path                        |                    |
+  | point                       |                    |
+  | polygon	                    |                    |
+  | real	                      | float4             |
+  | smallint                    | int2               |
+  | smallserial	                | serial2            |
+  | serial                      | serial4            |
+  | text                        |                    |
+  | time [ (p) ] 	              | timetz             |
+  | timestamp [ (p) ]           | timestamptz	      |
+  | tsquery                     |                    |
+  | tsvector                    |                    |
+  | txid_snapshot	              |                    |
+  | uuid                        |                    |
+  | xml                         |                    |
+
+## **[0.1.0]** Finished (needs tests)
 - [x] `SELECT` **TODO: Need tests**
   - [x] Sub-queries
 
@@ -127,15 +180,7 @@
           - [ ] *Has spec*  
         - [x] `FOREIGN KEY`
           - [ ] *Has spec*  
-  - [ ] Create table `AS SELECT`
-    - [ ] *Has spec*
-  - [ ] Create `INDEX`
-    - [ ] *Has spec*
-  - [ ] Create `TRIGGER`
-    - [ ] *Has spec*
-  - [ ] Create `VIEW`
-    - [ ] *Has spec*
-  - [ ] Create `VIRTUAL` table
+  - [x] Create table `AS SELECT`
     - [ ] *Has spec*
 - [x] `ALTER TABLE` **TODO: Need tests**
   - [ ] *Has spec*
@@ -450,45 +495,3 @@
     | BOOLEAN                     | NUMERIC            |
     | DATE                        | NUMERIC            |
     | DATETIME	                  | NUMERIC            |
-
-  - [ ] PostgreSQL
-
-    | Name                        | Aliases            |
-    |:--------------------------- | ------------------:|
-    | bigint                      | int8	             |
-    | bigserial	                  | serial8	           |
-    | bit [ (n) ]	 	              |                    |
-    | bit varying [ (n) ]	        | varbit	           |
-    | boolean	                    | bool	             |
-    | box	 	                      |                    |
-    | bytea	 	                    |                    |
-    | character [ (n) ]	          | char [ (n) ]       |
-    | character varying [ (n) ]   |	varchar [ (n) ]    |
-    | cidr                        |                    |
-    | circle                      |                    |
-    | date                        |                    |
-    | double precision	          | float8             |
-    | inet	 	                    |                    |
-    | integer	                    | int, int4	         |
-    | interval [ fields ] [ (p) ] |                    |
-    | json                        |                    |
-    | line	 	                    |                    |
-    | lseg	                      |                    |
-    | macaddr	                    |                    |
-    | money	                      |                    |
-    | numeric [ (p, s) ]          | decimal [ (p, s) ] |
-    | path                        |                    |
-    | point                       |                    |
-    | polygon	                    |                    |
-    | real	                      | float4             |
-    | smallint                    | int2               |
-    | smallserial	                | serial2            |
-    | serial                      | serial4            |
-    | text                        |                    |
-    | time [ (p) ] 	              | timetz             |
-    | timestamp [ (p) ]           | timestamptz	      |
-    | tsquery                     |                    |
-    | tsvector                    |                    |
-    | txid_snapshot	              |                    |
-    | uuid                        |                    |
-    | xml                         |                    |
