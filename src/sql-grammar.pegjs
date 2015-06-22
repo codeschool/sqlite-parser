@@ -6,7 +6,7 @@
 
 /* Start Grammar */
 start
-  = s:( stmt_list )?
+  = o s:( stmt_list )?
   {
     return {
       'statement': (_.isOkay(s) ? s : [])
@@ -18,7 +18,7 @@ stmt_list
   / stmt_list_single
 
 stmt_list_single
-  = f:( stmt ) c:( sym_semi )?
+  = f:( stmt ) o c:( sym_semi )?
   { return [f]; }
 
 stmt_list_multiple
@@ -39,7 +39,7 @@ expression "Expression"
   { return t; }
 
 expression_types
-  = expression_wrapped / expression_node / expression_value
+  = expression_wrapped / expression_unary / expression_node / expression_value
 
 expression_concat
   = l:( expression_types ) o o:( binary_loop_concat ) o r:( expression )
@@ -56,7 +56,7 @@ expression_concat
   }
 
 expression_wrapped
-  = sym_popen o n:( expression_node / expression_value ) o sym_pclose
+  = sym_popen o n:( expression_unary / expression_node / expression_value ) o sym_pclose
   { return n; }
 
 expression_value
@@ -64,21 +64,20 @@ expression_value
   / expression_exists
   / expression_case
   / expression_raise
-  / expression_unary
   / bind_parameter
   / function_call
   / literal_value
   / id_column
 
 expression_unary
-  = o:( operator_unary ) o e:( expression )
+  = o:( operator_unary ) e:( expression_types )
   {
     return {
       'type': 'expression',
       'format': 'unary',
-      'variant': 'logical', // or { 'format': 'unary' }
+      'variant': 'operation',
       'expression': e,
-      'modifier': o // TODO: could be { 'operator': o }
+      'operator': o
     };
   }
 
@@ -186,7 +185,7 @@ expression_node
   = expression_collate
   / expression_compare
   / expression_null
-  / expression_is
+  /*/ expression_is*/
   / expression_between
   / expression_in
   / stmt_select
@@ -194,41 +193,32 @@ expression_node
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_collate
-  = v:( expression_value ) o s:( COLLATE ) e n:( name_collation )
+  = v:( expression_value ) o s:( COLLATE ) e c:( name_collation )
   {
-    return {
-      'type': 'expression',
-      'format': 'unary',
-      'variant': _.key(s),
-      'expression': v,
-      'modifier': {
-        'type': 'name',
-        'name': n // TODO: could also be { 'name': n }
-      }
-    };
+    return _.extend(v, {
+      'collate': c
+    });
   }
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_compare
-  = v:( expression_value ) o n:( NOT e )? m:( LIKE / GLOB / REGEXP / MATCH ) e e:( expression ) o x:( expression_escape )?
+  = v:( expression_value ) o n:( expression_is_not )? m:( LIKE / GLOB / REGEXP / MATCH ) e e:( expression ) o x:( expression_escape )?
   {
-    return {
+    return _.extend({
       'type': 'expression',
       'format': 'binary',
       'variant': 'operation',
       'operation': _.key(_.compose([n, m])),
       'left': v,
-      'right': e,
-      'modifier': x
-    };
+      'right': e
+    }, x);
   }
 
 expression_escape
   = s:( ESCAPE ) o e:( expression )
   {
     return {
-      'type': _.key(s),
-      'expression': e
+      'escape': e
     };
   }
 
@@ -239,20 +229,33 @@ expression_null
     return {
       'type': 'expression',
       'format': 'unary',
-      'variant': 'null',
+      'variant': 'operation',
       'expression': v,
-      'modifier': n
+      'operation': n
     };
   }
 
 expression_null_nodes
-  = i:( IS / NOT ) o n:( NULL ) {
+  = i:( null_nodes_types ) n:( NULL ) e
+  { return _.key(_.compose([i, n])); }
+
+null_nodes_types
+  = t:( IS / ( NOT o ) )
+  { return _.key(t); }
+
+expression_isnt
+  = i:( IS ) e n:( expression_is_not )?
+  {
     return _.key(_.compose([i, n]));
   }
 
-/** @note Removed expression on left-hand-side to remove recursion */
-expression_is
-  = v:( expression_value ) o i:( IS e ) n:( NOT e )? e:( expression )
+expression_is_not
+  = n:( NOT ) e
+  { return _.textNode(n); }
+
+/** @note This rule is now rolled up in operator_binary */
+/*expression_is
+  = v:( expression_value ) o i:( IS ) e n:( expression_is_not )? e:( expression )
   {
     return {
       'type': 'expression',
@@ -263,11 +266,11 @@ expression_is
       'right': e,
       'modifier': null
     };
-  }
+  }*/
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_between
-  = v:( expression_value ) o n:( NOT e )? b:( BETWEEN ) e e1:( expression ) o s:( AND ) e e2:( expression )
+  = v:( expression_value ) o n:( expression_is_not )? b:( BETWEEN ) e e1:( expression ) o s:( AND ) e e2:( expression )
   {
     return {
       'type': 'expression',
@@ -290,7 +293,7 @@ expression_between
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_in
-  = v:( expression_value ) o n:( NOT e )? i:( IN ) e e:( expression_in_target )
+  = v:( expression_value ) o n:( expression_is_not )? i:( IN ) e e:( expression_in_target )
   {
     return {
       'type': 'expression',
@@ -798,7 +801,7 @@ select_parts
   / select_parts_values
 
 select_parts_core
-  = s:( select_core_select ) o f:( select_core_from )? o w:( stmt_core_where )? o g:( select_core_group )? o
+  = s:( select_core_select ) f:( select_core_from )? w:( stmt_core_where )? g:( select_core_group )?
   {
     return _.extend({
       'type': 'statement',
@@ -848,7 +851,7 @@ select_target_loop
   { return n; }
 
 select_core_from
-  = s:( FROM ) e s:( select_source )
+  = s:( FROM ) e s:( select_source ) o
   {
     return {
       'from': s
@@ -856,11 +859,11 @@ select_core_from
   }
 
 stmt_core_where
-  = s:( WHERE ) e e:( expression )
+  = s:( WHERE ) e e:( expression ) o
   { return _.makeArray(e); }
 
 select_core_group
-  = s:( GROUP ) e BY e e:( expression ) h:( select_core_having )?
+  = s:( GROUP ) e BY e e:( expression ) o h:( select_core_having )?
   {
     // TODO: format
     return {
@@ -870,7 +873,7 @@ select_core_group
   }
 
 select_core_having
-  = s:( HAVING ) e e:( expression )
+  = s:( HAVING ) e e:( expression ) o
   { return e; }
 
 select_node
@@ -1210,11 +1213,11 @@ operator_unary "Unary Operator"
   = sym_tilde
   / sym_minus
   / sym_plus
-  / NOT
+  / expression_is_not
 
 /* TODO: Needs return format refactoring */
 operator_binary "Binary Operator"
-  = o:( binary_concat
+  = o:( binary_concat / expression_isnt
   / binary_multiply / binary_mod
   / binary_plus / binary_minus
   / binary_left / binary_right / binary_and / binary_or
@@ -1340,6 +1343,16 @@ id_savepoint
     };
   }
 
+id_index
+  = d:( id_table_qualified )? n:( name_index )
+  {
+    return {
+      'type': 'identifier',
+      'variant': 'index',
+      'name': _.compose([d, n], '')
+    };
+  }
+
 /* TODO: FIX all name_* symbols */
 name_database "Database Name"
   = name
@@ -1407,7 +1420,7 @@ datatype_none
  * @note Includes limited update syntax {@link https://www.sqlite.org/syntax/update-stmt-limited.html}
  */
 stmt_update "UPDATE Statement"
-  = u:( clause_with )? o s:( update_start ) f:( update_fallback )? t:( table_qualified ) o u:( update_set ) w:( update_where )? o o:( stmt_core_order )? o l:( stmt_core_limit )?
+  = u:( clause_with )? o s:( update_start ) f:( update_fallback )? t:( table_qualified ) o u:( update_set ) w:( stmt_core_where )? o:( stmt_core_order )? o l:( stmt_core_limit )?
   {
     // TODO: Not final syntax!
     return _.extend({
@@ -1459,15 +1472,11 @@ update_column
     };
   }
 
-update_where
-  = w:( stmt_core_where ) o
-  { return w; }
-
 /**
  * @note Includes limited update syntax {@link https://www.sqlite.org/syntax/delete-stmt-limited.html}
  */
 stmt_delete "DELETE Statement"
-  = u:( clause_with )? o s:( delete_start ) t:( table_qualified ) o w:( delete_where )? o o:( stmt_core_order )? o l:( stmt_core_limit )?
+  = u:( clause_with )? o s:( delete_start ) t:( table_qualified ) o w:( stmt_core_where )? o:( stmt_core_order )? l:( stmt_core_limit )?
   {
     // TODO: Not final syntax!
     return _.extend({
@@ -1484,34 +1493,27 @@ delete_start
   = s:( DELETE ) e FROM e
   { return _.key(s); }
 
-delete_where
-  = w:( stmt_core_where ) o
-  { return w; }
-
 /* TODO: Complete */
 stmt_create "CREATE Statement"
-  = create_index
-  / create_table
+  = create_table
+  / create_index
   / create_trigger
   / create_view
   / create_virtual
 
-create_index "CREATE Index"
-  = _TODO_
-
 create_table "CREATE Table"
-  = CREATE e tmp:( create_table_tmp )? TABLE e ne:( create_ine )? id:( id_table ) e s:( create_table_source )
+  = s:( CREATE ) e tmp:( create_table_tmp )? t:( TABLE ) e ne:( create_ine )? id:( id_table ) e r:( create_table_source )
   {
     return _.extend({
       'type': 'statement',
-      'variant': 'create',
-      'format': 'table',
+      'variant': _.key(s),
+      'format': _.key(t),
       'temporary': _.isOkay(tmp),
       'target': id,
       'condition': null,
       'modifier': null,
       'definition': []
-    }, s, ne);
+    }, r, ne);
   }
 
 create_table_tmp
@@ -1741,7 +1743,7 @@ primary_columns
   { return _.compose([f, b], []); }
 
 primary_column "Indexed Column"
-  = e:( name_column ) o c:( column_collate )? o d:( primary_column_dir )? o
+  = e:( name_column ) o c:( column_collate )? d:( primary_column_dir )?
   {
     // TODO: Not final format
     return {
@@ -1755,7 +1757,7 @@ primary_column "Indexed Column"
   }
 
 column_collate
-  = COLLATE e n:( id_collation )
+  = COLLATE e n:( id_collation ) o
   { return n; }
 
 primary_column_dir
@@ -1876,6 +1878,39 @@ table_source_select
   {
     return {
       'result': s
+    };
+  }
+
+/* TODO: Left off here */
+create_index "CREATE Index"
+  = s:( CREATE ) e u:( index_unique )? i:( INDEX ) e ie:( create_ine )? n:( id_index ) e o:( index_on ) w:( stmt_core_where )?
+  {
+    return _.extend({
+      'type': 'statement',
+      'variant': _.key(s),
+      'format': _.key(i),
+      'target': n,
+      'where': w,
+      'on': o,
+      'condition': null,
+      'unique': false
+    }, u, ie);
+  }
+
+index_unique
+  = u:( UNIQUE ) e
+  {
+    return {
+      'unique': true
+    };
+  }
+
+index_on
+  = o:( ON ) e t:( name_table ) o c:( primary_columns )
+  {
+    return {
+      'target': t,
+      'columns': c
     };
   }
 
