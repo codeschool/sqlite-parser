@@ -132,6 +132,13 @@ describe('sqlite-parser', function() {
     tree.equals(resultTree, this, done);
   });
 
+  // CREATE VIRTUAL TABLE statement
+
+  it('basic create virtual table', function(done) {
+    var resultTree = '{"statement":[{"modifier":null,"type":"statement","variant":"create","format":"virtual","conditions":null,"target":{"type":"identifier","variant":"table","name":"happy_table"},"result":{"type":"module","name":"happy_module","args":[{"type":"expression","format":"binary","variant":"operation","operation":"!=","left":{"type":"identifier","variant":"column","name":"some"},"right":{"type":"literal","variant":"string","value":"expression"},"modifier":null},{"type":"literal","variant":"string","value":"just a string"},{"type":"literal","variant":"decimal","value":"33.0"}]}}]}';
+    tree.equals(resultTree, this, done);
+  });
+
   // DROP statement
 
   it('basic drop', function(done) {
