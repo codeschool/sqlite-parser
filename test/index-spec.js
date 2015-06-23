@@ -21,6 +21,36 @@ describe('sqlite-parser', function() {
     tree.equals(resultTree, this, done);
   });
 
+  it('expression grouping 1', function(done) {
+    var resultTree = '{"statement":[{"modifier":null,"type":"statement","variant":"create","format":"index","target":{"type":"identifier","variant":"index","name":"bees.hive_state"},"where":[{"type":"expression","format":"binary","variant":"operation","operation":"and","left":{"type":"expression","format":"binary","variant":"operation","operation":"!=","left":{"type":"identifier","variant":"column","name":"anger"},"right":{"type":"literal","variant":"null","value":"null"},"modifier":null},"right":{"type":"expression","format":"unary","variant":"operation","expression":{"type":"identifier","variant":"column","name":"happiness"},"operator":"NOT"},"modifier":null}],"on":{"target":"hive","columns":[{"type":"identifier","variant":"column","format":"indexed","direction":"asc","name":"happiness","collate":null},{"type":"identifier","variant":"column","format":"indexed","direction":"desc","name":"anger","collate":null}]},"conditions":[],"unique":false}]}';
+    tree.equals(resultTree, this, done);
+  });
+
+  it('expression grouping 2', function(done) {
+    var resultTree = '{"statement":[{"modifier":null,"type":"statement","variant":"create","format":"index","target":{"type":"identifier","variant":"index","name":"bees.hive_state"},"where":[{"type":"expression","format":"binary","variant":"operation","operation":"and","left":{"type":"expression","format":"unary","variant":"operation","expression":{"type":"identifier","variant":"column","name":"happiness"},"operation":"not null"},"right":{"type":"expression","format":"binary","variant":"operation","operation":">","left":{"type":"identifier","variant":"column","name":"anger"},"right":{"type":"literal","variant":"decimal","value":"0"},"modifier":null},"modifier":null}],"on":{"target":"hive","columns":[{"type":"identifier","variant":"column","format":"indexed","direction":"asc","name":"happiness","collate":null},{"type":"identifier","variant":"column","format":"indexed","direction":"desc","name":"anger","collate":null}]},"conditions":[],"unique":false}]}';
+    tree.equals(resultTree, this, done);
+  });
+
+  it('expression grouping 3', function(done) {
+    var resultTree = '{"statement":[{"modifier":null,"type":"statement","variant":"create","format":"index","target":{"type":"identifier","variant":"index","name":"bees.hive_state"},"where":[{"type":"expression","format":"binary","variant":"operation","operation":"and","left":{"type":"expression","format":"binary","variant":"operation","operation":"is not","left":{"type":"identifier","variant":"column","name":"happiness"},"right":{"type":"literal","variant":"null","value":"null"},"modifier":null},"right":{"type":"expression","format":"binary","variant":"operation","operation":">","left":{"type":"identifier","variant":"column","name":"anger"},"right":{"type":"literal","variant":"decimal","value":"0"},"modifier":null},"modifier":null}],"on":{"target":"hive","columns":[{"type":"identifier","variant":"column","format":"indexed","direction":"asc","name":"happiness","collate":null},{"type":"identifier","variant":"column","format":"indexed","direction":"desc","name":"anger","collate":null}]},"conditions":[],"unique":false}]}';
+    tree.equals(resultTree, this, done);
+  });
+
+  it('expression grouping 4', function(done) {
+    var resultTree = '{"statement":[{"modifier":null,"type":"statement","variant":"create","format":"index","target":{"type":"identifier","variant":"index","name":"bees.hive_state"},"where":[{"type":"expression","format":"binary","variant":"operation","operation":"and","left":{"type":"expression","format":"unary","variant":"operation","expression":{"type":"identifier","variant":"column","name":"happiness"},"operation":"is null"},"right":{"type":"expression","format":"binary","variant":"operation","operation":">","left":{"type":"identifier","variant":"column","name":"anger"},"right":{"type":"literal","variant":"decimal","value":"0"},"modifier":null},"modifier":null}],"on":{"target":"hive","columns":[{"type":"identifier","variant":"column","format":"indexed","direction":"asc","name":"happiness","collate":null},{"type":"identifier","variant":"column","format":"indexed","direction":"desc","name":"anger","collate":null}]},"conditions":[],"unique":false}]}';
+    tree.equals(resultTree, this, done);
+  });
+
+  it('expression grouping 5', function(done) {
+    var resultTree = '{"statement":[{"modifier":null,"type":"statement","variant":"create","format":"index","target":{"type":"identifier","variant":"index","name":"bees.hive_state"},"where":[{"type":"expression","format":"binary","variant":"operation","operation":"and","left":{"type":"expression","format":"binary","variant":"operation","operation":">","left":{"type":"identifier","variant":"column","name":"anger"},"right":{"type":"literal","variant":"decimal","value":"0"},"modifier":null},"right":{"type":"expression","format":"binary","variant":"operation","operation":"is not","left":{"type":"identifier","variant":"column","name":"happiness"},"right":{"type":"literal","variant":"null","value":"null"},"modifier":null},"modifier":null}],"on":{"target":"hive","columns":[{"type":"identifier","variant":"column","format":"indexed","direction":"asc","name":"happiness","collate":null},{"type":"identifier","variant":"column","format":"indexed","direction":"desc","name":"anger","collate":null}]},"conditions":[],"unique":false}]}';
+    tree.equals(resultTree, this, done);
+  });
+
+  it('expression grouping 6', function(done) {
+    var resultTree = '{"statement":[{"modifier":null,"type":"statement","variant":"create","format":"index","target":{"type":"identifier","variant":"index","name":"bees.hive_state"},"where":[{"type":"expression","format":"binary","variant":"operation","operation":"and","left":{"type":"expression","format":"unary","variant":"operation","expression":{"type":"identifier","variant":"column","name":"happiness"},"operator":"NOT"},"right":{"type":"expression","format":"binary","variant":"operation","operation":">","left":{"type":"identifier","variant":"column","name":"anger"},"right":{"type":"literal","variant":"decimal","value":"0"},"modifier":null},"modifier":null}],"on":{"target":"hive","columns":[{"type":"identifier","variant":"column","format":"indexed","direction":"asc","name":"happiness","collate":null},{"type":"identifier","variant":"column","format":"indexed","direction":"desc","name":"anger","collate":null}]},"conditions":[],"unique":false}]}';
+    tree.equals(resultTree, this, done);
+  });
+
   // SELECT statement
 
   it('basic select', function(done) {
