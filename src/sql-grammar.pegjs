@@ -1353,6 +1353,16 @@ id_index
     };
   }
 
+id_trigger
+  = d:( id_table_qualified )? n:( name_trigger )
+  {
+    return {
+      'type': 'identifier',
+      'variant': 'trigger',
+      'name': _.compose([d, n], '')
+    };
+  }
+
 /* TODO: FIX all name_* symbols */
 name_database "Database Name"
   = name
@@ -1373,6 +1383,9 @@ name_collation "Collation Name"
   = name
 
 name_index "Index Name"
+  = name
+
+name_trigger "Trigger Name"
   = name
 
 name_function "Function Name"
@@ -1502,7 +1515,7 @@ stmt_create "CREATE Statement"
   / create_virtual
 
 create_table "CREATE Table"
-  = s:( CREATE ) e tmp:( create_table_tmp )? t:( TABLE ) e ne:( create_ine )? id:( id_table ) e r:( create_table_source )
+  = s:( CREATE ) e tmp:( create_core_tmp )? t:( TABLE ) e ne:( create_core_ine )? id:( id_table ) o r:( create_table_source )
   {
     return _.extend({
       'type': 'statement',
@@ -1510,20 +1523,21 @@ create_table "CREATE Table"
       'format': _.key(t),
       'temporary': _.isOkay(tmp),
       'target': id,
-      'condition': null,
+      'conditions': _.compose([ne], []),
       'modifier': null,
       'definition': []
-    }, r, ne);
+    }, r);
   }
 
-create_table_tmp
+create_core_tmp
   = t:( TEMP / TEMPORARY ) e
   { return _.key(t); }
 
-create_ine
+create_core_ine
   = i:( IF ) e n:( NOT ) e e:( EXISTS ) e
   {
     return {
+      'type': 'condition',
       'condition': _.key(_.compose([i, n, e]))
     };
   }
@@ -1883,7 +1897,8 @@ table_source_select
 
 /* TODO: Left off here */
 create_index "CREATE Index"
-  = s:( CREATE ) e u:( index_unique )? i:( INDEX ) e ie:( create_ine )? n:( id_index ) e o:( index_on ) w:( stmt_core_where )?
+  = s:( CREATE ) e u:( index_unique )? i:( INDEX ) e ne:( create_core_ine )?
+    n:( id_index ) o o:( index_on ) w:( stmt_core_where )?
   {
     return _.extend({
       'type': 'statement',
@@ -1892,9 +1907,9 @@ create_index "CREATE Index"
       'target': n,
       'where': w,
       'on': o,
-      'condition': null,
+      'conditions': _.compose([ne], []),
       'unique': false
-    }, u, ie);
+    }, u);
   }
 
 index_unique
@@ -1914,8 +1929,105 @@ index_on
     };
   }
 
+/**
+ * @note
+ *  This statement type has missing syntax restrictions that need to be
+ *  enforced on UPDATE, DELETE, and INSERT statements in the trigger_action.
+ *  See {@link https://www.sqlite.org/lang_createtrigger.html}.
+ */
 create_trigger "CREATE Trigger"
-  = _TODO_
+  = s:( CREATE ) e p:( create_core_tmp )? t:( TRIGGER ) e ne:( create_core_ine )?
+    n:( id_trigger ) o cd:( trigger_conditions ) o:( ON ) e n:( name_table ) o
+    me:( trigger_foreach )? wh:( trigger_when )? a:( trigger_action )
+  {
+    return {
+      'type': 'statement',
+      'variant': _.key(s),
+      'format': _.key(t),
+      'when': wh,
+      'on': n,
+      'conditions': ne,
+      'event': cd,
+      'temporary': _.isOkay(p),
+      'by': (_.isOkay(me) ? me : 'row'),
+      'action': _.makeArray(a)
+    };
+  }
+
+trigger_conditions
+  = m:( trigger_apply_mods )? d:( trigger_do )
+  {
+    return _.extend({
+      'type': 'event',
+      'occurs': null
+    }, m, d);
+  }
+
+trigger_apply_mods
+  = m:( BEFORE / AFTER / trigger_apply_instead ) e
+  {
+    return {
+      'occurs': _.key(m)
+    };
+  }
+
+trigger_apply_instead
+  = i:( INSTEAD ) e o:( OF )
+  { return _.compose([i, o]); }
+
+trigger_do
+  = trigger_do_on
+  / trigger_do_update
+
+trigger_do_on
+  = o:( DELETE / INSERT ) e
+  {
+    return {
+      'event': _.key(o)
+    };
+  }
+
+trigger_do_update
+  = s:( UPDATE ) e f:( do_update_of )?
+  {
+    return {
+      'event': _.key(s),
+      'of': f
+    };
+  }
+
+do_update_of
+  = s:( OF ) e c:( do_update_columns )
+  { return c; }
+
+do_update_columns
+  = f:( loop_name_column ) o b:( loop_column_tail )*
+  { return _.compose([f, b], []); }
+
+/**
+ * @note
+ *  FOR EACH STATEMENT is not supported by SQLite, but still included here.
+ *  See {@link https://www.sqlite.org/lang_createtrigger.html}.
+ */
+trigger_foreach
+  = f:( FOR ) e e:( EACH ) e r:( ROW / "STATEMENT"i ) e
+  { return _.key(r); }
+
+trigger_when
+  = w:( WHEN ) e e:( expression ) o
+  { return e; }
+
+trigger_action
+  = s:( BEGIN ) e a:( action_loop ) o e:( END ) o
+  { return a; }
+
+action_loop
+  = l:( action_loop_stmt )+
+  { return l; }
+
+action_loop_stmt
+  = s:( stmt ) o c:( sym_semi )
+  { return s; }
 
 create_view "CREATE View"
   = _TODO_
@@ -1923,7 +2035,7 @@ create_view "CREATE View"
 create_virtual "CREATE Virtual Table"
   = _TODO_
 
-stmt_drop "DROP Table Statement"
+stmt_drop "DROP Statement"
   = s:( drop_start ) t:( drop_types ) i:( drop_ie )? q:( id_table ) o
   {
     return {
@@ -1931,7 +2043,7 @@ stmt_drop "DROP Table Statement"
       'variant': s,
       'format': t,
       'target': q,
-      'condition': i
+      'conditions': (_.isOkay(i) ? [i] : [])
     };
   }
 
@@ -1945,7 +2057,12 @@ drop_types
 
 drop_ie
   = i:( IF ) e e:( EXISTS ) e
-  { return _.key(_.compose([i, e])); }
+  {
+    return {
+      'type': 'condition',
+      'condition': _.key(_.compose([i, e]))
+    };
+  }
 
 /* Naming rules */
 
@@ -2306,7 +2423,7 @@ reserved_word_list
     NOTNULL / OFFSET / ORDER / OUTER / PLAN / PRAGMA /
     PRIMARY / QUERY / RAISE / RECURSIVE / REFERENCES / REGEXP / REINDEX /
     RELEASE / RENAME / REPLACE / RESTRICT / RIGHT / ROLLBACK / ROW / SAVEPOINT /
-    SELECT / SET / TABLE / TEMP / TEMPORARY / THEN / TO / TRANSACTION / TRIGGER /
+    SELECT / SET / TABLE / TEMPORARY / TEMP / THEN / TO / TRANSACTION / TRIGGER /
     UNION / UNIQUE / UPDATE / USING / VACUUM / VALUES / VIEW / VIRTUAL / WHEN /
     WHERE / WITH / WITHOUT / NULL / NOT / IN / IS / OF / ON / OR / IF / NO
 

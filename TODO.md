@@ -29,10 +29,12 @@
   NOT `happiness` AND `anger` > 0
   ```
 
+- [ ] Remove `modifier` key from all parts of AST and standardize as `conditions`
+
 - [x] Create `INDEX`
   - [x] *Has spec*
-- [ ] Create `TRIGGER`
-  - [ ] *Has spec*
+- [x] Create `TRIGGER`
+  - [x] *Has spec*
 - [ ] Create `VIEW`
   - [ ] *Has spec*
 - [ ] Create `VIRTUAL` table
