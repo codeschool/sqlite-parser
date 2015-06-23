@@ -1,6 +1,6 @@
 # Milestones for sqlite-parser
 
-## **[0.2.0]** In progress
+## **[1.0.0]** In progress
 
 - [ ] Missing specs
 
