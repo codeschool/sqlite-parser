@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 
 [unreleased]: https://github.com/codeschool/sqlite-parser
 
+## [v0.2.1] - 2015-06-23
+### Added
+- `CREATE VIEW` syntax and AST
+- specs for `CREATE VIEW` statement
+- `CREATE VIRTUAL TABLE` syntax and AST
+- specs for `CREATE VIRTUAL TABLE` statement
+
+### Notes
+- `CREATE VIRTUAL TABLE` currently only works with expression arguments and does not support passing column definitions and/or table constraint definitions as is allowed in the SQLite spec for virtual table module arguments.
+
+  ``` sql
+  CREATE VIRTUAL TABLE vtrl_ads
+  USING tbl_creator(
+    id int PRIMARY KEY,
+    name varchar(50),
+    category varchar(15),
+    cost int);
+  ```
+
 ## [v0.2.0] - 2015-06-23
 ### Added
 - `CREATE TRIGGER` syntax and AST
@@ -21,14 +40,10 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - updated rules and specs to remove use of `modifier` property in AST
 
-### Fixed
-
 ## [v0.1.1] - 2015-06-22
 ### Added
 - rules for `CREATE INDEX`
 - specs for `CREATE INDEX` statement
-
-### Changed
 
 ### Fixed
 - some grouping errors for unary operators, unary null and binary concatenation
@@ -70,7 +85,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.2.0...HEAD
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.2.1...HEAD
+[v0.2.1]: https://github.com/codeschool/sqlite-parser/compare/v0.2.0...v0.2.1
 [v0.2.0]: https://github.com/codeschool/sqlite-parser/compare/v0.1.1...v0.2.0
 [v0.1.1]: https://github.com/codeschool/sqlite-parser/compare/v0.1.0...v0.1.1
 [v0.1.0]: https://github.com/codeschool/sqlite-parser/compare/v0.0.9...v0.1.0

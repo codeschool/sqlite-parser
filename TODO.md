@@ -35,10 +35,12 @@
   - [x] *Has spec*
 - [x] Create `TRIGGER`
   - [x] *Has spec*
-- [ ] Create `VIEW`
-  - [ ] *Has spec*
+- [x] Create `VIEW`
+  - [x] *Has spec*
 - [ ] Create `VIRTUAL` table
-  - [ ] *Has spec*
+  - [x] *Has spec*
+  - This currently only works with expression arguments and does not support passing column definitions and/or table constraint definitions as is allowed in the SQLite spec for virtual table module arguments.
+    - See: [Virtual Tables](https://www.sqlite.org/lang_createvtab.html)
 
 ## **[0.1.0]** Finished (needs tests)
 - [x] `SELECT` **TODO: Need tests**
