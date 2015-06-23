@@ -1363,6 +1363,16 @@ id_trigger
     };
   }
 
+id_view
+  = d:( id_table_qualified )? n:( name_view )
+  {
+    return {
+      'type': 'identifier',
+      'variant': 'view',
+      'name': _.compose([d, n], '')
+    };
+  }
+
 /* TODO: FIX all name_* symbols */
 name_database "Database Name"
   = name
@@ -1386,6 +1396,9 @@ name_index "Index Name"
   = name
 
 name_trigger "Trigger Name"
+  = name
+
+name_view "View Name"
   = name
 
 name_function "Function Name"
@@ -1937,7 +1950,7 @@ index_on
  */
 create_trigger "CREATE Trigger"
   = s:( CREATE ) e p:( create_core_tmp )? t:( TRIGGER ) e ne:( create_core_ine )?
-    n:( id_trigger ) o cd:( trigger_conditions ) o:( ON ) e n:( name_table ) o
+    n:( id_trigger ) o cd:( trigger_conditions ) ( ON ) e o:( name_table ) o
     me:( trigger_foreach )? wh:( trigger_when )? a:( trigger_action )
   {
     return {
@@ -1945,7 +1958,8 @@ create_trigger "CREATE Trigger"
       'variant': _.key(s),
       'format': _.key(t),
       'when': wh,
-      'on': n,
+      'target': n,
+      'on': o,
       'conditions': ne,
       'event': cd,
       'temporary': _.isOkay(p),
@@ -2030,7 +2044,19 @@ action_loop_stmt
   { return s; }
 
 create_view "CREATE View"
-  = _TODO_
+  = s:( CREATE ) e p:( create_core_tmp )? v:( VIEW ) e ne:( create_core_ine )?
+    n:( id_view ) o ( AS ) o r:( stmt_select ) o
+  {
+    return {
+      'type': 'statement',
+      'variant': _.key(s),
+      'format': _.key(v),
+      'conditions': ne,
+      'temporary': _.isOkay(p),
+      'target': n,
+      'result': r
+    };
+  }
 
 create_virtual "CREATE Virtual Table"
   = _TODO_
