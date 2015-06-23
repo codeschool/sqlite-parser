@@ -1404,6 +1404,9 @@ name_view "View Name"
 name_function "Function Name"
   = name
 
+name_module "Module Name"
+  = name
+
 /* Column datatypes */
 
 datatype_types
@@ -2019,9 +2022,9 @@ do_update_columns
   { return _.compose([f, b], []); }
 
 /**
- * @note
- *  FOR EACH STATEMENT is not supported by SQLite, but still included here.
- *  See {@link https://www.sqlite.org/lang_createtrigger.html}.
+ *  @note
+ *    FOR EACH STATEMENT is not supported by SQLite, but still included here.
+ *    See {@link https://www.sqlite.org/lang_createtrigger.html}.
  */
 trigger_foreach
   = f:( FOR ) e e:( EACH ) e r:( ROW / "STATEMENT"i ) e
@@ -2058,8 +2061,38 @@ create_view "CREATE View"
     };
   }
 
+/**
+ *  @note
+ *    This currently only works with expression arguments and does not
+ *    support passing column definitions and/or table constraint definitions
+ *    as is allowed in the SQLite spec for virtual table module arguments.
+ *    See {@link https://www.sqlite.org/lang_createvtab.html}.
+ */
 create_virtual "CREATE Virtual Table"
-  = _TODO_
+  = s:( CREATE ) e v:( VIRTUAL ) e t:( TABLE ) e ne:( create_core_ine )?
+    n:( id_table ) e ( USING ) e m:( name_module ) o a:( virtual_args )?
+  {
+    return {
+      'type': 'statement',
+      'variant': _.key(s),
+      'format': _.key(v),
+      'conditions': ne,
+      'target': n,
+      'result': {
+        'type': 'module',
+        'name': m,
+        'args': (_.isOkay(a) ? a : [])
+      }
+    };
+  }
+
+virtual_args
+  = sym_popen f:( virtual_arg_types ) o sym_pclose
+  { return f; }
+
+virtual_arg_types
+  = expression_list
+  / source_def_loop
 
 stmt_drop "DROP Statement"
   = s:( drop_start ) t:( drop_types ) i:( drop_ie )? q:( id_table ) o
