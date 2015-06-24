@@ -2091,8 +2091,8 @@ virtual_args
   { return f; }
 
 virtual_arg_types
-  = expression_list
-  / source_def_loop
+  = ( !( name_column o ( type_definition / column_constraint ) ) l:( expression_list ) ) { return l; }
+  / ( l:( source_def_loop ) ) { return l; }
 
 stmt_drop "DROP Statement"
   = s:( drop_start ) t:( drop_types ) i:( drop_ie )? q:( id_table ) o
