@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 
 [unreleased]: https://github.com/codeschool/sqlite-parser
 
+## [v0.2.3] - 2015-06-24
+### Fixed
+- allow for nested parenthesis
+- allow multiple binary expressions and concatenation operators within parenthesis
+
+  ``` sql
+  SELECT *
+  FROM hats
+  WHERE
+    hat OR (shirt AND (shoes OR wig) AND pants)
+  ```
+
 ## [v0.2.2] - 2015-06-24
 ### Fixed
 - The `CREATE VIRTUAL TABLE` statement previously only worked with expression arguments. Fixed by checking for a column name followed by a type definition or column constraint before assuming the type is an expression list, if these things are found, then treat the arguments as a set of source definitions as in a creation statement for a table.
@@ -97,7 +109,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.2.2...HEAD
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.2.3...HEAD
+[v0.2.3]: https://github.com/codeschool/sqlite-parser/compare/v0.2.2...v0.2.3
 [v0.2.2]: https://github.com/codeschool/sqlite-parser/compare/v0.2.1...v0.2.2
 [v0.2.1]: https://github.com/codeschool/sqlite-parser/compare/v0.2.0...v0.2.1
 [v0.2.0]: https://github.com/codeschool/sqlite-parser/compare/v0.1.1...v0.2.0
