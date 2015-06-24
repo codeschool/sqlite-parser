@@ -5,29 +5,51 @@
 - [ ] Missing specs
 
 - [ ] Expression grouping issues
-  ``` sql
-  `anger` != null AND NOT `happiness`
-  ```
+  - [x] Grouping with unary and binary expressions
 
-  ``` sql
-  `happiness` NOT NULL AND `anger` > 0
-  ```
+    ``` sql
+    `anger` != null AND NOT `happiness`
+    ```
 
-  ``` sql
-  `happiness` IS NOT NULL AND `anger` > 0
-  ```
+    ``` sql
+    `happiness` NOT NULL AND `anger` > 0
+    ```
 
-  ``` sql
-  `happiness` ISNULL AND `anger` >
-  ```
+    ``` sql
+    `happiness` IS NOT NULL AND `anger` > 0
+    ```
 
-  ``` sql
-  `anger` > 0 AND `happiness` IS NOT NULL
-  ```
+    ``` sql
+    `happiness` ISNULL AND `anger` >
+    ```
 
-  ``` sql
-  NOT `happiness` AND `anger` > 0
-  ```
+    ``` sql
+    `anger` > 0 AND `happiness` IS NOT NULL
+    ```
+
+    ``` sql
+    NOT `happiness` AND `anger` > 0
+    ```
+
+    ``` sql
+    NOT `happiness` OR ~`ANGER` AND `anger` IS NOT 0
+    ```
+
+  - [ ] Grouping with parenthesis
+
+    ``` sql
+    SELECT *
+    FROM hats
+    WHERE
+      (1 != 2 OR 3 != 4) AND ( 3 == 3 )
+    ```
+
+    ``` sql
+    SELECT *
+    FROM hats
+    WHERE
+      hat OR (shirt AND (shoes OR wig) AND pants)
+    ```
 
 - [ ] Remove `modifier` key from all parts of AST and standardize as `conditions`
 

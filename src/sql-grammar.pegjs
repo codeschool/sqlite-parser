@@ -56,7 +56,7 @@ expression_concat
   }
 
 expression_wrapped
-  = sym_popen o n:( expression_unary / expression_node / expression_value ) o sym_pclose
+  = sym_popen n:( expression ) o sym_pclose
   { return n; }
 
 expression_value
@@ -77,7 +77,7 @@ expression_unary
       'format': 'unary',
       'variant': 'operation',
       'expression': e,
-      'operator': o
+      'operator': _.key(o)
     };
   }
 
