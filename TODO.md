@@ -37,9 +37,10 @@
   - [x] *Has spec*
 - [x] Create `VIEW`
   - [x] *Has spec*
-- [ ] Create `VIRTUAL` table
+- [x] Create `VIRTUAL` table
   - [x] *Has spec*
-  - This currently only works with expression arguments and does not support passing column definitions and/or table constraint definitions as is allowed in the SQLite spec for virtual table module arguments.
+  - [x] This currently only works with expression arguments and does not support passing column definitions and/or table constraint definitions as is allowed in the SQLite spec for virtual table module arguments.
+    - **FIXED: fixed by checking for a column name followed by a type definition or column constraint before assuming the type is an expression list, if these things are found, then treat the arguments as a set of source definitions as in a creation statement for a table**
     - See: [Virtual Tables](https://www.sqlite.org/lang_createvtab.html)
 
 ## **[0.1.0]** Finished (needs tests)

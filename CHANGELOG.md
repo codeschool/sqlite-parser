@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 
 [unreleased]: https://github.com/codeschool/sqlite-parser
 
+## [v0.2.2] - 2015-06-24
+### Fixed
+- The `CREATE VIRTUAL TABLE` statement previously only worked with expression arguments. Fixed by checking for a column name followed by a type definition or column constraint before assuming the type is an expression list, if these things are found, then treat the arguments as a set of source definitions as in a creation statement for a table.
+
+  ``` sql
+  CREATE VIRTUAL TABLE happy_table
+  USING happy_module(...);
+
+    id int -- treat as definitions for CREATE TABLE
+    x != 2 -- treat as an expression list
+  ```
+
 ## [v0.2.1] - 2015-06-23
 ### Added
 - `CREATE VIEW` syntax and AST
@@ -85,7 +97,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.2.1...HEAD
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.2.2...HEAD
+[v0.2.2]: https://github.com/codeschool/sqlite-parser/compare/v0.2.1...v0.2.2
 [v0.2.1]: https://github.com/codeschool/sqlite-parser/compare/v0.2.0...v0.2.1
 [v0.2.0]: https://github.com/codeschool/sqlite-parser/compare/v0.1.1...v0.2.0
 [v0.1.1]: https://github.com/codeschool/sqlite-parser/compare/v0.1.0...v0.1.1
