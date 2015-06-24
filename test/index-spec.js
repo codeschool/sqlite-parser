@@ -139,6 +139,11 @@ describe('sqlite-parser', function() {
     tree.equals(resultTree, this, done);
   });
 
+  it('create virtual table alt syntax', function(done) {
+    var resultTree = '{"statement":[{"modifier":null,"type":"statement","variant":"create","format":"virtual","conditions":null,"target":{"type":"identifier","variant":"table","name":"happy_table"},"result":{"type":"module","name":"happy_module","args":[{"type":"definition","variant":"column","name":"id","definition":[{"name":null,"type":"constraint","variant":"primary key","conflict":null,"direction":null,"modififer":null,"autoIncrement":false}],"datatype":{"type":"datatype","format":"int","affinity":"integer","args":[]}},{"type":"definition","variant":"column","name":"name","definition":[],"datatype":{"type":"datatype","format":"varchar","affinity":"text","args":[{"type":"literal","variant":"decimal","value":"50"}]}},{"type":"definition","variant":"column","name":"category","definition":[],"datatype":{"type":"datatype","format":"varchar","affinity":"text","args":[{"type":"literal","variant":"decimal","value":"15"}]}},{"type":"definition","variant":"column","name":"cost","definition":[],"datatype":{"type":"datatype","format":"int","affinity":"integer","args":[]}}]}}]}';
+    tree.equals(resultTree, this, done);
+  });
+
   // DROP statement
 
   it('basic drop', function(done) {
