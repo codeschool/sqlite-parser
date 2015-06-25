@@ -3,7 +3,7 @@ var expect            = require('chai').expect,
     Promise           = require('promise'),
     read              = Promise.denodeify(fs.readFile),
     _                 = require('lodash'),
-    sqliteParser      = require('../lib/index'),
+    sqliteParser      = require('../index'),
     prettyjson        = require('prettyjson'),
     format, broadcast, getTree, assertOkTree, assertErrorTree,
     isDefined = function (arg) { return arg != null; };

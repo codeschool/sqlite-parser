@@ -1,17 +1,28 @@
 {
   "name": "sqlite-parser",
+  "description": "JavaScript implentation of SQLite 3 query parser",
+  "author": "Code School (http://codeschool.com)",
   "version": "0.3.0",
-  "main": "lib/index.js",
-  "private": true,
-  "author": "Code School",
   "contributors": [
-    {
-      "name": "Nick Wronski",
-      "url": "https://github.com/nwronski"
-    }
+    "Nick Wronski <nick@javascript.com>"
   ],
+  "keywords": [
+    "sql",
+    "sqlite",
+    "parser",
+    "syntax",
+    "ast"
+  ],
+  "main": "index.js",
+  "private": true,
   "license": "MIT",
-  "description": "PEG.js implentation of SQLite 3 query parser",
+  "files": [
+    "lib/",
+    "LICENSE",
+    "CHANGELOG.md",
+    "README.md",
+    "index.js"
+  ],
   "repository": "git@github.com:codeschool/sqlite-parser.git",
   "bugs": {
     "url": "https://github.com/codeschool/sqlite-parser/issues"

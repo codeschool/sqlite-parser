@@ -13,7 +13,6 @@ module.exports = function(grunt) {
     },
     clean: {
       main: ['lib/**/*.js']
-      // , dist: ['dist/**/*.js']
     },
     shell: {
       pegjs: {
@@ -26,7 +25,7 @@ module.exports = function(grunt) {
         options: {
           failOnError: true
         },
-        command: './node_modules/.bin/mocha test/index-spec.js --reporter="nyan"'
+        command: './node_modules/.bin/mocha test/index-spec.js --reporter="nyan" --colors'
       },
       debug: {
         options: {
@@ -34,7 +33,7 @@ module.exports = function(grunt) {
           debounceDelay: 500,
           forever: true
         },
-        command: 'DEBUG=true ./node_modules/.bin/mocha test/index-spec.js --reporter="list"'
+        command: 'DEBUG=true ./node_modules/.bin/mocha test/index-spec.js --reporter="list" --colors'
       },
       json: {
         options: {
@@ -45,7 +44,7 @@ module.exports = function(grunt) {
     },
     watch: {
       debug: {
-        files: ['Gruntfile.js', 'test/*.js', 'src/*.js', 'src/*.pegjs', 'test/sql/*.sql'],
+        files: ['Gruntfile.js', 'index.js', 'test/*.js', 'src/*.js', 'src/*.pegjs', 'test/sql/*.sql'],
         tasks: ['default', 'shell:debug']
       }
     }
