@@ -6,15 +6,12 @@ All notable changes to this project will be documented in this file.
 [unreleased]: https://github.com/codeschool/sqlite-parser
 
 ## [v0.3.1] - 2015-06-25
-### Changed
-- updated package dependencies
-
-## [v0.3.0] - 2015-06-25
 ### Added
 - `LICENSE` file added
 - `.npmignore` file added
 
 ### Changed
+- updated package dependencies
 - `index.js` file moved to file root, duplicate copies in `lib/` and `src/` removed
 - going to try and keep (most significant) version numbers synchronized between `sqlite-parser` and `sqlite-tree` to avoid confusion going forward
 
