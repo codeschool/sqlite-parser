@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 
 [unreleased]: https://github.com/codeschool/sqlite-parser
 
+## [v0.3.0] - 2015-06-25
+### Added
+- allow subquery in parenthesis within `FROM` clause
+
+- New specs: Basic Drop Table, Basic Drop Trigger, Basic Function, Basic Subquery, Basic Union, Create Check 1, Create Check 2, Create Foreign Key 1, Create Foreign Key 2, Create Primary Key 1, Create Table Alt Syntax, Expression Like, Expression Table 1, Expression Unary 1, Function Mixed Args, Insert Into Default, Join Types 1, Join Types 2, Select Parts 1, Select Qualified Table 1, Transaction Rollback
+
+# Changed
+- allow multiple expressions for `GROUP BY` clause
+
+  ``` sql
+  SELECT color, type, name
+  FROM hats
+  GROUP BY type, color
+  ```
+
+- changed AST for create table, constraints, joins, select parts, transactions, unions, triggers to pass new specs
+- `INSERT` statement `VALUES` clause AST normalized for value lists and `DEFAULT VALUES`
+
+  ``` json
+  {
+    "type": "values",
+    "variant": "list",
+    "values": []
+  },
+  {
+    "type": "values",
+    "variant": "default",
+    "values": null
+  }
+  ```
+
+- normalized AST across all column constraints and table constraints. all table constraints are `{"type": "definition", "variant": "constraint"}` and contain a `definition` array that contains the constraint. the constraint in `definitions` has the same format as the column constraint definition.
+
 ## [v0.2.3] - 2015-06-24
 ### Fixed
 - allow for nested parenthesis
@@ -109,7 +142,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.2.3...HEAD
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.3.0...HEAD
+[v0.3.0]: https://github.com/codeschool/sqlite-parser/compare/v0.2.3...v0.3.0
 [v0.2.3]: https://github.com/codeschool/sqlite-parser/compare/v0.2.2...v0.2.3
 [v0.2.2]: https://github.com/codeschool/sqlite-parser/compare/v0.2.1...v0.2.2
 [v0.2.1]: https://github.com/codeschool/sqlite-parser/compare/v0.2.0...v0.2.1

@@ -3,6 +3,27 @@
 ## **[1.0.0]** In progress
 
 - [ ] Missing specs
+  - [x] Basic Drop Table
+  - [x] Basic Drop Trigger
+  - [x] Basic Function  
+  - [x] Basic Subquery  
+  - [x] Basic Union  
+  - [x] Create Check 1
+  - [x] Create Check 2
+  - [x] Create Foreign Key 1
+  - [x] Create Foreign Key 2
+  - [x] Create Primary Key 1
+  - [x] Create Table Alt Syntax
+  - [x] Expression Like  
+  - [x] Expression Table 1
+  - [x] Expression Unary 1
+  - [x] Function Mixed Args
+  - [x] Insert Into Default
+  - [x] Join Types 1
+  - [x] Join Types 2
+  - [x] Select Parts 1
+  - [x] Select Qualified Table 1
+  - [x] Transaction Rollback  
 
 - [ ] Expression grouping issues
   - [x] Grouping with unary and binary expressions
@@ -35,7 +56,7 @@
     NOT `happiness` OR ~`ANGER` AND `anger` IS NOT 0
     ```
 
-  - [ ] Grouping with parenthesis
+  - [x] Grouping with parenthesis
 
     ``` sql
     SELECT *
@@ -77,7 +98,7 @@
     ) AS z
     ```
 
-    - [ ] *Has spec*
+    - [x] *Has spec*
   - [x] Functions `SUM()`, aggregation `*`, etc...
 
     ``` sql
@@ -85,7 +106,7 @@
     FROM apples
     ```
 
-    - [ ] *Has spec*
+    - [x] *Has spec*
   - [x] Compound queries
 
     ``` sql
@@ -96,7 +117,7 @@
     FROM b
     ```
 
-      - [ ] *Has spec*
+      - [x] *Has spec*
 
   - [x] Alternate syntax
 
@@ -105,9 +126,11 @@
     ORDER BY id DESC
     ```
 
+      - [x] *Has spec*
+
   - [x] `JOIN` types `INNER`, `OUTER`, `LEFT` **TODO: Need tests**
     - [x] Joins on tables and/or sub-queries
-      - [ ] *Has spec*
+      - [x] *Has spec*
     - [x] `USING`
 
       ``` sql
@@ -139,7 +162,7 @@
     VALUES (1, 2, 'hey'), (2, 3, 'yo')
     ```
 
-    - [ ] *Has spec*
+    - [x] *Has spec*
   - [x] Default values
 
     ``` sql
@@ -147,7 +170,7 @@
     DEFAULT VALUES
     ```
 
-    - [ ] *Has spec*
+    - [x] *Has spec*
   - [x] Insert into select
 
     ``` sql
@@ -155,7 +178,7 @@
     SELECT * FROM apples
     ```
 
-    - [ ] *Has spec*
+    - [x] *Has spec*
 - [x] `UPDATE`
   - [x] Basic format
     - [x] *Has spec*
@@ -167,33 +190,33 @@
   - [x] Limit update format
     - [x] *Has spec*
 - [x] `DROP`
-    - [ ] *Has spec*
+    - [x] *Has spec*
 - [x] `CREATE`
   - [x] Table format
     - [x] Basic format
       - [x] *Has spec*
       - [x] Table constraints **TODO: Need tests**
         - [x] `PRIMARY KEY`
-          - [ ] *Has spec*
+          - [x] *Has spec*
         - [x] `CHECK`
-          - [ ] *Has spec*
+          - [x] *Has spec*
         - [x] `FOREIGN KEY`
-          - [ ] *Has spec*
+          - [x] *Has spec*
       - [x] Column constraints **TODO: Need tests**
         - [x] `PRIMARY KEY`
-          - [ ] *Has spec*  
+          - [x] *Has spec*  
         - [x] `NOT NULL`, `UNIQUE`
-          - [ ] *Has spec*  
+          - [x] *Has spec*  
         - [x] `CHECK`
-          - [ ] *Has spec*  
+          - [x] *Has spec*  
         - [x] `DEFAULT`
           - [ ] *Has spec*  
         - [x] `COLLATE`
           - [ ] *Has spec*  
         - [x] `FOREIGN KEY`
-          - [ ] *Has spec*  
+          - [x] *Has spec*  
   - [x] Create table `AS SELECT`
-    - [ ] *Has spec*
+    - [x] *Has spec*
 - [x] `ALTER TABLE` **TODO: Need tests**
   - [ ] *Has spec*
 - [x] Transaction statement types **TODO: Need tests**
@@ -220,7 +243,7 @@
   - [x] `COMMIT`, `END`
     - [x] *Has spec*
   - [x] `ROLLBACK`
-    - [ ] *Has spec*
+    - [x] *Has spec*
 - [x] Query plan `EXPLAIN QUERY PLAN stmt` **TODO: Need tests**
   - [ ] *Has spec*
 - [x] Multiple queries in batch
@@ -248,7 +271,7 @@
   FROM bees AS b INDEXED BY bees_index
   ```
 
-  - [ ] *Has spec*
+  - [x] *Has spec*
 
 - [x] Comments
   - [x] Line comments
@@ -325,7 +348,7 @@
     FROM hats
     ```
 
-    - [ ] *Has spec*
+    - [x] *Has spec*
   - [x] `RAISE`
 
     ``` sql
@@ -348,7 +371,7 @@
     WHERE bees LIKE '%somebees%'
     ```
 
-    - [ ] *Has spec*
+    - [x] *Has spec*
   - [x] `ESCAPE`
 
     ``` sql
@@ -365,7 +388,7 @@
     WHERE ham IS NOT NULL
     ```
 
-    - [ ] *Has spec*
+    - [x] *Has spec*
   - [x] `BETWEEN`
 
     ``` sql
@@ -391,13 +414,13 @@
     WHERE 2 != 3
     ```
 
-    - [ ] *Has spec*
+    - [x] *Has spec*
   - [x] Functions
 
     ``` sql
     SELECT MYFUNC(col, 1.2, 'str')
     ```
-    - [ ] *Has spec*
+    - [x] *Has spec*
   - [x] Table expressions
 
     ``` sql
@@ -411,8 +434,7 @@
         ON inventory.variety = ham.type
     ```
 
-      - [ ] *Has spec*
-
+      - [x] *Has spec*
   - [x] Logical grouping `1 == 2 AND 2 == 3`
     - [x] *Has spec*
     - [x] **BUG**: Need to fix the grouping of expressions to allow for expressions to be logically organized.
