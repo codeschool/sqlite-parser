@@ -638,7 +638,7 @@ stmt_commit
 stmt_begin
   = s:( BEGIN ) e m:( stmt_begin_modifier )? t:( TRANSACTION e )?
   {
-    return _.key(m);
+    return _.isOkay(m) ? _.key(m) : null;
   }
 
 stmt_begin_modifier
@@ -650,24 +650,31 @@ stmt_rollback
   {
     return {
       'type': 'statement',
-      'variant': 'rollback',
-      'action': _.key(s),
+      'variant': _.key(s),
       'savepoint': n
     };
   }
 
 rollback_savepoint
-  = TO e ( SAVEPOINT e )? n:( id_savepoint ) o
+  = TO e ( savepoint_alt )? n:( id_savepoint ) o
   { return n; }
 
+savepoint_alt
+  = s:( SAVEPOINT ) e
+  { return _.key(s); }
+
 stmt_alter
-  = s:( ALTER e TABLE ) e n:( id_table ) o e:( alter_action ) o
+  = s:( alter_start ) n:( id_table ) o e:( alter_action ) o
   {
     return {
       'type': 'statement',
       'variant': _.key(s)
     };
   }
+
+alter_start
+  = a:( ALTER ) e t:( TABLE ) e
+  { return _.compose([a, t]); }
 
 alter_action
   = alter_action_rename
@@ -700,17 +707,21 @@ stmt_crud
   { return _.extend(s, w); }
 
 clause_with "WITH Clause"
-  = s:( WITH ) e r:( RECURSIVE e )? f:( expression_table ) o r:( clause_with_loop )*
+  = s:( WITH ) e v:( clause_with_recursive )? f:( expression_table ) o r:( clause_with_loop )*
   {
     // TODO: final format
     return {
       'with': {
         'type': _.key(s),
-        'recursive': _.isOkay(r),
+        'recursive': _.isOkay(v),
         'expression': _.compose([f, r], [])
       }
     };
   }
+
+clause_with_recursive
+  = s:( RECURSIVE ) e
+  { return _.key(s); }
 
 clause_with_loop
   = sym_comma e:( expression_table )
@@ -863,7 +874,7 @@ stmt_core_where
   { return _.makeArray(e); }
 
 select_core_group
-  = s:( GROUP ) e BY e e:( expression ) o h:( select_core_having )?
+  = s:( GROUP ) e BY e e:( expression_list ) o h:( select_core_having )?
   {
     // TODO: format
     return {
@@ -918,6 +929,7 @@ source_loop_tail
 table_or_sub
   = table_or_sub_sub
   / table_qualified
+  / table_or_sub_select
 
 table_qualified
   = d:( table_qualified_id ) o i:( table_or_sub_index_node )
@@ -951,11 +963,19 @@ index_node_none
   { return null; }
 
 table_or_sub_sub
-  = sym_popen o l:( select_join_loop / select_source_loop ) o sym_pclose
+  = sym_popen l:( select_source ) o sym_pclose
   { return l; }
 
+table_or_sub_select
+  = sym_popen s:( stmt_select ) o sym_pclose a:( alias )?
+  {
+    return _.extend({
+      'alias': a
+    }, s);
+  }
+
 alias
-  = a:( AS e )? n:( name )
+  = a:( AS e )? n:( name ) o
   { return n; }
 
 select_join_loop
@@ -1178,20 +1198,19 @@ insert_values
   = sym_popen e:( expression_list ) o sym_pclose
   {
     return {
-      'type': 'statement',
-      'variant': 'values',
+      'type': 'values',
+      'variant': 'list',
       'values': e
     };
   }
 
-/* TODO: This doesn't seem like the right format for this variant */
 insert_default
   = d:( DEFAULT ) e v:( VALUES )
   {
     return {
-      'type': 'statement',
+      'type': 'values',
       'variant': 'default',
-      'values': _.compose([d, v])
+      'values': null
     };
   }
 
@@ -1531,7 +1550,8 @@ stmt_create "CREATE Statement"
   / create_virtual
 
 create_table "CREATE Table"
-  = s:( CREATE ) e tmp:( create_core_tmp )? t:( TABLE ) e ne:( create_core_ine )? id:( id_table ) o r:( create_table_source )
+  = s:( CREATE ) e tmp:( create_core_tmp )? t:( TABLE ) e ne:( create_core_ine )?
+    id:( id_table ) o r:( create_table_source )
   {
     return _.extend({
       'type': 'statement',
@@ -1652,11 +1672,11 @@ column_constraint_primary
   }
 
 col_primary_start
-  = s:( PRIMARY e KEY ) o
+  = s:( PRIMARY ) e k:( KEY ) o
   {
     return {
       'type': 'constraint',
-      'variant': _.key(s),
+      'variant': _.key(_.compose([s, k])),
       'conflict': null,
       'direction': null,
       'modififer': null,
@@ -1728,7 +1748,7 @@ table_constraint
       'type': 'definition',
       'variant': 'constraint',
       'name': n,
-      'expression': null
+      'definition': null
     }, c);
   }
 
@@ -1739,13 +1759,21 @@ table_constraint_name
 table_constraint_types
   = table_constraint_foreign
   / table_constraint_primary
-  / constraint_check
+  / table_constraint_check
+
+table_constraint_check
+  = c:( constraint_check )
+  {
+    return {
+      'definition': _.makeArray(c)
+    };
+  }
 
 table_constraint_primary
   = k:( primary_start ) o c:( primary_columns ) t:( primary_conflict )?
   {
     return {
-      'expression': _.extend(k, t),
+      'definition': _.makeArray(_.extend(k, t)),
       'columns': c
     };
   }
@@ -1820,7 +1848,7 @@ table_constraint_foreign
   = k:( foreign_start ) o l:( loop_columns ) o c:( foreign_clause ) o
   {
     return _.extend({
-      'expression': _.extend(k, c),
+      'definition': _.makeArray(_.extend(k, c)),
       'columns': null
     }, l);
   }
@@ -1907,7 +1935,7 @@ table_source_select
   = AS e s:( stmt_select )
   {
     return {
-      'result': s
+      'definition': _.makeArray(s)
     };
   }
 
@@ -2470,21 +2498,21 @@ reserved_words
   { return _.key(r); }
 
 reserved_word_list
-  = ABORT / ACTION / ADD / AFTER / ALL / ALTER / ANALYZE / AND / AS / ASC /
+  = ABORT / ACTION / ADD / AFTER / ALL / ALTER / ANALYZE / AND / ASC /
     ATTACH / AUTOINCREMENT / BEFORE / BEGIN / BETWEEN / BY / CASCADE / CASE /
     CAST / CHECK / COLLATE / COLUMN / COMMIT / CONFLICT / CONSTRAINT / CREATE /
     CROSS / CURRENT_DATE / CURRENT_TIME / CURRENT_TIMESTAMP / DATABASE / DEFAULT /
     DEFERRABLE / DEFERRED / DELETE / DESC / DETACH / DISTINCT / DROP / EACH /
-    ELSE / END / ESCAPE / EXCEPT / EXCLUSIVE / EXISTS / EXPLAIN / FAIL / FOR /
-    FOREIGN / FROM / FULL / GLOB / GROUP / HAVING / IGNORE / IMMEDIATE /
-    INDEX / INDEXED / INITIALLY / INNER / INSERT / INSTEAD / INTERSECT / INTO /
+    ELSE / END / ESCAPE / EXCEPT / EXCLUSIVE / EXISTS / EXPLAIN / FAIL /
+    FOREIGN / FOR / FROM / FULL / GLOB / GROUP / HAVING / IGNORE / IMMEDIATE /
+    INDEXED / INDEX / INITIALLY / INNER / INSERT / INSTEAD / INTERSECT / INTO /
     ISNULL / JOIN / KEY / LEFT / LIKE / LIMIT / MATCH / NATURAL /
     NOTNULL / OFFSET / ORDER / OUTER / PLAN / PRAGMA /
     PRIMARY / QUERY / RAISE / RECURSIVE / REFERENCES / REGEXP / REINDEX /
     RELEASE / RENAME / REPLACE / RESTRICT / RIGHT / ROLLBACK / ROW / SAVEPOINT /
     SELECT / SET / TABLE / TEMPORARY / TEMP / THEN / TO / TRANSACTION / TRIGGER /
     UNION / UNIQUE / UPDATE / USING / VACUUM / VALUES / VIEW / VIRTUAL / WHEN /
-    WHERE / WITH / WITHOUT / NULL / NOT / IN / IS / OF / ON / OR / IF / NO
+    WHERE / WITHOUT / WITH / NULL / NOT / IN / IF / IS / OF / ON / OR / NO / AS
 
 /* Generic rules */
 
