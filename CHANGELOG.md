@@ -2,8 +2,14 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
+### Added
+- `demo/` folder containing interactive demo of parser
+- `browserify` task added to `Gruntfile.js` for `sqlite-parser-dist.js` in `demo/lib/` as `grunt dist`
+- updated `TODO.md` and `.npmignore` for new Interactive demo
 
-[unreleased]: https://github.com/codeschool/sqlite-parser
+### Changed
+- renamed `parse.jsr` and `util.js` files in `src/` and `lib/` folders
+- pointing to latest `pegjs` master to get latest `SyntaxError` format
 
 ## [v0.3.1] - 2015-06-25
 ### Added

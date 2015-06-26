@@ -2,6 +2,8 @@
 
 ## **[1.0.0]** In progress
 
+- [ ] **In progress** Interactive demo editor showing SQL and corresponding AST
+
 - [ ] Missing specs
   - [x] Basic Drop Table
   - [x] Basic Drop Trigger
