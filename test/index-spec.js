@@ -298,8 +298,7 @@ describe('sqlite-parser', function() {
 
   it('parse error 1', function(done) {
     tree.error({
-      'message': 'Expected Semicolon or end of input but "f" found.',
-      'line': 3
+      'message': 'Expected Semicolon or end of input but "f" found.'
     }, this, done);
   });
 
