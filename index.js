@@ -1,19 +1,21 @@
 /*!
  * sqlite-parser
- * @description PEG.js implementation of SQLite 3 query parser
+ * @copyright Code School 2015 {@link http://codeschool.com}
  * @author Nick Wronski <nick@javascript.com>
  */
+ ;(function (root) {
+  var _           = require('lodash'),
+      Promise     = require('promise/lib/es6-extensions'),
+      parser      = require('./lib/parser');
 
-var _           = require('lodash'),
-    prom        = require('promise/lib/es6-extensions'),
-    parser      = require('./lib/sql-parser');
+  function sqliteParser(source) {
+    var lastEvent;
+    return new Promise(function(resolve, reject) {
+      resolve(parser.parse(source));
+    });
+  }
+  sqliteParser['NAME'] = "sqlite-parser";
+  sqliteParser['VERSION'] = "0.3.0";
 
-function sqliteParser(source) {
-  return new prom(function(resolve) {
-    resolve(parser.parse(source));
-  });
-}
-sqliteParser['NAME'] = "sqlite-parser";
-sqliteParser['VERSION'] = "0.3.0";
-
-module.exports = sqliteParser;
+  module.exports = root.sqliteParser = sqliteParser;
+})(typeof self === 'object' ? self : global);

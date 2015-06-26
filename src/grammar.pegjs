@@ -1,7 +1,7 @@
 /* Helper Functions */
 {
-      // Parser utilities
-  var _ = require('./sql-parser-util');
+  // Parser utilities
+  var _ = require('./parser-util');
 }
 
 /* Start Grammar */

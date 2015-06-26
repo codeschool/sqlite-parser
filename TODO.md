@@ -25,7 +25,7 @@
   - [x] Select Qualified Table 1
   - [x] Transaction Rollback  
 
-- [ ] Expression grouping issues
+- [x] Expression grouping issues
   - [x] Grouping with unary and binary expressions
 
     ``` sql

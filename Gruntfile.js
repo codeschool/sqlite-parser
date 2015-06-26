@@ -1,5 +1,12 @@
 module.exports = function(grunt) {
   grunt.initConfig({
+    browserify: {
+      dist: {
+        require: ['lib/parser-util.js', 'lib/parser.js'],
+        src: ['index.js'],
+        dest: 'demo/lib/sqlite-parser-dist.js'
+      }
+    },
     copy: {
       main: {
         files: [{
@@ -12,14 +19,16 @@ module.exports = function(grunt) {
       }
     },
     clean: {
-      main: ['lib/**/*.js']
+      main: ['lib/**/*.js'],
+      dist: ['demo/lib/**/*.js']
     },
     shell: {
       pegjs: {
         options: {
           failOnError: true
         },
-        command: './node_modules/.bin/pegjs src/sql-grammar.pegjs lib/sql-parser.js'
+        command: './node_modules/.bin/pegjs src/grammar.pegjs lib/parser.js'
+        // command: './node_modules/.bin/pegjs --trace src/grammar.pegjs lib/parser.js'
       },
       test: {
         options: {
@@ -54,9 +63,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-browserify');
 
   grunt.registerTask('default', ['clean:main', 'shell:pegjs', 'copy:main']);
   grunt.registerTask('test', ['default', 'shell:test']);
   grunt.registerTask('debug', ['default', 'shell:debug', 'watch:debug']);
   grunt.registerTask('json', ['default', 'shell:json']);
+  grunt.registerTask('dist', ['default', 'clean:dist', 'browserify:dist']);
 };
