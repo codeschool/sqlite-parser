@@ -1,4 +1,14 @@
 (function (root) {
+  var sqliteParser = require('sqlite-parser'),
+      CodeMirror = require('codemirror');
+
+  require('foldcode');
+  require('foldgutter');
+  require('brace-fold');
+  require('panel');
+  require('mode-javascript');
+  require('mode-sql');
+
   var loadDemo = function () {
     var panel,
         /* taken from _.debounce() method of Underscore.js */
@@ -34,12 +44,10 @@
           return node;
         },
         setError = function (cm, message) {
-          var panels = document.getElementsByClassName('panel');
-          if (panels.length) {
-            panels.item(0).querySelector('span').textContent = message;
-            console.log("update");
+          var panelElem = document.getElementById('panel-ast');
+          if (panelElem) {
+            panelElem.querySelector('span').textContent = message;
           } else {
-            console.log("draw");
             panel = cm.addPanel(makePanel("top", message), {position: "top"});
           }
         },
@@ -51,14 +59,12 @@
           };
         },
         prettify = function (obj) {
-          console.log('hey');
           return JSON.stringify(obj, null, '\t');
         },
         updater = function (source, dest) {
           var output = setContent(dest);
-          root.sqliteParser(source.getValue())
+          sqliteParser(source.getValue())
           .then(output, function (err) {
-            console.log(err);
             var location = err.location != null ? " (Line: " + err.location.start.line + ", Column: " + err.location.start.column + ")" : "";
             setError(dest, "[" + err.name + "] " + err.message + location);
           });
@@ -94,4 +100,4 @@
     sql.on('change', update);
   };
   root.onload = loadDemo;
-})(window);
+})(typeof self === 'object' ? self : global);

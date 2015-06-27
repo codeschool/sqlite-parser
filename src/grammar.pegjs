@@ -18,16 +18,16 @@ stmt_list
   / stmt_list_single
 
 stmt_list_single
-  = f:( stmt ) o c:( sym_semi )?
+  = f:( stmt ) o c:( sym_semi )*
   { return [f]; }
 
 stmt_list_multiple
-  = f:( stmt ) o b:( stmt_list_tail )+ c:( sym_semi )?
+  = f:( stmt ) o b:( stmt_list_tail )+ c:( sym_semi )*
   { return _.compose([f, b], []); }
 
 /* TODO: Note - you need semicolon between multiple statements, otherwise can omit */
 stmt_list_tail
-  = ( sym_semi ) s:( stmt ) o
+  = ( sym_semi )+ s:( stmt ) o
   { return s; }
 
 /**
@@ -41,7 +41,7 @@ expression "Expression"
 expression_types
   = expression_wrapped / expression_unary / expression_node / expression_value
 
-expression_concat
+expression_concat "Logical Expression Group"
   = l:( expression_types ) o o:( binary_loop_concat ) o r:( expression )
   {
     return {
@@ -55,7 +55,7 @@ expression_concat
     };
   }
 
-expression_wrapped
+expression_wrapped "Wrapped Expression"
   = sym_popen n:( expression ) o sym_pclose
   { return n; }
 
@@ -69,7 +69,7 @@ expression_value
   / literal_value
   / id_column
 
-expression_unary
+expression_unary "Unary Expression"
   = o:( operator_unary ) e:( expression_types )
   {
     return {
@@ -81,7 +81,7 @@ expression_unary
     };
   }
 
-expression_cast
+expression_cast "CAST Expression"
   = s:( CAST ) o sym_popen e:( expression ) o a:( type_alias ) o sym_pclose
   {
     return {
@@ -93,11 +93,11 @@ expression_cast
     };
   }
 
-type_alias
+type_alias "Type Alias"
   = AS e d:( type_definition )
   { return d; }
 
-expression_exists
+expression_exists "EXISTS Expression"
   = n:( expression_exists_ne ) o e:( stmt_select )
   {
     return {
@@ -113,7 +113,7 @@ expression_exists_ne
   = n:( NOT e )? x:( EXISTS ) o
   { return _.compose([n, x]); }
 
-expression_case
+expression_case "CASE Expression"
   = t:( CASE ) e e:( expression )? o w:( expression_case_when )+ o s:( expression_case_else )? o END o
   {
     // TODO: Not sure about this
@@ -128,7 +128,7 @@ expression_case
   }
 
 
-expression_case_when
+expression_case_when "WHEN Clause"
   = s:( WHEN ) e w:( expression ) o THEN e t:( expression ) o
   {
     return {
@@ -140,7 +140,7 @@ expression_case_when
     };
   }
 
-expression_case_else
+expression_case_else "ELSE Clause"
   = s:( ELSE ) e e:( expression ) o
   {
     return {
@@ -152,7 +152,7 @@ expression_case_else
   }
 
 /* TODO: Needs final format */
-expression_raise
+expression_raise "RAISE Expression"
   = s:( RAISE ) o sym_popen o a:( expression_raise_args ) o sym_pclose
   {
     return _.extend({
@@ -163,7 +163,7 @@ expression_raise
     }, a);
   }
 
-expression_raise_args
+expression_raise_args "RAISE Expression Arguments"
   = raise_args_ignore
   / raise_args_message
 
@@ -192,7 +192,7 @@ expression_node
   / operation_binary
 
 /** @note Removed expression on left-hand-side to remove recursion */
-expression_collate
+expression_collate "COLLATE Expression"
   = v:( expression_value ) o s:( COLLATE ) e c:( name_collation )
   {
     return _.extend(v, {
@@ -214,7 +214,7 @@ expression_compare
     }, x);
   }
 
-expression_escape
+expression_escape "ESCAPE Expression"
   = s:( ESCAPE ) o e:( expression )
   {
     return {
@@ -223,7 +223,7 @@ expression_escape
   }
 
 /** @note Removed expression on left-hand-side to remove recursion */
-expression_null
+expression_null "NULL Expression"
   = v:( expression_value ) o n:( expression_null_nodes )
   {
     return {
@@ -269,7 +269,7 @@ expression_is_not
   }*/
 
 /** @note Removed expression on left-hand-side to remove recursion */
-expression_between
+expression_between "BETWEEN Expression"
   = v:( expression_value ) o n:( expression_is_not )? b:( BETWEEN ) e e1:( expression ) o s:( AND ) e e2:( expression )
   {
     return {
@@ -292,7 +292,7 @@ expression_between
 
 
 /** @note Removed expression on left-hand-side to remove recursion */
-expression_in
+expression_in "IN Expression"
   = v:( expression_value ) o n:( expression_is_not )? i:( IN ) e e:( expression_in_target )
   {
     return {
@@ -329,7 +329,7 @@ expression_list_or_select
     }, a);
   }
 
-type_definition_args
+type_definition_args "Type Definition Arguments"
   = sym_popen a1:( literal_number_signed ) o a2:( definition_args_loop )? sym_pclose
   {
     return {
@@ -352,7 +352,7 @@ literal_value "Literal Value"
   / literal_null
   / literal_date
 
-literal_null
+literal_null "Null Literal"
   = n:( NULL ) o
   {
     return {
@@ -362,7 +362,7 @@ literal_null
     };
   }
 
-literal_date
+literal_date "Date Literal"
   = d:( CURRENT_DATE / CURRENT_TIMESTAMP / CURRENT_TIME ) o
   {
     return {
@@ -378,7 +378,7 @@ literal_date
  *    2) Value is an identier or a string literal based on context.
  * {@link https://www.sqlite.org/lang_keywords.html}
  */
-literal_string
+literal_string "String Literal"
   = s:( literal_string_single )
   {
     return {
@@ -388,7 +388,7 @@ literal_string
     };
   }
 
-literal_string_single
+literal_string_single "Single-quoted String Literal"
   = sym_sglquote s:( literal_string_schar )* sym_sglquote
   {
     /**
@@ -402,7 +402,7 @@ literal_string_schar
   = "''"
   / [^\']
 
-literal_blob
+literal_blob "Blob Literal"
   = [x]i b:( literal_string_single )
   {
     return {
@@ -412,7 +412,7 @@ literal_blob
     };
   }
 
-number_sign
+number_sign "Number Sign"
   = s:( sym_plus / sym_minus )
   { return _.textNode(s); }
 
@@ -425,7 +425,7 @@ literal_number_signed
     return n;
   }
 
-literal_number
+literal_number "Number Literal"
   = literal_number_decimal
   / literal_number_hex
 
@@ -466,10 +466,10 @@ literal_number_hex
     };
   }
 
-number_hex
+number_hex "Hexidecimal Digit"
   = [0-9a-f]i
 
-number_digit
+number_digit "Decimal Digit"
   = [0-9]
 
 /**
@@ -486,7 +486,7 @@ bind_parameter "Bind Parameter"
 /**
  * Bind parameters start at index 1 instead of 0.
  */
-bind_parameter_numbered
+bind_parameter_numbered "Numbered Bind Parameter"
   = q:( sym_quest ) id:( [1-9] [0-9]* )? o
   {
     return {
@@ -496,7 +496,7 @@ bind_parameter_numbered
     };
   }
 
-bind_parameter_named
+bind_parameter_named "Named Bind Parameter"
   = s:( [\:\@] ) name:( name_char )+ o
   {
     return {
@@ -506,7 +506,7 @@ bind_parameter_named
     };
   }
 
-bind_parameter_tcl
+bind_parameter_tcl "TCL Bind Parameter"
   = d:( "$" ) name:( name_char / ":" )+ o suffix:( bind_parameter_named_suffix )?
   {
     return {
@@ -516,12 +516,12 @@ bind_parameter_tcl
     };
   }
 
-bind_parameter_named_suffix
+bind_parameter_named_suffix "TCL Bind Parameter Suffix"
   = q1:( sym_dblquote ) n:( !sym_dblquote match_all )* q2:( sym_dblquote )
   { return _.compose([q1, n, q2], ''); }
 
 /** @note Removed expression on left-hand-side to remove recursion */
-operation_binary
+operation_binary "Binary Expression"
   = v:( expression_value ) o o:( operator_binary ) o e:( expression_types )
   {
     return {
@@ -549,7 +549,7 @@ expression_list_rest
   = sym_comma e:( expression ) o
   { return e; }
 
-function_call
+function_call "Function Call"
   = n:( name_function ) sym_popen a:( function_call_args )? o sym_pclose
   {
     return _.extend({
@@ -560,7 +560,7 @@ function_call
     }, a);
   }
 
-function_call_args
+function_call_args "Function Call Arguments"
   = call_args_star
   / call_args_list
 
@@ -598,7 +598,7 @@ stmt "Statement"
     }, m, s);
   }
 
-stmt_modifier
+stmt_modifier "QUERY PLAN"
   = e:( EXPLAIN ) e q:( QUERY e PLAN)? o
   {
     // TODO: Format?
@@ -618,7 +618,7 @@ stmt_nodes
   / stmt_alter
   / stmt_rollback
 
-stmt_transaction
+stmt_transaction "Transaction"
   = b:( stmt_begin ) s:( stmt_list )? e:( stmt_commit )
   {
     return {
@@ -629,13 +629,13 @@ stmt_transaction
     };
   }
 
-stmt_commit
+stmt_commit "END Transaction"
   = s:( COMMIT / END ) t:( e TRANSACTION )? o
   {
     return _.key(_.compose([s, t]));
   }
 
-stmt_begin
+stmt_begin "BEGIN Transaction"
   = s:( BEGIN ) e m:( stmt_begin_modifier )? t:( TRANSACTION e )?
   {
     return _.isOkay(m) ? _.key(m) : null;
@@ -645,7 +645,7 @@ stmt_begin_modifier
   = m:( DEFERRED / IMMEDIATE / EXCLUSIVE ) e
   { return _.key(m); }
 
-stmt_rollback
+stmt_rollback "ROLLBACK Statement"
   = s:( ROLLBACK ) e ( TRANSACTION e )? n:( rollback_savepoint )?
   {
     return {
@@ -655,7 +655,7 @@ stmt_rollback
     };
   }
 
-rollback_savepoint
+rollback_savepoint "SAVEPOINT"
   = TO e ( savepoint_alt )? n:( id_savepoint ) o
   { return n; }
 
@@ -663,7 +663,7 @@ savepoint_alt
   = s:( SAVEPOINT ) e
   { return _.key(s); }
 
-stmt_alter
+stmt_alter "ALTER TABLE Statement"
   = s:( alter_start ) n:( id_table ) o e:( alter_action ) o
   {
     return {
@@ -861,7 +861,7 @@ select_target_loop
   = sym_comma n:( select_node ) o
   { return n; }
 
-select_core_from
+select_core_from "FROM Clause"
   = s:( FROM ) e s:( select_source ) o
   {
     return {
@@ -1304,7 +1304,7 @@ binary_lang_misc "Misc Binary Operator"
 
 /* Database, Table and Column IDs */
 
-id_database
+id_database "Database Identifier"
   = n:( name_database )
   {
     return {
@@ -1314,7 +1314,7 @@ id_database
     };
   }
 
-id_table
+id_table "Table Identifier"
   = d:( id_table_qualified )? n:( name_table )
   {
     return {
@@ -1324,11 +1324,11 @@ id_table
     };
   }
 
-id_table_qualified
+id_table_qualified "Qualified Table Identifier"
   = n:( name_database ) d:( sym_dot )
   { return _.compose([n, d], ''); }
 
-id_column
+id_column "Column Identifier"
   = d:( id_table_qualified )? t:( id_column_qualified )? n:( name_column )
   {
     return {
@@ -1338,11 +1338,11 @@ id_column
     };
   }
 
-id_column_qualified
+id_column_qualified "Qualified Column Identifier"
   = t:( name_table ) d:( sym_dot )
   { return _.compose([t, d], ''); }
 
-id_collation
+id_collation "Collation Identifier"
   = n:( name_collation )
   {
     return {
@@ -1352,7 +1352,7 @@ id_collation
     };
   }
 
-id_savepoint
+id_savepoint "Savepoint Indentifier"
   = n:( name )
   {
     return {
@@ -1362,7 +1362,7 @@ id_savepoint
     };
   }
 
-id_index
+id_index "Index Identifier"
   = d:( id_table_qualified )? n:( name_index )
   {
     return {
@@ -1372,7 +1372,7 @@ id_index
     };
   }
 
-id_trigger
+id_trigger "Trigger Identifier"
   = d:( id_table_qualified )? n:( name_trigger )
   {
     return {
@@ -1382,7 +1382,7 @@ id_trigger
     };
   }
 
-id_view
+id_view "View Identifier"
   = d:( id_table_qualified )? n:( name_view )
   {
     return {
@@ -1428,26 +1428,26 @@ name_module "Module Name"
 
 /* Column datatypes */
 
-datatype_types
+datatype_types "Datatype Name"
   = t:( datatype_text ) { return [t, 'text']; }
   / t:( datatype_real ) { return [t, 'real']; }
   / t:( datatype_numeric ) { return [t, 'numeric']; }
   / t:( datatype_integer ) { return [t, 'integer']; }
   / t:( datatype_none ) { return [t, 'none']; }
 
-datatype_text
+datatype_text "TEXT Datatype Name"
   = t:( ( ( "N"i )? ( "VAR"i )? "CHAR"i )
   / ( ( "TINY"i / "MEDIUM"i / "LONG"i )? "TEXT"i )
   / "CLOB"i )
   { return _.key(t); }
 
-datatype_real
+datatype_real "REAL Datatype Name"
   = t:( ( "DOUBLE"i ( e "PRECISION"i )? )
   / "FLOAT"i
   / "REAL"i )
   { return _.key(t); }
 
-datatype_numeric
+datatype_numeric "NUMERIC Datatype Name"
   = t:( "NUMERIC"i
   / "DECIMAL"i
   / "BOOLEAN"i
@@ -1455,12 +1455,12 @@ datatype_numeric
   / ( "TIME"i ( "STAMP"i )? ) )
   { return _.key(t); }
 
-datatype_integer
+datatype_integer "INTEGER Datatype Name"
   = t:( ( "INT"i ( "2" / "4" / "8" / "EGER"i ) )
   / ( ( "BIG"i / "MEDIUM"i / "SMALL"i / "TINY"i )? "INT"i ) )
   { return _.key(t); }
 
-datatype_none
+datatype_none "BLOB Datatype Name"
   = t:( "BLOB"i )
   { return _.key(t); }
 
@@ -1482,11 +1482,11 @@ stmt_update "UPDATE Statement"
     }, u, f);
   }
 
-update_start
+update_start "UPDATE"
   = s:( UPDATE ) e
   { return _.key(s); }
 
-update_fallback
+update_fallback "Update Fallback"
   = OR e t:( stmt_fallback_types ) e
   {
     return {
@@ -1494,7 +1494,7 @@ update_fallback
     };
   }
 
-update_set
+update_set "Update SET"
   = SET e c:( update_columns ) o
   {
     return {
@@ -1582,11 +1582,11 @@ create_table_source
   = table_source_def
   / table_source_select
 
-table_source_def
-  = sym_popen s:( source_def_loop ) o sym_pclose r:( source_def_rowid )?
+table_source_def "Table Definition"
+  = sym_popen s:( source_def_loop ) t:( source_tbl_loop )* sym_pclose r:( source_def_rowid )?
   {
     return {
-      'definition': s,
+      'definition': _.compose([s, t], []),
       'modifier': r
     };
   }
@@ -1595,20 +1595,20 @@ source_def_rowid
   = r:( WITHOUT e ROWID ) o
   { return _.key(r); }
 
-source_def_loop
-  = f:( source_def_types ) o b:( source_def_tail )*
+source_def_loop "Column Definitions"
+  = f:( source_def_column ) o b:( source_def_tail )*
   { return _.compose([f, b], []); }
 
 source_def_tail
-  = sym_comma t:( source_def_types ) o
+  = sym_comma t:( source_def_column ) o
   { return t; }
 
-source_def_types
-  = table_constraint
-  / source_def_column
+source_tbl_loop "Table Constraint Definitions"
+  = sym_comma f:( table_constraint )
+  { return f; }
 
 /** {@link https://www.sqlite.org/syntaxdiagrams.html#column-def} */
-source_def_column
+source_def_column "Column Definition"
   = n:( name_column ) e t:( column_type )? o c:( column_constraints )?
   {
     return _.extend({
@@ -1620,7 +1620,7 @@ source_def_column
     }, t);
   }
 
-column_type
+column_type "Column Datatype"
   = t:( type_definition )
   {
     return {
@@ -1741,7 +1741,7 @@ column_constraint_collate
   }
 
 /** {@link https://www.sqlite.org/syntax/table-constraint.html} */
-table_constraint
+table_constraint "Table Constraint"
   = n:( table_constraint_name )? o c:( table_constraint_types ) o
   {
     return _.extend({

@@ -4,7 +4,33 @@ module.exports = function(grunt) {
       dist: {
         require: ['lib/parser-util.js', 'lib/parser.js'],
         src: ['index.js'],
-        dest: 'demo/lib/sqlite-parser-dist.js'
+        dest: 'dist/sqlite-parser.js'
+      },
+      demo: {
+        options: {
+          alias: {
+            'sqlite-parser': './index.js',
+            'codemirror': './node_modules/codemirror/lib/codemirror',
+            'foldcode': './node_modules/codemirror/addon/fold/foldcode',
+            'foldgutter': './node_modules/codemirror/addon/fold/foldgutter',
+            'brace-fold': './node_modules/codemirror/addon/fold/brace-fold',
+            'panel': './node_modules/codemirror/addon/display/panel',
+            'mode-javascript': './node_modules/codemirror/mode/javascript/javascript',
+            'mode-sql': './node_modules/codemirror/mode/sql/sql'
+          },
+        },
+        require: [
+          'lib/parser-util.js', 'lib/parser.js', './index.js',
+          'node_modules/codemirror/lib/codemirror',
+          'node_modules/codemirror/addon/fold/foldcode',
+          'node_modules/codemirror/addon/fold/foldgutter',
+          'node_modules/codemirror/addon/fold/brace-fold',
+          'node_modules/codemirror/addon/display/panel',
+          'node_modules/codemirror/mode/javascript/javascript',
+          'node_modules/codemirror/mode/sql/sql'
+        ],
+        src: ['demo/js/demo.js'],
+        dest: 'demo/sqlite-parser-demo.js'
       }
     },
     copy: {
@@ -16,11 +42,22 @@ module.exports = function(grunt) {
           src: ['*.js'],
           dest: 'lib/'
         }]
+      },
+      demo: {
+        src: [
+          'node_modules/codemirror/lib/codemirror.css',
+          'node_modules/codemirror/addon/fold/foldgutter.css',
+          'node_modules/codemirror/theme/monokai.css'
+        ],
+        flatten: true,
+        expand: true,
+        dest: 'demo/css/'
       }
     },
     clean: {
-      main: ['lib/**/*.js'],
-      dist: ['demo/lib/**/*.js']
+      main: ['lib/*.js'],
+      dist: ['dist/*.js'],
+      demo: ['demo/sqlite-parser-demo.js', 'demo/css/*.css', '!demo/css/demo.css']
     },
     shell: {
       pegjs: {
@@ -51,10 +88,40 @@ module.exports = function(grunt) {
         command: 'UGLY=true DEBUG=true ./node_modules/.bin/mocha test/index-spec.js --reporter="list"'
       }
     },
+    connect: {
+      server: {
+        options: {
+          port: 8080,
+          base: 'demo',
+          livereload: true
+        }
+      }
+    },
     watch: {
       debug: {
-        files: ['Gruntfile.js', 'index.js', 'test/*.js', 'src/*.js', 'src/*.pegjs', 'test/sql/*.sql'],
+        options: {
+          debounceDelay: 250,
+          livereload: false
+        },
+        files: [
+          'Gruntfile.js', 'index.js', 'test/*.js', 'src/*.js',
+          'src/*.pegjs', 'test/sql/*.sql'
+        ],
         tasks: ['default', 'shell:debug']
+      },
+      demo: {
+        options: {
+          debounceDelay: 1000,
+          livereload: {
+            directory: 'demo/',
+            port: 35729
+          },
+        },
+        files: [
+          'index.js', 'src/*.js', 'src/*.pegjs', 'demo/js/*.js',
+          'Gruntfile.js', 'demo/css/demo.css', 'demo/index.html'
+        ],
+        tasks: ['default', 'browserify:demo']
       }
     }
   });
@@ -64,10 +131,18 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-contrib-connect');
 
   grunt.registerTask('default', ['clean:main', 'shell:pegjs', 'copy:main']);
   grunt.registerTask('test', ['default', 'shell:test']);
   grunt.registerTask('debug', ['default', 'shell:debug', 'watch:debug']);
   grunt.registerTask('json', ['default', 'shell:json']);
+  grunt.registerTask('demo', [
+    'default', 'clean:demo', 'browserify:demo', 'copy:demo'
+  ]);
+  grunt.registerTask('interactive', [
+    'demo', 'connect:server', 'watch:demo'
+  ]);
   grunt.registerTask('dist', ['default', 'clean:dist', 'browserify:dist']);
+  grunt.registerTask('release', ['test', 'dist', 'demo']);
 };
