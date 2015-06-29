@@ -121,7 +121,7 @@ module.exports = function(grunt) {
           'index.js', 'src/*.js', 'src/*.pegjs', 'demo/js/*.js',
           'Gruntfile.js', 'demo/css/demo.css', 'demo/index.html'
         ],
-        tasks: ['default', 'browserify:demo']
+        tasks: ['demo']
       }
     }
   });

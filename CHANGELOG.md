@@ -2,10 +2,18 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
+
+## [v0.4.0] - 2015-06-27
 ### Added
-- `demo/` folder containing interactive demo of parser
-- `browserify` task added to `Gruntfile.js` for `sqlite-parser-dist.js` in `demo/lib/` as `grunt dist`
-- updated `TODO.md` and `.npmignore` for new Interactive demo
+- `sqlite-parser` demo
+  - `demo/` folder containing interactive demo of parser. demo JavaScript is all in a self-contained, browserified package
+  - `browserify` task added to `Gruntfile.js` for creating `sqlite-parser-demo.js` in `demo/` as `grunt demo` and a watcher/livereload version as `grunt interactive`
+  - `CodeMirror` dependency into `devDependencies`
+  - updated `TODO.md` and `.npmignore` for new Interactive demo
+- `sqlite-parser` distributable
+  - `browserify` task added to `Gruntfile.js` for creating `sqlite-parser-dist.js` in `dist/` as `grunt dist`
+  - attaches a single function to `window` as `sqliteParser`
+- some missing names for grammar rules
 
 ### Changed
 - renamed `parse.jsr` and `util.js` files in `src/` and `lib/` folders
