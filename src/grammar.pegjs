@@ -14,15 +14,7 @@ start
   }
 
 stmt_list
-  = stmt_list_multiple
-  / stmt_list_single
-
-stmt_list_single
-  = f:( stmt ) o c:( sym_semi )*
-  { return [f]; }
-
-stmt_list_multiple
-  = f:( stmt ) o b:( stmt_list_tail )+ c:( sym_semi )*
+  = f:( stmt ) o b:( stmt_list_tail )* c:( sym_semi )*
   { return _.compose([f, b], []); }
 
 /* TODO: Note - you need semicolon between multiple statements, otherwise can omit */
@@ -1609,7 +1601,7 @@ source_tbl_loop "Table Constraint Definitions"
 
 /** {@link https://www.sqlite.org/syntaxdiagrams.html#column-def} */
 source_def_column "Column Definition"
-  = n:( name_column ) e t:( column_type )? o c:( column_constraints )?
+  = n:( name_column ) (! name_char o ) t:( column_type )? o c:( column_constraints )?
   {
     return _.extend({
       'type': 'definition',
@@ -2242,255 +2234,255 @@ sym_bslash "Backslash"
 
 /* Keywords */
 
-ABORT "ABORT Keyword"
+ABORT
   = "ABORT"i
-ACTION "ACTION Keyword"
+ACTION
   = "ACTION"i
-ADD "ADD Keyword"
+ADD
   = "ADD"i
-AFTER "AFTER Keyword"
+AFTER
   = "AFTER"i
-ALL "ALL Keyword"
+ALL
   = "ALL"i
-ALTER "ALTER Keyword"
+ALTER
   = "ALTER"i
-ANALYZE "ANALYZE Keyword"
+ANALYZE
   = "ANALYZE"i
-AND "AND Keyword"
+AND
   = "AND"i
-AS "AS Keyword"
+AS
   = "AS"i
-ASC "ASC Keyword"
+ASC
   = "ASC"i
-ATTACH "ATTACH Keyword"
+ATTACH
   = "ATTACH"i
-AUTOINCREMENT "AUTOINCREMENT Keyword"
+AUTOINCREMENT
   = "AUTOINCREMENT"i
-BEFORE "BEFORE Keyword"
+BEFORE
   = "BEFORE"i
-BEGIN "BEGIN Keyword"
+BEGIN
   = "BEGIN"i
-BETWEEN "BETWEEN Keyword"
+BETWEEN
   = "BETWEEN"i
-BY "BY Keyword"
+BY
   = "BY"i
-CASCADE "CASCADE Keyword"
+CASCADE
   = "CASCADE"i
-CASE "CASE Keyword"
+CASE
   = "CASE"i
-CAST "CAST Keyword"
+CAST
   = "CAST"i
-CHECK "CHECK Keyword"
+CHECK
   = "CHECK"i
-COLLATE "COLLATE Keyword"
+COLLATE
   = "COLLATE"i
-COLUMN "COLUMN Keyword"
+COLUMN
   = "COLUMN"i
-COMMIT "COMMIT Keyword"
+COMMIT
   = "COMMIT"i
-CONFLICT "CONFLICT Keyword"
+CONFLICT
   = "CONFLICT"i
-CONSTRAINT "CONSTRAINT Keyword"
+CONSTRAINT
   = "CONSTRAINT"i
-CREATE "CREATE Keyword"
+CREATE
   = "CREATE"i
-CROSS "CROSS Keyword"
+CROSS
   = "CROSS"i
-CURRENT_DATE "CURRENT_DATE Keyword"
+CURRENT_DATE
   = "CURRENT_DATE"i
-CURRENT_TIME "CURRENT_TIME Keyword"
+CURRENT_TIME
   = "CURRENT_TIME"i
-CURRENT_TIMESTAMP "CURRENT_TIMESTAMP Keyword"
+CURRENT_TIMESTAMP
   = "CURRENT_TIMESTAMP"i
-DATABASE "DATABASE Keyword"
+DATABASE
   = "DATABASE"i
-DEFAULT "DEFAULT Keyword"
+DEFAULT
   = "DEFAULT"i
-DEFERRABLE "DEFERRABLE Keyword"
+DEFERRABLE
   = "DEFERRABLE"i
-DEFERRED "DEFERRED Keyword"
+DEFERRED
   = "DEFERRED"i
-DELETE "DELETE Keyword"
+DELETE
   = "DELETE"i
-DESC "DESC Keyword"
+DESC
   = "DESC"i
-DETACH "DETACH Keyword"
+DETACH
   = "DETACH"i
-DISTINCT "DISTINCT Keyword"
+DISTINCT
   = "DISTINCT"i
-DROP "DROP Keyword"
+DROP
   = "DROP"i
-EACH "EACH Keyword"
+EACH
   = "EACH"i
-ELSE "ELSE Keyword"
+ELSE
   = "ELSE"i
-END "END Keyword"
+END
   = "END"i
-ESCAPE "ESCAPE Keyword"
+ESCAPE
   = "ESCAPE"i
-EXCEPT "EXCEPT Keyword"
+EXCEPT
   = "EXCEPT"i
-EXCLUSIVE "EXCLUSIVE Keyword"
+EXCLUSIVE
   = "EXCLUSIVE"i
-EXISTS "EXISTS Keyword"
+EXISTS
   = "EXISTS"i
-EXPLAIN "EXPLAIN Keyword"
+EXPLAIN
   = "EXPLAIN"i
-FAIL "FAIL Keyword"
+FAIL
   = "FAIL"i
-FOR "FOR Keyword"
+FOR
   = "FOR"i
-FOREIGN "FOREIGN Keyword"
+FOREIGN
   = "FOREIGN"i
-FROM "FROM Keyword"
+FROM
   = "FROM"i
-FULL "FULL Keyword"
+FULL
   = "FULL"i
-GLOB "GLOB Keyword"
+GLOB
   = "GLOB"i
-GROUP "GROUP Keyword"
+GROUP
   = "GROUP"i
-HAVING "HAVING Keyword"
+HAVING
   = "HAVING"i
-IF "IF Keyword"
+IF
   = "IF"i
-IGNORE "IGNORE Keyword"
+IGNORE
   = "IGNORE"i
-IMMEDIATE "IMMEDIATE Keyword"
+IMMEDIATE
   = "IMMEDIATE"i
-IN "IN Keyword"
+IN
   = "IN"i
-INDEX "INDEX Keyword"
+INDEX
   = "INDEX"i
-INDEXED "INDEXED Keyword"
+INDEXED
   = "INDEXED"i
-INITIALLY "INITIALLY Keyword"
+INITIALLY
   = "INITIALLY"i
-INNER "INNER Keyword"
+INNER
   = "INNER"i
-INSERT "INSERT Keyword"
+INSERT
   = "INSERT"i
-INSTEAD "INSTEAD Keyword"
+INSTEAD
   = "INSTEAD"i
-INTERSECT "INTERSECT Keyword"
+INTERSECT
   = "INTERSECT"i
-INTO "INTO Keyword"
+INTO
   = "INTO"i
-IS "IS Keyword"
+IS
   = "IS"i
-ISNULL "ISNULL Keyword"
+ISNULL
   = "ISNULL"i
-JOIN "JOIN Keyword"
+JOIN
   = "JOIN"i
-KEY "KEY Keyword"
+KEY
   = "KEY"i
-LEFT "LEFT Keyword"
+LEFT
   = "LEFT"i
-LIKE "LIKE Keyword"
+LIKE
   = "LIKE"i
-LIMIT "LIMIT Keyword"
+LIMIT
   = "LIMIT"i
-MATCH "MATCH Keyword"
+MATCH
   = "MATCH"i
-NATURAL "NATURAL Keyword"
+NATURAL
   = "NATURAL"i
-NO "NO Keyword"
+NO
   = "NO"i
-NOT "NOT Keyword"
+NOT
   = "NOT"i
-NOTNULL "NOTNULL Keyword"
+NOTNULL
   = "NOTNULL"i
-NULL "NULL Keyword"
+NULL
   = "NULL"i
-OF "OF Keyword"
+OF
   = "OF"i
-OFFSET "OFFSET Keyword"
+OFFSET
   = "OFFSET"i
-ON "ON Keyword"
+ON
   = "ON"i
-OR "OR Keyword"
+OR
   = "OR"i
-ORDER "ORDER Keyword"
+ORDER
   = "ORDER"i
-OUTER "OUTER Keyword"
+OUTER
   = "OUTER"i
-PLAN "PLAN Keyword"
+PLAN
   = "PLAN"i
-PRAGMA "PRAGMA Keyword"
+PRAGMA
   = "PRAGMA"i
-PRIMARY "PRIMARY Keyword"
+PRIMARY
   = "PRIMARY"i
-QUERY "QUERY Keyword"
+QUERY
   = "QUERY"i
-RAISE "RAISE Keyword"
+RAISE
   = "RAISE"i
-RECURSIVE "RECURSIVE Keyword"
+RECURSIVE
   = "RECURSIVE"i
-REFERENCES "REFERENCES Keyword"
+REFERENCES
   = "REFERENCES"i
-REGEXP "REGEXP Keyword"
+REGEXP
   = "REGEXP"i
-REINDEX "REINDEX Keyword"
+REINDEX
   = "REINDEX"i
-RELEASE "RELEASE Keyword"
+RELEASE
   = "RELEASE"i
-RENAME "RENAME Keyword"
+RENAME
   = "RENAME"i
-REPLACE "REPLACE Keyword"
+REPLACE
   = "REPLACE"i
-RESTRICT "RESTRICT Keyword"
+RESTRICT
   = "RESTRICT"i
-RIGHT "RIGHT Keyword"
+RIGHT
   = "RIGHT"i
-ROLLBACK "ROLLBACK Keyword"
+ROLLBACK
   = "ROLLBACK"i
-ROW "ROW Keyword"
+ROW
   = "ROW"i
-ROWID "ROWID Keyword"
+ROWID
   = "ROWID"i
-SAVEPOINT "SAVEPOINT Keyword"
+SAVEPOINT
   = "SAVEPOINT"i
-SELECT "SELECT Keyword"
+SELECT
   = "SELECT"i
-SET "SET Keyword"
+SET
   = "SET"i
-TABLE "TABLE Keyword"
+TABLE
   = "TABLE"i
-TEMP "TEMP Keyword"
+TEMP
   = "TEMP"i
-TEMPORARY "TEMPORARY Keyword"
+TEMPORARY
   = "TEMPORARY"i
-THEN "THEN Keyword"
+THEN
   = "THEN"i
-TO "TO Keyword"
+TO
   = "TO"i
-TRANSACTION "TRANSACTION Keyword"
+TRANSACTION
   = "TRANSACTION"i
-TRIGGER "TRIGGER Keyword"
+TRIGGER
   = "TRIGGER"i
-UNION "UNION Keyword"
+UNION
   = "UNION"i
-UNIQUE "UNIQUE Keyword"
+UNIQUE
   = "UNIQUE"i
-UPDATE "UPDATE Keyword"
+UPDATE
   = "UPDATE"i
-USING "USING Keyword"
+USING
   = "USING"i
-VACUUM "VACUUM Keyword"
+VACUUM
   = "VACUUM"i
-VALUES "VALUES Keyword"
+VALUES
   = "VALUES"i
-VIEW "VIEW Keyword"
+VIEW
   = "VIEW"i
-VIRTUAL "VIRTUAL Keyword"
+VIRTUAL
   = "VIRTUAL"i
-WHEN "WHEN Keyword"
+WHEN
   = "WHEN"i
-WHERE "WHERE Keyword"
+WHERE
   = "WHERE"i
-WITH "WITH Keyword"
+WITH
   = "WITH"i
-WITHOUT "WITHOUT Keyword"
+WITHOUT
   = "WITHOUT"i
 
 reserved_words
@@ -2547,11 +2539,13 @@ match_all "Anything"
   = .
   /*= [\s\S]*/
 
-o "Optional Whitespace"
+/* Optional Whitespace */
+o
   = n:( whitespace_nodes )*
   { return n; }
 
-e "Enforced Whitespace"
+/* Enforced Whitespace */
+e
   = n:( whitespace_nodes )+
   { return n; }
 
@@ -2559,14 +2553,15 @@ whitespace_nodes
   = whitespace
   / comment
 
-whitespace "Whitespace"
+/* Whitespace */
+whitespace
   = whitespace_space
   / whitespace_line
 
-whitespace_space
+whitespace_space "Whitespace"
   = [ \t]
 
-whitespace_line
+whitespace_line "New Line"
   = [\n\v\f\r]
 
 /* TODO: Everything with this symbol */

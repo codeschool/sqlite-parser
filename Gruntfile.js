@@ -64,8 +64,8 @@ module.exports = function(grunt) {
         options: {
           failOnError: true
         },
-        command: './node_modules/.bin/pegjs src/grammar.pegjs lib/parser.js'
-        // command: './node_modules/.bin/pegjs --trace src/grammar.pegjs lib/parser.js'
+        // command: './node_modules/.bin/pegjs src/grammar.pegjs lib/parser.js'
+        command: './node_modules/.bin/pegjs --trace src/grammar.pegjs lib/parser.js'
       },
       test: {
         options: {
