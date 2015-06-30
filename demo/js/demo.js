@@ -98,6 +98,7 @@
         }, 250);
 
     sql.on('change', update);
+    update();
   };
   root.onload = loadDemo;
 })(typeof self === 'object' ? self : global);
