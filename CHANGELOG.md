@@ -3,6 +3,41 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+## [v0.5.1] - 2015-06-30
+### Fixed
+- accidentally repeating first `description` in the error thrown from the `smartError()` method of `Tracer`
+
+  > There is a syntax error near **FROM Clause** [**FROM Clause**, Table Identifier]
+
+## [v0.5.0] - 2015-06-30
+### Added
+- turned tracer/smart error code into a `Tracer` class located at `tracer.js` in `src/`
+
+  ``` javascript
+  var t = Tracer();
+  return new Promise(function(resolve, reject) {
+    resolve(parser.parse(source, {
+      'tracer': t
+    }));
+  })
+  .catch(function (err) {
+    t.smartError(err);
+  });
+  ```
+
+### Changed
+- cleaned up smart error code to follow the most relevant error path of the `pegjs` trace output
+
+### Notes
+- need to remove the `lodash` dependency from `Tracer` before v1.0.0
+
+## [v0.4.1] - 2015-06-30
+### Added
+- smarter error messages using rule descriptions and tracer functionality in newest `pegjs`
+
+### Changed
+- `parseError1.sql` spec updated for new smarter error syntax
+
 ## [v0.4.0] - 2015-06-27
 ### Added
 - `sqlite-parser` demo
