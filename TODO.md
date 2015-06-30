@@ -2,6 +2,8 @@
 
 ## **[1.0.0]** In progress
 
+- [ ] Set proper rules for identifier names, e.g.: `[a-z0-9\_\-]+`
+
 - [ ] **In progress** Interactive demo editor showing SQL and corresponding AST
 
 - [ ] Missing specs
