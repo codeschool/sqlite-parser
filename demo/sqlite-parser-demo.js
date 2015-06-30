@@ -51960,7 +51960,7 @@ CodeMirror.defineMode("sql", function(config, parserConfig) {
     });
   }
   sqliteParser['NAME'] = 'sqlite-parser';
-  sqliteParser['VERSION'] = '0.5.0';
+  sqliteParser['VERSION'] = '0.5.1';
 
   module.exports = root.sqliteParser = sqliteParser;
 })(typeof self === 'object' ? self : global);
