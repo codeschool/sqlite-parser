@@ -201,7 +201,11 @@ All notable changes to this project will be documented in this file.
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.3.1...HEAD
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.5.1...HEAD
+[v0.5.1]: https://github.com/codeschool/sqlite-parser/compare/v0.5.0...v0.5.1
+[v0.5.0]: https://github.com/codeschool/sqlite-parser/compare/v0.4.1...v0.5.0
+[v0.4.1]: https://github.com/codeschool/sqlite-parser/compare/v0.4.0...v0.4.1
+[v0.4.0]: https://github.com/codeschool/sqlite-parser/compare/v0.3.1...v0.4.0
 [v0.3.1]: https://github.com/codeschool/sqlite-parser/compare/v0.3.0...v0.3.1
 [v0.3.0]: https://github.com/codeschool/sqlite-parser/compare/v0.2.3...v0.3.0
 [v0.2.3]: https://github.com/codeschool/sqlite-parser/compare/v0.2.2...v0.2.3
