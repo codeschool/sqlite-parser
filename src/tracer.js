@@ -32,7 +32,7 @@ module.exports = (function (_) {
   };
 
   Tracer.prototype.smartError = function smartError(err) {
-    var message, location,
+    var message, location, chainDetail,
         lastIndent = 10000,
         bestDescriptor = false,
         chain = _(this.events)
@@ -63,8 +63,10 @@ module.exports = (function (_) {
         .value();
 
     if (chain.length) {
+      // Don't accidentally repeat the first description in the output
+      chainDetail = _(chain).rest().takeRight(2).value();
       message = 'There is a syntax error near ' + _.first(chain) +
-                ' [' + _.takeRight(chain, 2).join(', ') + ']' + '';
+                ' [' + chainDetail.join(', ') + ']' + '';
       location = _.findLast(this.events, {description: _.last(chain)}).location;
       throw {
         'name': 'SyntaxError',
