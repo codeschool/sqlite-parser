@@ -298,7 +298,7 @@ describe('sqlite-parser', function() {
 
   it('parse error 1', function(done) {
     tree.error({
-      'message': 'Expected Semicolon or end of input but "f" found.'
+      'message': 'There is a syntax error near Statement [Table Identifier/Table Name]'
     }, this, done);
   });
 
