@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+## [v0.6.0] - 2015-07-01
+### Changed
+- updated grammar to remove all dependence on `modifier` clause as it was being used as a catch-all clause for stray parts of statements
+- created `defer` clause
+- normalized format for common clauses and nodes across different statement types
+- removed `range` variant that was part of `BETWEEN` expressions
+- renamed several clauses to match the SQL keywords and/or SQLite manual descriptions used to define them
+  - for `WITHOUT ROWID` in `CREATE TABLE`: `modifier` -> `optimization`
+  - for `IF NOT EXISTS` in all places: `modifier`: `condition`
+
 ## [v0.5.1] - 2015-06-30
 ### Fixed
 - accidentally repeating first `description` in the error thrown from the `smartError()` method of `Tracer`
@@ -70,7 +80,7 @@ All notable changes to this project will be documented in this file.
 
 - New specs: Basic Drop Table, Basic Drop Trigger, Basic Function, Basic Subquery, Basic Union, Create Check 1, Create Check 2, Create Foreign Key 1, Create Foreign Key 2, Create Primary Key 1, Create Table Alt Syntax, Expression Like, Expression Table 1, Expression Unary 1, Function Mixed Args, Insert Into Default, Join Types 1, Join Types 2, Select Parts 1, Select Qualified Table 1, Transaction Rollback
 
-# Changed
+### Changed
 - allow multiple expressions for `GROUP BY` clause
 
   ``` sql
@@ -201,7 +211,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.5.1...HEAD
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.6.0...HEAD
+[v0.6.0]: https://github.com/codeschool/sqlite-parser/compare/v0.5.1...v0.6.0
 [v0.5.1]: https://github.com/codeschool/sqlite-parser/compare/v0.5.0...v0.5.1
 [v0.5.0]: https://github.com/codeschool/sqlite-parser/compare/v0.4.1...v0.5.0
 [v0.4.1]: https://github.com/codeschool/sqlite-parser/compare/v0.4.0...v0.4.1
