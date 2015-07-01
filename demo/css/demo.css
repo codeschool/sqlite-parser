@@ -8,37 +8,18 @@
 @import url("monokai.css");
 @import url("foldgutter.css");
 
-/* CodeMirror Panel */
-
-.border {
-  border: 1px solid #E03210;
-}
-.remove-panel {
-  float: right;
-  cursor: pointer;
-}
-.panel {
-  background: #7A2716;
-  padding: 3px 7px;
-  font-size: 12px;
-}
-.panel.top, .panel.after-top {
-  border-bottom: 1px solid #585858;
-}
-.panel.bottom, .panel.before-bottom {
-  border-top: 1px solid #585858;
-}
-
 /* Demo Layout */
 
 *, *:before, *:after {
-  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
   font-family: 'Inconsolata', monospace;
-  font-size: 12px;
+  font-size: 10px;
   color: #efefef;
   background-color: #272822;
 }
@@ -50,12 +31,61 @@ body {
 
 .container h3 {
   border-bottom: 1px solid #585858;
-  padding-bottom: 8px;
+  padding: 8px;
+  margin: 0;
+}
+
+.container .left h3 {
+  background-color: #2f6a9e;
+}
+
+.container .right h3 {
+  background-color: #329e2f;
+}
+
+.left, .right {
+  min-height: 400px;
+  height: 400px;
+  border: 1px solid #585858;
+}
+
+.left {
+  margin-bottom: .5em;
+}
+
+.CodeMirror {
+  height: 364px !important;
+}
+
+.panel {
+  background: #7A2716;
+  padding: 3px 7px;
+  font-size: 12px;
+}
+
+.remove-panel {
+  float: right;
+  cursor: pointer;
+}
+
+.panel.top, .panel.after-top {
+  border-bottom: 1px solid #585858;
+}
+.panel.bottom, .panel.before-bottom {
+  border-top: 1px solid #585858;
+}
+
+footer, header {
+  padding: 0.5em;
+  color: #dbdbdb;
 }
 
 footer h3, header h2 {
-  margin: 0 auto;
   width: 500px;
+}
+
+footer h3 {
+  margin: 0 auto;
   text-align: center;
 }
 
@@ -70,65 +100,24 @@ footer a:hover, footer a:active {
 
 }
 
-.left, .right {
-  font-size: 16px;
-  min-height: 400px;
-  height: 400px;
-}
-
-footer, header { padding: 0.5em; color: #dbdbdb; }
-
-.left, .right {
-  border: 1px solid #585858;
-  padding: 0.25em 0.75em 1.75em;
-}
-
-.left { margin-bottom: .5em; }
-
-.nav {
-  list-style: none;
-  margin-left: 0;
-  margin-bottom: 0;
-  padding-left: 0;
-}
-
-.nav > li,
-.nav > li > a {
-  display: inline-block;
-  *display: inline;
-  zoom: 1;
-}
-
-.inline-items {
-  margin-top: 0;
-}
-
-.inline-items li {
-  margin-left: 0;
-  border-left: 1px solid black;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-.inline-items li:first-child {
-  margin-left: 0;
-  border: none;
-  padding-left: 0;
-  padding-right: 10px;
-}
-
-.inline-items li:last-child {
-  padding-right: 0;
-}
-
-.CodeMirror { height: 300px !important; }
-
 @media screen and (min-width: 84.75em ) {
-  .left { margin-right: 49.5em; }
+  .right, .left {
+    min-height: 800px;
+    height: 800px;
+  }
 
-  .right { position: absolute; top: 0; right: 0; width: 48.75em; }
+  .left {
+    margin-right: 49.5em;
+  }
 
-  .right, .left { min-height: 800px; height: 800px; }
+  .right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 48.75em;
+  }
 
-  .CodeMirror { height: 700px !important; }
+  .CodeMirror {
+    height: 764px !important;
+  }
 }

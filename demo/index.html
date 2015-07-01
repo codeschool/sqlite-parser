@@ -25,23 +25,23 @@
       <div class="left">
         <h3>SQLite Statement</h3>
         <textarea id="sql">
-CREATE TABLE Actors (
-  name varchar(50),
-  country varchar(50),
-  salary integer
+CREATE TABLE Bees (
+  id integer PRIMARY KEY ON CONFLICT ROLLBACK AUTOINCREMENT,
+  name varchar(50) NOT NULL UNIQUE,
+  wings integer CONSTRAINT has_enough_wings CHECK (wings >= 2),
+  legs integer CONSTRAINT too_many_legs CHECK (legs <= 6)
 );
 
-INSERT INTO Actors (name, country, salary) VALUES
-  ('Vivien Leigh', 'IN', 150000),
-  ('Clark Gable', 'USA', 120000),
-  ('Olivia de Havilland', 'Japan', 30000),
-  ('Hattie McDaniel', 'USA', 45000,);
+INSERT INTO Bees (name, wings, legs) VALUES
+  ('Dr. Bee', 2, 6);
 
-SELECT
- MIN(salary) AS "MinSalary",
- MAX(salary) AS "MaxSalary"
-FROM
- Actors;
+SELECT *
+FROM Bees b
+WHERE b.wings = 2 AND b.legs = 6;
+
+INSERT INTO Bees (name, wings, legs) VALUES
+  ('Mr. Dragonfly', 4, 6),
+  ('Nick', 0, 2);
         </textarea>
       </div>
 

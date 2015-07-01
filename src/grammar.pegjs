@@ -1811,7 +1811,7 @@ primary_column "Indexed Column"
       'type': 'identifier',
       'variant': 'column',
       'format': 'indexed',
-      'direction': util.key(d) /*|| "ASC"*/,
+      'direction': d,
       'name': e,
       'collate': c
     };
@@ -1823,7 +1823,7 @@ column_collate
 
 primary_column_dir
   = t:( ASC / DESC ) o
-  { return util.textNode(t); }
+  { return util.key(t); }
 
 primary_column_tail
   = sym_comma c:( primary_column ) o

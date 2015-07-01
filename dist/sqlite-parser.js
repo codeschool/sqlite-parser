@@ -1332,7 +1332,7 @@ module.exports = (function() {
               'type': 'identifier',
               'variant': 'column',
               'format': 'indexed',
-              'direction': util.key(d) /*|| "ASC"*/,
+              'direction': d,
               'name': e,
               'collate': c
             };
@@ -17405,7 +17405,7 @@ module.exports = (function() {
         s2 = peg$parseo();
         if (s2 !== peg$FAILED) {
           peg$savedPos = s0;
-          s1 = peg$c176(s1);
+          s1 = peg$c38(s1);
           s0 = s1;
         } else {
           peg$currPos = s0;
