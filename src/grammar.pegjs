@@ -356,8 +356,8 @@ literal_date "Date Literal"
 
 /**
  * Notes:
- *    1) SQL uses single quotes for string literals.
- *    2) Value is an identier or a string literal based on context.
+ *    1) [ENFORCED] SQL uses single quotes for string literals.
+ *    2) [NOT IMPLEMENTED] Value is an identier or a string literal based on context.
  * {@link https://www.sqlite.org/lang_keywords.html}
  */
 literal_string "String Literal"
@@ -377,7 +377,7 @@ literal_string_single "Single-quoted String Literal"
       * @note Unescaped the pairs of literal single quotation marks
       * @note Not sure if the BLOB type should be un-escaped
       */
-    return util.unescape(util.textNode(s));
+    return util.unescape(util.nodeToString(s), "'");
   }
 
 literal_string_schar
@@ -1404,7 +1404,7 @@ name_constraint_column
   = name
 
 name_collation
-  = name
+  = name_unquoted
 
 name_index
   = name
@@ -1416,10 +1416,10 @@ name_view
   = name
 
 name_function
-  = name
+  = name_unquoted
 
 name_module
-  = name
+  = name_unquoted
 
 /* Column datatypes */
 
@@ -1437,10 +1437,16 @@ datatype_text "TEXT Datatype Name"
   { return util.key(t); }
 
 datatype_real "REAL Datatype Name"
-  = t:( ( "DOUBLE"i ( e "PRECISION"i )? )
-  / "FLOAT"i
-  / "REAL"i )
+  = t:( datatype_real_double / "FLOAT"i / "REAL"i )
   { return util.key(t); }
+
+datatype_real_double
+  = d:( "DOUBLE"i ) p:( real_double_precision )?
+  { return util.compose([d, p]); }
+
+real_double_precision
+  = e p:( "PRECISION"i )
+  { return p; }
 
 datatype_numeric "NUMERIC Datatype Name"
   = t:( "NUMERIC"i
@@ -2180,9 +2186,6 @@ drop_ie
 name_char
   = [a-z0-9\-\_]i
 
-name_char_quoted
-  = [a-z0-9\-\_ ]i
-
 name
   = name_bracketed
   / name_backticked
@@ -2190,7 +2193,8 @@ name
   / name_unquoted
 
 reserved_nodes
-  = ( datatype_types / reserved_words ) !name_char
+  = r:( datatype_types / reserved_words ) !name_char
+  { return util.textNode(r); }
 
 name_unquoted
   = !reserved_nodes n:( name_char )+
@@ -2198,17 +2202,28 @@ name_unquoted
 
 /** @note Non-standard legacy format */
 name_bracketed
-  = sym_bopen n:( !sym_bclose name_char_quoted )+ o sym_bclose
+  = sym_bopen n:( name_bracketed_schar )+ o sym_bclose
   { return util.textNode(n); }
 
+/* TODO: Should this be `whitespace_space` or just `o` */
+name_bracketed_schar
+  = !( whitespace_space* "]" ) n:( [^\]] )
+  { return n; }
+
 name_dblquoted
-  = '"' n:( !'"' name_char_quoted )+ '"'
-  { return util.textNode(n); }
+  = '"' n:( name_dblquoted_schar )+ '"'
+  { return util.unescape(util.nodeToString(n), '"'); }
+
+name_dblquoted_schar
+  = '""' / [^\"]
 
 /** @note Non-standard legacy format */
 name_backticked
-  = '`' n:( !'`' name_char_quoted )+ '`'
-  { return util.textNode(n); }
+  = '`' n:( name_backticked_schar )+ '`'
+  { return util.unescape(util.nodeToString(n), '`'); }
+
+name_backticked_schar
+  = '``' / [^\`]
 
 /* Symbols */
 

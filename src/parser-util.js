@@ -89,8 +89,13 @@ function textNode(elem) {
   return nodeToString(elem).trim();
 }
 
-function unescape(str) {
-  return str.replace(/\'{2}/g, '\'');
+function unescape(str, quoteChar) {
+  var re;
+  if (quoteChar == null) {
+    quoteChar = '\'';
+  }
+  re = new RegExp(quoteChar + '{2}', 'g');
+  return str.replace(re, quoteChar);
 }
 
 function extend() {
@@ -160,10 +165,6 @@ function findWhere(arr, props) {
   return null;
 }
 
-function keywordify(elem) {
-  return textNode(elem).toUpperCase();
-}
-
 function key(elem) {
   return textNode(elem).toLowerCase();
 }
@@ -179,7 +180,6 @@ module.exports = {
   'nodeToString':         nodeToString,
   'textNode':             textNode,
   'unescape':             unescape,
-  'keywordify':           keywordify,
   'key':                  key,
   // Type detection
   'typed':                typed,
