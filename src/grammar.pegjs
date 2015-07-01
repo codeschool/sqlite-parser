@@ -45,8 +45,7 @@ expression_concat "Logical Expression Group"
       'variant': 'operation',
       'operation': util.key(o),
       'left': l,
-      'right': r,
-      'modifier': null
+      'right': r
     };
   }
 
@@ -84,7 +83,7 @@ expression_cast "CAST Expression"
       'format': 'unary',
       'variant': util.key(s),
       'expression': e,
-      'modifier': a
+      'as': a
     };
   }
 
@@ -93,19 +92,19 @@ type_alias "Type Alias"
   { return d; }
 
 expression_exists "EXISTS Expression"
-  = n:( expression_exists_ne ) o e:( stmt_select )
+  = n:( expression_exists_ne ) o e:( select_wrapped )
   {
     return {
       'type': 'expression',
       'format': 'unary',
-      'variant': 'select',
+      'variant': 'exists',
       'expression': e,
-      'modifier': n
+      'operator': util.key(n)
     };
   }
 
 expression_exists_ne
-  = n:( NOT e )? x:( EXISTS ) o
+  = n:( expression_is_not )? x:( EXISTS ) o
   { return util.compose([n, x]); }
 
 expression_case "CASE Expression"
@@ -116,12 +115,10 @@ expression_case "CASE Expression"
       'type': 'expression',
       'format': 'binary',
       'variant': util.key(t),
-      'case': e,
-      'expression': util.compose([w, s], []),
-      'modifier': null
+      'expression': e,
+      'condition': util.compose([w, s], [])
     };
   }
-
 
 expression_case_when "WHEN Clause"
   = s:( WHEN ) e w:( expression ) o THEN e t:( expression ) o
@@ -129,9 +126,8 @@ expression_case_when "WHEN Clause"
     return {
       'type': 'condition',
       'format': util.key(s),
-      'condition': w,
-      'expression': t,
-      'modifier': null
+      'when': w,
+      'then': t
     };
   }
 
@@ -141,8 +137,7 @@ expression_case_else "ELSE Clause"
     return {
       'type': 'condition',
       'format': util.key(s),
-      'expression': e,
-      'modifier': null
+      'else': e
     };
   }
 
@@ -154,23 +149,33 @@ expression_raise "RAISE Expression"
       'type': 'expression',
       'format': 'unary',
       'variant': util.key(s),
-      'modifier': null
+      'expression': a
     }, a);
   }
 
 expression_raise_args "RAISE Expression Arguments"
-  = raise_args_ignore
-  / raise_args_message
+  = a:( raise_args_ignore / raise_args_message )
+  {
+    return util.extend({
+      'type': 'error',
+      'action': null,
+      'message': null
+    }, a);
+  }
 
 raise_args_ignore
   = f:( IGNORE )
-  { return util.key(f); }
+  {
+    return {
+      'action': util.key(f)
+    };
+  }
 
 raise_args_message
   = f:( ROLLBACK / ABORT / FAIL ) o sym_comma o m:( error_message )
   {
     return {
-      'modifier': util.key(f),
+      'action': util.key(f),
       'message': m
     };
   }
@@ -248,21 +253,6 @@ expression_is_not
   = n:( NOT ) e
   { return util.textNode(n); }
 
-/** @note This rule is now rolled up in operator_binary */
-/*expression_is
-  = v:( expression_value ) o i:( IS ) e n:( expression_is_not )? e:( expression )
-  {
-    return {
-      'type': 'expression',
-      'format': 'binary',
-      'variant': 'operation',
-      'operation': util.key(util.compose([i, n])),
-      'left': v,
-      'right': e,
-      'modifier': null
-    };
-  }*/
-
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_between "BETWEEN Expression"
   = v:( expression_value ) o n:( expression_is_not )? b:( BETWEEN ) e e1:( expression ) o s:( AND ) e e2:( expression )
@@ -276,12 +266,11 @@ expression_between "BETWEEN Expression"
       'right': {
         'type': 'expression',
         'format': 'binary',
-        'variant': 'range',
+        'variant': 'operation',
         'operation': util.key(s),
         'left': e1,
         'right': e2
-      },
-      'modifier': null
+      }
     };
   }
 
@@ -296,8 +285,7 @@ expression_in "IN Expression"
       'variant': 'operation',
       'operation': util.key(util.compose([n, i])),
       'left': v,
-      'right': e,
-      'modifier': null
+      'right': e
     };
   }
 
@@ -309,7 +297,6 @@ expression_list_or_select
   = sym_popen e:( stmt_select / expression_list ) o sym_pclose
   { return e; }
 
-
 /**
  * Type definitions
  */
@@ -318,7 +305,7 @@ expression_list_or_select
   {
     return util.extend({
       'type': 'datatype',
-      'format': n[0],
+      'variant': n[0],
       'affinity': n[1],
       'args': [] // datatype definition arguments
     }, a);
@@ -525,8 +512,7 @@ operation_binary "Binary Expression"
       'variant': 'operation',
       'operation': util.key(o),
       'left': v,
-      'right': e,
-      'modifier': null
+      'right': e
     };
   }
 
@@ -589,21 +575,19 @@ stmt "Statement"
   = m:( stmt_modifier )? s:( stmt_nodes ) o
   {
     return util.extend({
-      'modifier': null
+      'explain': util.isOkay(m)
     }, m, s);
   }
 
 stmt_modifier "QUERY PLAN"
-  = e:( EXPLAIN ) e q:( QUERY e PLAN)? o
+  = e:( EXPLAIN ) e q:( modifier_query )?
   {
-    // TODO: Format?
-    return {
-      'modifier': {
-        'type': util.key(e),
-        'explain': 'query plan'
-      }
-    };
+    return util.key(util.compose([e, q]));
   }
+
+modifier_query
+  = q:( QUERY ) e p:( PLAN ) e
+  { return util.compose([q, p]); }
 
 stmt_nodes
   = stmt_crud
@@ -620,28 +604,36 @@ stmt_transaction "Transaction"
       'type': 'statement',
       'variant': 'transaction',
       'statement': util.isOkay(s) ? s : [],
-      'modifier': b
+      'defer': b
     };
   }
 
 stmt_commit "END Transaction"
-  = s:( COMMIT / END ) t:( e TRANSACTION )? o
+  = s:( COMMIT / END ) t:( commit_transaction )? o
   {
     return util.key(util.compose([s, t]));
   }
 
 stmt_begin "BEGIN Transaction"
-  = s:( BEGIN ) e m:( stmt_begin_modifier )? t:( TRANSACTION e )?
+  = s:( BEGIN ) e m:( stmt_begin_modifier )? t:( begin_transaction )?
   {
     return util.isOkay(m) ? util.key(m) : null;
   }
+
+commit_transaction
+  = e t:( TRANSACTION )
+  { return t; }
+
+begin_transaction
+  = t:( TRANSACTION ) e
+  { return t; }
 
 stmt_begin_modifier
   = m:( DEFERRED / IMMEDIATE / EXCLUSIVE ) e
   { return util.key(m); }
 
 stmt_rollback "ROLLBACK Statement"
-  = s:( ROLLBACK ) e ( TRANSACTION e )? n:( rollback_savepoint )?
+  = s:( ROLLBACK ) e ( begin_transaction )? n:( rollback_savepoint )?
   {
     return {
       'type': 'statement',
@@ -723,7 +715,7 @@ clause_with_loop
   { return e; }
 
 expression_table "Table Expression"
-  = n:( name_table ) o a:( loop_columns )? o AS o sym_popen s:( stmt_select ) o sym_pclose o
+  = n:( name_table ) o a:( loop_columns )? o s:( select_alias )
   {
     return util.extend({
       'type': 'expression',
@@ -733,6 +725,14 @@ expression_table "Table Expression"
       'columns': null
     }, a);
   }
+
+select_alias
+  = AS o s:( select_wrapped )
+  { return s; }
+
+select_wrapped
+  = sym_popen s:( stmt_select ) o sym_pclose
+  { return s; }
 
 stmt_crud_types
   = stmt_select
@@ -954,7 +954,7 @@ index_node_indexed
   { return n; }
 
 index_node_none
-  = NOT e INDEXED o
+  = expression_is_not INDEXED o
   { return null; }
 
 table_or_sub_sub
@@ -962,7 +962,7 @@ table_or_sub_sub
   { return l; }
 
 table_or_sub_select
-  = sym_popen s:( stmt_select ) o sym_pclose a:( alias )?
+  = s:( select_wrapped ) a:( alias )?
   {
     return util.extend({
       'alias': a
@@ -1290,7 +1290,7 @@ binary_lang
   / binary_lang_misc
 
 binary_lang_isnt "IS"
-  = i:( IS ) e n:( NOT e )?
+  = i:( IS ) e n:( expression_is_not )?
   { return util.key(util.compose([i, n])); }
 
 binary_lang_misc "Misc Binary Operator"
@@ -1554,8 +1554,8 @@ create_table "CREATE Table"
       'format': util.key(t),
       'temporary': util.isOkay(tmp),
       'target': id,
-      'conditions': util.compose([ne], []),
-      'modifier': null,
+      'condition': util.makeArray(ne),
+      'optimization': null,
       'definition': []
     }, r);
   }
@@ -1565,7 +1565,7 @@ create_core_tmp
   { return util.key(t); }
 
 create_core_ine
-  = i:( IF ) e n:( NOT ) e e:( EXISTS ) e
+  = i:( IF ) e n:( expression_is_not ) e:( EXISTS ) e
   {
     return {
       'type': 'condition',
@@ -1582,13 +1582,18 @@ table_source_def "Table Definition"
   {
     return {
       'definition': util.compose([s, t], []),
-      'modifier': r
+      'optimization': util.makeArray(r)
     };
   }
 
 source_def_rowid
-  = r:( WITHOUT e ROWID ) o
-  { return util.key(r); }
+  = r:( WITHOUT ) e w:( ROWID ) o
+  {
+    return {
+      'type': 'optimization',
+      'value': util.key(util.compose([r, w]))
+    };
+  }
 
 source_def_loop
   = f:( source_def_column ) o b:( source_def_tail )*
@@ -1706,9 +1711,12 @@ column_constraint_null
   }
 
 constraint_null_types
-  = t:( ( NOT e NULL )
-  / UNIQUE ) o
+  = t:( constraint_null_value / UNIQUE )
   { return util.key(t); }
+
+constraint_null_value
+  = n:( expression_is_not )? l:( NULL )
+  { return util.compose([n, l]); }
 
 column_constraint_default
   = s:( DEFAULT ) v:( col_default_val )
@@ -1857,7 +1865,7 @@ foreign_start
       'target': null,
       'columns': null,
       'action': null,
-      'deferrable': null
+      'defer': null
     };
   }
 
@@ -1868,7 +1876,7 @@ foreign_clause
     return util.extend({
       'type': 'constraint',
       'action': a,
-      'deferrable': d
+      'defer': d
     }, r);
   }
 
@@ -1906,10 +1914,21 @@ foreign_action_on
   }
 
 action_on_action
-  = a:( ( SET e ( NULL / DEFAULT ) )
-  / ( CASCADE / RESTRICT )
-  / ( NO e ACTION ) )
-  { return util.key(a); }
+  = on_action_set
+  / on_action_cascade
+  / on_action_none
+
+on_action_set
+  = s:( SET ) e v:( NULL / DEFAULT )
+  { return util.compose([s, v]); }
+
+on_action_cascade
+  = c:( CASCADE / RESTRICT )
+  { return util.textNode(c); }
+
+on_action_none
+  = n:( NO ) e a:( ACTION )
+  { return util.compose([n, a]); }
 
 /* TODO: name format? */
 foreign_action_match
@@ -1923,11 +1942,15 @@ foreign_action_match
   }
 
 foreign_deferrable
-  = n:( NOT e )? d:( DEFERRABLE ) i:( e INITIALLY e ( DEFERRED / IMMEDIATE ) )?
-  { return util.collect([n, d, i]); }
+  = n:( expression_is_not )? d:( DEFERRABLE ) i:( deferrable_initially )?
+  { return util.key(util.compose([n, d, i])); }
+
+deferrable_initially
+  = e i:( INITIALLY ) e d:( DEFERRED / IMMEDIATE )
+  { return util.compose([i, d]); }
 
 table_source_select
-  = AS e s:( stmt_select )
+  = s:( create_as_select )
   {
     return {
       'definition': util.makeArray(s)
@@ -1946,7 +1969,7 @@ create_index "CREATE Index"
       'target': n,
       'where': w,
       'on': o,
-      'conditions': util.compose([ne], []),
+      'condition': util.makeArray(ne),
       'unique': false
     }, u);
   }
@@ -1986,7 +2009,7 @@ create_trigger "CREATE Trigger"
       'when': wh,
       'target': n,
       'on': o,
-      'conditions': ne,
+      'condition': util.makeArray(ne),
       'event': cd,
       'temporary': util.isOkay(p),
       'by': (util.isOkay(me) ? me : 'row'),
@@ -2071,18 +2094,22 @@ action_loop_stmt
 
 create_view "CREATE View"
   = s:( CREATE ) e p:( create_core_tmp )? v:( VIEW ) e ne:( create_core_ine )?
-    n:( id_view ) o ( AS ) o r:( stmt_select ) o
+    n:( id_view ) o r:( create_as_select )
   {
     return {
       'type': 'statement',
       'variant': util.key(s),
       'format': util.key(v),
-      'conditions': ne,
+      'condition': util.makeArray(ne),
       'temporary': util.isOkay(p),
       'target': n,
       'result': r
     };
   }
+
+create_as_select
+  = s:( AS ) e r:( stmt_select ) o
+  { return r; }
 
 /**
  *  @note
@@ -2099,7 +2126,7 @@ create_virtual "CREATE Virtual Table"
       'type': 'statement',
       'variant': util.key(s),
       'format': util.key(v),
-      'conditions': ne,
+      'condition': util.makeArray(ne),
       'target': n,
       'result': {
         'type': 'module',
@@ -2125,7 +2152,7 @@ stmt_drop "DROP Statement"
       'variant': s,
       'format': t,
       'target': q,
-      'conditions': (util.isOkay(i) ? [i] : [])
+      'condition': (util.isOkay(i) ? [i] : [])
     };
   }
 

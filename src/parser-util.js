@@ -6,7 +6,7 @@
 var slice = [].slice;
 
 function makeArray(arr) {
-  return !isArray(arr) ? [arr] : arr;
+  return !isArray(arr) ? (isOkay(arr) ? [arr] : []) : arr;
 }
 
 function typed(obj) {
