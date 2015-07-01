@@ -212,19 +212,6 @@ All notable changes to this project will be documented in this file.
 - First working version of sqlite-parser
 
 [unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.6.0...HEAD
-[v0.6.0]: https://github.com/codeschool/sqlite-parser/compare/v0.5.1...v0.6.0
-[v0.5.1]: https://github.com/codeschool/sqlite-parser/compare/v0.5.0...v0.5.1
-[v0.5.0]: https://github.com/codeschool/sqlite-parser/compare/v0.4.1...v0.5.0
-[v0.4.1]: https://github.com/codeschool/sqlite-parser/compare/v0.4.0...v0.4.1
-[v0.4.0]: https://github.com/codeschool/sqlite-parser/compare/v0.3.1...v0.4.0
-[v0.3.1]: https://github.com/codeschool/sqlite-parser/compare/v0.3.0...v0.3.1
-[v0.3.0]: https://github.com/codeschool/sqlite-parser/compare/v0.2.3...v0.3.0
-[v0.2.3]: https://github.com/codeschool/sqlite-parser/compare/v0.2.2...v0.2.3
-[v0.2.2]: https://github.com/codeschool/sqlite-parser/compare/v0.2.1...v0.2.2
-[v0.2.1]: https://github.com/codeschool/sqlite-parser/compare/v0.2.0...v0.2.1
-[v0.2.0]: https://github.com/codeschool/sqlite-parser/compare/v0.1.1...v0.2.0
-[v0.1.1]: https://github.com/codeschool/sqlite-parser/compare/v0.1.0...v0.1.1
-[v0.1.0]: https://github.com/codeschool/sqlite-parser/compare/v0.0.9...v0.1.0
-[v0.0.9]: https://github.com/codeschool/sqlite-parser/compare/v0.0.8...v0.0.9
-[v0.0.8]: https://github.com/codeschool/sqlite-parser/compare/v0.0.7...v0.0.8
-[v0.0.7]: https://github.com/codeschool/sqlite-parser/commit/ba1f7af0af1c7c4c4462e8bd80835eaf62f2a9f6
+[v0.6.0]: https://github.com/codeschool/sqlite-parser/compare/v0.3.1...v0.6.0
+[v0.3.1]: https://github.com/codeschool/sqlite-parser/compare/6388118d601a89d011ecd6f5c215bbc9763444db...v0.3.1
+[v0.1.1]: https://github.com/codeschool/sqlite-parser/commit/6388118d601a89d011ecd6f5c215bbc9763444db

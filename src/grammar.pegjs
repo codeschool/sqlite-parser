@@ -1666,7 +1666,8 @@ column_constraint_foreign
   }
 
 column_constraint_primary
-  = p:( col_primary_start ) d:( col_primary_dir )? c:( primary_conflict )? a:( col_primary_auto )? o
+  = p:( col_primary_start ) d:( col_primary_dir )? c:( primary_conflict )?
+    a:( col_primary_auto )?
   {
     return util.extend(p, c, d, a);
   }
