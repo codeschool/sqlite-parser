@@ -3,7 +3,8 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
 (function (root) {
   var sqliteParser = require('sqlite-parser'),
       CodeMirror = require('codemirror'),
-      panel;
+      panel = document.getElementById('ast'),
+      msgArea = document.getElementById('ast-header');
 
   require('foldcode');
   require('foldgutter');
@@ -28,36 +29,14 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
     };
   }
 
-  function makePanel(where, content) {
-    var node = document.createElement("div");
-    var widget, close, label;
-
-    node.id = "panel-ast";
-    node.className = "panel " + where;
-    close = node.appendChild(document.createElement("a"));
-    close.setAttribute("title", "Dismiss");
-    close.setAttribute("class", "remove-panel");
-    close.textContent = "✖";
-    CodeMirror.on(close, "click", clearError);
-    label = node.appendChild(document.createElement("span"));
-    label.textContent = content;
-    return node;
-  }
-
   function clearError() {
-    if (panel != null) {
-      panel.clear();
-      panel = null;
-    }
+    msgArea.textContent = "Syntax Tree";
+    panel.className = 'right';
   }
 
   function setError(cm, message) {
-    var panelElem = document.getElementById('panel-ast');
-    if (panelElem) {
-      panelElem.querySelector('span').textContent = message;
-    } else {
-      panel = cm.addPanel(makePanel("top", message), {position: "top"});
-    }
+    panel.className = 'alert right';
+    msgArea.textContent = message;
   }
 
   function setContent(cm) {
@@ -76,8 +55,9 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
     var output = setContent(dest);
     sqliteParser(source.getValue())
     .then(output, function (err) {
-      var location = err.location != null ? " (Line: " + err.location.start.line + ", Column: " + err.location.start.column + ")" : "";
-      setError(dest, "[" + err.name + "] " + err.message + location);
+      var location = err.location != null ? "[" + err.location.start.line +
+      ", " + err.location.start.column + "] " : "";
+      setError(dest, location + err.message);
     });
   }
 
@@ -89,7 +69,7 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
   }
 
   var loadDemo = function () {
-    var sql = CodeMirror.fromTextArea(document.getElementById('sql'), {
+    var sql = CodeMirror.fromTextArea(document.getElementById('sql-text'), {
           mode: 'text/x-plsql',
           lineNumbers: true,
           theme: 'monokai',
@@ -97,7 +77,7 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
           lineWrapping: true,
           lineWrapping: true
         }),
-        ast = CodeMirror.fromTextArea(document.getElementById('ast'), {
+        ast = CodeMirror.fromTextArea(document.getElementById('ast-text'), {
           lineNumbers: true,
           theme: 'monokai',
           lineWrapping: true,
@@ -28833,8 +28813,8 @@ module.exports = (function (_) {
     if (chain.length) {
       // Don't accidentally repeat the first description in the output
       chainDetail = _(chain).rest().takeRight(2).value();
-      message = 'There is a syntax error near ' + _.first(chain) +
-                ' [' + chainDetail.join(', ') + ']' + '';
+      message = 'Syntax error found near ' + _.first(chain) +
+                ' (' + chainDetail.join(', ') + ')' + '';
       location = _.findLast(this.events, {description: _.last(chain)}).location;
       throw {
         'name': 'SyntaxError',

@@ -28743,8 +28743,8 @@ module.exports = (function (_) {
     if (chain.length) {
       // Don't accidentally repeat the first description in the output
       chainDetail = _(chain).rest().takeRight(2).value();
-      message = 'There is a syntax error near ' + _.first(chain) +
-                ' [' + chainDetail.join(', ') + ']' + '';
+      message = 'Syntax error found near ' + _.first(chain) +
+                ' (' + chainDetail.join(', ') + ')' + '';
       location = _.findLast(this.events, {description: _.last(chain)}).location;
       throw {
         'name': 'SyntaxError',

@@ -9,10 +9,6 @@
 
     <!-- Demo Styles -->
     <link rel="stylesheet" href="css/demo.css">
-
-    <!-- CodeMirror Setup -->
-    <script src="sqlite-parser-demo.js"></script>
-
   </head>
 
   <body>
@@ -22,9 +18,9 @@
 
     <div class="container">
 
-      <div class="left">
-        <h3>SQLite Statement</h3>
-        <textarea id="sql">
+      <div class="left" id="sql">
+        <h3 id="sql-header">SQL Statement</h3>
+        <textarea id="sql-text">
 CREATE TABLE Bees (
   id integer PRIMARY KEY ON CONFLICT ROLLBACK AUTOINCREMENT,
   name varchar(50) NOT NULL UNIQUE,
@@ -45,9 +41,9 @@ INSERT INTO Bees (name, wings, legs) VALUES
         </textarea>
       </div>
 
-      <div class="right">
-        <h3>Syntax Tree</h3>
-        <textarea id="ast"></textarea>
+      <div class="right" id="ast">
+        <h3 id="ast-header">Syntax Tree</h3>
+        <textarea id="ast-text"></textarea>
       </div>
 
     </div>
@@ -61,5 +57,8 @@ INSERT INTO Bees (name, wings, legs) VALUES
          &copy; 2015 <a href="http://codeschool.com" title="Code School">Code School</a>
        </h3>
     </footer>
+
+    <!-- CodeMirror Setup -->
+    <script src="sqlite-parser-demo.js"></script>
   </body>
 </html>

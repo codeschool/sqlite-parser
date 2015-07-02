@@ -143,7 +143,7 @@ which will automatically compile the parser and run the tests in `test/index-spe
 
 Optionally, run `grunt debug` to get extended output and start a file watcher.
 
-Finally, you should run `grunt release` before creating any PR to run all tests
+Finally, you should run `grunt release`, before creating any PR, to run all tests
 and rebuild the `dist/` and `demo/` folders.
 
 ### Writing tests
