@@ -76,8 +76,8 @@ body {
 }
 
 footer, header {
-  padding: 8px;
   color: #dbdbdb;
+  padding: 0;
 }
 
 footer h3, header h2 {
@@ -87,16 +87,18 @@ footer h3, header h2 {
 footer h3 {
   margin: 0 auto;
   text-align: center;
+  line-height: 24px;
+  font-size: 16px;
 }
 
-footer a, footer a:visited {
-  color: #2f6a9e;
+a, a:visited {
+  color: #e6db74;
   text-decoration: none;
 }
 
-footer a:hover, footer a:active {
-  color: #329e2f;
-  text-decoration: underline;
+a:hover, a:active {
+  color: #77A025;
+  text-decoration: none;
 
 }
 
