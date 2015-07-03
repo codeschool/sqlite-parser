@@ -28230,28 +28230,6 @@ module.exports = (function() {
 var lodash = require('lodash');
 
 module.exports = (function (_) {
-  function log(event) {
-    function repeat(string, n) {
-       var result = "", i;
-
-       for (i = 0; i < n; i++) {
-         result += string;
-       }
-
-       return result;
-    }
-
-    function pad(string, length) {
-      return string + repeat(" ", length - string.length);
-    }
-
-    console.log(
-      event.location.start.line + ":" + event.location.start.column + "-"
-        + event.location.end.line + ":" + event.location.end.column + " "
-        + pad(event.type, 10) + " "
-        + repeat("  ", event.indentation) + event.rule
-    );
-  }
   Tracer = function Tracer() {
     if (!(this instanceof Tracer)) {
       return new Tracer();
