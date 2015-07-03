@@ -202,7 +202,9 @@ expression_collate "COLLATE Expression"
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_compare
-  = v:( expression_value ) o n:( expression_is_not )? m:( LIKE / GLOB / REGEXP / MATCH ) e e:( expression ) o x:( expression_escape )?
+  = v:( expression_value ) o n:( expression_is_not )?
+    m:( LIKE / GLOB / REGEXP / MATCH ) e e:( expression ) o
+    x:( expression_escape )?
   {
     return util.extend({
       'type': 'expression',
@@ -807,7 +809,8 @@ select_parts
   / select_parts_values
 
 select_parts_core
-  = s:( select_core_select ) f:( select_core_from )? w:( stmt_core_where )? g:( select_core_group )?
+  = s:( select_core_select ) f:( select_core_from )? w:( stmt_core_where )?
+    g:( select_core_group )?
   {
     return util.extend({
       'type': 'statement',
@@ -1010,6 +1013,11 @@ join_operator_types
   = operator_types_hand
   / operator_types_misc
 
+/**
+ * @note FULL (OUTER)? JOIN included from PostgreSQL although it is not a
+ *  join operarator allowed in SQLite.
+ *  See: {@link https://www.sqlite.org/syntax/join-operator.html}
+ */
 operator_types_hand
   = t:( LEFT / RIGHT / FULL ) e o:( types_hand_outer )?
   { return util.compose([t, o]); }
@@ -1136,7 +1144,7 @@ insert_keyword_mod
     };
   }
 
-insert_target
+insert_target "INTO Clause"
   = s:( INTO ) e id:( id_table ) o cols:( loop_columns )?
   {
     return {
@@ -1177,7 +1185,7 @@ insert_parts
     };
   }
 
-insert_value
+insert_value "VALUES Clause"
   = s:( VALUES ) o r:( insert_values_list )
   { return r; }
 
@@ -1199,7 +1207,7 @@ insert_values
     };
   }
 
-insert_default
+insert_default "DEFAULT VALUES Clause"
   = d:( DEFAULT ) e v:( VALUES )
   {
     return {
@@ -1469,7 +1477,9 @@ datatype_none "BLOB Datatype Name"
  * @note Includes limited update syntax {@link https://www.sqlite.org/syntax/update-stmt-limited.html}
  */
 stmt_update "UPDATE Statement"
-  = u:( clause_with )? o s:( update_start ) f:( update_fallback )? t:( table_qualified ) o u:( update_set ) w:( stmt_core_where )? o:( stmt_core_order )? o l:( stmt_core_limit )?
+  = u:( clause_with )? o s:( update_start ) f:( update_fallback )?
+    t:( table_qualified ) o u:( update_set ) w:( stmt_core_where )?
+    o:( stmt_core_order )? o l:( stmt_core_limit )?
   {
     // TODO: Not final syntax!
     return util.extend({

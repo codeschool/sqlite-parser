@@ -9,7 +9,8 @@ module.exports = function(grunt) {
       demo: {
         options: {
           alias: {
-            'sqlite-parser': './index.js',
+            'sqlite-parser': './index',
+            'sqlite-parser-util': './lib/parser-util',
             'codemirror': './node_modules/codemirror/lib/codemirror',
             'foldcode': './node_modules/codemirror/addon/fold/foldcode',
             'foldgutter': './node_modules/codemirror/addon/fold/foldgutter',

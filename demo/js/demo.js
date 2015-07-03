@@ -1,8 +1,11 @@
 (function (root) {
   var sqliteParser = require('sqlite-parser'),
+      util = require('sqlite-parser-util'),
       CodeMirror = require('codemirror'),
       panel = document.getElementById('ast'),
-      msgArea = document.getElementById('ast-header');
+      msgArea = document.getElementById('ast-header'),
+      elemSql = document.getElementById('sql-text'),
+      elemAst = document.getElementById('ast-text');
 
   require('foldcode');
   require('foldgutter');
@@ -67,24 +70,21 @@
   }
 
   var loadDemo = function () {
-    var sql = CodeMirror.fromTextArea(document.getElementById('sql-text'), {
-          mode: 'text/x-plsql',
-          lineNumbers: true,
-          theme: 'monokai',
-          tabSize: 4,
-          lineWrapping: true,
-          lineWrapping: true
-        }),
-        ast = CodeMirror.fromTextArea(document.getElementById('ast-text'), {
+    var cmDefaults = {
           lineNumbers: true,
           theme: 'monokai',
           lineWrapping: true,
-          mode: "application/ld+json",
           tabSize: 4,
-          lineWrapping: true,
-          foldGutter: true,
           gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
-        }),
+        },
+        sql = CodeMirror.fromTextArea(elemSql, util.extend({
+          mode: 'text/x-plsql'
+        }, cmDefaults)),
+        ast = CodeMirror.fromTextArea(elemAst, util.extend({
+          mode: "application/ld+json",
+          foldGutter: true,
+          readOnly: 'nocursor'
+        }, cmDefaults)),
         update = debounce(function () {
           updater(sql, ast);
         }, 250);
