@@ -251,7 +251,8 @@ fixed value format for direction key in PRIMARY KEY table contrainsts cleaned up
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.6.0...HEAD
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.8.0...HEAD
+[v0.8.0]: https://github.com/codeschool/sqlite-parser/compare/v0.6.0...v0.8.0
 [v0.6.0]: https://github.com/codeschool/sqlite-parser/compare/v0.3.1...v0.6.0
 [v0.3.1]: https://github.com/codeschool/sqlite-parser/compare/6388118d601a89d011ecd6f5c215bbc9763444db...v0.3.1
 [v0.1.1]: https://github.com/codeschool/sqlite-parser/commit/6388118d601a89d011ecd6f5c215bbc9763444db
