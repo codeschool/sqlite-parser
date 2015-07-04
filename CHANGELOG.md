@@ -3,6 +3,46 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+## [v0.8.0] - 2015-07-04
+### Added
+- added several array methods (e.g.: `findLast()`, `takeRight()`, `pluck()`) so that I could remove `lodash` as a dependency of the "smart error" `Tracer` class
+
+### Changed
+- removed `lodash` dependency in core `Tracer`. `lodash` is now only a `devDependency` again!
+
+### Notes
+- considering removing the `promise` dependency from the core `sqlite-parser` library before `v1.0.0`, as well, so that the parser can be dependency free as a standalone library. people could choose to "promisify" the parser or just use it synchronously instead of being forced to bundle the `promise` dependency when bundling this package for use in the browser. It actually looks like all the evergreen browsers except IE currently support a native `Promise` implementation, so having a non-native `Promise` implementation as a dependency will probably be obsolete pretty soon.
+
+## [v0.7.0] - 2015-07-02
+### Added
+- additional rule descriptions in `grammar.pegjs`
+
+### Changed
+- cleaned up css in the interactive demo
+
+### Fixed
+- fixed error reporting when there is more than one statement in the input SQL.
+  - still need to make sure previous tree is not used if a subsequent statement has an error at the highest level
+
+  ``` sql
+  SELECT *
+  FROM cats;
+  SELECT * d
+  ```
+
+### Notes  
+- to support the "smart errors" changes were made to the `pegjs` library code in `lib/compiler/passes/generate-javascript.js`. this was done to allow `Tracer` to get the `description` names for the rules that are referenced in the error messages. will need to fork `pegjs` to get the changes to `pegjs` core into version control so they are not accidentally overwritten.
+
+do not show parenthesis in error message for syntax error when thereis nothing to put inside them. fixes for css in demo
+
+demo layout off by 1px when at smallest resolution
+
+did a lot of cleanup on demo styles, responsive layout, error notification. changed error message format for smart errors
+
+fixed rules for double-quoted, backticked, and bracketed identifiers to allow for escapes, leading or trailing spaces, and the full character set that is legal for quoted identifiers, where allowed. fixed datatype names that did not display correctly in generated AST. fixed string literal definition to allow all possible input
+
+fixed value format for direction key in PRIMARY KEY table contrainsts cleaned up CSS for demo.
+
 ## [v0.6.0] - 2015-07-01
 ### Changed
 - updated grammar to remove all dependence on `modifier` clause as it was being used as a catch-all clause for stray parts of statements

@@ -3,9 +3,9 @@
  * @copyright Code School 2015 {@link http://codeschool.com}
  * @author Nick Wronski <nick@javascript.com>
  */
-var lodash = require('lodash');
+var parserUtils = require('./parser-util');
 
-module.exports = (function (_) {
+module.exports = (function (util) {
   Tracer = function Tracer() {
     if (!(this instanceof Tracer)) {
       return new Tracer();
@@ -34,50 +34,51 @@ module.exports = (function (_) {
         break;
       case 'rule.fail':
         // remove failed leaf
-        this.events.splice(_.findLastIndex(this.events, {rule: event.rule}), 1);
+        this.events.splice(util.findLastIndex(this.events, {rule: event.rule}), 1);
         this.indentation -= 1;
         break;
     }
   };
 
   Tracer.prototype.smartError = function smartError(err) {
-    var message, location, chainDetail,
+    var message, location, chain, chainDetail,
         lastIndent = 10000,
-        bestDescriptor = false,
-        chain = _(this.events)
-        // Only use nodes with a set description
-        .filter(function (e) {
-          return e.description !== '' && !/whitespace|(semi$)|(^[oe]$)/i.test(e.rule);
-        })
-        .reverse()
-        .filter(function (e) {
-          if (e.indentation < lastIndent) {
-            // Keep this node and update last indentation
-            lastIndent = e.indentation;
-            return true;
-          } else {
-            // Prune this node from a previous match sequence
-            return false;
-          }
-        })
-        .pluck('description')
-        .takeWhile(function (d) {
-          if (!bestDescriptor && /(Statement|Clause)$/i.test(d)) {
-            bestDescriptor = true;
-            return true;
-          }
-          return !bestDescriptor;
-        })
-        .reverse()
-        .value();
+        bestDescriptor = false;
+
+    chain = this.events.filter(function (e) {
+      // Only use nodes with a set description
+      return e.description !== '' && !/whitespace|(semi$)|(^[oe]$)/i.test(e.rule);
+    })
+    .reverse()
+    .filter(function (e) {
+      if (e.indentation < lastIndent) {
+        // Keep this node and update last indentation
+        lastIndent = e.indentation;
+        return true;
+      } else {
+        // Prune this node from a previous match sequence
+        return false;
+      }
+    });
 
     if (chain.length) {
+      // Get best location data
+      location = util.first(chain).location;
+      // Collect descriptions
+      chain = util.takeWhile(util.pluck(chain, 'description'), function (d) {
+        if (!bestDescriptor && /(Statement|Clause)$/i.test(d)) {
+          bestDescriptor = true;
+          return true;
+        }
+        return !bestDescriptor;
+      })
+      .reverse();
       // Don't accidentally repeat the first description in the output
-      chainDetail = _(chain).rest().takeRight(2).value();
-      message = 'Syntax error found near ' + _.first(chain) +
+      chainDetail = util.takeRight(util.rest(chain), 2);
+      message = 'Syntax error found near ' + util.first(chain) +
                 (chainDetail.length > 0 ? ' (' + chainDetail.join(', ') + ')' : '');
-      location = _.findLast(this.events, {description: _.last(chain)}).location;
-      _.extend(err, {
+      //location = this.events.findLast({description: chain.last()}).location;
+      util.extend(err, {
         'message': message,
         'location': location
       });
@@ -86,4 +87,4 @@ module.exports = (function (_) {
   }
 
   return Tracer;
-})(lodash);
+})(parserUtils);
