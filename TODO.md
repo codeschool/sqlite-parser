@@ -2,11 +2,11 @@
 
 ## **[1.0.0]** In progress
 
-- [ ] Set proper rules for identifier names, e.g.: `[a-z0-9\_\-]+`
+- [x] Set proper rules for identifier names, e.g.: `[a-z0-9\_\-]+`
 
-- [ ] **In progress** Interactive demo editor showing SQL and corresponding AST
+- [x] Interactive demo editor showing SQL and corresponding AST
 
-- [ ] Missing specs
+- [x] Missing specs
   - [x] Basic Drop Table
   - [x] Basic Drop Trigger
   - [x] Basic Function  
@@ -76,7 +76,7 @@
       hat OR (shirt AND (shoes OR wig) AND pants)
     ```
 
-- [ ] Remove `modifier` key from all parts of AST and standardize as `conditions`
+- [x] Remove `modifier` key from all parts of AST and standardize as `conditions`
 
 - [x] Create `INDEX`
   - [x] *Has spec*
@@ -89,6 +89,9 @@
   - [x] This currently only works with expression arguments and does not support passing column definitions and/or table constraint definitions as is allowed in the SQLite spec for virtual table module arguments.
     - **FIXED: fixed by checking for a column name followed by a type definition or column constraint before assuming the type is an expression list, if these things are found, then treat the arguments as a set of source definitions as in a creation statement for a table**
     - See: [Virtual Tables](https://www.sqlite.org/lang_createvtab.html)
+
+- [ ] **[In Progress]** Need to display correct error location when there are multiple statements in the input SQL
+- [ ] **[In Progress]** Finish standardizing AST format across all types of statements
 
 ## **[0.1.0]** Finished (needs tests)
 - [x] `SELECT` **TODO: Need tests**
