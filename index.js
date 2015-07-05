@@ -20,7 +20,7 @@
     });
   }
   sqliteParser['NAME'] = 'sqlite-parser';
-  sqliteParser['VERSION'] = '0.8.2';
+  sqliteParser['VERSION'] = '0.8.3';
 
   module.exports = root.sqliteParser = sqliteParser;
 })(typeof self === 'object' ? self : global);

@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 - forked `pegjs` repository as `nwronski/pegjs` to get the changes into `pegjs` core into version control so they are not accidentally overwritten
 - getting closer to displaying correct error location when there are multiple statements in the input SQL
 
+### Notes
+- Even though the `Tracer` is now pretty good at pinpointing where a SyntaxError occurred, it is still removing `CREATE TABLE` node when there is a failure in the statement, even though that information should be part of the error message.
+
 ## [v0.8.0] - 2015-07-04
 ### Added
 - added several array methods (e.g.: `findLast()`, `takeRight()`, `pluck()`) so that I could remove `lodash` as a dependency of the "smart error" `Tracer` class

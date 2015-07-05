@@ -127,8 +127,9 @@ function has(thing, item) {
       return findWhere(thing, item) !== undefined;
     }
   } else if (isPlain(thing)) {
-    // thing is an object
-    if (isPlain(item)) {
+    if (isFunc(item)) {
+      return item(thing);
+    } else if (isPlain(item)) {
       // item is an object, find each prop key and value in item within thing
       for (k in item) {
         v = item[k];

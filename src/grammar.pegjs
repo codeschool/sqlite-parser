@@ -1102,7 +1102,7 @@ stmt_fallback_types
   { return k; }
 
 /** {@link https://www.sqlite.org/lang_insert.html} */
-stmt_insert
+stmt_insert "INSERT Statement"
   = k:( insert_keyword ) o t:( insert_target ) o p:( insert_parts )
   {
     // TODO: Not final syntax!
@@ -1120,7 +1120,7 @@ insert_keyword
   = insert_keyword_ins
   / insert_keyword_repl
 
-insert_keyword_ins "INSERT Statement"
+insert_keyword_ins
   = a:( INSERT ) e m:( insert_keyword_mod )?
   {
     return util.extend({
@@ -1128,7 +1128,7 @@ insert_keyword_ins "INSERT Statement"
     }, m);
   }
 
-insert_keyword_repl "REPLACE Statement"
+insert_keyword_repl
   = a:( REPLACE ) e
   {
     return {
