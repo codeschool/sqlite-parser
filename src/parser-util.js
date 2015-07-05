@@ -185,16 +185,6 @@ function findLast(arr, props, index) {
   return index ? -1 : null;
 }
 
-function takeRight(arr, count) {
-  return 1 <= count ? arr.slice(-1 * count) : null;
-}
-
-function pluck(arr, prop) {
-  return arr.map(function (elem) {
-    return has(elem, prop) ? elem[prop] : null;
-  });
-}
-
 function takeWhile(arr, func) {
   var elem, i, len;
   for (i = 0, len = arr.length; i < len; i++) {
@@ -239,13 +229,7 @@ module.exports = {
   'has':                  has,
   'findLastIndex':        findLastIndex,
   'findLast':             findLast,
-  'takeRight':            takeRight,
-  'pluck':                pluck,
   'takeWhile':            takeWhile,
-  'first':                first,
-  'last':                 last,
-  'rest':                 rest,
-  'uniq':                 uniq,
   // String methods
   'nodeToString':         nodeToString,
   'textNode':             textNode,

@@ -74,7 +74,8 @@ module.exports = (function (util) {
     if (chain.length) {
       location = bestNode.location;
       firstNode = util.findLast(chain.reverse(), function (elem) {
-        return /(Statement|Clause)$/i.test(elem.description);
+        return /(Statement|Clause)$/i.test(elem.description)  &&
+                elem.description !== bestNode.description;
       });
       chainDetail = firstNode != null ? ' (' + firstNode.description + ')' : '';
       message = 'Syntax error found near ' + bestNode.description + chainDetail;
