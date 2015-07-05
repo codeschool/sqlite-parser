@@ -90,8 +90,13 @@
     - **FIXED: fixed by checking for a column name followed by a type definition or column constraint before assuming the type is an expression list, if these things are found, then treat the arguments as a set of source definitions as in a creation statement for a table**
     - See: [Virtual Tables](https://www.sqlite.org/lang_createvtab.html)
 
-- [ ] **[In Progress]** Need to display correct error location when there are multiple statements in the input SQL
+- [x] Need to display correct error location when there are multiple statements in the input SQL
 - [ ] **[In Progress]** Finish standardizing AST format across all types of statements
+- [ ] `comment` rules should not use `sym_*` rules since you should not be able to put a space between the two symbols at the start and/or end of a comment.
+
+  ```
+  SELECT * - - not valid but is being accepted
+  ```
 
 ## **[0.1.0]** Finished (needs tests)
 - [x] `SELECT` **TODO: Need tests**
