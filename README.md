@@ -31,21 +31,23 @@ npm install sqlite-parser
 
 ## Usage
 
-The library exposes a function that accepts a single argument: a string
-containing SQL to parse. The method returns a `Promise` that resolves to the
-AST object generated from the source string.
+The library exposes a function that accepts two arguments: a string
+containing SQL to parse and a callback function. The function will invoke
+the callback function with the AST object generated from the source string.
 
 ``` javascript
-var sqliteParser  = require('sqlite-parser'),
-    sampleSQL     = "SELECT type, quantity FROM apples WHERE amount > 1";
+// Standard usage
+var sqliteParser    = require('sqlite-parser'),
+    sampleSQL       = "SELECT type, quantity FROM apples WHERE amount > 1";
 
-sqliteParser(sampleSQL)
-.then(function (tree) {
-  // AST generated
-  console.log(tree);
-}, function (err) {
-  // Parse error thrown
-  console.log(err);
+sqliteParser(sampleSQL, function (err, res) {
+  if (err) {
+    // Error
+    console.log(err);
+  } else {
+    // Result AST
+    console.log(res);
+  }
 });
 ```
 

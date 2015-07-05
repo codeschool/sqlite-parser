@@ -1,11 +1,12 @@
 (function (root) {
-  var sqliteParser = require('sqlite-parser'),
-      util = require('sqlite-parser-util'),
-      CodeMirror = require('codemirror'),
-      panel = document.getElementById('ast'),
-      msgArea = document.getElementById('ast-header'),
-      elemSql = document.getElementById('sql-text'),
-      elemAst = document.getElementById('ast-text');
+  var Promise         = require('promise'),
+      sqliteParser    = Promise.denodeify(require('sqlite-parser')),
+      util            = require('sqlite-parser-util'),
+      CodeMirror      = require('codemirror'),
+      panel           = document.getElementById('ast'),
+      msgArea         = document.getElementById('ast-header'),
+      elemSql         = document.getElementById('sql-text'),
+      elemAst         = document.getElementById('ast-text');
 
   require('foldcode');
   require('foldgutter');

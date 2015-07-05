@@ -10,19 +10,19 @@
       parser      = require('./lib/parser'),
       Tracer      = require('./lib/tracer');
 
-  function sqliteParser(source) {
-    var t = Tracer();
-    return new Promise(function(resolve, reject) {
-      resolve(parser.parse(source, {
+  function sqliteParser(source, callback) {
+    var t = Tracer(), res;
+    try {
+      res = parser.parse(source, {
         'tracer': t
-      }));
-    })
-    .catch(function (err) {
-      t.smartError(err);
-    });
+      });
+      callback(null, res);
+    } catch (e) {
+      callback(e instanceof parser.SyntaxError ? t.smartError(e) : e);
+    }
   }
   sqliteParser['NAME'] = 'sqlite-parser';
-  sqliteParser['VERSION'] = '0.8.3';
+  sqliteParser['VERSION'] = '0.9.0';
 
   module.exports = root.sqliteParser = sqliteParser;
 })(typeof self === 'object' ? self : global);
@@ -28380,7 +28380,7 @@ module.exports = (function (util) {
         'location': location
       });
     }
-    throw err;
+    return err;
   }
 
   return Tracer;

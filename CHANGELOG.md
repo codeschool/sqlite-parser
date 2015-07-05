@@ -2,7 +2,39 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
+
+## [v0.9.0] - 2015-07-05
 ### Changed
+- `sqlite-parser` is now completely **free of runtime dependencies** as `promise` has been removed as a dependency. you can still use the library as a promise-based module, but you have to include and `require('promise')` manually.
+
+  ``` javascript
+  // Promise-based usage
+  var Promise         = require('promise'),
+      sqliteParser    = Promise.denodeify(require('sqlite-parser'));
+  sqliteParser("SELECT * FROM bees")
+  .then(function (res) {
+    // Result AST
+    console.log(res);
+  }, function (err) {
+    // Error
+    console.log(err);
+  });
+  ```
+
+  ``` javascript
+  // Standard usage
+  var sqliteParser    = require('sqlite-parser');
+  sqliteParser("SELECT * FROM bees", function (err, res) {
+    if (err) {
+      // Error
+      console.log(err);
+    } else {
+      // Result AST
+      console.log(res);
+    }
+  });
+  ```
+
 - forked `pegjs` repository as `nwronski/pegjs` to get the changes into `pegjs` core into version control so they are not accidentally overwritten
 - getting closer to displaying correct error location when there are multiple statements in the input SQL
 
@@ -257,7 +289,8 @@ fixed value format for direction key in PRIMARY KEY table contrainsts cleaned up
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.8.0...HEAD
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.9.0...HEAD
+[v0.9.0]: https://github.com/codeschool/sqlite-parser/compare/v0.8.0...v0.9.0
 [v0.8.0]: https://github.com/codeschool/sqlite-parser/compare/v0.6.0...v0.8.0
 [v0.6.0]: https://github.com/codeschool/sqlite-parser/compare/v0.3.1...v0.6.0
 [v0.3.1]: https://github.com/codeschool/sqlite-parser/compare/6388118d601a89d011ecd6f5c215bbc9763444db...v0.3.1
