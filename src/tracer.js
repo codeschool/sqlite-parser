@@ -30,7 +30,7 @@ module.exports = (function (util) {
          *       statement is reported when there is an error within a
          *       statement that follows it
          */
-        this.indentation -= 1;
+         this.indentation -= 1;
         break;
       case 'rule.fail':
         // remove failed leaf
@@ -43,22 +43,20 @@ module.exports = (function (util) {
   Tracer.prototype.smartError = function smartError(err) {
     var message, location, chain, chainDetail,
         lastIndent = 10000,
-        bestDescriptor = false;
+        bestDescriptor = false,
+        multiStatement = false;
 
-    chain = this.events.filter(function (e) {
-      // Only use nodes with a set description
-      return e.description != null && !/whitespace|(semi$)|(^[oe]$)/i.test(e.rule);
-    })
+    chain = this.events
     .reverse()
     .filter(function (e) {
-      if (e.indentation < lastIndent) {
-        // Keep this node and update last indentation
-        lastIndent = e.indentation;
-        return true;
-      } else {
-        // Prune this node from a previous match sequence
+      // Only use nodes with a set description
+      if (multiStatement) {
         return false;
+      } else if (/Statement$/i.test(e.description)) {
+        multiStatement = true;
+        return true;
       }
+      return e.description !== null && !/whitespace|(semi$)|(^[oe]$)/i.test(e.rule);
     });
 
     if (chain.length) {

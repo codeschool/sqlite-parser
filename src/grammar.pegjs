@@ -1102,7 +1102,7 @@ stmt_fallback_types
   { return k; }
 
 /** {@link https://www.sqlite.org/lang_insert.html} */
-stmt_insert "INSERT Statement"
+stmt_insert
   = k:( insert_keyword ) o t:( insert_target ) o p:( insert_parts )
   {
     // TODO: Not final syntax!
@@ -1120,7 +1120,7 @@ insert_keyword
   = insert_keyword_ins
   / insert_keyword_repl
 
-insert_keyword_ins
+insert_keyword_ins "INSERT Statement"
   = a:( INSERT ) e m:( insert_keyword_mod )?
   {
     return util.extend({
@@ -1128,7 +1128,7 @@ insert_keyword_ins
     }, m);
   }
 
-insert_keyword_repl
+insert_keyword_repl "REPLACE Statement"
   = a:( REPLACE ) e
   {
     return {
@@ -1560,7 +1560,7 @@ stmt_create "CREATE Statement"
   / create_view
   / create_virtual
 
-create_table "CREATE Table"
+create_table "CREATE TABLE Statement"
   = s:( CREATE ) e tmp:( create_core_tmp )? t:( TABLE ) e ne:( create_core_ine )?
     id:( id_table ) o r:( create_table_source )
   {
@@ -1975,7 +1975,7 @@ table_source_select
   }
 
 /* TODO: Left off here */
-create_index "CREATE Index"
+create_index "CREATE INDEX Statement"
   = s:( CREATE ) e u:( index_unique )? i:( INDEX ) e ne:( create_core_ine )?
     n:( id_index ) o o:( index_on ) w:( stmt_core_where )?
   {
@@ -2014,7 +2014,7 @@ index_on
  *  enforced on UPDATE, DELETE, and INSERT statements in the trigger_action.
  *  See {@link https://www.sqlite.org/lang_createtrigger.html}.
  */
-create_trigger "CREATE Trigger"
+create_trigger "CREATE TRIGGER Statement"
   = s:( CREATE ) e p:( create_core_tmp )? t:( TRIGGER ) e ne:( create_core_ine )?
     n:( id_trigger ) o cd:( trigger_conditions ) ( ON ) e o:( name_table ) o
     me:( trigger_foreach )? wh:( trigger_when )? a:( trigger_action )
@@ -2109,7 +2109,7 @@ action_loop_stmt
   = s:( stmt ) o c:( sym_semi )
   { return s; }
 
-create_view "CREATE View"
+create_view "CREATE VIEW Statement"
   = s:( CREATE ) e p:( create_core_tmp )? v:( VIEW ) e ne:( create_core_ine )?
     n:( id_view ) o r:( create_as_select )
   {
@@ -2135,7 +2135,7 @@ create_as_select
  *    as is allowed in the SQLite spec for virtual table module arguments.
  *    See {@link https://www.sqlite.org/lang_createvtab.html}.
  */
-create_virtual "CREATE Virtual Table"
+create_virtual "CREATE VIRTUAL TABLE Statement"
   = s:( CREATE ) e v:( VIRTUAL ) e t:( TABLE ) e ne:( create_core_ine )?
     n:( id_table ) e ( USING ) e m:( name_module ) o a:( virtual_args )?
   {
