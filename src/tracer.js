@@ -47,7 +47,7 @@ module.exports = (function (util) {
 
     chain = this.events.filter(function (e) {
       // Only use nodes with a set description
-      return e.description !== '' && !/whitespace|(semi$)|(^[oe]$)/i.test(e.rule);
+      return e.description != null && !/whitespace|(semi$)|(^[oe]$)/i.test(e.rule);
     })
     .reverse()
     .filter(function (e) {
@@ -65,13 +65,13 @@ module.exports = (function (util) {
       // Get best location data
       location = util.first(chain).location;
       // Collect descriptions
-      chain = util.takeWhile(util.pluck(chain, 'description'), function (d) {
+      chain = util.uniq(util.takeWhile(util.pluck(chain, 'description'), function (d) {
         if (!bestDescriptor && /(Statement|Clause)$/i.test(d)) {
           bestDescriptor = true;
           return true;
         }
         return !bestDescriptor;
-      })
+      }))
       .reverse();
       // Don't accidentally repeat the first description in the output
       chainDetail = util.takeRight(util.rest(chain), 2);
