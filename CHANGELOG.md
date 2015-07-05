@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+## [v0.9.1] - 2015-07-05
+### Changed
+- removed `private` flag in `package.json` ahead of first published release
+- pulled out last remnants of `promise` from core `sqlite-parser` lib
+
 ## [v0.9.0] - 2015-07-05
 ### Changed
 - `sqlite-parser` is now completely **free of runtime dependencies** as `promise` has been removed as a dependency. you can still use the library as a promise-based module, but you have to include and `require('promise')` manually.
@@ -289,8 +294,8 @@ fixed value format for direction key in PRIMARY KEY table contrainsts cleaned up
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.9.0...HEAD
-[v0.9.0]: https://github.com/codeschool/sqlite-parser/compare/v0.8.0...v0.9.0
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.9.1...HEAD
+[v0.9.1]: https://github.com/codeschool/sqlite-parser/compare/v0.8.0...v0.9.1
 [v0.8.0]: https://github.com/codeschool/sqlite-parser/compare/v0.6.0...v0.8.0
 [v0.6.0]: https://github.com/codeschool/sqlite-parser/compare/v0.3.1...v0.6.0
 [v0.3.1]: https://github.com/codeschool/sqlite-parser/compare/6388118d601a89d011ecd6f5c215bbc9763444db...v0.3.1

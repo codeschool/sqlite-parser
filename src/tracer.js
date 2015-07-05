@@ -84,7 +84,7 @@ module.exports = (function (util) {
       });
     }
     return err;
-  }
+  };
 
   return Tracer;
 })(parserUtils);

@@ -4,8 +4,7 @@
  * @author Nick Wronski <nick@javascript.com>
  */
  ;(function (root) {
-  var Promise     = require('promise/lib/es6-extensions'),
-      parser      = require('./lib/parser'),
+  var parser      = require('./lib/parser'),
       Tracer      = require('./lib/tracer');
 
   function sqliteParser(source, callback) {
@@ -20,7 +19,7 @@
     }
   }
   sqliteParser['NAME'] = 'sqlite-parser';
-  sqliteParser['VERSION'] = '0.9.0';
+  sqliteParser['VERSION'] = '0.9.1';
 
   module.exports = root.sqliteParser = sqliteParser;
 })(typeof self === 'object' ? self : global);

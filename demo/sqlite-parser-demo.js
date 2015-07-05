@@ -28185,7 +28185,7 @@ module.exports = (function (util) {
       });
     }
     return err;
-  }
+  };
 
   return Tracer;
 })(parserUtils);
@@ -40099,8 +40099,7 @@ module.exports = {
  * @author Nick Wronski <nick@javascript.com>
  */
  ;(function (root) {
-  var Promise     = require('promise/lib/es6-extensions'),
-      parser      = require('./lib/parser'),
+  var parser      = require('./lib/parser'),
       Tracer      = require('./lib/tracer');
 
   function sqliteParser(source, callback) {
@@ -40115,10 +40114,10 @@ module.exports = {
     }
   }
   sqliteParser['NAME'] = 'sqlite-parser';
-  sqliteParser['VERSION'] = '0.9.0';
+  sqliteParser['VERSION'] = '0.9.1';
 
   module.exports = root.sqliteParser = sqliteParser;
 })(typeof self === 'object' ? self : global);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./lib/parser":2,"./lib/tracer":3,"promise/lib/es6-extensions":10}]},{},[1]);
+},{"./lib/parser":2,"./lib/tracer":3}]},{},[1]);
