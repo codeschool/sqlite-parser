@@ -137,32 +137,20 @@ module.exports = function(grunt) {
       }
     },
     'string-replace': {
+      options: {
+        replacements: [{
+          pattern: '<script src="sqlite-parser-demo-min.js"></script>',
+          replacement: '<script src="sqlite-parser-demo.js"></script>'
+        }]
+      },
       demo: {
         files: {
           'demo/index.html': 'demo/index.html'
-        },
-        options: {
-          replacements: [
-            // place files inline example
-            {
-              pattern: '<script src="sqlite-parser-demo.js"></script>',
-              replacement: '<script src="sqlite-parser-demo-min.js"></script>'
-            }
-          ]
         }
       },
       interactive: {
         files: {
           'demo/index.html': 'demo/index.html'
-        },
-        options: {
-          replacements: [
-            // place files inline example
-            {
-              pattern: '<script src="sqlite-parser-demo-min.js"></script>',
-              replacement: '<script src="sqlite-parser-demo.js"></script>'
-            }
-          ]
         }
       }
     }
