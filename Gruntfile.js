@@ -121,7 +121,49 @@ module.exports = function(grunt) {
           'index.js', 'src/*.js', 'src/*.pegjs', 'demo/js/*.js',
           'Gruntfile.js', 'demo/css/demo.css', 'demo/index.html'
         ],
-        tasks: ['demo']
+        tasks: ['default', 'clean:demo', 'browserify:demo', 'copy:demo']
+      }
+    },
+    uglify: {
+      dist: {
+        files: {
+          'dist/sqlite-parser-min.js': ['dist/sqlite-parser.js']
+        }
+      },
+      demo: {
+        files: {
+          'demo/sqlite-parser-demo-min.js': ['demo/sqlite-parser-demo.js']
+        }
+      }
+    },
+    'string-replace': {
+      demo: {
+        files: {
+          'demo/index.html': 'demo/index.html'
+        },
+        options: {
+          replacements: [
+            // place files inline example
+            {
+              pattern: '<script src="sqlite-parser-demo.js"></script>',
+              replacement: '<script src="sqlite-parser-demo-min.js"></script>'
+            }
+          ]
+        }
+      },
+      interactive: {
+        files: {
+          'demo/index.html': 'demo/index.html'
+        },
+        options: {
+          replacements: [
+            // place files inline example
+            {
+              pattern: '<script src="sqlite-parser-demo-min.js"></script>',
+              replacement: '<script src="sqlite-parser-demo.js"></script>'
+            }
+          ]
+        }
       }
     }
   });
@@ -132,17 +174,19 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-string-replace');
 
   grunt.registerTask('default', ['clean:main', 'shell:pegjs', 'copy:main']);
   grunt.registerTask('test', ['default', 'shell:test']);
   grunt.registerTask('debug', ['default', 'shell:debug', 'watch:debug']);
   grunt.registerTask('json', ['default', 'shell:json']);
   grunt.registerTask('demo', [
-    'default', 'clean:demo', 'browserify:demo', 'copy:demo'
+    'default', 'clean:demo', 'browserify:demo', 'copy:demo', 'uglify:demo', 'string-replace:demo'
   ]);
   grunt.registerTask('interactive', [
-    'demo', 'connect:server', 'watch:demo'
+    'default', 'clean:demo', 'browserify:demo', 'copy:demo', 'string-replace:interactive', 'connect:server', 'watch:demo'
   ]);
-  grunt.registerTask('dist', ['default', 'clean:dist', 'browserify:dist']);
+  grunt.registerTask('dist', ['default', 'clean:dist', 'browserify:dist', 'uglify:dist']);
   grunt.registerTask('release', ['test', 'dist', 'demo']);
 };

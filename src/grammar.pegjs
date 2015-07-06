@@ -1313,34 +1313,39 @@ delete_start "DELETE Keyword"
 
 /**
  * @note
- *  The inverse rules were created to help the tracer to not traverse
+ *  The "only" rules were created to help the tracer to not traverse
  *  the wrong path.
  */
 stmt_create "CREATE Statement"
-  = ( !create_table_inverse c:( create_table ) ) { return c; }
-  / ( !create_index_inverse c:( create_index ) ) { return c; }
-  / ( !create_trigger_inverse c:( create_trigger ) ) { return c; }
-  / ( !create_view_inverse c:( create_view ) ) { return c; }
-  / ( !create_virtual_inverse c:( create_virtual ) ) { return c; }
+  = create_table_only
+  / create_index_only
+  / create_trigger_only
+  / create_view_only
+  / create_virtual_only
 
 create_start
   = s:( CREATE ) e
   { return util.key(s); }
 
-create_table_inverse
-  = create_start ( INDEX / TRIGGER / VIEW / VIRTUAL )
+create_table_only
+  = !( create_start ( INDEX / TRIGGER / VIEW / VIRTUAL ) ) c:( create_table )
+  { return c; }
 
-create_index_inverse
-  = create_start ( TABLE / TRIGGER / VIEW / VIRTUAL )
+create_index_only
+  = !( create_start ( TABLE / TRIGGER / VIEW / VIRTUAL ) ) c:( create_index )
+  { return c; }
 
-create_trigger_inverse
-  = create_start ( TABLE / INDEX / VIEW / VIRTUAL )
+create_trigger_only
+  = !( create_start ( TABLE / INDEX / VIEW / VIRTUAL ) ) c:( create_trigger )
+  { return c; }
 
-create_view_inverse
-  = create_start ( TABLE / INDEX / TRIGGER / VIRTUAL )
+create_view_only
+  = !( create_start ( TABLE / INDEX / TRIGGER / VIRTUAL ) ) c:( create_view )
+  { return c; }
 
-create_virtual_inverse
-  = create_start ( TABLE / INDEX / TRIGGER / VIEW )
+create_virtual_only
+  = !( create_start ( TABLE / INDEX / TRIGGER / VIEW ) ) c:( create_virtual )
+  { return c; }
 
 create_table "CREATE TABLE Statement"
   = s:( create_table_start ) ne:( create_core_ine )? id:( id_table ) o
