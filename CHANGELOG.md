@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
+### Added
+- new specs for `CREATE TRIGGER` and datatypes
+
 ### Changed
 - added a bunch of missing descriptions for grammar rules in `grammar.pegjs`
 - make sure that a `description` is not repeated in smart error message

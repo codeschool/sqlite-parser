@@ -1349,7 +1349,7 @@ create_table "CREATE TABLE Statement"
   }
 
 create_core_tmp
-  = t:( TEMP / TEMPORARY ) e
+  = t:( TEMPORARY / TEMP ) e
   { return util.key(t); }
 
 create_core_ine "IF NOT EXISTS Modifier"
@@ -1978,13 +1978,27 @@ operator_unary "Unary Operator"
 
 /* TODO: Needs return format refactoring */
 operator_binary "Binary Operator"
-  = o:( binary_concat / expression_isnt
-  / binary_multiply / binary_mod
-  / binary_plus / binary_minus
-  / binary_left / binary_right / binary_and / binary_or
-  / binary_lte / binary_lt / binary_gte / binary_gt
-  / binary_lang / binary_notequal / binary_equal )
+  = o:( binary_nodes )
   { return util.key(o); }
+
+binary_nodes
+  = binary_concat
+  / expression_isnt
+  / binary_multiply
+  / binary_mod
+  / binary_plus
+  / binary_minus
+  / binary_left
+  / binary_right
+  / binary_and
+  / binary_or
+  / binary_lte
+  / binary_lt
+  / binary_gte
+  / binary_gt
+  / binary_lang
+  / binary_notequal
+  / binary_equal
 
 binary_concat "Or"
   = sym_pipe sym_pipe
