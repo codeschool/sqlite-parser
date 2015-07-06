@@ -92,7 +92,7 @@
 
 - [x] Need to display correct error location when there are multiple statements in the input SQL
 - [ ] **[In Progress]** Finish standardizing AST format across all types of statements
-- [ ] `comment` rules should not use `sym_*` rules since you should not be able to put a space between the two symbols at the start and/or end of a comment.
+- [x] `comment` rules should not use `sym_*` rules since you should not be able to put a space between the two symbols at the start and/or end of a comment.
 
   ```
   SELECT * - - not valid but is being accepted

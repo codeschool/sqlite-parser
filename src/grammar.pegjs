@@ -20,7 +20,11 @@ stmt_list
   = f:( stmt ) o b:( stmt_list_tail )* c:( sym_semi )*
   { return util.compose([f, b], []); }
 
-/* TODO: Note - you need semicolon between multiple statements, otherwise can omit */
+/**
+ * @note
+ *  You need semicolon between multiple statements, otherwise can omit last
+ *  semicolon in a group of statements.
+ */
 stmt_list_tail
   = ( sym_semi )+ s:( stmt ) o
   { return s; }
@@ -110,7 +114,6 @@ expression_exists_ne "EXISTS Keyword"
 expression_case "CASE Expression"
   = t:( CASE ) e e:( expression )? o w:( expression_case_when )+ o s:( expression_case_else )? o END o
   {
-    // TODO: Not sure about this
     return {
       'type': 'expression',
       'format': 'binary',
@@ -141,7 +144,6 @@ expression_case_else "ELSE Clause"
     };
   }
 
-/* TODO: Needs final format */
 expression_raise "RAISE Expression"
   = s:( RAISE ) o sym_popen o a:( expression_raise_args ) o sym_pclose
   {
@@ -435,7 +437,6 @@ number_decimal_fraction
   = t:( sym_dot ) d:( number_digit )+
   { return util.compose([t, d], ''); }
 
-/* TODO: Not sure about "E"i or just "E" */
 number_decimal_exponent "Decimal Literal Exponent"
   = e:( "E"i ) s:( [\+\-] )? d:( number_digit )+
   { return util.compose([e, s, d], ''); }
@@ -573,7 +574,7 @@ error_message "Error Message"
   = m:( literal_string )
   { return m; }
 
-stmt "Statement"
+stmt
   = m:( stmt_modifier )? s:( stmt_nodes ) o
   {
     return util.extend({
@@ -698,7 +699,6 @@ stmt_crud
 clause_with "WITH Clause"
   = s:( WITH ) e v:( clause_with_recursive )? f:( expression_table ) o r:( clause_with_loop )*
   {
-    // TODO: final format
     return {
       'with': {
         'type': util.key(s),
@@ -781,7 +781,6 @@ select_loop
   = s:( select_parts ) o u:( select_loop_union )*
   {
     if (util.isArray(u) && u.length) {
-      // TODO: Not final format
       return {
         'type': 'statement',
         'variant': 'compound',
@@ -793,7 +792,6 @@ select_loop
     }
   }
 
-/* TODO: Not final format */
 select_loop_union "Union Operation"
   = c:( operator_compound ) o s:( select_parts ) o
   {
@@ -874,7 +872,6 @@ stmt_core_where "WHERE Clause"
 select_core_group "GROUP BY Clause"
   = s:( GROUP ) e BY e e:( expression_list ) o h:( select_core_having )?
   {
-    // TODO: format
     return {
       'expression': util.makeArray(e),
       'having': h
@@ -906,7 +903,6 @@ select_node_star_qualified
 select_node_aliased
   = e:( expression ) o a:( alias )?
   {
-    // TODO: format
     return util.extend(e, {
       'alias': a
     });
@@ -973,13 +969,12 @@ table_or_sub_select "Subquery"
   }
 
 alias "Alias"
-  = a:( AS e )? n:( name ) o
+  = a:( AS ( !name_char o ) )? n:( name ) o
   { return n; }
 
 select_join_loop
   = t:( table_or_sub ) o j:( select_join_clause )+
   {
-    // TODO: format
     return {
       'type': 'map',
       'variant': 'join',
@@ -991,7 +986,6 @@ select_join_loop
 select_join_clause "JOIN Operation"
   = o:( join_operator ) o n:( table_or_sub ) o c:( join_condition )?
   {
-    // TODO: format
     return util.extend({
       'type': 'join',
       'variant': util.key(o),
@@ -1042,7 +1036,6 @@ join_condition_on "Join ON Clause"
     };
   }
 
-/* TODO: should it be name_column or id_column ? */
 join_condition_using "Join USING Clause"
   = s:( USING ) e f:( id_column ) o b:( join_condition_using_loop )*
   {
@@ -1051,7 +1044,6 @@ join_condition_using "Join USING Clause"
     };
   }
 
-/* TODO: should it be name_column or id_column ? */
 join_condition_using_loop
   = sym_comma n:( id_column ) o
   { return n; }
@@ -1059,7 +1051,6 @@ join_condition_using_loop
 select_parts_values "VALUES Clause"
   = s:( VALUES ) o l:( insert_values_list )
   {
-    // TODO: format
     return {
       'type': 'statement',
       'variant': 'select',
@@ -1083,7 +1074,6 @@ stmt_core_order_list_loop
 stmt_core_order_list_item "Ordering Expression"
   = e:( expression ) o c:( column_collate )? o d:( stmt_core_order_list_dir )?
   {
-    // TODO: Not final format
     return {
       'direction': util.textNode(d) /*|| 'ASC'*/,
       'expression': e,
@@ -1105,7 +1095,6 @@ stmt_fallback_types "Fallback Type"
 stmt_insert "INSERT Statement"
   = k:( insert_keyword ) o t:( insert_target )
   {
-    // TODO: Not final syntax!
     return util.extend({
       'type': 'statement',
       'variant': 'insert',
@@ -1253,7 +1242,6 @@ stmt_update "UPDATE Statement"
     t:( table_qualified ) o u:( update_set ) w:( stmt_core_where )?
     o:( stmt_core_order )? o l:( stmt_core_limit )?
   {
-    // TODO: Not final syntax!
     return util.extend({
       'type': 'statement',
       'variant': s,
@@ -1309,7 +1297,6 @@ update_column "Column Assignment"
 stmt_delete "DELETE Statement"
   = u:( clause_with )? o s:( delete_start ) t:( table_qualified ) o w:( stmt_core_where )? o:( stmt_core_order )? l:( stmt_core_limit )?
   {
-    // TODO: Not final syntax!
     return util.extend({
       'type': 'statement',
       'variant': s,
@@ -1324,28 +1311,58 @@ delete_start "DELETE Keyword"
   = s:( DELETE ) e FROM e
   { return util.key(s); }
 
-/* TODO: Complete */
-stmt_create
-  = create_table
-  / create_index
-  / create_trigger
-  / create_view
-  / create_virtual
+/**
+ * @note
+ *  The inverse rules were created to help the tracer to not traverse
+ *  the wrong path.
+ */
+stmt_create "CREATE Statement"
+  = ( !create_table_inverse c:( create_table ) ) { return c; }
+  / ( !create_index_inverse c:( create_index ) ) { return c; }
+  / ( !create_trigger_inverse c:( create_trigger ) ) { return c; }
+  / ( !create_view_inverse c:( create_view ) ) { return c; }
+  / ( !create_virtual_inverse c:( create_virtual ) ) { return c; }
+
+create_start
+  = s:( CREATE ) e
+  { return util.key(s); }
+
+create_table_inverse
+  = create_start ( INDEX / TRIGGER / VIEW / VIRTUAL )
+
+create_index_inverse
+  = create_start ( TABLE / TRIGGER / VIEW / VIRTUAL )
+
+create_trigger_inverse
+  = create_start ( TABLE / INDEX / VIEW / VIRTUAL )
+
+create_view_inverse
+  = create_start ( TABLE / INDEX / TRIGGER / VIRTUAL )
+
+create_virtual_inverse
+  = create_start ( TABLE / INDEX / TRIGGER / VIEW )
 
 create_table "CREATE TABLE Statement"
-  = s:( CREATE ) e tmp:( create_core_tmp )? t:( TABLE ) e ne:( create_core_ine )?
-    id:( id_table ) o r:( create_table_source )
+  = s:( create_table_start ) ne:( create_core_ine )? id:( id_table ) o
+    r:( create_table_source )
   {
     return util.extend({
       'type': 'statement',
-      'variant': util.key(s),
-      'format': util.key(t),
-      'temporary': util.isOkay(tmp),
       'target': id,
       'condition': util.makeArray(ne),
       'optimization': null,
       'definition': []
-    }, r);
+    }, s, r);
+  }
+
+create_table_start
+  = s:( create_start ) tmp:( create_core_tmp )? t:( TABLE ) e
+  {
+    return {
+      'temporary': util.isOkay(tmp),
+      'variant': s,
+      'format': util.key(t)
+    };
   }
 
 create_core_tmp
@@ -1598,7 +1615,6 @@ primary_columns "PRIMARY KEY Columns"
 primary_column "Indexed Column"
   = e:( name_column ) o c:( column_collate )? d:( primary_column_dir )?
   {
-    // TODO: Not final format
     return {
       'type': 'identifier',
       'variant': 'column',
@@ -1679,7 +1695,6 @@ foreign_clause
 foreign_references "REFERENCES Clause"
   = REFERENCES e t:( id_table ) o c:( loop_columns )?
   {
-    // TODO: FORMAT?
     return util.extend({
       'target': t,
       'columns': null
@@ -1694,7 +1709,6 @@ foreign_actions_tail
   = e a:( foreign_action )
   { return a; }
 
-/* TODO: action format? */
 foreign_action "FOREIGN KEY Action Clause"
   = foreign_action_on
   / foreign_action_match
@@ -1726,7 +1740,9 @@ on_action_none
   = n:( NO ) e a:( ACTION )
   { return util.compose([n, a]); }
 
-/* TODO: name format? */
+/**
+ * @note Not sure what kind of name this should be.
+ */
 foreign_action_match
   = m:( MATCH ) e n:( name )
   {
@@ -1754,18 +1770,25 @@ table_source_select
   }
 
 create_index "CREATE INDEX Statement"
-  = s:( CREATE ) e u:( index_unique )? i:( INDEX ) e ne:( create_core_ine )?
-    n:( id_index ) o o:( index_on ) w:( stmt_core_where )?
+  = s:( create_index_start ) ne:( create_core_ine )? n:( id_index ) o
+    o:( index_on ) w:( stmt_core_where )?
   {
     return util.extend({
       'type': 'statement',
-      'variant': util.key(s),
-      'format': util.key(i),
       'target': n,
       'where': w,
       'on': o,
       'condition': util.makeArray(ne),
       'unique': false
+    }, s);
+  }
+
+create_index_start
+  = s:( create_start ) u:( index_unique )? i:( INDEX ) e
+  {
+    return util.extend({
+      'variant': util.key(s),
+      'format': util.key(i)
     }, u);
   }
 
@@ -1793,22 +1816,29 @@ index_on "ON Clause"
  *  See {@link https://www.sqlite.org/lang_createtrigger.html}.
  */
 create_trigger "CREATE TRIGGER Statement"
-  = s:( CREATE ) e p:( create_core_tmp )? t:( TRIGGER ) e ne:( create_core_ine )?
-    n:( id_trigger ) o cd:( trigger_conditions ) ( ON ) e o:( name_table ) o
+  = s:( create_trigger_start ) ne:( create_core_ine )? n:( id_trigger ) o
+    cd:( trigger_conditions ) ( ON ) e o:( name_table ) o
     me:( trigger_foreach )? wh:( trigger_when )? a:( trigger_action )
   {
-    return {
+    return util.extend({
       'type': 'statement',
-      'variant': util.key(s),
-      'format': util.key(t),
       'when': wh,
       'target': n,
       'on': o,
       'condition': util.makeArray(ne),
       'event': cd,
-      'temporary': util.isOkay(p),
       'by': (util.isOkay(me) ? me : 'row'),
       'action': util.makeArray(a)
+    }, s);
+  }
+
+create_trigger_start
+  = s:( create_start ) p:( create_core_tmp )? t:( TRIGGER ) e
+  {
+    return {
+      'temporary': util.isOkay(p),
+      'variant': util.key(s),
+      'format': util.key(t)
     };
   }
 
@@ -1888,17 +1918,24 @@ action_loop_stmt
   { return s; }
 
 create_view "CREATE VIEW Statement"
-  = s:( CREATE ) e p:( create_core_tmp )? v:( VIEW ) e ne:( create_core_ine )?
-    n:( id_view ) o r:( create_as_select )
+  = s:( create_view_start ) ne:( create_core_ine )? n:( id_view ) o
+    r:( create_as_select )
   {
-    return {
+    return util.extend({
       'type': 'statement',
-      'variant': util.key(s),
-      'format': util.key(v),
       'condition': util.makeArray(ne),
-      'temporary': util.isOkay(p),
       'target': n,
       'result': r
+    }, s);
+  }
+
+create_view_start
+  = s:( create_start ) p:( create_core_tmp )? v:( VIEW ) e
+  {
+    return {
+      'temporary': util.isOkay(p),
+      'variant': util.key(s),
+      'format': util.key(v)
     };
   }
 
@@ -1906,58 +1943,87 @@ create_as_select
   = s:( AS ) e r:( stmt_select ) o
   { return r; }
 
-/**
- *  @note
- *    This currently only works with expression arguments and does not
- *    support passing column definitions and/or table constraint definitions
- *    as is allowed in the SQLite spec for virtual table module arguments.
- *    See {@link https://www.sqlite.org/lang_createvtab.html}.
- */
 create_virtual "CREATE VIRTUAL TABLE Statement"
-  = s:( CREATE ) e v:( VIRTUAL ) e t:( TABLE ) e ne:( create_core_ine )?
-    n:( id_table ) e ( USING ) e m:( name_module ) o a:( virtual_args )?
+  = s:( create_virtual_start ) ne:( create_core_ine )? n:( id_table ) e
+    ( USING ) e m:( virtual_module )
   {
-    return {
+    return util.extend({
       'type': 'statement',
-      'variant': util.key(s),
-      'format': util.key(v),
       'condition': util.makeArray(ne),
       'target': n,
-      'result': {
-        'type': 'module',
-        'name': m,
-        'args': (util.isOkay(a) ? a : [])
-      }
+      'result': m
+    }, s);
+  }
+
+create_virtual_start
+  = s:( create_start ) v:( VIRTUAL ) e t:( TABLE ) e
+  {
+    return {
+      'variant': util.key(s),
+      'format': util.key(v)
     };
+  }
+
+virtual_module
+  = m:( name_module ) o a:( virtual_args )?
+  {
+    return util.extend({
+      'type': 'module',
+      'name': m,
+      'args': []
+    }, a);
   }
 
 virtual_args "Module Arguments"
   = sym_popen f:( virtual_arg_types ) o sym_pclose
-  { return f; }
-
-virtual_arg_types
-  = ( !( name_column o ( type_definition / column_constraint ) ) l:( expression_list ) ) { return l; }
-  / ( l:( source_def_loop ) ) { return l; }
-
-stmt_drop "DROP Statement"
-  = s:( drop_start ) t:( drop_types ) i:( drop_ie )? q:( id_table ) o
   {
     return {
-      'type': 'statement',
-      'variant': s,
-      'format': t,
-      'target': q,
-      'condition': (util.isOkay(i) ? [i] : [])
+      'args': f
     };
   }
 
-drop_start "DROP Keyword"
-  = s:( DROP ) e
-  { return util.key(s); }
+virtual_arg_types
+  = virtual_arg_list
+  / virtual_arg_def
 
-drop_types
-  = t:( TABLE / INDEX / TRIGGER / VIEW ) e
+virtual_arg_list
+  = !( name_column o ( type_definition / column_constraint ) ) l:( expression_list )
+  { return l; }
+
+virtual_arg_def
+  = l:( source_def_loop )
+  { return l; }
+
+stmt_drop "DROP Statement"
+  = s:( drop_start ) q:( id_table ) o
+  {
+    return util.extend({
+      'type': 'statement',
+      'target': q
+    }, s);
+  }
+
+drop_start "DROP Keyword"
+  = s:( DROP ) e t:( drop_types ) e  i:( drop_conditions )?
+  {
+     return util.extend({
+       'variant': util.key(s),
+       'format': t,
+       'condition': []
+     }, i);
+  }
+
+drop_types "DROP Type"
+  = t:( TABLE / INDEX / TRIGGER / VIEW )
   { return util.key(t); }
+
+drop_conditions
+  = c:( drop_ie )
+  {
+    return {
+      'condition': util.makeArray(c)
+    };
+  }
 
 drop_ie "IF EXISTS Keyword"
   = i:( IF ) e e:( EXISTS ) e
@@ -1976,7 +2042,6 @@ operator_unary "Unary Operator"
   / sym_plus
   / expression_is_not
 
-/* TODO: Needs return format refactoring */
 operator_binary "Binary Operator"
   = o:( binary_nodes )
   { return util.key(o); }
@@ -2221,20 +2286,37 @@ name_trigger "Trigger Name"
 name_view "View Name"
 = name
 
+/**
+ * @note Enforcing name not starting with a number
+ */
 name_function "Function Name"
-= name_unquoted
+  = name_unquoted
 
+/**
+ * @note Enforcing name not starting with a number
+ */
 name_module "Module Name"
-= name_unquoted
+ = name_unquoted
 
-/* TODO: Replace me! */
+/**
+ * @note
+ *  This is a best approximation of the characters allowed in an unquoted
+ *  identifier or alias.
+ */
 name_char
-  = [a-z0-9\-\_]i
+  = [a-z0-9\$\_]i
 
+
+/**
+* @note
+*  Since SQLite is tolerant of this behavior, although it is non-standard,
+*  parser allows single-quoted string literals to be interpreted as aliases.
+*/
 name
   = name_bracketed
   / name_backticked
   / name_dblquoted
+  / name_sglquoted
   / name_unquoted
 
 reserved_nodes
@@ -2242,7 +2324,7 @@ reserved_nodes
   { return util.textNode(r); }
 
 name_unquoted
-  = !reserved_nodes n:( name_char )+
+  = !( reserved_nodes / number_digit ) n:( name_char )+
   { return util.textNode(n); }
 
 /** @note Non-standard legacy format */
@@ -2261,6 +2343,13 @@ name_dblquoted
 
 name_dblquoted_schar
   = '""' / [^\"]
+
+name_sglquoted
+  = "'" n:( name_sglquoted_schar )+ "'"
+  { return util.unescape(util.nodeToString(n), "'"); }
+
+name_sglquoted_schar
+  = "''" / [^\']
 
 /** @note Non-standard legacy format */
 name_backticked
@@ -2608,32 +2697,26 @@ comment
 comment_line "SQL Line Comment"
   = comment_line_start ( !whitespace_line match_all )*
 
-/*
- * @note
- *  These comment rules should not use sym_x rules since you should not
- *  be able to put a space between the two symbols at the start and/or
- *  end of a comment.
- */
 comment_line_start
-  = sym_minus sym_minus
+  = "--"
 
 comment_block "SQL Block Comment"
-  = comment_block_start comment_block_feed comment_block_end o
+  = comment_block_start comment_block_feed comment_block_end
 
 comment_block_start
-  = sym_fslash sym_star
+  = "/*"
 
 comment_block_end
-  = sym_star sym_fslash
+  = "*/"
 
 comment_block_body
-  = ( !( comment_block_end ) match_all )+
+  = ( !( comment_block_end / comment_block_start ) match_all )+
 
 block_body_nodes
   = comment_block_body / comment_block
 
 comment_block_feed
-  = block_body_nodes ( o block_body_nodes )*
+  = block_body_nodes ( whitespace / block_body_nodes )*
 
 match_all
   = .

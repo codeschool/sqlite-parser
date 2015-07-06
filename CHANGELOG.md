@@ -8,13 +8,26 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - added a bunch of missing descriptions for grammar rules in `grammar.pegjs`
 - make sure that a `description` is not repeated in smart error message
-
-### Notes
-- `comment` rules should not use `sym_*` rules since you should not be able to put a space between the two symbols at the start and/or end of a comment.
+- `comment` rules no longer allow you to put a space between the two symbols at the start and/or end of a comment.
 
   ```
   SELECT * - - not valid but is being accepted
   ```
+
+- added some extra helper rules to `CREATE` statement rules to help the tracer avoid traversing the wrong create statement type
+- allowed characters in identifiers now includes dollar sign `$` and no longer includes dash `-` for unquoted values
+- Since `SQLite` itself is tolerant of this behavior, although it is non-standard, parser allows single-quoted string literals to be interpreted as aliases.
+
+  ``` sql
+  select
+    'hat'.*,
+    COUNT(*) as 'pants'
+  from
+    hats 'hat'
+  ```
+
+### Notes
+- there is way too much magic/nonsense in the `smartError()` method of `Tracer`. need to come up with an alternative approach to getting the right information for syntax errors.
 
 ## [v0.9.1] - 2015-07-05
 ### Changed
