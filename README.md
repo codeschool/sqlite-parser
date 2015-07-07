@@ -1,13 +1,13 @@
 # sqlite-parser
 
+[![NPM Version Image](https://img.shields.io/npm/v/sqlite-parser.svg)](https://www.npmjs.com/package/sqlite-parser)
 [![dependencies Status Image](https://david-dm.org/codeschool/sqlite-parser.svg)](https://github.com/codeschool/sqlite-parser/)
 [![devDependencies Status Image](https://img.shields.io/david/dev/codeschool/sqlite-parser.svg)](https://github.com/codeschool/sqlite-parser/)
-[![NPM Version Image](https://img.shields.io/npm/v/sqlite-parser.svg)](https://www.npmjs.com/package/sqlite-parser)
 [![License Type Image](https://img.shields.io/github/license/codeschool/sqlite-parser.svg)](https://github.com/codeschool/sqlite-parser/blob/master/LICENSE)
 
-This library takes SQL queries, provided as a string, and generates an
-AST. An error will be generated describing what is malformed in the source query
-code if the AST cannot be generated.
+This library parses SQLite queries, using JavaScript, and generates
+_abstract syntax tree_ (AST) representations of the input strings. A
+syntax error is produced if an AST cannot be generated.
 
 **This parser is written against the [SQLite 3 spec](https://www.sqlite.org/lang.html).**
 
