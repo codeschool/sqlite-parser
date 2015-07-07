@@ -26,6 +26,11 @@ All notable changes to this project will be documented in this file.
     hats 'hat'
   ```
 
+- removed `grunt-string-replace` from `devDependencies`
+- no longer building demo on top of source in `demo/` folder. `grunt live` now puts assets for interactive demo into `.tmp/` folder and then `grunt demo` creates a min bundle in the `demo/` folder
+- raw source for interactive demo now exists in `src/demo/` folder
+- now using `grunt-contrib-cssmin` to create single css bundle file for demo
+
 ### Notes
 - there is way too much magic/nonsense in the `smartError()` method of `Tracer`. need to come up with an alternative approach to getting the right information for syntax errors.
 

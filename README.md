@@ -21,7 +21,7 @@ There interactive demo of the parser hosted
 [at this location](http://codeschool.github.io/sqlite-parser/demo/). The source
 for the interactive demo exists in the `demo/` folder of this repository. You
 can serve a LiveReload version of the demo on your local machine by running
-`grunt interactive`.
+`grunt live`.
 
 ## Install
 

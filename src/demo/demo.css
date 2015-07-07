@@ -1,13 +1,3 @@
-/* Demo Fonts */
-
-@import url(http://fonts.googleapis.com/css?family=Inconsolata);
-
-/* CodeMirror Imports */
-
-@import url("codemirror.css");
-@import url("monokai.css");
-@import url("foldgutter.css");
-
 /* Demo Layout */
 
 *, *:before, *:after {
@@ -49,6 +39,7 @@ body {
   padding: 8px;
   margin: 0;
   height: 32px;
+  font-weight: normal;
 }
 
 .container .left h3 {
@@ -83,7 +74,8 @@ footer, header {
 }
 
 footer h3, header h2 {
-  width: 350px;
+  width: 360px;
+  font-weight: normal;
 }
 
 footer h3 {

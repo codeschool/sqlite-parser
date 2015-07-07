@@ -16,7 +16,7 @@
   require('mode-sql');
 
   /* taken from _.debounce() method of Underscore.js */
-  function debounce(func, wait, immediate) {
+  function debounce(func, wait, immediate) { 
     var timeout;
     return function() {
       var context = this, args = arguments;

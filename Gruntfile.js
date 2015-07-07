@@ -6,7 +6,7 @@ module.exports = function(grunt) {
         src: ['index.js'],
         dest: 'dist/sqlite-parser.js'
       },
-      demo: {
+      interactive: {
         options: {
           alias: {
             'sqlite-parser': './index',
@@ -30,12 +30,12 @@ module.exports = function(grunt) {
           'node_modules/codemirror/mode/javascript/javascript',
           'node_modules/codemirror/mode/sql/sql'
         ],
-        src: ['demo/js/demo.js'],
-        dest: 'demo/sqlite-parser-demo.js'
+        src: ['src/demo/demo.js'],
+        dest: '.tmp/js/sqlite-parser-demo.js'
       }
     },
     copy: {
-      main: {
+      build: {
         files: [{
           filter: 'isFile',
           expand: true,
@@ -44,24 +44,29 @@ module.exports = function(grunt) {
           dest: 'lib/'
         }]
       },
+      interactive: {
+        files: [{
+          src: ['src/demo/index.html'],
+          flatten: true,
+          expand: true,
+          dest: '.tmp/'
+        }],
+      },
       demo: {
-        src: [
-          'node_modules/codemirror/lib/codemirror.css',
-          'node_modules/codemirror/addon/fold/foldgutter.css',
-          'node_modules/codemirror/theme/monokai.css'
-        ],
-        flatten: true,
+        src: ['**/*.{html,css}'],
         expand: true,
-        dest: 'demo/css/'
+        cwd: '.tmp/',
+        dest: 'demo/'
       }
     },
     clean: {
-      main: ['lib/*.js'],
+      build: ['lib/*.js'],
       dist: ['dist/*.js'],
-      demo: ['demo/sqlite-parser-demo.js', 'demo/css/*.css', '!demo/css/demo.css']
+      interactive: ['.tmp/**/*'],
+      demo: ['demo/**/*']
     },
     shell: {
-      pegjs: {
+      build: {
         options: {
           failOnError: true
         },
@@ -92,7 +97,7 @@ module.exports = function(grunt) {
       server: {
         options: {
           port: 8080,
-          base: 'demo',
+          base: '.tmp',
           livereload: true
         }
       }
@@ -104,24 +109,23 @@ module.exports = function(grunt) {
           livereload: false
         },
         files: [
-          'Gruntfile.js', 'index.js', 'test/*.js', 'src/*.js',
-          'src/*.pegjs', 'test/sql/*.sql'
+          'index.js', 'test/*.js', 'src/*.js', 'src/*.pegjs',
+          'test/sql/*.sql', 'Gruntfile.js'
         ],
-        tasks: ['default', 'shell:debug']
+        tasks: ['build', 'shell:debug']
       },
-      demo: {
+      live: {
         options: {
           debounceDelay: 1000,
           livereload: {
-            directory: 'demo/',
+            directory: '.tmp/',
             port: 35729
           },
         },
         files: [
-          'index.js', 'src/*.js', 'src/*.pegjs', 'demo/js/*.js',
-          'Gruntfile.js', 'demo/css/demo.css', 'demo/index.html'
+          'index.js', 'src/**/*.{js,pegjs,css,html}', 'Gruntfile.js'
         ],
-        tasks: ['default', 'clean:demo', 'browserify:demo', 'copy:demo']
+        tasks: ['interactive']
       }
     },
     uglify: {
@@ -132,31 +136,22 @@ module.exports = function(grunt) {
       },
       demo: {
         files: {
-          'demo/sqlite-parser-demo-min.js': ['demo/sqlite-parser-demo.js']
+          'demo/js/sqlite-parser-demo.js': ['.tmp/js/sqlite-parser-demo.js']
         }
       }
     },
-    'string-replace': {
-      demo: {
-        files: {
-          'demo/index.html': 'demo/index.html'
-        },
-        options: {
-          replacements: [{
-            pattern: '<script src="sqlite-parser-demo.js"></script>',
-            replacement: '<script src="sqlite-parser-demo-min.js"></script>'
-          }]
-        }
-      },
+    cssmin: {
       interactive: {
-        files: {
-          'demo/index.html': 'demo/index.html'
-        },
         options: {
-          replacements: [{
-            pattern: '<script src="sqlite-parser-demo-min.js"></script>',
-            replacement: '<script src="sqlite-parser-demo.js"></script>'
-          }]
+          processImport: true
+        },
+        files: {
+          '.tmp/css/sqlite-parser-demo.css': [
+            'node_modules/codemirror/lib/codemirror.css',
+            'node_modules/codemirror/addon/fold/foldgutter.css',
+            'node_modules/codemirror/theme/monokai.css',
+            'src/demo/demo.css'
+          ]
         }
       }
     }
@@ -169,18 +164,37 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-string-replace');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
 
-  grunt.registerTask('default', ['clean:main', 'shell:pegjs', 'copy:main']);
-  grunt.registerTask('test', ['default', 'shell:test']);
-  grunt.registerTask('debug', ['default', 'shell:debug', 'watch:debug']);
-  grunt.registerTask('json', ['default', 'shell:json']);
-  grunt.registerTask('demo', [
-    'default', 'clean:demo', 'browserify:demo', 'copy:demo', 'uglify:demo', 'string-replace:demo'
+  grunt.registerTask('default', [
+    'build'
+  ]);
+  grunt.registerTask('build', [
+    'clean:build', 'shell:build', 'copy:build'
+  ]);
+  grunt.registerTask('test', [
+    'build', 'shell:test'
+  ]);
+  grunt.registerTask('debug', [
+    'build', 'shell:debug', 'watch:debug'
+  ]);
+  grunt.registerTask('json', [
+    'build', 'shell:json'
   ]);
   grunt.registerTask('interactive', [
-    'default', 'clean:demo', 'browserify:demo', 'copy:demo', 'string-replace:interactive', 'connect:server', 'watch:demo'
+    'clean:interactive', 'default', 'copy:interactive', 'cssmin:interactive',
+    'browserify:interactive'
   ]);
-  grunt.registerTask('dist', ['default', 'clean:dist', 'browserify:dist', 'uglify:dist']);
-  grunt.registerTask('release', ['test', 'dist', 'demo']);
+  grunt.registerTask('live', [
+    'interactive', 'connect:server', 'watch:live'
+  ]);
+  grunt.registerTask('demo', [
+    'interactive', 'clean:demo', 'copy:demo', 'uglify:demo'
+  ]);
+  grunt.registerTask('dist', [
+    'default', 'clean:dist', 'browserify:dist', 'uglify:dist'
+  ]);
+  grunt.registerTask('release', [
+    'test', 'dist', 'demo', 'clean:interactive'
+  ]);
 };
