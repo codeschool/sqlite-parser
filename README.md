@@ -1,33 +1,28 @@
 # sqlite-parser
 
+[![dependencies Status Image](https://david-dm.org/codeschool/sqlite-parser.svg)](https://github.com/codeschool/sqlite-parser/)
+[![devDependencies Status Image](https://img.shields.io/david/dev/codeschool/sqlite-parser.svg)](https://github.com/codeschool/sqlite-parser/)
+[![NPM Version Image](https://img.shields.io/npm/v/sqlite-parser.svg)](https://www.npmjs.com/package/sqlite-parser)
+
 This library takes SQL queries, provided as a string, and generates an
 AST. An error will be generated describing what is malformed in the source query
 code if the AST cannot be generated.
 
 **This parser is written against the [SQLite 3 spec](https://www.sqlite.org/lang.html).**
 
-Note: this project is work-in-progress and is **not fully spec-compliant**.
-
-The parser implements the basic components of the SQLite 3 spec, such as:
-- Basic query types `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `DROP`, `CREATE`, etc...
-- Sub-queries `SELECT FROM (SELECT * FROM b)`
-- Aliases `SELECT * FROM apples AS a`
-- `JOIN` types `INNER`, `OUTER`, `LEFT`
-- Query modifiers `WHERE`, `GROUP BY`, `HAVING`
-
-## Demo
-
-There interactive demo of the parser hosted
-[at this location](http://codeschool.github.io/sqlite-parser/demo/). The source
-for the interactive demo exists in the `demo/` folder of this repository. You
-can serve a LiveReload version of the demo on your local machine by running
-`grunt live`.
-
 ## Install
 
 ```
 npm install sqlite-parser
 ```
+
+## Demo
+
+There is an interactive demo of the parser hosted
+[at this location](http://codeschool.github.io/sqlite-parser/demo/). The source
+for the interactive demo exists in the `demo/` folder of this repository. You
+can serve up a LiveReload version of the demo on your local machine by running
+`grunt live`.
 
 ## Usage
 
