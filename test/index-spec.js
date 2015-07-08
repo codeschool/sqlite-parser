@@ -284,7 +284,7 @@ describe('sqlite-parser', function() {
   });
 
   it('basic drop trigger', function(done) {
-    var resultTree = '{"statement":[{"explain":false,"type":"statement","variant":"drop","format":"trigger","target":{"type":"identifier","variant":"table","name":"happy.insertRecord"},"condition":[{"type":"condition","condition":"if exists"}]}]}';
+    var resultTree = '{"statement":[{"explain":false,"type":"statement","variant":"drop","format":"trigger","target":{"type":"identifier","variant":"trigger","name":"happy.insertRecord"},"condition":[{"type":"condition","condition":"if exists"}]}]}';
     tree.equals(resultTree, this, done);
   });
 
@@ -301,7 +301,12 @@ describe('sqlite-parser', function() {
   });
 
   it('transaction rollback', function(done) {
-    var resultTree = '{"statement":[{"explain":false,"type":"statement","variant":"rollback","savepoint":{"type":"identifier","variant":"savepoint","name":"super_save"}}]}';
+    var resultTree = '{"statement":[{"explain":false,"type":"statement","variant":"rollback","to":{"type":"identifier","variant":"savepoint","name":"super_save"}}]}';
+    tree.equals(resultTree, this, done);
+  });
+
+  it('transaction misc', function(done) {
+    var resultTree = '{"statement":[{"explain":false,"type":"statement","variant":"release","target":{"type":"identifier","variant":"savepoint","name":"happy_place"}},{"explain":false,"type":"statement","variant":"release","target":{"type":"identifier","variant":"savepoint","name":"sad_place"}},{"explain":false,"type":"statement","variant":"savepoint","target":{"type":"identifier","variant":"savepoint","name":"bee_time"}}]}';
     tree.equals(resultTree, this, done);
   });
 
@@ -321,7 +326,7 @@ describe('sqlite-parser', function() {
 
   it('parse error 1', function(done) {
     tree.error({
-      'message': 'Syntax error found near Qualified Column Identifier (WHERE Clause)'
+      'message': 'Syntax error found near Function Name (WHERE Clause)'
     }, this, done);
   });
 
@@ -329,6 +334,18 @@ describe('sqlite-parser', function() {
 
   it('comments', function (done) {
     var resultTree = '{"statement":[{"explain":false,"type":"statement","variant":"select","with":null,"from":[],"where":null,"group":null,"result":[{"type":"literal","variant":"decimal","value":"1","alias":null}],"distinct":false,"all":false,"order":null,"limit":null},{"explain":false,"type":"statement","variant":"select","with":null,"from":[{"type":"identifier","variant":"table","name":"Rooms","alias":"hat","index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":">","left":{"type":"identifier","variant":"column","name":"seats"},"right":{"type":"literal","variant":"decimal","value":"75"}}],"group":null,"result":[{"type":"identifier","variant":"column","name":"movie_id","alias":null}],"distinct":false,"all":false,"order":null,"limit":null},{"explain":false,"type":"statement","variant":"select","with":null,"from":[{"type":"identifier","variant":"table","name":"hats","alias":null,"index":null}],"where":null,"group":null,"result":[{"type":"literal","variant":"decimal","value":"2","alias":null}],"distinct":false,"all":false,"order":null,"limit":null}]}';
+    tree.equals(resultTree, this, done);
+  });
+
+  // SQLite-specific and internal
+
+  it('basic pragma', function (done) {
+    var resultTree = '{"statement":[{"explain":false,"type":"statement","variant":"pragma","target":{"type":"identifier","variant":"pragma","name":"hat.pants"},"args":[{"type":"literal","variant":"string","value":"some string"}]},{"explain":false,"type":"statement","variant":"pragma","target":{"type":"identifier","variant":"pragma","name":"pants.pants"},"args":[{"type":"literal","variant":"decimal","value":"+200.00"}]},{"explain":false,"type":"statement","variant":"pragma","target":{"type":"identifier","variant":"pragma","name":"nap.times"},"args":[]},{"explain":false,"type":"statement","variant":"pragma","target":{"type":"identifier","variant":"pragma","name":"suit"},"args":[{"type":"literal","variant":"boolean","normalized":"0","value":"no"}]}]}';
+    tree.equals(resultTree, this, done);
+  });
+
+  it('basic sqlite', function (done) {
+    var resultTree = '{"statement":[{"explain":false,"type":"statement","variant":"detach","target":"hat_db"},{"explain":false,"type":"statement","variant":"detach","target":"pants_db"},{"explain":false,"type":"statement","variant":"reindex","target":"happy_collation"},{"explain":false,"type":"statement","variant":"reindex","target":null},{"explain":false,"type":"statement","variant":"reindex","target":"hat_db.pants_table"},{"explain":false,"type":"statement","variant":"analyze","target":"happy_table"},{"explain":false,"type":"statement","variant":"analyze","target":null},{"explain":false,"type":"statement","variant":"analyze","target":"hat_db.pants_table"},{"explain":false,"type":"statement","variant":"vacuum"}]}';
     tree.equals(resultTree, this, done);
   });
 

@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 ### Added
+- rules and AST for missing transaction-related statement types: `RELEASE` and `SAVEPOINT`
+- rules and AST for missing SQLite-specific statement types: `PRAGMA`, `DETACH`, `VACUUM`, `ANALYZE`, and `REINDEX`
+- new specs for SQLite-specific statement types
+- new specs for missing transaction-related statement types
 - new spec for `WITH` clause with recursive table expressions
 
 ### Changed
@@ -32,6 +36,9 @@ All notable changes to this project will be documented in this file.
     }
   ]
   ```
+
+- `DROP` statement now gives correct `variant` to the `type:'identifier'` node in the `target` property
+- now, in a `ROLLBACK` statement, the savepoint exists on the `to` property
 
 ## [v0.9.8] - 2015-07-06
 ### Added

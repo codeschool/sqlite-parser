@@ -17,7 +17,7 @@ start
   }
 
 stmt_list
-  = f:( stmt ) o b:( stmt_list_tail )* c:( sym_semi )*
+  = ( sym_semi )* f:( stmt ) o b:( stmt_list_tail )* c:( sym_semi )*
   { return util.compose([f, b], []); }
 
 /**
@@ -195,7 +195,7 @@ expression_node
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_collate "COLLATE Expression"
-  = v:( expression_value ) o s:( COLLATE ) e c:( name_collation )
+  = v:( expression_value ) o s:( COLLATE ) e c:( id_collation )
   {
     return util.extend(v, {
       'collate': c
@@ -406,7 +406,7 @@ literal_number_signed
   = s:( number_sign )? n:( literal_number )
   {
     if (util.isOkay(s)) {
-      n['value'] = util.compose([s, n['value']]);
+      n['value'] = util.compose([s, n['value']], '');
     }
     return n;
   }
@@ -599,7 +599,16 @@ stmt_nodes
   / stmt_transaction
   / stmt_alter
   / stmt_rollback
+  / stmt_savepoint
+  / stmt_release
+  / stmt_sqlite
 
+/**
+ * @note
+ *  Transaction statement rules do not follow the transaction nesting rules
+ *  for the BEGIN, COMMIT, and ROLLBACK statements.
+ *  {@link https://www.sqlite.org/lang_savepoint.html}
+ */
 stmt_transaction "Transaction"
   = b:( stmt_begin ) s:( stmt_list )? e:( stmt_commit )
   {
@@ -611,13 +620,13 @@ stmt_transaction "Transaction"
     };
   }
 
-stmt_commit "END Transaction"
+stmt_commit "END Transaction Statement"
   = s:( COMMIT / END ) t:( commit_transaction )? o
   {
     return util.key(util.compose([s, t]));
   }
 
-stmt_begin "BEGIN Transaction"
+stmt_begin "BEGIN Transaction Statement"
   = s:( BEGIN ) e m:( stmt_begin_modifier )? t:( begin_transaction )?
   {
     return util.isOkay(m) ? util.key(m) : null;
@@ -641,17 +650,37 @@ stmt_rollback "ROLLBACK Statement"
     return {
       'type': 'statement',
       'variant': util.key(s),
-      'savepoint': n
+      'to': n
     };
   }
 
-rollback_savepoint "SAVEPOINT"
+rollback_savepoint "TO Clause"
   = TO e ( savepoint_alt )? n:( id_savepoint ) o
   { return n; }
 
 savepoint_alt
   = s:( SAVEPOINT ) e
   { return util.key(s); }
+
+stmt_savepoint "SAVEPOINT Statement"
+  = s:( savepoint_alt ) n:( id_savepoint ) o
+  {
+    return {
+      'type': 'statement',
+      'variant': s,
+      'target': n
+    };
+  }
+
+stmt_release "RELEASE Statement"
+  = s:( RELEASE ) e a:( savepoint_alt )? n:( id_savepoint ) o
+  {
+    return {
+      'type': 'statement',
+      'variant': util.key(s),
+      'target': n
+    };
+  }
 
 stmt_alter "ALTER TABLE Statement"
   = s:( alter_start ) n:( id_table ) o e:( alter_action ) o
@@ -750,6 +779,129 @@ select_alias "Table Expression Alias"
 select_wrapped
   = sym_popen s:( stmt_select ) o sym_pclose
   { return s; }
+
+/**
+ * @note Uncommon or SQLite-specific statement types
+ */
+stmt_sqlite
+  = stmt_detach
+  / stmt_vacuum
+  / stmt_analyze
+  / stmt_reindex
+  / stmt_pragma
+
+stmt_detach "DETACH Statement"
+  = d:( DETACH ) e b:( DATABASE e )? n:( name_database ) o
+  {
+    return {
+      'type': 'statement',
+      'variant': util.key(d),
+      'target': n
+    };
+  }
+
+stmt_vacuum "VACUUM Statement"
+  = v:( VACUUM ) o
+  {
+    return {
+      'type': 'statement',
+      'variant': 'vacuum'
+    };
+  }
+
+/**
+ * @note
+ *  The argument from this statement cannot be categorized as a
+ *  table or index based on context, so only the name is included.
+ */
+stmt_analyze "ANALYZE Statement"
+  = s:( ANALYZE ) a:( analyze_arg )? o
+  {
+    return {
+      'type': 'statement',
+      'variant': util.key(s),
+      'target': (util.isOkay(a) ? a['name'] : null)
+    };
+  }
+
+analyze_arg
+  = e n:( id_table / id_index / id_database )
+  { return n; }
+
+/**
+ * @note
+ *  The argument from this statement cannot be categorized as a
+ *  table or index based on context, so only the name is included.
+ */
+stmt_reindex "REINDEX Statement"
+  = s:( REINDEX ) a:( reindex_arg )? o
+  {
+    return {
+      'type': 'statement',
+      'variant': util.key(s),
+      'target': (util.isOkay(a) ? a['name'] : null)
+    };
+  }
+
+reindex_arg
+  = e a:( id_table / id_index / id_collation )
+  { return a; }
+
+stmt_pragma "PRAGMA Statement"
+  = s:( PRAGMA ) e n:( id_pragma ) o v:( pragma_expression )?
+  {
+    return {
+      'type': 'statement',
+      'variant': util.key(s),
+      'target': n,
+      'args': (util.isOkay(v) ? util.makeArray(v) : [])
+    };
+  }
+
+pragma_expression
+  = ( sym_equal v:( pragma_value ) o ) { return v; }
+  / ( sym_popen v:( pragma_value ) o sym_pclose ) { return v; }
+
+pragma_value
+  = pragma_value_bool
+  / pragma_value_literal
+  / pragma_value_name
+
+pragma_value_literal
+  = v:( literal_number_signed / literal_string )
+  { return v; }
+
+/**
+ * @note
+ *  This method allows all possible values EXCEPT an unquoted 'no',
+ *  because that is a reserved word.
+ * @note
+ *  There is no such thing as a boolean literal in SQLite
+ *  {@link http://www.sqlite.org/datatype3.html}. However, the
+ *  documentation for PRAGMA mentions the ability to use
+ *  literal boolean values in this one specific instance.
+ *  See: {@link https://www.sqlite.org/pragma.html}
+ */
+pragma_value_bool
+  = v:( name ) & { return /^(yes|no|false|true|0|1)$/i.test(v) }
+  {
+    return {
+      'type': 'literal',
+      'variant': 'boolean',
+      'normalized': (/^(yes|true|1)$/i.test(v) ? '1' : '0'),
+      'value': util.key(v)
+    };
+  }
+
+pragma_value_name
+  = n:( name )
+  {
+    return {
+      'type': 'identifier',
+      'variant': 'name',
+      'name': n
+    };
+  }
 
 stmt_crud_types
   = stmt_select
@@ -2017,14 +2169,19 @@ virtual_arg_def
 stmt_drop "DROP Statement"
   = s:( drop_start ) q:( id_table ) o
   {
+    /**
+     * @note Manually copy in the correct variant for the target
+     */
     return util.extend({
       'type': 'statement',
-      'target': q
+      'target': util.extend(q, {
+                  'variant': s['format']
+                })
     }, s);
   }
 
 drop_start "DROP Keyword"
-  = s:( DROP ) e t:( drop_types ) e  i:( drop_conditions )?
+  = s:( DROP ) e t:( drop_types ) i:( drop_conditions )?
   {
      return util.extend({
        'variant': util.key(s),
@@ -2034,7 +2191,7 @@ drop_start "DROP Keyword"
   }
 
 drop_types "DROP Type"
-  = t:( TABLE / INDEX / TRIGGER / VIEW )
+  = t:( TABLE / INDEX / TRIGGER / VIEW ) e
   { return util.key(t); }
 
 drop_conditions
@@ -2165,21 +2322,29 @@ id_table "Table Identifier"
     };
   }
 
-id_table_qualified "Qualified Table Identifier"
+id_table_qualified
   = n:( name_database ) d:( sym_dot )
   { return util.compose([n, d], ''); }
 
 id_column "Column Identifier"
-  = d:( id_table_qualified )? t:( id_column_qualified )? n:( name_column )
+  = q:( column_qualifiers / id_column_qualified / column_unqualified ) n:( name_column )
   {
     return {
       'type': 'identifier',
       'variant': 'column',
-      'name': util.compose([d, t, n], '')
+      'name': util.compose([q, n], '')
     };
   }
 
-id_column_qualified "Qualified Column Identifier"
+column_unqualified
+  = o
+  { return ''; }
+
+column_qualifiers
+  = d:( id_table_qualified ) t:( id_column_qualified )
+  { return util.compose([d, t], ''); }
+
+id_column_qualified
   = t:( name_table ) d:( sym_dot )
   { return util.compose([t, d], ''); }
 
@@ -2233,6 +2398,16 @@ id_view "View Identifier"
     };
   }
 
+id_pragma "Pragma Identifier"
+  = d:( id_table_qualified )? n:( name_pragma )
+  {
+    return {
+      'type': 'identifier',
+      'variant': 'pragma',
+      'name': util.compose([d, n], '')
+    };
+  }
+
 /* Column datatypes */
 
 datatype_types "Datatype Name"
@@ -2280,31 +2455,34 @@ datatype_none "BLOB Datatype Name"
 /* Naming rules */
 
 name_database
-= name
+  = name
 
 name_table
-= name
+  = name
 
 name_column
-= name
+  = name
 
 name_constraint_table "Table Constraint Name"
-= name
+  = name
 
 name_constraint_column "Column Constraint Name"
-= name
+  = name
 
 name_collation "Collation Name"
-= name_unquoted
+  = name_unquoted
 
 name_index "Index Name"
-= name
+  = name
 
 name_trigger "Trigger Name"
-= name
+  = name
 
 name_view "View Name"
-= name
+  = name
+
+name_pragma "Pragma Name"
+  = name
 
 /**
  * @note Enforcing name not starting with a number
@@ -2352,7 +2530,6 @@ name_bracketed
   = sym_bopen n:( name_bracketed_schar )+ o sym_bclose
   { return util.textNode(n); }
 
-/* TODO: Should this be `whitespace_space` or just `o` */
 name_bracketed_schar
   = !( whitespace_space* "]" ) n:( [^\]] )
   { return n; }
@@ -2364,6 +2541,7 @@ name_dblquoted
 name_dblquoted_schar
   = '""' / [^\"]
 
+/** @note Non-standard format */
 name_sglquoted
   = "'" n:( name_sglquoted_schar )+ "'"
   { return util.unescape(util.nodeToString(n), "'"); }
