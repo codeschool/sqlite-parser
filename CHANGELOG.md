@@ -2,6 +2,36 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
+### Added
+- new spec for `WITH` clause with recursive table expressions
+
+### Changed
+- fixed rules for `WITH` clause prepended to CRUD-type statements to make sure the `with` property is added to the correct nodes
+- changed the AST for `WITH` clause to no longer have a node of `type` `"with"`
+
+  ``` json
+  "with": [
+    {
+      "type": "expression",
+      "format": "table",
+      "name": "bees",
+      "expression": {
+        "type": "statement",
+        "variant": "select",
+        "from": [],
+        "where": null,
+        "group": null,
+        "result": [],
+        "distinct": false,
+        "all": false,
+        "order": null,
+        "limit": null
+      },
+      "columns": null,
+      "recursive": false
+    }
+  ]
+  ```
 
 ## [v0.9.8] - 2015-07-06
 ### Added

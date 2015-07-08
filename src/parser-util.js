@@ -196,28 +196,11 @@ function takeWhile(arr, func) {
   return arr.slice(0, i);
 }
 
-function first(arr) {
-  return 1 <= arr.length ? arr[0] : null;
-}
-
-function last(arr) {
-  return 1 <= arr.length ? arr[arr.length - 1] : null;
-}
-
-function rest(arr) {
-  return 2 <= arr.length ? slice.call(arr, 1) : [];
-}
-
-function uniq(arr) {
-  var u = {}, a = [];
-  for(var i = 0, l = arr.length; i < l; ++i){
-     if(Object.prototype.hasOwnProperty.call(u, arr[i])) {
-        continue;
-     }
-     a.push(arr[i]);
-     u[arr[i]] = 1;
+function isArrayOkay(arr) {
+  if (isArray(arr)) {
+    return arr.length > 0 && isOkay(arr[0]);
   }
-  return a;
+  return false;
 }
 
 module.exports = {
@@ -230,6 +213,7 @@ module.exports = {
   'findLastIndex':        findLastIndex,
   'findLast':             findLast,
   'takeWhile':            takeWhile,
+  'isArrayOkay':          isArrayOkay,
   // String methods
   'nodeToString':         nodeToString,
   'textNode':             textNode,

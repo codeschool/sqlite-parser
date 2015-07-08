@@ -693,27 +693,42 @@ action_add_modifier
   { return util.key(s); }
 
 stmt_crud
-  = w:( clause_with )? o s:( stmt_crud_types )
+  = w:( stmt_core_with ) s:( stmt_crud_types )
   { return util.extend(s, w); }
 
-clause_with "WITH Clause"
-  = s:( WITH ) e v:( clause_with_recursive )? f:( expression_table ) o r:( clause_with_loop )*
+stmt_core_with "WITH Clause"
+  = w:( clause_with )? o
   {
     return {
-      'with': {
-        'type': util.key(s),
-        'recursive': util.isOkay(v),
-        'expression': util.compose([f, r], [])
-      }
+      'with': w
     };
+  }
+
+clause_with
+  = s:( WITH ) e v:( clause_with_recursive )? t:( clause_with_tables )
+  {
+    var recursive = {
+      'recursive': util.isOkay(v)
+    };
+    if (util.isArrayOkay(t)) {
+      // Add 'recursive' property into each table expression
+      t = t.map(function (elem) {
+        return util.extend(elem, recursive);
+      });
+    }
+    return t;
   }
 
 clause_with_recursive
   = s:( RECURSIVE ) e
   { return util.key(s); }
 
+clause_with_tables
+  = f:( expression_table ) o r:( clause_with_loop )*
+  { return util.compose([f, r], []); }
+
 clause_with_loop
-  = sym_comma e:( expression_table )
+  = sym_comma e:( expression_table ) o
   { return e; }
 
 expression_table "Table Expression"
@@ -780,7 +795,7 @@ limit_offset_variant_name
 select_loop
   = s:( select_parts ) o u:( select_loop_union )*
   {
-    if (util.isArray(u) && u.length) {
+    if (util.isArrayOkay(u)) {
       return {
         'type': 'statement',
         'variant': 'compound',
@@ -1238,7 +1253,7 @@ compound_union_all
  * @note Includes limited update syntax {@link https://www.sqlite.org/syntax/update-stmt-limited.html}
  */
 stmt_update "UPDATE Statement"
-  = u:( clause_with )? o s:( update_start ) f:( update_fallback )?
+  = s:( update_start ) f:( update_fallback )?
     t:( table_qualified ) o u:( update_set ) w:( stmt_core_where )?
     o:( stmt_core_order )? o l:( stmt_core_limit )?
   {
@@ -1250,7 +1265,7 @@ stmt_update "UPDATE Statement"
       'set': [],
       'order': o,
       'limit': l
-    }, u, f);
+    }, f, u);
   }
 
 update_start "UPDATE Keyword"
@@ -1295,16 +1310,16 @@ update_column "Column Assignment"
  * @note Includes limited update syntax {@link https://www.sqlite.org/syntax/delete-stmt-limited.html}
  */
 stmt_delete "DELETE Statement"
-  = u:( clause_with )? o s:( delete_start ) t:( table_qualified ) o w:( stmt_core_where )? o:( stmt_core_order )? l:( stmt_core_limit )?
+  = s:( delete_start ) t:( table_qualified ) o w:( stmt_core_where )? o:( stmt_core_order )? l:( stmt_core_limit )?
   {
-    return util.extend({
+    return {
       'type': 'statement',
       'variant': s,
       'from': t,
       'where': w,
       'order': o,
       'limit': l
-    }, u);
+    };
   }
 
 delete_start "DELETE Keyword"
