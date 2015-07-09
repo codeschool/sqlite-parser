@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
+
+## [v0.10.1] - 2015-07-09
 ### Changed
 - the following things no longer have an `identifier` node in the `name` property, as it is too redundant: column constraints, table constrains, column definitions. the parent node provides plenty of context itself for what you will find in its `name` property.
 
@@ -422,8 +424,8 @@ fixed value format for direction key in PRIMARY KEY table contrainsts cleaned up
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.10.0...HEAD
-[v0.10.0]: https://github.com/codeschool/sqlite-parser/compare/v0.9.8...v0.10.0
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.10.1...HEAD
+[v0.10.1]: https://github.com/codeschool/sqlite-parser/compare/v0.9.8...v0.10.1
 [v0.9.8]: https://github.com/codeschool/sqlite-parser/compare/v0.9.1...v0.9.8
 [v0.9.1]: https://github.com/codeschool/sqlite-parser/compare/v0.8.0...v0.9.1
 [v0.8.0]: https://github.com/codeschool/sqlite-parser/compare/v0.6.0...v0.8.0
