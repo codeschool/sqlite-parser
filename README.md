@@ -5,6 +5,9 @@
 [![devDependencies Status Image](https://img.shields.io/david/dev/codeschool/sqlite-parser.svg)](https://github.com/codeschool/sqlite-parser/)
 [![License Type Image](https://img.shields.io/github/license/codeschool/sqlite-parser.svg)](https://github.com/codeschool/sqlite-parser/blob/master/LICENSE)
 
+## This branch is a work-in-progress
+_Note: There is a currently a significant performance penalty (14x) to using this branch for the smart-error functionality._
+
 This library parses SQLite queries, using JavaScript, and generates
 _abstract syntax tree_ (AST) representations of the input strings. A
 syntax error is produced if an AST cannot be generated.
@@ -46,6 +49,13 @@ sqliteParser(sampleSQL, function (err, res) {
   }
 });
 ```
+
+## Syntax Errors
+
+This parser uses the `--trace` flag exposed in `pegjs` to create "smart" error
+messages. The parser includes a `Trace` class that keeps track of which grammar
+rules were being traversed just prior to the error and uses that information
+to improve the error message and location information.
 
 ## AST
 
