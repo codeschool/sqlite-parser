@@ -118,7 +118,8 @@ expression_exists_ne "EXISTS Keyword"
   { return util.compose([n, x]); }
 
 expression_case "CASE Expression"
-  = t:( CASE ) e e:( expression )? o w:( expression_case_when )+ o s:( expression_case_else )? o END o
+  = t:( CASE ) e e:( expression )? o w:( expression_case_when )+ o
+    s:( expression_case_else )? o END o
   {
     return {
       'type': 'expression',
@@ -585,7 +586,7 @@ error_message "Error Message"
   = m:( literal_string )
   { return m; }
 
-stmt
+stmt "Statement"
   = m:( stmt_modifier )? s:( stmt_nodes ) o
   {
     return util.extend({
@@ -1476,8 +1477,11 @@ update_column "Column Assignment"
 /**
  * @note Includes limited update syntax {@link https://www.sqlite.org/syntax/delete-stmt-limited.html}
  */
+
+
 stmt_delete "DELETE Statement"
-  = s:( delete_start ) t:( table_qualified ) o w:( stmt_core_where )? o:( stmt_core_order )? l:( stmt_core_limit )?
+  = s:( delete_start ) t:( table_qualified ) o w:( stmt_core_where )?
+    o:( stmt_core_order )? l:( stmt_core_limit )?
   {
     return {
       'type': 'statement',
@@ -2902,13 +2906,13 @@ comment
   / comment_block
   { return null; }
 
-comment_line "SQL Line Comment"
+comment_line "Line Comment"
   = comment_line_start ( !whitespace_line match_all )*
 
 comment_line_start
   = "--"
 
-comment_block "SQL Block Comment"
+comment_block "Block Comment"
   = comment_block_start comment_block_feed comment_block_end
 
 comment_block_start

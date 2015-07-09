@@ -47,13 +47,6 @@ sqliteParser(sampleSQL, function (err, res) {
 });
 ```
 
-## Syntax Errors
-
-This parser uses the `--trace` flag exposed in `pegjs` to create "smart" error
-messages. The parser includes a `Trace` class that keeps track of which grammar
-rules were being traversed just prior to the error and uses that information
-to improve the error message and location information.
-
 ## AST
 
 **NOTE: The SQLite AST is a work-in-progress and subject to change.**

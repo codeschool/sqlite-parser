@@ -330,8 +330,9 @@ describe('sqlite-parser', function() {
   // Parse error
 
   it('parse error 1', function(done) {
+    /** @note Disabled tracer, so parse error message has changed. */
     tree.error({
-      'message': 'Syntax error found near Column Identifier (WHERE Clause)'
+      'message': 'Expected Block Comment, Line Comment, New Line, Semicolon, Whitespace or end of input but "W" found.'
     }, this, done);
   });
 

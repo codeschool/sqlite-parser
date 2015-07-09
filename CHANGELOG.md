@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
+
+## [v0.10.0] - 2015-07-09
 ### Added
 - rules and AST for missing transaction-related statement types: `RELEASE` and `SAVEPOINT`
 - rules and AST for missing SQLite-specific statement types: `PRAGMA`, `DETACH`, `VACUUM`, `ANALYZE`, and `REINDEX`
@@ -11,6 +13,9 @@ All notable changes to this project will be documented in this file.
 - added new methods in `parser-util.js` to reduce repeated code: `keyify()`, `textMerge()`, and `listify()`
 
 ### Changed
+- **removing Tracer class from sqlite-parser until a faster solution is developed**
+  - Tracer is causing a **14x performance hit** to the sqlite-parser specs when it is enabled
+  - might consider having two different builds: one _smart error_ build with Tracer and another _performance_ build for speed
 - fixed rules for `WITH` clause prepended to CRUD-type statements to make sure the `with` property is added to the correct nodes
 - changed the AST for `WITH` clause to no longer have a node of `type` `"with"`
 
@@ -88,6 +93,7 @@ All notable changes to this project will be documented in this file.
 - several property values are now being normalized to lowercased strings instead of being passed unmodified to the AST. for example, the `action` property of `action` node now contains a lowercased value.
 - removed redundant rules that pointed to `name` rule, such as `name_function`, `name_view`, and `name_trigger`.
 - unquoted identifiers are now normalized to lowercased strings as per the SQL-92 standard. quoted identifiers are not normalized.
+- SQLite functions are now normalized to lowercase strings in the output AST.
 - now preventing FOUC when first loading the demo page. also allowing cursor focus on "Syntax Tree" editor so that the contents can be selected and copied to the clipboard.
 
 ## [v0.9.8] - 2015-07-06
@@ -414,7 +420,8 @@ fixed value format for direction key in PRIMARY KEY table contrainsts cleaned up
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.9.8...HEAD
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.10.0...HEAD
+[v0.10.0]: https://github.com/codeschool/sqlite-parser/compare/v0.9.8...v0.10.0
 [v0.9.8]: https://github.com/codeschool/sqlite-parser/compare/v0.9.1...v0.9.8
 [v0.9.1]: https://github.com/codeschool/sqlite-parser/compare/v0.8.0...v0.9.1
 [v0.8.0]: https://github.com/codeschool/sqlite-parser/compare/v0.6.0...v0.8.0

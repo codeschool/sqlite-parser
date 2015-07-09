@@ -4,22 +4,17 @@
  * @author Nick Wronski <nick@javascript.com>
  */
  ;(function (root) {
-  var parser      = require('./lib/parser'),
-      Tracer      = require('./lib/tracer');
+  var parser      = require('./lib/parser');
 
   function sqliteParser(source, callback) {
-    var t = Tracer(), res;
     try {
-      res = parser.parse(source, {
-        'tracer': t
-      });
-      callback(null, res);
+      callback(null, parser.parse(source));
     } catch (e) {
-      callback(e instanceof parser.SyntaxError ? t.smartError(e) : e);
+      callback(e);
     }
   }
   sqliteParser['NAME'] = 'sqlite-parser';
-  sqliteParser['VERSION'] = '0.9.11';
+  sqliteParser['VERSION'] = '0.10.0';
 
   module.exports = root.sqliteParser = sqliteParser;
 })(typeof self === 'object' ? self : global);
