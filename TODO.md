@@ -1,6 +1,13 @@
 # Milestones for sqlite-parser
 
 ## **[1.0.0]** In progress
+- [ ] **[In Progress]** Finish standardizing AST format across all types of statements
+  - [ ] `ORDER BY`
+  - [ ] `LIMIT`
+  - [ ] `name` property across node types
+  - [ ] `type` and `variant` combine into single `type` property
+
+## **[0.10.0]** Finished
 
 - [x] Set proper rules for identifier names, e.g.: `[a-z0-9\_\-]+`
 
@@ -91,15 +98,14 @@
     - See: [Virtual Tables](https://www.sqlite.org/lang_createvtab.html)
 
 - [x] Need to display correct error location when there are multiple statements in the input SQL
-- [ ] **[In Progress]** Finish standardizing AST format across all types of statements
 - [x] `comment` rules should not use `sym_*` rules since you should not be able to put a space between the two symbols at the start and/or end of a comment.
 
   ```
   SELECT * - - not valid but is being accepted
   ```
 
-## **[0.1.0]** Finished (needs tests)
-- [x] `SELECT` **TODO: Need tests**
+## **[0.1.0]** Finished
+- [x] `SELECT`
   - [x] Sub-queries
 
     ``` sql
@@ -140,7 +146,7 @@
 
       - [x] *Has spec*
 
-  - [x] `JOIN` types `INNER`, `OUTER`, `LEFT` **TODO: Need tests**
+  - [x] `JOIN` types `INNER`, `OUTER`, `LEFT`
     - [x] Joins on tables and/or sub-queries
       - [x] *Has spec*
     - [x] `USING`
@@ -153,7 +159,7 @@
 
       - [ ] *Has spec*
 
-  - [x] Query modifiers `WHERE`, `GROUP BY`, `HAVING` **TODO: Need tests**
+  - [x] Query modifiers `WHERE`, `GROUP BY`, `HAVING`
     - [x] `WHERE`
       - [ ] *Has spec*
     - [x] `FROM`
@@ -166,7 +172,7 @@
       - [ ] *Has spec*
     - [x] `LIMIT`
       - [ ] *Has spec*
-- [x] `INSERT` **TODO: Need tests**
+- [x] `INSERT`
   - [x] Basic
 
     ``` sql
@@ -207,14 +213,14 @@
   - [x] Table format
     - [x] Basic format
       - [x] *Has spec*
-      - [x] Table constraints **TODO: Need tests**
+      - [x] Table constraints
         - [x] `PRIMARY KEY`
           - [x] *Has spec*
         - [x] `CHECK`
           - [x] *Has spec*
         - [x] `FOREIGN KEY`
           - [x] *Has spec*
-      - [x] Column constraints **TODO: Need tests**
+      - [x] Column constraints
         - [x] `PRIMARY KEY`
           - [x] *Has spec*  
         - [x] `NOT NULL`, `UNIQUE`
@@ -229,9 +235,9 @@
           - [x] *Has spec*  
   - [x] Create table `AS SELECT`
     - [x] *Has spec*
-- [x] `ALTER TABLE` **TODO: Need tests**
+- [x] `ALTER TABLE`
   - [ ] *Has spec*
-- [x] Transaction statement types **TODO: Need tests**
+- [x] Transaction statement types
 
   ``` sql
   BEGIN IMMEDIATE TRANSACTION
@@ -256,7 +262,7 @@
     - [x] *Has spec*
   - [x] `ROLLBACK`
     - [x] *Has spec*
-- [x] Query plan `EXPLAIN QUERY PLAN stmt` **TODO: Need tests**
+- [x] Query plan `EXPLAIN QUERY PLAN stmt`
   - [ ] *Has spec*
 - [x] Multiple queries in batch
 
@@ -333,7 +339,7 @@
     FROM dinosaurs
     ```
 
-- [ ] Expressions  **TODO: Need tests**
+- [ ] Expressions  
   - [x] `CAST banana AS INT`
     - [x] *Has spec*
   - [x] `CASE`
