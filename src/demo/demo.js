@@ -16,7 +16,7 @@
   require('mode-sql');
 
   /* taken from _.debounce() method of Underscore.js */
-  function debounce(func, wait, immediate) { 
+  function debounce(func, wait, immediate) {
     var timeout;
     return function() {
       var context = this, args = arguments;
@@ -71,6 +71,7 @@
   }
 
   var loadDemo = function () {
+    document.getElementById('container').className = '';
     var cmDefaults = {
           lineNumbers: true,
           theme: 'monokai',
@@ -84,12 +85,11 @@
         ast = CodeMirror.fromTextArea(elemAst, util.extend({
           mode: "application/ld+json",
           foldGutter: true,
-          readOnly: 'nocursor'
+          readOnly: true
         }, cmDefaults)),
         update = debounce(function () {
           updater(sql, ast);
         }, 250);
-
     sql.on('change', update);
     update();
   };

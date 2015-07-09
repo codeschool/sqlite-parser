@@ -19,7 +19,7 @@
     }
   }
   sqliteParser['NAME'] = 'sqlite-parser';
-  sqliteParser['VERSION'] = '0.9.10';
+  sqliteParser['VERSION'] = '0.9.11';
 
   module.exports = root.sqliteParser = sqliteParser;
 })(typeof self === 'object' ? self : global);

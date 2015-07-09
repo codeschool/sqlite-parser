@@ -7,7 +7,8 @@ All notable changes to this project will be documented in this file.
 - rules and AST for missing SQLite-specific statement types: `PRAGMA`, `DETACH`, `VACUUM`, `ANALYZE`, and `REINDEX`
 - new specs for SQLite-specific statement types
 - new specs for missing transaction-related statement types
-- new spec for `WITH` clause with recursive table expressions
+- new specs for `WITH` clause with recursive table expressions
+- added new methods in `parser-util.js` to reduce repeated code: `keyify()`, `textMerge()`, and `listify()`
 
 ### Changed
 - fixed rules for `WITH` clause prepended to CRUD-type statements to make sure the `with` property is added to the correct nodes
@@ -39,6 +40,55 @@ All notable changes to this project will be documented in this file.
 
 - `DROP` statement now gives correct `variant` to the `type:'identifier'` node in the `target` property
 - now, in a `ROLLBACK` statement, the savepoint exists on the `to` property
+- fixed bind parameter rules and AST so that a named tcl parameter can still have an alias
+- changed the format for `INSERT`, `WITH`, and `FOREIGN KEY` when using a table name versus a table expression name with a column list. for example, `INSERT INTO cats (a, b, c)` versus `INSERT INTO cats` now have the following differences in formats
+
+  ``` json
+  {
+    "into": {
+      "type": "identifier",
+      "variant": "expression",
+      "format": "table",
+      "name": "cats",
+      "columns": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "a"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "b"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "c"
+        }
+      ]
+    }
+  }
+  ```
+
+  ``` json
+  {
+    "into": {
+      "type": "identifier",
+      "variant": "table",
+      "name": "cats",
+    }
+  }
+  ```
+
+- `JOIN` rules so that `USING` clause can be followed by column names enclosed in parenthesis as the previous rule was not the correct behavior
+- `JOIN` AST modified to have a `constraint` property, instead of `on` and `using`, as a join can only have one of these constraints at a time.
+- many places in the AST that previously had a string value in the `name` property, such as the `into` property of an `INSERT` statement, now instead have a node of `type` `'identifier'`
+- `FOREIGN KEY` constraints now have a `references` property that contains an `'expression'` identifier or a `'table'` identifier depending on the query instead of the `target`, `columns`, and `name` properties.
+- several property values are now being normalized to lowercased strings instead of being passed unmodified to the AST. for example, the `action` property of `action` node now contains a lowercased value.
+- removed redundant rules that pointed to `name` rule, such as `name_function`, `name_view`, and `name_trigger`.
+- unquoted identifiers are now normalized to lowercased strings as per the SQL-92 standard. quoted identifiers are not normalized.
+- now preventing FOUC when first loading the demo page. also allowing cursor focus on "Syntax Tree" editor so that the contents can be selected and copied to the clipboard.
 
 ## [v0.9.8] - 2015-07-06
 ### Added

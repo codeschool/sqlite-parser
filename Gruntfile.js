@@ -90,7 +90,7 @@ module.exports = function(grunt) {
         options: {
           failOnError: false
         },
-        command: 'UGLY=true DEBUG=true ./node_modules/.bin/mocha test/index-spec.js --reporter="list"'
+        command: 'UGLY=true DEBUG=true ./node_modules/.bin/mocha test/index-spec.js --colors --reporter="list"'
       }
     },
     connect: {

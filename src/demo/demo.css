@@ -14,7 +14,7 @@ body {
   background-color: #272822;
 }
 
-.container, footer, header {
+#container, footer, header {
   position: relative;
   margin: 8px;
   font-size: 14px;
@@ -35,27 +35,27 @@ body {
   border: 1px solid #E42267;
 }
 
-.container h3 {
+#container h3 {
   padding: 8px;
   margin: 0;
   height: 32px;
   font-weight: normal;
 }
 
-.container .left h3 {
+#container .left h3 {
   background-color: #ec9652;
   color: #aa5714;
   border-bottom: 1px solid #d7782c;
 }
 
-.container .right h3 {
+#container .right h3 {
   background-color: #daf6a1;
   color: #557B0A;
   border-bottom: 1px solid #77A025;
   transition: all 0.75s;
 }
 
-.container .right.alert h3 {
+#container .right.alert h3 {
   background-color: #fca4c3;
   color: #CB0048;
   border-bottom: 1px solid #E42267;
@@ -66,6 +66,10 @@ body {
 
 .CodeMirror {
   height: 361px !important;
+}
+
+#container.shy .CodeMirror, #container.shy textarea {
+  display: none;
 }
 
 footer, header {
