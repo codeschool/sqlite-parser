@@ -16,7 +16,7 @@
     }
   }
   sqliteParser['NAME'] = 'sqlite-parser';
-  sqliteParser['VERSION'] = '0.10.0';
+  sqliteParser['VERSION'] = '0.10.1';
 
   module.exports = root.sqliteParser = sqliteParser;
 })(typeof self === 'object' ? self : global);
@@ -9810,7 +9810,7 @@ module.exports = (function() {
 
       peg$silentFails++;
       s0 = peg$currPos;
-      s1 = peg$parseid_column();
+      s1 = peg$parsename();
       if (s1 !== peg$FAILED) {
         s2 = peg$currPos;
         s3 = peg$currPos;
@@ -9999,7 +9999,7 @@ module.exports = (function() {
       if (s1 !== peg$FAILED) {
         s2 = peg$parsee();
         if (s2 !== peg$FAILED) {
-          s3 = peg$parseid_constraint_column();
+          s3 = peg$parsename();
           if (s3 !== peg$FAILED) {
             s4 = peg$parseo();
             if (s4 !== peg$FAILED) {
@@ -10485,7 +10485,7 @@ module.exports = (function() {
       if (s1 !== peg$FAILED) {
         s2 = peg$parsee();
         if (s2 !== peg$FAILED) {
-          s3 = peg$parseid_constraint_table();
+          s3 = peg$parsename();
           if (s3 !== peg$FAILED) {
             peg$savedPos = s0;
             s1 = peg$c8(s3);

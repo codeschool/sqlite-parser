@@ -1605,7 +1605,7 @@ source_tbl_loop
 
 /** {@link https://www.sqlite.org/syntaxdiagrams.html#column-def} */
 source_def_column "Column Definition"
-  = n:( id_column ) ( !( name_char ) o ) t:( column_type )? o c:( column_constraints )?
+  = n:( name ) ( !( name_char ) o ) t:( column_type )? o c:( column_constraints )?
   {
     return util.extend({
       'type': 'definition',
@@ -1642,7 +1642,7 @@ column_constraint "Column Constraint"
   }
 
 column_constraint_name "Column Constraint Name"
-  = CONSTRAINT e n:( id_constraint_column ) o
+  = CONSTRAINT e n:( name ) o
   { return n; }
 
 column_constraint_types
@@ -1756,7 +1756,7 @@ table_constraint "Table Constraint"
   }
 
 table_constraint_name "Table Constraint Name"
-  = CONSTRAINT e n:( id_constraint_table )
+  = CONSTRAINT e n:( name )
   { return n; }
 
 table_constraint_types

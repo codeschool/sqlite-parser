@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
+### Changed
+- the following things no longer have an `identifier` node in the `name` property, as it is too redundant: column constraints, table constrains, column definitions. the parent node provides plenty of context itself for what you will find in its `name` property.
 
 ## [v0.10.0] - 2015-07-09
 ### Added
