@@ -6,6 +6,7 @@
   - [ ] `LIMIT`
   - [ ] `name` property across node types
   - [ ] `type` and `variant` combine into single `type` property
+- [ ] **[In Progress]** Organize tests and SQL test queries by type and split out into different files/directories.
 
 ## **[0.10.0]** Finished
 

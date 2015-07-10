@@ -76,7 +76,7 @@ module.exports = function(grunt) {
         options: {
           failOnError: true
         },
-        command: './node_modules/.bin/mocha --reporter="nyan"'
+        command: './node_modules/.bin/mocha --reporter=nyan'
       },
       debug: {
         options: {
