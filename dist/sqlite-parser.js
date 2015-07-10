@@ -15,7 +15,7 @@
   }
 
   sqliteParser['NAME'] = 'sqlite-parser';
-  sqliteParser['VERSION'] = '0.10.1';
+  sqliteParser['VERSION'] = '0.10.2';
 
   module.exports = root.sqliteParser = sqliteParser;
 })(typeof self === 'object' ? self : global, require('./lib/parser'));

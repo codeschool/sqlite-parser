@@ -80,7 +80,7 @@ FROM
         {
           "type": "identifier",
           "variant": "table",
-          "name": "BeeHive",
+          "name": "beehive",
           "alias": null,
           "index": null
         }
@@ -90,7 +90,7 @@ FROM
       "result": [
         {
           "type": "function",
-          "name": "MIN",
+          "name": "min",
           "distinct": false,
           "args": [
             {
@@ -103,7 +103,7 @@ FROM
         },
         {
           "type": "function",
-          "name": "MAX",
+          "name": "max",
           "distinct": false,
           "args": [
             {
@@ -119,7 +119,7 @@ FROM
       "all": false,
       "order": null,
       "limit": null,
-      "with": []
+      "with": null
     }
   ]
 }
