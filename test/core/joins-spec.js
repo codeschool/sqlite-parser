@@ -1,0 +1,13 @@
+describe('joins', function() {
+
+  it('join types 1', function(done) {
+    var resultTree = '{"statement":[{"explain":false,"type":"statement","variant":"select","from":{"type":"map","variant":"join","source":{"type":"identifier","variant":"table","name":"movies","alias":"m","index":null},"map":[{"type":"join","variant":"inner join","source":{"alias":"r","type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"rooms","alias":"r2","index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":">=","left":{"type":"identifier","variant":"column","name":"r2.seats"},"right":{"type":"literal","variant":"decimal","value":"50"}}],"group":null,"result":[{"type":"identifier","variant":"column","name":"r2.movie_id","alias":null}],"distinct":false,"all":false,"order":null,"limit":null},"constraint":{"type":"constraint","variant":"join","format":"on","on":{"type":"expression","format":"binary","variant":"operation","operation":"and","left":{"type":"expression","format":"binary","variant":"operation","operation":"=","left":{"type":"identifier","variant":"column","name":"m.id"},"right":{"type":"identifier","variant":"column","name":"r.movie_id"}},"right":{"type":"expression","format":"binary","variant":"operation","operation":"!=","left":{"type":"identifier","variant":"column","name":"m.title"},"right":{"type":"literal","variant":"string","value":"Batman"}}}}}]},"where":null,"group":null,"result":[{"type":"identifier","variant":"column","name":"m.title","alias":null},{"type":"identifier","variant":"column","name":"r.id","alias":"Theatre Number"}],"distinct":false,"all":false,"order":null,"limit":null,"with":null}]}';
+    tree.equals(resultTree, this, done);
+  });
+
+  it('join types 2', function(done) {
+    var resultTree = '{"statement":[{"explain":false,"type":"statement","variant":"select","from":{"type":"map","variant":"join","source":{"type":"identifier","variant":"table","name":"movies","alias":"m","index":null},"map":[{"type":"join","variant":"left outer join","source":{"type":"identifier","variant":"table","name":"rooms","alias":"r","index":null},"constraint":{"type":"constraint","variant":"join","format":"on","on":{"type":"expression","format":"binary","variant":"operation","operation":"=","left":{"type":"identifier","variant":"column","name":"m.id"},"right":{"type":"identifier","variant":"column","name":"r.movie_id"}}}}]},"where":null,"group":null,"result":[{"type":"identifier","variant":"column","name":"m.title","alias":null},{"type":"identifier","variant":"column","name":"r.id","alias":"Theatre Number"}],"distinct":false,"all":false,"order":null,"limit":null,"with":null}]}';
+    tree.equals(resultTree, this, done);
+  });
+
+});

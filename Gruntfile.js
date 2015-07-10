@@ -70,13 +70,13 @@ module.exports = function(grunt) {
         options: {
           failOnError: true
         },
-        command: './node_modules/.bin/pegjs --optimize "speed" src/grammar.pegjs lib/parser.js'
+        command: './node_modules/.bin/pegjs --optimize speed src/grammar.pegjs lib/parser.js'
       },
       test: {
         options: {
           failOnError: true
         },
-        command: './node_modules/.bin/mocha test/index-spec.js --reporter="nyan" --colors'
+        command: './node_modules/.bin/mocha --reporter="nyan"'
       },
       debug: {
         options: {
@@ -84,13 +84,13 @@ module.exports = function(grunt) {
           debounceDelay: 500,
           forever: true
         },
-        command: 'DEBUG=true ./node_modules/.bin/mocha test/index-spec.js --reporter="list" --colors'
+        command: 'DEBUG=true ./node_modules/.bin/mocha'
       },
       json: {
         options: {
           failOnError: false
         },
-        command: 'UGLY=true DEBUG=true ./node_modules/.bin/mocha test/index-spec.js --colors --reporter="list"'
+        command: 'UGLY=true DEBUG=true ./node_modules/.bin/mocha'
       }
     },
     connect: {

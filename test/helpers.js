@@ -41,8 +41,9 @@ Load the source file for the current test and then try and generate the AST from
   The function to call when sqliteParser has generated the AST or an error.
 */
 getTree = function (that) {
-  var fileTitle = _.camelCase(that.test.title.trim()),
-      filePath = __dirname + '/sql/' + fileTitle + '.sql';
+  var fileTitle = _.kebabCase(that.test.title.trim()),
+      folderTitle = _.kebabCase(that.test.parent.title.trim()),
+      filePath = __dirname + '/sql/' + folderTitle + '/' + fileTitle + '.sql';
   return read(filePath, "utf8")
   .then(sqliteParser)
   .then(broadcast);
