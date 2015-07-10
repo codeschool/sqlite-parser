@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
+### Changed
+- lots of clean up to organize tests by category, split out tests to different files and directories by type, and created `mocha.opts` to run tests directory recursively.
 
 ## [v0.10.1] - 2015-07-09
 ### Changed
