@@ -195,9 +195,6 @@ All notable changes to this project will be documented in this file.
 ### Added
 - additional rule descriptions in `grammar.pegjs`
 
-### Changed
-- cleaned up css in the interactive demo
-
 ### Fixed
 - fixed error reporting when there is more than one statement in the input SQL.
   - still need to make sure previous tree is not used if a subsequent statement has an error at the highest level
@@ -208,18 +205,14 @@ All notable changes to this project will be documented in this file.
   SELECT * d
   ```
 
+- fixed rules for double-quoted, backticked, and bracketed identifiers to allow for escapes, leading or trailing spaces, and the full character set that is legal for quoted identifiers, where allowed.
+- fixed datatype names that did not display correctly in generated AST. fixed string literal definition to allow all possible input
+- fixed value format for direction key in `PRIMARY KEY` table conatrainsts
+- do not show parenthesis in error message for syntax error when there is nothing to put inside them.
+- fixes for css in demo. for example, demo layout off by 1px when at smallest resolution, did a lot of cleanup on demo styles, responsive layout, error notification. also, changed error message format for smart errors.
+
 ### Notes  
 - to support the "smart errors" changes were made to the `pegjs` library code in `lib/compiler/passes/generate-javascript.js`. this was done to allow `Tracer` to get the `description` names for the rules that are referenced in the error messages. will need to fork `pegjs` to get the changes to `pegjs` core into version control so they are not accidentally overwritten.
-
-do not show parenthesis in error message for syntax error when thereis nothing to put inside them. fixes for css in demo
-
-demo layout off by 1px when at smallest resolution
-
-did a lot of cleanup on demo styles, responsive layout, error notification. changed error message format for smart errors
-
-fixed rules for double-quoted, backticked, and bracketed identifiers to allow for escapes, leading or trailing spaces, and the full character set that is legal for quoted identifiers, where allowed. fixed datatype names that did not display correctly in generated AST. fixed string literal definition to allow all possible input
-
-fixed value format for direction key in PRIMARY KEY table contrainsts cleaned up CSS for demo.
 
 ## [v0.6.0] - 2015-07-01
 ### Changed
@@ -295,7 +288,6 @@ fixed value format for direction key in PRIMARY KEY table contrainsts cleaned up
 ## [v0.3.0] - 2015-06-25
 ### Added
 - allow subquery in parenthesis within `FROM` clause
-
 - New specs: Basic Drop Table, Basic Drop Trigger, Basic Function, Basic Subquery, Basic Union, Create Check 1, Create Check 2, Create Foreign Key 1, Create Foreign Key 2, Create Primary Key 1, Create Table Alt Syntax, Expression Like, Expression Table 1, Expression Unary 1, Function Mixed Args, Insert Into Default, Join Types 1, Join Types 2, Select Parts 1, Select Qualified Table 1, Transaction Rollback
 
 ### Changed
