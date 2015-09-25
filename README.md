@@ -1,7 +1,7 @@
 # sqlite-parser
 
 [![NPM Version Image](https://img.shields.io/npm/v/sqlite-parser.svg)](https://www.npmjs.com/package/sqlite-parser)
-[![dependencies Status Image](https://david-dm.org/codeschool/sqlite-parser.svg)](https://github.com/codeschool/sqlite-parser/)
+[![dependencies Status Image](https://img.shields.io/david/codeschool/sqlite-parser.svg)](https://github.com/codeschool/sqlite-parser/)
 [![devDependencies Status Image](https://img.shields.io/david/dev/codeschool/sqlite-parser.svg)](https://github.com/codeschool/sqlite-parser/)
 [![License Type Image](https://img.shields.io/github/license/codeschool/sqlite-parser.svg)](https://github.com/codeschool/sqlite-parser/blob/master/LICENSE)
 
