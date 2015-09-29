@@ -1,5 +1,5 @@
-/*!
- * sqlite-parser
+/**
+ * sqlite-parser grammar
  * @copyright Code School 2015 {@link http://codeschool.com}
  * @author Nick Wronski <nick@javascript.com>
  */
@@ -11,14 +11,16 @@
 start
   = o s:( stmt_list )?
   {
-    return {
-      'statement': (util.isOkay(s) ? s : [])
-    };
+    return util.extend({}, s);
   }
 
 stmt_list
   = semi_optional f:( stmt ) o b:( stmt_list_tail )* semi_optional
-  { return util.listify(f, b); }
+  {
+    return {
+      'statement': util.listify(f, b)
+    };
+  }
 
 semi_optional
   = ( sym_semi )*
@@ -166,9 +168,7 @@ expression_raise_args "RAISE Expression Arguments"
   = a:( raise_args_ignore / raise_args_message )
   {
     return util.extend({
-      'type': 'error',
-      'action': null,
-      'message': null
+      'type': 'error'
     }, a);
   }
 
@@ -504,8 +504,7 @@ bind_parameter_tcl "TCL Bind Parameter"
   {
     return util.extend({
       'format': 'tcl',
-      'name': util.textMerge(d, name),
-      'suffix': null
+      'name': util.textMerge(d, name)
     }, s);
   }
 
@@ -551,20 +550,13 @@ function_call "Function Call"
     return util.extend({
       'type': 'function',
       'name': n,
-      'distinct': false,
       'args': []
     }, a);
   }
 
 function_call_args "Function Call Arguments"
-  = call_args_star
-  / call_args_list
-
-call_args_star
-  = s:( select_star )
-  {
+  = ( s:( select_star ) ) {
     return {
-      'distinct': false,
       'args': [{
         'type': 'identifier',
         'variant': 'star',
@@ -572,13 +564,17 @@ call_args_star
       }]
     };
   }
+  / ( d:( args_list_distinct )? e:( expression_list ) ) {
+    return util.extend({
+      'args': e
+    }, d);
+  }
 
-call_args_list
-  = d:( DISTINCT e )? e:( expression_list )
+args_list_distinct
+  = s:( DISTINCT ) e
   {
     return {
-      'distinct': util.isOkay(d),
-      'args': e
+      'filter': util.key(s)
     };
   }
 
@@ -589,15 +585,15 @@ error_message "Error Message"
 stmt "Statement"
   = m:( stmt_modifier )? s:( stmt_nodes ) o
   {
-    return util.extend({
-      'explain': util.isOkay(m)
-    }, m, s);
+    return util.extend(s, m);
   }
 
 stmt_modifier "QUERY PLAN"
   = e:( EXPLAIN ) e q:( modifier_query )?
   {
-    return util.keyify([e, q]);
+    return {
+      'explain': util.isOkay(e)
+    };
   }
 
 modifier_query "QUERY PLAN Keyword"
@@ -624,12 +620,10 @@ stmt_nodes
 stmt_transaction "Transaction"
   = b:( stmt_begin ) s:( stmt_list )? e:( stmt_commit )
   {
-    return {
+    return util.extend({
       'type': 'statement',
-      'variant': 'transaction',
-      'statement': util.isOkay(s) ? s : [],
-      'defer': b
-    };
+      'variant': 'transaction'
+    }, b, s);
   }
 
 stmt_commit "END Transaction Statement"
@@ -641,7 +635,7 @@ stmt_commit "END Transaction Statement"
 stmt_begin "BEGIN Transaction Statement"
   = s:( BEGIN ) e m:( stmt_begin_modifier )? t:( begin_transaction )?
   {
-    return util.isOkay(m) ? util.key(m) : null;
+    return util.extend({}, m);
   }
 
 commit_transaction
@@ -654,7 +648,11 @@ begin_transaction
 
 stmt_begin_modifier
   = m:( DEFERRED / IMMEDIATE / EXCLUSIVE ) e
-  { return util.key(m); }
+  {
+    return {
+      'defer': util.key(m)
+    };
+  }
 
 stmt_rollback "ROLLBACK Statement"
   = s:( ROLLBACK ) e ( begin_transaction )? n:( rollback_savepoint )?
@@ -740,9 +738,7 @@ stmt_crud
 stmt_core_with "WITH Clause"
   = w:( clause_with )? o
   {
-    return {
-      'with': w
-    };
+    return w;
   }
 
 clause_with
@@ -757,7 +753,9 @@ clause_with
         return util.extend(elem, recursive);
       });
     }
-    return t;
+    return {
+      'with': t
+    };
   }
 
 clause_with_recursive
@@ -779,8 +777,7 @@ expression_cte "Common Table Expression"
       'type': 'expression',
       'format': 'table',
       'variant': 'common',
-      'target': t,
-      'expression': null
+      'target': t
     }, s);
   }
 
@@ -833,16 +830,19 @@ stmt_vacuum "VACUUM Statement"
 stmt_analyze "ANALYZE Statement"
   = s:( ANALYZE ) a:( analyze_arg )? o
   {
-    return {
+    return util.extend({
       'type': 'statement',
-      'variant': util.key(s),
-      'target': (util.isOkay(a) ? a['name'] : null)
-    };
+      'variant': util.key(s)
+    }, a);
   }
 
 analyze_arg
   = e n:( id_table / id_index / id_database )
-  { return n; }
+  {
+    return {
+      'target': n
+    };
+  }
 
 /**
  * @note
@@ -852,16 +852,19 @@ analyze_arg
 stmt_reindex "REINDEX Statement"
   = s:( REINDEX ) a:( reindex_arg )? o
   {
-    return {
+    return util.extend({
       'type': 'statement',
-      'variant': util.key(s),
-      'target': (util.isOkay(a) ? a['name'] : null)
-    };
+      'variant': util.key(s)
+    }, a);
   }
 
 reindex_arg
   = e a:( id_table / id_index / id_collation )
-  { return a; }
+  {
+    return {
+      'target': a['name']
+    };
+  }
 
 stmt_pragma "PRAGMA Statement"
   = s:( PRAGMA ) e n:( id_pragma ) o v:( pragma_expression )?
@@ -929,28 +932,36 @@ stmt_crud_types
 stmt_select "SELECT Statement"
   = s:( select_loop ) o o:( stmt_core_order )? o l:( stmt_core_limit )?
   {
-    return util.extend(s, {
-      'order': o,
-      'limit': l
-    });
+    return util.extend(s, o, l);
   }
 
 stmt_core_order "ORDER BY Clause"
   = ORDER e BY e d:( stmt_core_order_list )
-  { return d; }
+  {
+    return {
+      'order': d
+    };
+  }
 
 stmt_core_limit "LIMIT Clause"
   = s:( LIMIT ) e e:( expression ) o d:( stmt_core_limit_offset )?
   {
     return {
-      'start': e,
-      'offset': d
+      'limit': util.extend({
+        'type': 'expression',
+        'variant': 'limit',
+        'start': e
+      }, d)
     };
   }
 
 stmt_core_limit_offset "OFFSET Clause"
   = o:( limit_offset_variant ) e:( expression )
-  { return e; }
+  {
+    return {
+      'offset': e
+    };
+  }
 
 limit_offset_variant
   = limit_offset_variant_name
@@ -996,19 +1007,14 @@ select_parts_core
     return util.extend({
       'type': 'statement',
       'variant': 'select',
-      'from': [],
-      'where': w,
-      'group': g
-    }, s, f);
+    }, s, f, w, g);
   }
 
 select_core_select "SELECT Results Clause"
   = SELECT e d:( select_modifier )? o t:( select_target )
   {
     return util.extend({
-      'result': t,
-      'distinct': false,
-      'all': false
+      'result': t
     }, d);
   }
 
@@ -1027,9 +1033,7 @@ select_modifier_distinct
 select_modifier_all
   = s:( ALL ) e
   {
-    return {
-      'all': true
-    };
+    return {};
   }
 
 select_target
@@ -1050,20 +1054,27 @@ select_core_from "FROM Clause"
 
 stmt_core_where "WHERE Clause"
   = s:( WHERE ) e e:( expression ) o
-  { return util.makeArray(e); }
+  {
+    return {
+      'where': util.makeArray(e)
+    };
+  }
 
 select_core_group "GROUP BY Clause"
   = s:( GROUP ) e BY e e:( expression_list ) o h:( select_core_having )?
   {
-    return {
-      'expression': util.makeArray(e),
-      'having': h
-    };
+    return util.extend({
+      'group': util.makeArray(e)
+    }, h);
   }
 
 select_core_having "HAVING Clause"
   = s:( HAVING ) e e:( expression ) o
-  { return e; }
+  {
+    return {
+      'having': e
+    };
+  }
 
 select_node
   = select_node_star
@@ -1086,9 +1097,7 @@ select_node_star_qualified
 select_node_aliased
   = e:( expression ) o a:( alias )?
   {
-    return util.extend(e, {
-      'alias': a
-    });
+    return util.extend(e, a);
   }
 
 select_source
@@ -1109,7 +1118,7 @@ table_or_sub
   / table_or_sub_select
 
 table_qualified "Qualified Table"
-  = d:( table_qualified_id ) o i:( table_or_sub_index_node )
+  = d:( table_qualified_id ) o i:( table_or_sub_index_node )?
   {
     return util.extend(d, i);
   }
@@ -1117,27 +1126,30 @@ table_qualified "Qualified Table"
 table_qualified_id "Qualified Table Identifier"
   = n:( id_table ) o a:( alias )?
   {
-    return util.extend(n, {
-      'alias': a
-    });
+    return util.extend(n, a);
   }
 
 
 table_or_sub_index_node "Qualfied Table Index"
-  = i:( index_node_indexed / index_node_none )?
-  {
-    return {
-      'index': i
-    };
-  }
+  = index_node_indexed
+  / index_node_none
 
 index_node_indexed
   = s:( INDEXED ) e BY e n:( name ) o
-  { return n; }
+  {
+    return {
+      'index': n
+    };
+  }
 
 index_node_none
-  = expression_is_not INDEXED o
-  { return null; }
+  = n:( expression_is_not ) i:( INDEXED ) o
+  {
+    // TODO: Not sure what should happen here
+    return {
+      'index': util.keyify([n, i])
+    };
+  }
 
 table_or_sub_sub "SELECT Source"
   = sym_popen l:( select_source ) o sym_pclose
@@ -1146,14 +1158,16 @@ table_or_sub_sub "SELECT Source"
 table_or_sub_select "Subquery"
   = s:( select_wrapped ) a:( alias )?
   {
-    return util.extend({
-      'alias': a
-    }, s);
+    return util.extend(s, a);
   }
 
 alias "Alias"
   = a:( AS ( !name_char o ) )? n:( name ) o
-  { return n; }
+  {
+    return {
+      'alias': n
+    };
+  }
 
 select_join_loop
   = t:( table_or_sub ) o j:( select_join_clause )+
@@ -1237,20 +1251,18 @@ join_condition_using "Join USING Clause"
 select_parts_values "VALUES Clause"
   = s:( VALUES ) o l:( insert_values_list )
   {
-    return {
+    return util.extend({
       'type': 'statement',
-      'variant': 'select',
-      'result': l,
-      'from': null,
-      'where': null,
-      'group': null
-    };
+      'variant': 'select'
+    }, l);
   }
 
 stmt_core_order_list
   = f:( stmt_core_order_list_item ) o b:( stmt_core_order_list_loop )?
   {
-    return util.listify(f, b);
+    return {
+      'result': util.listify(f, b)
+    };
   }
 
 stmt_core_order_list_loop
@@ -1258,17 +1270,14 @@ stmt_core_order_list_loop
   { return i; }
 
 stmt_core_order_list_item "Ordering Expression"
-  = e:( expression ) o c:( column_collate )? o d:( stmt_core_order_list_dir )?
+  = e:( expression ) o c:( column_collate )? o d:( primary_column_dir )?
   {
-    return {
-      'direction': util.textNode(d) /*|| 'ASC'*/,
-      'expression': e,
-      'collate': c
-    };
+    return util.extend({
+      'type': 'expression',
+      'variant': 'order',
+      'expression': e
+    }, c, d);
   }
-
-stmt_core_order_list_dir "Ordering Direction"
-  = primary_column_dir
 
 select_star "Star"
   = sym_star
@@ -1283,11 +1292,7 @@ stmt_insert "INSERT Statement"
   {
     return util.extend({
       'type': 'statement',
-      'variant': 'insert',
-      'into': null,
-      'action': null,
-      'or': null,
-      'result': []
+      'variant': 'insert'
     }, k, t);
   }
 
@@ -1400,8 +1405,9 @@ insert_default "DEFAULT VALUES Clause"
   {
     return {
       'type': 'values',
-      'variant': 'default',
-      'values': null
+      'variant': 'default'
+      // TODO: Not sure what should go here
+      // , 'values': null
     };
   }
 
@@ -1428,12 +1434,8 @@ stmt_update "UPDATE Statement"
     return util.extend({
       'type': 'statement',
       'variant': s,
-      'into': t,
-      'where': w,
-      'set': [],
-      'order': o,
-      'limit': l
-    }, f, u);
+      'into': t
+    }, f, u, w, o, l);
   }
 
 update_start "UPDATE Keyword"
@@ -1483,14 +1485,11 @@ stmt_delete "DELETE Statement"
   = s:( delete_start ) t:( table_qualified ) o w:( stmt_core_where )?
     o:( stmt_core_order )? l:( stmt_core_limit )?
   {
-    return {
+    return util.extend({
       'type': 'statement',
       'variant': s,
-      'from': t,
-      'where': w,
-      'order': o,
-      'limit': l
-    };
+      'from': t
+    }, w, o, l);
   }
 
 delete_start "DELETE Keyword"
@@ -1539,11 +1538,8 @@ create_table "CREATE TABLE Statement"
   {
     return util.extend({
       'type': 'statement',
-      'name': id,
-      'condition': util.makeArray(ne),
-      'optimization': null,
-      'definition': []
-    }, s, r);
+      'name': id
+    }, s, r, ne);
   }
 
 create_table_start
@@ -1564,8 +1560,10 @@ create_core_ine "IF NOT EXISTS Modifier"
   = i:( IF ) e n:( expression_is_not ) e:( EXISTS ) e
   {
     return {
-      'type': 'condition',
-      'condition': util.keyify([i, n, e])
+      'condition': util.makeArray({
+        'type': 'condition',
+        'condition': util.keyify([i, n, e])
+      })
     };
   }
 
@@ -1576,18 +1574,19 @@ create_table_source
 table_source_def "Table Definition"
   = sym_popen s:( source_def_loop ) t:( source_tbl_loop )* sym_pclose r:( source_def_rowid )?
   {
-    return {
-      'definition': util.listify(s, t),
-      'optimization': util.makeArray(r)
-    };
+    return util.extend({
+      'definition': util.listify(s, t)
+    }, r);
   }
 
 source_def_rowid
   = r:( WITHOUT ) e w:( ROWID ) o
   {
     return {
-      'type': 'optimization',
-      'value': util.keyify([r, w])
+      'optimization': [{
+        'type': 'optimization',
+        'value': util.keyify([r, w])
+      }]
     };
   }
 
@@ -1612,7 +1611,6 @@ source_def_column "Column Definition"
       'variant': 'column',
       'name': n,
       'definition': (util.isOkay(c) ? c : []),
-      'datatype': null
     }, t);
   }
 
@@ -1662,7 +1660,7 @@ column_constraint_foreign "FOREIGN KEY Column Constraint"
   }
 
 column_constraint_primary "PRIMARY KEY Column Constraint"
-  = p:( col_primary_start ) d:( col_primary_dir )? c:( primary_conflict )?
+  = p:( col_primary_start ) d:( primary_column_dir )? c:( primary_conflict )?
     a:( col_primary_auto )?
   {
     return util.extend(p, c, d, a);
@@ -1673,19 +1671,7 @@ col_primary_start "PRIMARY KEY Keyword"
   {
     return {
       'type': 'constraint',
-      'variant': util.keyify([s, k]),
-      'conflict': null,
-      'direction': null,
-      'modififer': null,
-      'autoIncrement': false
-    };
-  }
-
-col_primary_dir
-  = d:( primary_column_dir ) o
-  {
-    return {
-      'direction': util.key(d)
+      'variant': util.keyify([s, k])
     };
   }
 
@@ -1702,8 +1688,7 @@ column_constraint_null
   {
     return util.extend({
       'type': 'constraint',
-      'variant': s,
-      'conflict': null
+      'variant': s
     }, c);
   }
 
@@ -1749,15 +1734,17 @@ table_constraint "Table Constraint"
   {
     return util.extend({
       'type': 'definition',
-      'variant': 'constraint',
-      'name': n,
-      'definition': null
-    }, c);
+      'variant': 'constraint'
+    }, c, n);
   }
 
 table_constraint_name "Table Constraint Name"
   = CONSTRAINT e n:( name )
-  { return n; }
+  {
+    return {
+      'name': n
+    };
+  }
 
 table_constraint_types
   = table_constraint_foreign
@@ -1786,8 +1773,7 @@ primary_start
   {
     return {
       'type': 'constraint',
-      'variant': util.key(s),
-      'conflict': null
+      'variant': util.key(s)
     };
   }
 
@@ -1806,23 +1792,29 @@ primary_columns "PRIMARY KEY Columns"
 primary_column "Indexed Column"
   = e:( name ) o c:( column_collate )? d:( primary_column_dir )?
   {
-    return {
+    return util.extend({
       'type': 'identifier',
       'variant': 'column',
       'format': 'indexed',
-      'direction': d,
-      'name': e,
-      'collate': c
-    };
+      'name': e
+    }, c, d);
   }
 
 column_collate "Column Collation"
   = COLLATE e n:( id_collation ) o
-  { return n; }
+  {
+    return {
+      'collate': n
+    };
+  }
 
 primary_column_dir "Column Direction"
   = t:( ASC / DESC ) o
-  { return util.key(t); }
+  {
+    return {
+      'direction': util.key(t),
+    };
+  }
 
 primary_column_tail
   = sym_comma c:( primary_column ) o
@@ -1854,8 +1846,7 @@ table_constraint_foreign "FOREIGN KEY Table Constraint"
   = k:( foreign_start ) l:( loop_columns ) c:( foreign_clause ) o
   {
     return util.extend({
-      'definition': util.makeArray(util.extend(k, c)),
-      'columns': null
+      'definition': util.makeArray(util.extend(k, c))
     }, l);
   }
 
@@ -1864,10 +1855,7 @@ foreign_start "FOREIGN KEY Keyword"
   {
     return {
       'type': 'constraint',
-      'variant': util.keyify([f, k]),
-      'action': null,
-      'defer': null,
-      'references': null
+      'variant': util.keyify([f, k])
     };
   }
 
@@ -1967,11 +1955,9 @@ create_index "CREATE INDEX Statement"
     return util.extend({
       'type': 'statement',
       'target': n,
-      'where': w,
       'on': o,
-      'condition': util.makeArray(ne),
-      'unique': false
-    }, s);
+      'condition': util.makeArray(ne)
+    }, s, w);
   }
 
 create_index_start
@@ -2037,8 +2023,7 @@ trigger_conditions "Conditional Clause"
   = m:( trigger_apply_mods )? d:( trigger_do )
   {
     return util.extend({
-      'type': 'event',
-      'occurs': null
+      'type': 'event'
     }, m, d);
   }
 
