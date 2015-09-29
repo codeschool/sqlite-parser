@@ -1,5 +1,8 @@
+/**
+ * sqlite-parser
+ */
+var parser = require('./lib/parser');
 function sqliteParser(source, callback) {
-  var parser = require('./lib/parser');
   try {
     callback(null, parser.parse(source));
   } catch (e) {
@@ -8,6 +11,6 @@ function sqliteParser(source, callback) {
 }
 
 sqliteParser['NAME'] = 'sqlite-parser';
-sqliteParser['VERSION'] = '0.10.2';
+sqliteParser['VERSION'] = '@@VERSION';
 
 module.exports = sqliteParser;

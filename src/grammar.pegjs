@@ -1,7 +1,5 @@
 /**
  * sqlite-parser grammar
- * @copyright Code School 2015 {@link http://codeschool.com}
- * @author Nick Wronski <nick@javascript.com>
  */
 {
   var util = require('./parser-util');

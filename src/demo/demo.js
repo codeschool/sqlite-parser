@@ -1,7 +1,5 @@
 /**
  * sqlite-parser demo
- * @copyright Code School 2015 {@link http://codeschool.com}
- * @author Nick Wronski <nick@javascript.com>
  */
 (function (root) {
   var Promise         = require('promise'),

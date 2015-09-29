@@ -1,7 +1,5 @@
 /**
  * sqlite-parser utilities
- * @copyright Code School 2015 {@link http://codeschool.com}
- * @author Nick Wronski <nick@javascript.com>
  */
 var slice = [].slice;
 

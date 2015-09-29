@@ -1,12 +1,13 @@
 module.exports = function(grunt) {
   function getBanner(isDemo) {
-    return '/*!' +
-     ' * sqlite-parser' + (isDemo ? ' demo' : '') +
-     ' * @copyright Code School 2015 {@link http://codeschool.com}' +
-     ' * @author Nick Wronski <nick@javascript.com>' +
+    return '/*!\n' +
+     ' * <%= pkg.name %>' + (isDemo ? '-demo' : '') + ' - v<%= pkg.version %>\n' +
+     ' * @copyright <%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
+     ' * @author Nick Wronski <nick@javascript.com>\n' +
      ' */';
   }
   grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
     browserify: {
       dist: {
         options: {
@@ -200,16 +201,27 @@ module.exports = function(grunt) {
         }
       }
     },
+    replace: {
+      options: {
+        patterns: [
+          {
+            match: 'VERSION',
+            replacement: '<%= pkg.version %>'
+          }
+        ]
+      },
+      dist: {
+        files: [{
+          expand: true,
+          cwd: 'dist/',
+          src: 'sqlite-parser*.js',
+          dest: 'dist/'
+        }]
+      }
+    }
   });
 
-  grunt.loadNpmTasks('grunt-shell');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-browserify');
-  grunt.loadNpmTasks('grunt-contrib-connect');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-cssmin');
+  require('load-grunt-tasks')(grunt);
 
   grunt.registerTask('default', [
     'build'
@@ -237,7 +249,7 @@ module.exports = function(grunt) {
     'interactive', 'clean:demo', 'copy:demo', 'uglify:demo', 'usebanner:demo'
   ]);
   grunt.registerTask('dist', [
-    'default', 'clean:dist', 'browserify:dist', 'uglify:dist', 'usebanner:dist'
+    'default', 'clean:dist', 'browserify:dist', 'uglify:dist', 'replace:dist', 'usebanner:dist'
   ]);
   grunt.registerTask('release', [
     'test', 'dist', 'demo', 'clean:interactive'
