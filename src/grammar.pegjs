@@ -840,7 +840,7 @@ analyze_arg
   = e n:( id_table / id_index / id_database )
   {
     return {
-      'target': n
+      'target': n['name']
     };
   }
 
@@ -1956,8 +1956,7 @@ create_index "CREATE INDEX Statement"
       'type': 'statement',
       'target': n,
       'on': o,
-      'condition': util.makeArray(ne)
-    }, s, w);
+    }, s, ne, w);
   }
 
 create_index_start
@@ -1999,24 +1998,21 @@ create_trigger "CREATE TRIGGER Statement"
   {
     return util.extend({
       'type': 'statement',
-      'when': wh,
       'target': n,
       'on': o,
-      'condition': util.makeArray(ne),
       'event': cd,
       'by': (util.isOkay(me) ? me : 'row'),
       'action': util.makeArray(a)
-    }, s);
+    }, s, ne, wh);
   }
 
 create_trigger_start
-  = s:( create_start ) p:( create_core_tmp )? t:( TRIGGER ) e
+  = s:( create_start ) tmp:( create_core_tmp )? t:( TRIGGER ) e
   {
-    return {
-      'temporary': util.isOkay(p),
+    return util.extend({
       'variant': util.key(s),
       'format': util.key(t)
-    };
+    }, tmp);
   }
 
 trigger_conditions "Conditional Clause"
@@ -2099,10 +2095,9 @@ create_view "CREATE VIEW Statement"
   {
     return util.extend({
       'type': 'statement',
-      'condition': util.makeArray(ne),
       'target': n,
       'result': r
-    }, s);
+    }, s, ne);
   }
 
 create_view_start
@@ -2125,10 +2120,9 @@ create_virtual "CREATE VIRTUAL TABLE Statement"
   {
     return util.extend({
       'type': 'statement',
-      'condition': util.makeArray(ne),
       'target': n,
       'result': m
-    }, s);
+    }, s, ne);
   }
 
 create_virtual_start
