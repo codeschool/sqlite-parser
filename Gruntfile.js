@@ -98,11 +98,11 @@ module.exports = function(grunt) {
         },
         command: 'DEBUG=true ./node_modules/.bin/mocha'
       },
-      json: {
+      rewrite: {
         options: {
-          failOnError: false
+          failOnError: true
         },
-        command: 'UGLY=true DEBUG=true ./node_modules/.bin/mocha'
+        command: 'REWRITE=true ./node_modules/.bin/mocha'
       }
     },
     connect: {
@@ -223,8 +223,8 @@ module.exports = function(grunt) {
   grunt.registerTask('debug', [
     'build', 'shell:debug', 'watch:debug'
   ]);
-  grunt.registerTask('json', [
-    'build', 'shell:json'
+  grunt.registerTask('rewrite-json', [
+    'build', 'shell:rewrite'
   ]);
   grunt.registerTask('interactive', [
     'clean:interactive', 'default', 'copy:interactive', 'cssmin:interactive',

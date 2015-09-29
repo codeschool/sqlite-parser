@@ -2,11 +2,15 @@ var expect            = require('chai').expect,
     fs                = require('fs'),
     Promise           = require('promise'),
     read              = Promise.denodeify(fs.readFile),
+    write             = Promise.denodeify(fs.writeFile),
     _                 = require('lodash'),
     parser            = require('../index'),
     sqliteParser      = Promise.denodeify(parser),
     prettyjson        = require('prettyjson'),
-    format, broadcast, getTree, assertOkTree, assertErrorTree,
+    format, broadcast,
+    filePath,
+    getTree, getTestJson, getTestFiles,
+    assertOkTree, assertErrorTree,
     isDefined = function (arg) { return arg != null; };
 
 broadcast = function broadcast(args) {
@@ -30,6 +34,12 @@ broadcast = function broadcast(args) {
   b.ugly = b.should && _.has(p.env, 'UGLY');
 })(broadcast, console, process);
 
+filePath = function (that, ext) {
+  var fileTitle = _.kebabCase(that.test.title.trim()),
+      folderTitle = _.kebabCase(that.test.parent.title.trim());
+  return __dirname + '/' + ext + '/' + folderTitle + '/' + fileTitle + '.' + ext;
+};
+
 /**
 Load the source file for the current test and then try and generate the AST from it.
 @note Uses the name of the test to determine what test input to use such that `bees-test`
@@ -41,12 +51,20 @@ Load the source file for the current test and then try and generate the AST from
   The function to call when sqliteParser has generated the AST or an error.
 */
 getTree = function (that) {
-  var fileTitle = _.kebabCase(that.test.title.trim()),
-      folderTitle = _.kebabCase(that.test.parent.title.trim()),
-      filePath = __dirname + '/sql/' + folderTitle + '/' + fileTitle + '.sql';
-  return read(filePath, "utf8")
+  return read(filePath(that, 'sql'), 'utf8')
   .then(sqliteParser)
   .then(broadcast);
+};
+
+getTestJson = function (that) {
+  return read(filePath(that, 'json'), 'utf8')
+  .then(function (json) {
+    return JSON.parse(json);
+  });
+};
+
+getTestFiles = function (that) {
+  return Promise.all([getTree(that), getTestJson(that)]);
 };
 
 /**
@@ -78,33 +96,28 @@ given object.
   The function to call when the test is completed
 */
 assertErrorTree = function (obj, that, done) {
+  if (_.isUndefined(obj)) {
+    obj = {};
+  } else if (_.isString(obj)) {
+    obj = { 'message': obj };
+  }
   return getTree(that)
   .then(function () {
     return done(Error("Returned a tree instead of an error!"));
   })
   .catch(function (err) {
-    if (_.isUndefined(obj)) {
-      obj = {};
-    } else if (_.isString(obj)) {
-      obj = { 'message': obj };
-    }
-    return Promise.all(_.map(obj, function (v, k) {
-      return new Promise(function (acc, rej) {
-        expect(err).to.include.keys(k);
-        expect(err[k]).to.equal(v);
-        acc();
-      });
-    })).then(function () {
-      done();
+    _.forEach(obj, function (v, k) {
+      expect(err).to.include.keys(k);
+      expect(err[k]).to.equal(v);
     });
+    done();
   })
   .catch(done);
 };
 
 /**
 Assert that the current file returns an AST containing the properties and values in the
-given object.
-@note Alternative arguments format to pass options object is: obj, that, options, done.
+given corresponding JSON file.
 @param [Object|String] obj
   The properties and values to assert within the AST generated for the running test.
 @param [Object] that
@@ -112,17 +125,20 @@ given object.
 @param [Function] done
   The function to call when the test is completed
 */
-assertEqualsTree = function (obj, that, done) {
-  return getTree(that)
-  .then(function (tree) {
-    if (_.isUndefined(obj)) {
-      obj = {};
+assertEqualsTree = function (that, done) {
+  return getTestFiles(that)
+  .then(function (files) {
+    if (_.has(p.env, 'REWRITE')) {
+      // REWRITE MODE: Save a new JSON file using parser tree result
+      return write(filePath(that, 'json'), JSON.stringify(files[0], null, 2), 'utf8')
+      .then(function () {
+        done();
+      });
+    } else {
+      // Run the assertions as normal
+      expect(files[0]).to.deep.equal(files[1]);
+      done();
     }
-    if (_.isString(obj)) {
-      obj = JSON.parse(obj);
-    }
-    expect(tree).to.deep.equal(obj);
-    return done();
   })
   .catch(done);
 };
