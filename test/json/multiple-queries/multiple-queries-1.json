@@ -1,0 +1,216 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "actors"
+      },
+      "temporary": false,
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "name",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text",
+            "args": [
+              {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "50"
+              }
+            ]
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "country",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text",
+            "args": [
+              {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "50"
+              }
+            ]
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "salary",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer",
+            "args": []
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "actors",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "name"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "country"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "salary"
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "values",
+          "variant": "list",
+          "values": [
+            {
+              "type": "literal",
+              "variant": "string",
+              "value": "Vivien Leigh"
+            },
+            {
+              "type": "literal",
+              "variant": "string",
+              "value": "IN"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "150000"
+            }
+          ]
+        },
+        {
+          "type": "values",
+          "variant": "list",
+          "values": [
+            {
+              "type": "literal",
+              "variant": "string",
+              "value": "Clark Gable"
+            },
+            {
+              "type": "literal",
+              "variant": "string",
+              "value": "USA"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "120000"
+            }
+          ]
+        },
+        {
+          "type": "values",
+          "variant": "list",
+          "values": [
+            {
+              "type": "literal",
+              "variant": "string",
+              "value": "Olivia de Havilland"
+            },
+            {
+              "type": "literal",
+              "variant": "string",
+              "value": "Japan"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "30000"
+            }
+          ]
+        },
+        {
+          "type": "values",
+          "variant": "list",
+          "values": [
+            {
+              "type": "literal",
+              "variant": "string",
+              "value": "Hattie McDaniel"
+            },
+            {
+              "type": "literal",
+              "variant": "string",
+              "value": "USA"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "45000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": "min",
+          "args": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "salary"
+            }
+          ],
+          "alias": "MinSalary"
+        },
+        {
+          "type": "function",
+          "name": "max",
+          "args": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "salary"
+            }
+          ],
+          "alias": "MaxSalary"
+        }
+      ],
+      "from": [
+        {
+          "type": "identifier",
+          "variant": "table",
+          "name": "actors"
+        }
+      ]
+    }
+  ]
+}

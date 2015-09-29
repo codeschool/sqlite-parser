@@ -1,0 +1,29 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "unary",
+          "variant": "operation",
+          "expression": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "bees"
+          },
+          "operator": "not",
+          "alias": "b"
+        }
+      ],
+      "from": [
+        {
+          "type": "identifier",
+          "variant": "table",
+          "name": "hats"
+        }
+      ]
+    }
+  ]
+}

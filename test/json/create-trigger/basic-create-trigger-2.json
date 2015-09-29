@@ -1,0 +1,132 @@
+{
+  "statement": [
+    {
+      "type": "expression",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "happy_bee_time"
+      },
+      "on": "bees",
+      "event": {
+        "type": "event",
+        "occurs": "before",
+        "event": "delete"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "expression",
+            "format": "table",
+            "name": "hive",
+            "columns": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "id"
+              },
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "name"
+              }
+            ]
+          },
+          "result": [
+            {
+              "type": "values",
+              "variant": "list",
+              "values": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "4"
+                },
+                {
+                  "type": "literal",
+                  "variant": "string",
+                  "value": "A Better Hive"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "expression",
+            "format": "table",
+            "name": "bees",
+            "columns": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "name"
+              },
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "color"
+              },
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "hive_id"
+              }
+            ]
+          },
+          "result": [
+            {
+              "type": "values",
+              "variant": "list",
+              "values": [
+                {
+                  "type": "literal",
+                  "variant": "string",
+                  "value": "New Nick"
+                },
+                {
+                  "type": "literal",
+                  "variant": "string",
+                  "value": "purple"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "4"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "operation",
+      "format": "binary",
+      "condition": [
+        {
+          "type": "condition",
+          "condition": "if not exists"
+        }
+      ],
+      "operation": "==",
+      "left": {
+        "type": "identifier",
+        "variant": "column",
+        "name": "name"
+      },
+      "right": {
+        "type": "literal",
+        "variant": "string",
+        "value": "Nick"
+      }
+    }
+  ]
+}

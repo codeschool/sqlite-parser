@@ -1,0 +1,20 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "hive.beestuff"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": [
+        {
+          "type": "condition",
+          "condition": "if exists"
+        }
+      ]
+    }
+  ]
+}

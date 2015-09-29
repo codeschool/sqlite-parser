@@ -1,0 +1,132 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "bees"
+      },
+      "temporary": false,
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "id",
+          "definition": [
+            {
+              "name": null,
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "int",
+            "affinity": "integer",
+            "args": []
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "name",
+          "definition": [
+            {
+              "name": null,
+              "type": "constraint",
+              "variant": "not null"
+            },
+            {
+              "name": null,
+              "type": "constraint",
+              "variant": "unique"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text",
+            "args": [
+              {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "50"
+              }
+            ]
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "wings",
+          "definition": [
+            {
+              "name": null,
+              "type": "constraint",
+              "variant": "check",
+              "expression": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": ">=",
+                "left": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "wings"
+                },
+                "right": {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "2"
+                }
+              }
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "int",
+            "affinity": "integer",
+            "args": []
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "legs",
+          "definition": [
+            {
+              "name": null,
+              "type": "constraint",
+              "variant": "check",
+              "expression": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "<",
+                "left": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "legs"
+                },
+                "right": {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "8"
+                }
+              }
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "int",
+            "affinity": "integer",
+            "args": []
+          }
+        }
+      ]
+    }
+  ]
+}

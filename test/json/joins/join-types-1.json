@@ -1,0 +1,118 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "m.title"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "r.id",
+          "alias": "Theatre Number"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "movies",
+          "alias": "m"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "inner join",
+            "source": {
+              "type": "statement",
+              "variant": "select",
+              "result": [
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "r2.movie_id"
+                }
+              ],
+              "from": [
+                {
+                  "type": "identifier",
+                  "variant": "table",
+                  "name": "rooms",
+                  "alias": "r2"
+                }
+              ],
+              "where": [
+                {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": ">=",
+                  "left": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "r2.seats"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "50"
+                  }
+                }
+              ],
+              "alias": "r"
+            },
+            "constraint": {
+              "type": "constraint",
+              "variant": "join",
+              "format": "on",
+              "on": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "and",
+                "left": {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "=",
+                  "left": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "m.id"
+                  },
+                  "right": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "r.movie_id"
+                  }
+                },
+                "right": {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "!=",
+                  "left": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "m.title"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "variant": "string",
+                    "value": "Batman"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "concessions",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "item"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "size"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "id"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "price"
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "values",
+          "variant": "list",
+          "values": [
+            {
+              "type": "literal",
+              "variant": "string",
+              "value": "Nachos"
+            },
+            {
+              "type": "literal",
+              "variant": "string",
+              "value": "Regular"
+            },
+            {
+              "type": "literal",
+              "variant": "null",
+              "value": "null"
+            },
+            {
+              "type": "literal",
+              "variant": "null",
+              "value": "null"
+            }
+          ]
+        },
+        {
+          "type": "values",
+          "variant": "list",
+          "values": [
+            {
+              "type": "literal",
+              "variant": "string",
+              "value": "Pizza"
+            },
+            {
+              "type": "literal",
+              "variant": "null",
+              "value": "null"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "8"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2.00"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

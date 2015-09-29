@@ -1,0 +1,68 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "bees"
+      },
+      "temporary": false,
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "statement",
+          "variant": "select",
+          "result": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "name"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "color"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "legs"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "id"
+            }
+          ],
+          "from": [
+            {
+              "type": "identifier",
+              "variant": "table",
+              "name": "old_bees"
+            }
+          ],
+          "where": [
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "is not",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "name"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "null",
+                "value": "null"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

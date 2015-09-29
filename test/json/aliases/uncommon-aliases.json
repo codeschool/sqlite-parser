@@ -1,0 +1,35 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "hat.*"
+        },
+        {
+          "type": "function",
+          "name": "count",
+          "args": [
+            {
+              "type": "identifier",
+              "variant": "star",
+              "name": "*"
+            }
+          ],
+          "alias": "pants"
+        }
+      ],
+      "from": [
+        {
+          "type": "identifier",
+          "variant": "table",
+          "name": "hats",
+          "alias": "hat"
+        }
+      ]
+    }
+  ]
+}

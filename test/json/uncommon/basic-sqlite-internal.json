@@ -1,0 +1,54 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "detach",
+      "target": {
+        "type": "identifier",
+        "variant": "database",
+        "name": "hat_db"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "detach",
+      "target": {
+        "type": "identifier",
+        "variant": "database",
+        "name": "pants_db"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "reindex",
+      "target": "happy_collation"
+    },
+    {
+      "type": "statement",
+      "variant": "reindex"
+    },
+    {
+      "type": "statement",
+      "variant": "reindex",
+      "target": "hat_db.pants_table"
+    },
+    {
+      "type": "statement",
+      "variant": "analyze",
+      "target": "happy_table"
+    },
+    {
+      "type": "statement",
+      "variant": "analyze"
+    },
+    {
+      "type": "statement",
+      "variant": "analyze",
+      "target": "hat_db.pants_table"
+    },
+    {
+      "type": "statement",
+      "variant": "vacuum"
+    }
+  ]
+}

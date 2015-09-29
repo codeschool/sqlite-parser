@@ -1,0 +1,36 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "apples",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "c"
+          }
+        ]
+      },
+      "result": {
+        "type": "values",
+        "variant": "default"
+      }
+    }
+  ]
+}

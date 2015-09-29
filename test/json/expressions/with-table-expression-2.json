@@ -1,0 +1,270 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "family.name"
+        }
+      ],
+      "from": [
+        {
+          "type": "identifier",
+          "variant": "table",
+          "name": "ancestor_of_alice"
+        },
+        {
+          "type": "identifier",
+          "variant": "table",
+          "name": "family"
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "ancestor_of_alice.name"
+            },
+            "right": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "family.name"
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "is",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "died"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "null",
+              "value": "null"
+            }
+          }
+        }
+      ],
+      "order": {
+        "result": [
+          {
+            "type": "expression",
+            "variant": "order",
+            "expression": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "born"
+            }
+          }
+        ]
+      },
+      "with": [
+        {
+          "type": "expression",
+          "format": "table",
+          "variant": "recursive",
+          "target": {
+            "type": "identifier",
+            "variant": "expression",
+            "format": "table",
+            "name": "parent_of",
+            "columns": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "name"
+              },
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "parent"
+              }
+            ]
+          },
+          "expression": {
+            "type": "statement",
+            "variant": "compound",
+            "statement": {
+              "type": "statement",
+              "variant": "select",
+              "result": [
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "name"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "mom"
+                }
+              ],
+              "from": [
+                {
+                  "type": "identifier",
+                  "variant": "table",
+                  "name": "family"
+                }
+              ]
+            },
+            "compound": [
+              {
+                "type": "compound",
+                "variant": "union",
+                "statement": {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "name"
+                    },
+                    {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "dad"
+                    }
+                  ],
+                  "from": [
+                    {
+                      "type": "identifier",
+                      "variant": "table",
+                      "name": "family"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "expression",
+          "format": "table",
+          "variant": "recursive",
+          "target": {
+            "type": "identifier",
+            "variant": "expression",
+            "format": "table",
+            "name": "ancestor_of_alice",
+            "columns": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "name"
+              }
+            ]
+          },
+          "expression": {
+            "type": "statement",
+            "variant": "compound",
+            "statement": {
+              "type": "statement",
+              "variant": "select",
+              "result": [
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "parent"
+                }
+              ],
+              "from": [
+                {
+                  "type": "identifier",
+                  "variant": "table",
+                  "name": "parent_of"
+                }
+              ],
+              "where": [
+                {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "=",
+                  "left": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "name"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "variant": "string",
+                    "value": "Alice"
+                  }
+                }
+              ]
+            },
+            "compound": [
+              {
+                "type": "compound",
+                "variant": "union all",
+                "statement": {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "parent"
+                    }
+                  ],
+                  "from": {
+                    "type": "map",
+                    "variant": "join",
+                    "source": {
+                      "type": "identifier",
+                      "variant": "table",
+                      "name": "parent_of"
+                    },
+                    "map": [
+                      {
+                        "type": "join",
+                        "variant": "join",
+                        "source": {
+                          "type": "identifier",
+                          "variant": "table",
+                          "name": "ancestor_of_alice"
+                        },
+                        "constraint": {
+                          "type": "constraint",
+                          "variant": "join",
+                          "format": "using",
+                          "using": {
+                            "columns": [
+                              {
+                                "type": "identifier",
+                                "variant": "column",
+                                "name": "name"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

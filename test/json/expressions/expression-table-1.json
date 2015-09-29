@@ -1,0 +1,86 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "inventory"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "inner join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "ham"
+            },
+            "constraint": {
+              "type": "constraint",
+              "variant": "join",
+              "format": "on",
+              "on": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "=",
+                "left": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "inventory.variety"
+                },
+                "right": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "ham.type"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "with": [
+        {
+          "type": "expression",
+          "format": "table",
+          "variant": "common",
+          "target": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "ham"
+          },
+          "expression": {
+            "type": "statement",
+            "variant": "select",
+            "result": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "type"
+              }
+            ],
+            "from": [
+              {
+                "type": "identifier",
+                "variant": "table",
+                "name": "hams"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

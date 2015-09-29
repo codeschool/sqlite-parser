@@ -1,0 +1,39 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": "count",
+          "args": [
+            {
+              "type": "identifier",
+              "variant": "star",
+              "name": "*"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "max",
+          "args": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "price"
+            }
+          ]
+        }
+      ],
+      "from": [
+        {
+          "type": "identifier",
+          "variant": "table",
+          "name": "apples"
+        }
+      ]
+    }
+  ]
+}

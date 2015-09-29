@@ -1,0 +1,89 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "bees"
+      },
+      "temporary": false,
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "id",
+          "definition": [
+            {
+              "name": null,
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "int",
+            "affinity": "integer",
+            "args": []
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "color",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "int",
+            "affinity": "integer",
+            "args": []
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "hive_id",
+          "definition": [
+            {
+              "name": null,
+              "type": "constraint",
+              "variant": "unique"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "int",
+            "affinity": "integer",
+            "args": []
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "constraint",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "foreign key",
+              "action": null,
+              "defer": null,
+              "references": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "hives"
+              }
+            }
+          ],
+          "columns": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "hive_id"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

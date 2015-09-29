@@ -1,0 +1,61 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "view",
+        "name": "happy.bananaview"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "type"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "name"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "origin"
+          }
+        ],
+        "from": [
+          {
+            "type": "identifier",
+            "variant": "table",
+            "name": "bananas"
+          }
+        ],
+        "where": [
+          {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "color"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "string",
+              "value": "red"
+            }
+          }
+        ]
+      },
+      "temporary": false,
+      "variant": "create",
+      "format": "view"
+    }
+  ]
+}

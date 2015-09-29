@@ -1,0 +1,39 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "unary",
+          "variant": "cast",
+          "expression": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "430.120"
+          },
+          "as": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text",
+            "args": [
+              {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "20"
+              }
+            ]
+          }
+        }
+      ],
+      "from": [
+        {
+          "type": "identifier",
+          "variant": "table",
+          "name": "bees"
+        }
+      ]
+    }
+  ]
+}

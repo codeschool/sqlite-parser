@@ -1,0 +1,32 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": "myfunc",
+          "args": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "col"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1.2"
+            },
+            {
+              "type": "literal",
+              "variant": "string",
+              "value": "str"
+            }
+          ],
+          "alias": "Super Func"
+        }
+      ]
+    }
+  ]
+}

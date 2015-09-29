@@ -1,0 +1,42 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "apple",
+          "alias": "The Apple"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "pear",
+          "alias": "the_pear"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "orange",
+          "alias": "TheOrange"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "pineapple",
+          "alias": "wherekeyword"
+        }
+      ],
+      "from": [
+        {
+          "type": "identifier",
+          "variant": "table",
+          "name": "bananas",
+          "alias": "b"
+        }
+      ]
+    }
+  ]
+}

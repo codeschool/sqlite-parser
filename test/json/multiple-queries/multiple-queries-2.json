@@ -1,0 +1,356 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "actors"
+      },
+      "temporary": false,
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "id",
+          "definition": [
+            {
+              "name": null,
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "int",
+            "affinity": "integer",
+            "args": []
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "name",
+          "definition": [
+            {
+              "name": null,
+              "type": "constraint",
+              "variant": "not null"
+            },
+            {
+              "name": null,
+              "type": "constraint",
+              "variant": "unique"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text",
+            "args": [
+              {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "50"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "actors",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "name"
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "values",
+          "variant": "list",
+          "values": [
+            {
+              "type": "literal",
+              "variant": "string",
+              "value": "Vivien Leigh"
+            }
+          ]
+        },
+        {
+          "type": "values",
+          "variant": "list",
+          "values": [
+            {
+              "type": "literal",
+              "variant": "string",
+              "value": "Clark Gable"
+            }
+          ]
+        },
+        {
+          "type": "values",
+          "variant": "list",
+          "values": [
+            {
+              "type": "literal",
+              "variant": "string",
+              "value": "Olivia de Havilland"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "movies"
+      },
+      "temporary": false,
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "id",
+          "definition": [
+            {
+              "name": null,
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "int",
+            "affinity": "integer",
+            "args": []
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "title",
+          "definition": [
+            {
+              "name": null,
+              "type": "constraint",
+              "variant": "not null"
+            },
+            {
+              "name": null,
+              "type": "constraint",
+              "variant": "unique"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text",
+            "args": [
+              {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "50"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "movies",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "title"
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "values",
+          "variant": "list",
+          "values": [
+            {
+              "type": "literal",
+              "variant": "string",
+              "value": "Don Juan"
+            }
+          ]
+        },
+        {
+          "type": "values",
+          "variant": "list",
+          "values": [
+            {
+              "type": "literal",
+              "variant": "string",
+              "value": "The Lost World"
+            }
+          ]
+        },
+        {
+          "type": "values",
+          "variant": "list",
+          "values": [
+            {
+              "type": "literal",
+              "variant": "string",
+              "value": "Peter Pan"
+            }
+          ]
+        },
+        {
+          "type": "values",
+          "variant": "list",
+          "values": [
+            {
+              "type": "literal",
+              "variant": "string",
+              "value": "Robin Hood"
+            }
+          ]
+        },
+        {
+          "type": "values",
+          "variant": "list",
+          "values": [
+            {
+              "type": "literal",
+              "variant": "string",
+              "value": "Wolfman"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "actors_movies"
+      },
+      "temporary": false,
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "actor_id",
+          "definition": [
+            {
+              "name": null,
+              "variant": "foreign key",
+              "type": "constraint",
+              "action": null,
+              "defer": null,
+              "references": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "actors"
+              }
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "int",
+            "affinity": "integer",
+            "args": []
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "movie_id",
+          "definition": [
+            {
+              "name": null,
+              "variant": "foreign key",
+              "type": "constraint",
+              "action": null,
+              "defer": null,
+              "references": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "movies"
+              }
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "int",
+            "affinity": "integer",
+            "args": []
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "actors_movies",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "actor_id"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "movie_id"
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "values",
+          "variant": "list",
+          "values": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "5"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

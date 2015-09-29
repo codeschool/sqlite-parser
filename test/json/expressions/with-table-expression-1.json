@@ -1,0 +1,129 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": [
+        {
+          "type": "identifier",
+          "variant": "table",
+          "name": "nick"
+        }
+      ],
+      "with": [
+        {
+          "type": "expression",
+          "format": "table",
+          "variant": "recursive",
+          "target": {
+            "type": "identifier",
+            "variant": "expression",
+            "format": "table",
+            "name": "hat",
+            "columns": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "hat"
+              },
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "pants"
+              }
+            ]
+          },
+          "expression": {
+            "type": "statement",
+            "variant": "select",
+            "result": [
+              {
+                "type": "identifier",
+                "variant": "star",
+                "name": "*"
+              }
+            ],
+            "from": [
+              {
+                "type": "identifier",
+                "variant": "table",
+                "name": "hats"
+              }
+            ]
+          }
+        },
+        {
+          "type": "expression",
+          "format": "table",
+          "variant": "recursive",
+          "target": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "pant"
+          },
+          "expression": {
+            "type": "statement",
+            "variant": "select",
+            "result": [
+              {
+                "type": "identifier",
+                "variant": "star",
+                "name": "*"
+              }
+            ],
+            "from": [
+              {
+                "type": "identifier",
+                "variant": "table",
+                "name": "pants"
+              }
+            ]
+          }
+        },
+        {
+          "type": "expression",
+          "format": "table",
+          "variant": "recursive",
+          "target": {
+            "type": "identifier",
+            "variant": "expression",
+            "format": "table",
+            "name": "nap",
+            "columns": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "a"
+              }
+            ]
+          },
+          "expression": {
+            "type": "statement",
+            "variant": "select",
+            "result": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "sleep"
+              }
+            ],
+            "from": [
+              {
+                "type": "identifier",
+                "variant": "table",
+                "name": "naps"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

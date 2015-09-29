@@ -1,0 +1,46 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "happy_table"
+      },
+      "result": {
+        "type": "module",
+        "name": "happy_module",
+        "args": [
+          {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "!=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "some"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "string",
+              "value": "expression"
+            }
+          },
+          {
+            "type": "literal",
+            "variant": "string",
+            "value": "just a string"
+          },
+          {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "33.0"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "virtual"
+    }
+  ]
+}

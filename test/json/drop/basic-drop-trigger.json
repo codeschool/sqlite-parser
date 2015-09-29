@@ -1,0 +1,20 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "happy.insertRecord"
+      },
+      "variant": "drop",
+      "format": "trigger",
+      "condition": [
+        {
+          "type": "condition",
+          "condition": "if exists"
+        }
+      ]
+    }
+  ]
+}

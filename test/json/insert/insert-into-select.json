@@ -1,0 +1,88 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "foods",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "item"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "size"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "id"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "price"
+          }
+        ]
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "literal",
+            "variant": "string",
+            "value": "banana"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "size"
+          },
+          {
+            "type": "literal",
+            "variant": "null",
+            "value": "null"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "price"
+          }
+        ],
+        "from": [
+          {
+            "type": "identifier",
+            "variant": "table",
+            "name": "bananas"
+          }
+        ],
+        "where": [
+          {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "!=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "color"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "string",
+              "value": "red"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
