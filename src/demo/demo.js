@@ -1,3 +1,8 @@
+/**
+ * sqlite-parser demo
+ * @copyright Code School 2015 {@link http://codeschool.com}
+ * @author Nick Wronski <nick@javascript.com>
+ */
 (function (root) {
   var Promise         = require('promise'),
       sqliteParser    = Promise.denodeify(require('sqlite-parser')),
@@ -54,13 +59,15 @@
   }
 
   function updater(source, dest) {
-    var output = setContent(dest);
-    sqliteParser(source.getValue())
-    .then(output, function (err) {
-      var location = err.location != null ? "[" + err.location.start.line +
-      ", " + err.location.start.column + "] " : "";
-      setError(dest, location + err.message);
-    });
+    var writer = setContent(dest);
+    return function () {
+      sqliteParser(source.getValue())
+      .then(writer, function (err) {
+        var location = err.location != null ? "[" + err.location.start.line +
+        ", " + err.location.start.column + "] " : "";
+        setError(dest, location + err.message);
+      });
+    }
   }
 
   function editorFormat(e) {
@@ -87,9 +94,7 @@
           foldGutter: true,
           readOnly: true
         }, cmDefaults)),
-        update = debounce(function () {
-          updater(sql, ast);
-        }, 250);
+        update = debounce(updater(sql, ast), 250);
     sql.on('change', update);
     update();
   };

@@ -1,8 +1,20 @@
 module.exports = function(grunt) {
+  function getBanner(isDemo) {
+    return '/*!' +
+     ' * sqlite-parser' + (isDemo ? ' demo' : '') +
+     ' * @copyright Code School 2015 {@link http://codeschool.com}' +
+     ' * @author Nick Wronski <nick@javascript.com>' +
+     ' */';
+  }
   grunt.initConfig({
     browserify: {
       dist: {
-        require: ['lib/parser-util.js', 'lib/parser.js'],
+        options: {
+          browserifyOptions: {
+            debug: false,
+            standalone: 'sqliteParser'
+          }
+        },
         src: ['index.js'],
         dest: 'dist/sqlite-parser.js'
       },
@@ -129,6 +141,12 @@ module.exports = function(grunt) {
       }
     },
     uglify: {
+      options: {
+        screwIE8: true,
+        mangle: {
+          except: ['sqliteParser']
+        },
+      },
       dist: {
         files: {
           'dist/sqlite-parser-min.js': ['dist/sqlite-parser.js']
@@ -154,7 +172,34 @@ module.exports = function(grunt) {
           ]
         }
       }
-    }
+    },
+    usebanner: {
+      options: {
+        position: 'top',
+        linebreak: true
+      },
+      dist: {
+        options: {
+          banner: getBanner(false)
+        },
+        files: {
+          src: [
+            'dist/sqlite-parser-min.js',
+            'dist/sqlite-parser.js',
+          ]
+        }
+      },
+      demo: {
+        options: {
+          banner: getBanner(true)
+        },
+        files: {
+          src: [
+            'demo/js/sqlite-parser-demo.js',
+          ]
+        }
+      }
+    },
   });
 
   grunt.loadNpmTasks('grunt-shell');
@@ -189,10 +234,10 @@ module.exports = function(grunt) {
     'interactive', 'connect:server', 'watch:live'
   ]);
   grunt.registerTask('demo', [
-    'interactive', 'clean:demo', 'copy:demo', 'uglify:demo'
+    'interactive', 'clean:demo', 'copy:demo', 'uglify:demo', 'usebanner:demo'
   ]);
   grunt.registerTask('dist', [
-    'default', 'clean:dist', 'browserify:dist', 'uglify:dist'
+    'default', 'clean:dist', 'browserify:dist', 'uglify:dist', 'usebanner:dist'
   ]);
   grunt.registerTask('release', [
     'test', 'dist', 'demo', 'clean:interactive'
