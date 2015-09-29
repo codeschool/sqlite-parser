@@ -64,7 +64,20 @@ getTestJson = function (that) {
 };
 
 getTestFiles = function (that) {
-  return Promise.all([getTree(that), getTestJson(that)]);
+  var getFiles = function () {
+    return Promise.all([getTree(that), getTestJson(that)]);
+  };
+  if (_.has(process.env, 'REWRITE')) {
+    // REWRITE MODE: Save a new JSON file using parser tree result
+    var writePath = filePath(that, 'json');
+    return getTree(that)
+    .then(function (tree) {
+      return write(writePath, JSON.stringify(tree, null, 2), 'utf8');
+    })
+    .then(getFiles);
+  } else {
+    return getFiles();
+  }
 };
 
 /**
@@ -128,17 +141,9 @@ given corresponding JSON file.
 assertEqualsTree = function (that, done) {
   return getTestFiles(that)
   .then(function (files) {
-    if (_.has(p.env, 'REWRITE')) {
-      // REWRITE MODE: Save a new JSON file using parser tree result
-      return write(filePath(that, 'json'), JSON.stringify(files[0], null, 2), 'utf8')
-      .then(function () {
-        done();
-      });
-    } else {
-      // Run the assertions as normal
-      expect(files[0]).to.deep.equal(files[1]);
-      done();
-    }
+    // Run the assertions as normal
+    expect(files[0]).to.deep.equal(files[1]);
+    done();
   })
   .catch(done);
 };
