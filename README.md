@@ -73,25 +73,12 @@ FROM
 {
   "statement": [
     {
-      "explain": false,
       "type": "statement",
       "variant": "select",
-      "from": [
-        {
-          "type": "identifier",
-          "variant": "table",
-          "name": "beehive",
-          "alias": null,
-          "index": null
-        }
-      ],
-      "where": null,
-      "group": null,
       "result": [
         {
           "type": "function",
           "name": "min",
-          "distinct": false,
           "args": [
             {
               "type": "identifier",
@@ -104,7 +91,6 @@ FROM
         {
           "type": "function",
           "name": "max",
-          "distinct": false,
           "args": [
             {
               "type": "identifier",
@@ -115,11 +101,13 @@ FROM
           "alias": "Max Honey"
         }
       ],
-      "distinct": false,
-      "all": false,
-      "order": null,
-      "limit": null,
-      "with": null
+      "from": [
+        {
+          "type": "identifier",
+          "variant": "table",
+          "name": "beehive"
+        }
+      ]
     }
   ]
 }
@@ -131,7 +119,7 @@ Once the dependencies are installed, start development with the following comman
 
 `grunt test`
 
-which will automatically compile the parser and run the tests in `test/index-spec.js`.
+which will automatically compile the parser and run the tests in `test/core/**/*-spec.js`.
 
 Optionally, run `grunt debug` to get extended output and start a file watcher.
 
@@ -141,24 +129,32 @@ and rebuild the `dist/` and `demo/` folders.
 ### Writing tests
 
 Tests refer to a SQL test file in `test/sql/` and the test name is a
-reference to the filename of the test file. For example `super test 2`
-as a test name points to the file `test/sql/superTest2.sql`.
+reference to the filename of the test file. For example `super test 2` as a test name in an `it()` block within a `describe()` block with title `parent block` points to the file `test/sql/parent-block/super-test2.sql`.
+
+The expected AST that should be generated from `super-test-2.sql` should
+be located in a JSON file in the following location:
+`test/json/super-test2.json`.
 
 There are three options for the test helpers exposed by `tree`:
 - `tree.ok(this, done)` to assert that the test file successfully generates an AST
-- `tree.equals(ast, this, done)` to assert that the test file generates an AST that exactly matches `ast`
+- `tree.equals(this, done)` to assert that the test file generates an AST that exactly matches the expected output JSON file
 - `tree.error()` to assert that a test throws an error
   - `tree.error("This is the error message", this, done)` assert an error `message`
   - `tree.error({'line': 2}, this, done)` assert an object of properties that each exist in the error
+
+Use `grunt rewrite-json` generate new JSON files for each of the specs in
+`test/core/**/*-spec.js` and save them in `test/json/`. Example:
+the AST for `test/sql/parent-block/it-block.sql` will be re-parsed and the
+results will overwrite the existing `json/parent block/it-block.json` file.
 
 ``` javascript
 var tree = require('./helpers');
 
 describe('sqlite-parser', function() {
-  // uses: test/sql/basicSelect.sql
+  // Test SQL: test/sql/select/basic-select.sql
+  // Expected JSON: test/json/select/basic-select.json
   it('basic select', function(done) {
-    var resultTree = '{"statement":[{"explain":false,"type":"statement","variant":"select","from":[{"type":"identifier","variant":"table","name":"bananas","alias":null,"index":null}],"where":[{"type":"expression","format":"binary","variant":"operation","operation":"=","left":{"type":"identifier","variant":"column","name":"color"},"right":{"type":"literal","variant":"string","value":"red"}}],"group":null,"result":[{"type":"identifier","variant":"star","name":"*"}],"distinct":false,"all":false,"order":null,"limit":null}]}';
-    tree.equals(resultTree, this, done);
+    tree.equals(this, done);
   });
 
   // uses: test/sql/parseError1.sql
