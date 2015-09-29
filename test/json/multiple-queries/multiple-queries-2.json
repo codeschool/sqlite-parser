@@ -17,7 +17,6 @@
           "name": "id",
           "definition": [
             {
-              "name": null,
               "type": "constraint",
               "variant": "primary key"
             }
@@ -35,12 +34,10 @@
           "name": "name",
           "definition": [
             {
-              "name": null,
               "type": "constraint",
               "variant": "not null"
             },
             {
-              "name": null,
               "type": "constraint",
               "variant": "unique"
             }
@@ -130,7 +127,6 @@
           "name": "id",
           "definition": [
             {
-              "name": null,
               "type": "constraint",
               "variant": "primary key"
             }
@@ -148,12 +144,10 @@
           "name": "title",
           "definition": [
             {
-              "name": null,
               "type": "constraint",
               "variant": "not null"
             },
             {
-              "name": null,
               "type": "constraint",
               "variant": "unique"
             }
@@ -265,7 +259,6 @@
           "name": "actor_id",
           "definition": [
             {
-              "name": null,
               "variant": "foreign key",
               "type": "constraint",
               "action": null,
@@ -290,7 +283,6 @@
           "name": "movie_id",
           "definition": [
             {
-              "name": null,
               "variant": "foreign key",
               "type": "constraint",
               "action": null,

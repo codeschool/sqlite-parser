@@ -1634,14 +1634,16 @@ column_constraint_tail
 column_constraint "Column Constraint"
   = n:( column_constraint_name )? c:( column_constraint_types )
   {
-    return util.extend({
-      'name': n
-    }, c);
+    return util.extend(c, n);
   }
 
 column_constraint_name "Column Constraint Name"
   = CONSTRAINT e n:( name ) o
-  { return n; }
+  {
+    return {
+      'name': n
+    };
+  }
 
 column_constraint_types
   = column_constraint_primary
