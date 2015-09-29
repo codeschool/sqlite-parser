@@ -1543,16 +1543,19 @@ create_table "CREATE TABLE Statement"
 create_table_start
   = s:( create_start ) tmp:( create_core_tmp )? t:( TABLE ) e
   {
-    return {
-      'temporary': util.isOkay(tmp),
+    return util.extend({
       'variant': s,
       'format': util.key(t)
-    };
+    }, tmp);
   }
 
 create_core_tmp
   = t:( TEMPORARY / TEMP ) e
-  { return util.key(t); }
+  {
+    return {
+      'temporary': util.isOkay(t)
+    };
+  }
 
 create_core_ine "IF NOT EXISTS Modifier"
   = i:( IF ) e n:( expression_is_not ) e:( EXISTS ) e
@@ -2101,13 +2104,12 @@ create_view "CREATE VIEW Statement"
   }
 
 create_view_start
-  = s:( create_start ) p:( create_core_tmp )? v:( VIEW ) e
+  = s:( create_start ) tmp:( create_core_tmp )? v:( VIEW ) e
   {
-    return {
-      'temporary': util.isOkay(p),
+    return util.extend({
       'variant': util.key(s),
       'format': util.key(v)
-    };
+    }, tmp);
   }
 
 create_as_select
