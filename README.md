@@ -13,6 +13,8 @@ syntax error is produced if an AST cannot be generated.
 
 ## Install
 
+**IMPORTANT: If you want intelligent error messages for syntax errors, then use the `v0.11.0` release. If you want the fastest possible version of the parser, with the tradeoff of poor syntax error feedback, use the `v0.12.0` release.**
+
 ```
 npm install sqlite-parser
 ```

@@ -1,5 +1,5 @@
 /*!
- * sqlite-parser - v0.12.0-beta.1
+ * sqlite-parser - v0.12.0
  * @copyright 2015 Code School (http://codeschool.com)
  * @author Nick Wronski <nick@javascript.com>
  */
@@ -17,7 +17,7 @@ function sqliteParser(source, callback) {
 }
 
 sqliteParser['NAME'] = 'sqlite-parser';
-sqliteParser['VERSION'] = '0.12.0-beta.1';
+sqliteParser['VERSION'] = '0.12.0';
 
 module.exports = sqliteParser;
 
