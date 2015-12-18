@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
+### Changed
+- Created a `tracer` branch to continue developing the `Tracer` class into something viable.
 
 ## [v0.12.0-beta.1] - 2015-09-29
 ### Changed
