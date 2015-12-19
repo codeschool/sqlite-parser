@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
+### Fixed
+- the parser picked up on `INT` instead of the full keyword `INTERSECT` in queries such as the following, causing a parse error:
+
+  ``` sql
+  SELECT a, b FROM table1
+  INTERSECT
+  SELECT * FROM table2
+  ```
 
 ## [v0.12.0] - 2015-09-29
 ### Changed

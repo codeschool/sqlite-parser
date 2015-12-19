@@ -2449,11 +2449,11 @@ id_constraint_column "Column Constraint Identifier"
 /* Column datatypes */
 
 datatype_types "Datatype Name"
-  = t:( datatype_text ) { return [t, 'text']; }
-  / t:( datatype_real ) { return [t, 'real']; }
-  / t:( datatype_numeric ) { return [t, 'numeric']; }
-  / t:( datatype_integer ) { return [t, 'integer']; }
-  / t:( datatype_none ) { return [t, 'none']; }
+  = t:( datatype_text ) !name_char { return [t, 'text']; }
+  / t:( datatype_real ) !name_char { return [t, 'real']; }
+  / t:( datatype_numeric ) !name_char { return [t, 'numeric']; }
+  / t:( datatype_integer ) !name_char { return [t, 'integer']; }
+  / t:( datatype_none ) !name_char { return [t, 'none']; }
 
 datatype_text "TEXT Datatype Name"
   = t:( ( ( "N"i )? ( "VAR"i )? "CHAR"i )
