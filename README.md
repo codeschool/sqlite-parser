@@ -131,11 +131,11 @@ and rebuild the `dist/` and `demo/` folders.
 ### Writing tests
 
 Tests refer to a SQL test file in `test/sql/` and the test name is a
-reference to the filename of the test file. For example `super test 2` as a test name in an `it()` block within a `describe()` block with title `parent block` points to the file `test/sql/parent-block/super-test2.sql`.
+reference to the filename of the test file. For example `super test 2` as a test name in an `it()` block within a `describe()` block with title `parent block` points to the file `test/sql/parent-block/super-test-2.sql`.
 
 The expected AST that should be generated from `super-test-2.sql` should
 be located in a JSON file in the following location:
-`test/json/super-test2.json`.
+`test/json/super-test-2.json`.
 
 There are three options for the test helpers exposed by `tree`:
 - `tree.ok(this, done)` to assert that the test file successfully generates an AST
