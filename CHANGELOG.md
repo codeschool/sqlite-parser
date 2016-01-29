@@ -2,11 +2,23 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
+
+## [v0.11.1] - 2016-01-29
+### Fixed
+- Refactor to solve the different issues that come from trying to use unquoted reserved words as
+part of table names, column names, aliases, etc... This also addresses issues that came from certain SQLite keywords being fully contained within other keywords (e.g.: `IN` is contained in `INT` which is contained in `INTERSECT`).
+
+  ``` sql
+  select intersects inid, innot notin
+  from fromson nots
+  where colorwhere IN nots.pon
+  INTERSECT
+  select suit, tie from pants;
+  ```
+
+## [v0.11.0] - 2015-09-29
 ### Changed
 - Created a `tracer` branch to continue developing the `Tracer` class into something viable.
-
-## [v0.12.0-beta.1] - 2015-09-29
-### Changed
 - `all` keys removed in all places as it has no effect on query results
 - function `args` property now always contains an array. when `DISTINCT` is used in function arguments, then a `distinct: true` property is added to the function node.
 - any property that was previously attached to a node with a value of `null` is no longer included in the AST. this should reduce the size of the AST considerably with useless information. for example, the `with` property of a `SELECT` statement node.
@@ -431,8 +443,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.12.0-beta.1...HEAD
-[v0.12.0-beta.1]: https://github.com/codeschool/sqlite-parser/compare/v0.10.2...v0.12.0-beta.1
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.11.1...HEAD
+[v0.11.1]: https://github.com/codeschool/sqlite-parser/compare/v0.11.0...v0.11.1
+[v0.11.0]: https://github.com/codeschool/sqlite-parser/compare/v0.10.2...v0.11.0
 [v0.10.2]: https://github.com/codeschool/sqlite-parser/compare/v0.9.8...v0.10.2
 [v0.9.8]: https://github.com/codeschool/sqlite-parser/compare/v0.9.1...v0.9.8
 [v0.9.1]: https://github.com/codeschool/sqlite-parser/compare/v0.8.0...v0.9.1

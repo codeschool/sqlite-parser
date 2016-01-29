@@ -68,6 +68,26 @@
     }
   }
 
+  function saveLast(sql) {
+    // Save the last stuff in the editor for next time
+    if (root.window.localStorage) {
+      root.window.localStorage.setItem('sqlite-parser-demo', JSON.stringify({
+        sql: sql
+      }));
+    }
+  }
+
+  function reloadLast(source) {
+    if (root.window.localStorage) {
+      try {
+        var lastState = JSON.parse(root.window.localStorage.getItem('sqlite-parser-demo'));
+        if (lastState && lastState['sql'] != null) {
+          source.setValue(lastState['sql']);
+        }
+      } catch (e) {}
+    }
+  }
+
   function editorFormat(e) {
     e.execCommand('selectAll');
     e.execCommand('indentAuto');
@@ -94,7 +114,14 @@
         }, cmDefaults)),
         update = debounce(updater(sql, ast), 250);
     sql.on('change', update);
+    reloadLast(sql);
     update();
+    root.window.onbeforeunload = function () {
+      var lastValue = sql.getValue();
+      if (lastValue.trim() !== '') {
+        saveLast(lastValue);
+      }
+    };
   };
   root.onload = loadDemo;
 })(typeof self === 'object' ? self : global);
