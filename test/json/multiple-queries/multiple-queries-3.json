@@ -1,0 +1,208 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "compound",
+      "statement": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          }
+        ],
+        "from": [
+          {
+            "type": "identifier",
+            "variant": "table",
+            "name": "table1"
+          }
+        ]
+      },
+      "compound": [
+        {
+          "type": "compound",
+          "variant": "intersect",
+          "statement": {
+            "type": "statement",
+            "variant": "select",
+            "result": [
+              {
+                "type": "identifier",
+                "variant": "star",
+                "name": "*"
+              }
+            ],
+            "from": [
+              {
+                "type": "statement",
+                "variant": "compound",
+                "statement": {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "a"
+                    },
+                    {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "b"
+                    }
+                  ],
+                  "from": [
+                    {
+                      "type": "identifier",
+                      "variant": "table",
+                      "name": "table2"
+                    }
+                  ]
+                },
+                "compound": [
+                  {
+                    "type": "compound",
+                    "variant": "except",
+                    "statement": {
+                      "type": "statement",
+                      "variant": "select",
+                      "result": [
+                        {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "a"
+                        },
+                        {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "b"
+                        }
+                      ],
+                      "from": [
+                        {
+                          "type": "identifier",
+                          "variant": "table",
+                          "name": "table3"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "compound",
+      "statement": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          }
+        ],
+        "from": [
+          {
+            "type": "identifier",
+            "variant": "table",
+            "name": "table1"
+          }
+        ]
+      },
+      "compound": [
+        {
+          "type": "compound",
+          "variant": "union",
+          "statement": {
+            "type": "statement",
+            "variant": "select",
+            "result": [
+              {
+                "type": "identifier",
+                "variant": "star",
+                "name": "*"
+              }
+            ],
+            "from": [
+              {
+                "type": "statement",
+                "variant": "compound",
+                "statement": {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "a"
+                    },
+                    {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "b"
+                    }
+                  ],
+                  "from": [
+                    {
+                      "type": "identifier",
+                      "variant": "table",
+                      "name": "table2"
+                    }
+                  ]
+                },
+                "compound": [
+                  {
+                    "type": "compound",
+                    "variant": "except",
+                    "statement": {
+                      "type": "statement",
+                      "variant": "select",
+                      "result": [
+                        {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "a"
+                        },
+                        {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "b"
+                        }
+                      ],
+                      "from": [
+                        {
+                          "type": "identifier",
+                          "variant": "table",
+                          "name": "table3"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
