@@ -1,5 +1,5 @@
 /*!
- * sqlite-parser - v0.11.1
+ * sqlite-parser - v0.11.2
  * @copyright 2016 Code School (http://codeschool.com)
  * @author Nick Wronski <nick@javascript.com>
  */
@@ -25,7 +25,7 @@ function sqliteParser(source, callback) {
 }
 
 sqliteParser['NAME'] = 'sqlite-parser';
-sqliteParser['VERSION'] = '0.11.1';
+sqliteParser['VERSION'] = '0.11.2';
 
 module.exports = sqliteParser;
 
@@ -917,7 +917,7 @@ module.exports = (function() {
         peg$c178 = { type: "other", description: "ORDER BY Clause" },
         peg$c179 = function(d) {
             return {
-              'order': d
+              'order': d['result']
             };
           },
         peg$c180 = { type: "other", description: "LIMIT Clause" },
