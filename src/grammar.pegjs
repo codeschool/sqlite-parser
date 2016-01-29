@@ -98,7 +98,7 @@ expression_cast "CAST Expression"
   }
 
 type_alias "Type Alias"
-  = AS e d:( type_definition )
+  = AS o d:( type_definition )
   { return d; }
 
 expression_exists "EXISTS Expression"
@@ -118,7 +118,7 @@ expression_exists_ne "EXISTS Keyword"
   { return util.compose([n, x]); }
 
 expression_case "CASE Expression"
-  = t:( CASE ) e e:( expression )? o w:( expression_case_when )+ o
+  = t:( CASE ) o e:( expression )? o w:( expression_case_when )+ o
     s:( expression_case_else )? o END o
   {
     return {
@@ -131,7 +131,7 @@ expression_case "CASE Expression"
   }
 
 expression_case_when "WHEN Clause"
-  = s:( WHEN ) e w:( expression ) o THEN e t:( expression ) o
+  = s:( WHEN ) o w:( expression ) o THEN o t:( expression ) o
   {
     return {
       'type': 'condition',
@@ -142,7 +142,7 @@ expression_case_when "WHEN Clause"
   }
 
 expression_case_else "ELSE Clause"
-  = s:( ELSE ) e e:( expression ) o
+  = s:( ELSE ) o e:( expression ) o
   {
     return {
       'type': 'condition',
@@ -200,7 +200,7 @@ expression_node
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_collate "COLLATE Expression"
-  = v:( expression_value ) o s:( COLLATE ) e c:( id_collation )
+  = v:( expression_value ) o s:( COLLATE ) o c:( id_collation )
   {
     return util.extend(v, {
       'collate': c
@@ -210,7 +210,7 @@ expression_collate "COLLATE Expression"
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_compare "Comparison Expression"
   = v:( expression_value ) o n:( expression_is_not )?
-    m:( LIKE / GLOB / REGEXP / MATCH ) e e:( expression ) o
+    m:( LIKE / GLOB / REGEXP / MATCH ) o e:( expression ) o
     x:( expression_escape )?
   {
     return util.extend({
@@ -245,26 +245,24 @@ expression_null "NULL Expression"
   }
 
 expression_null_nodes "NULL Keyword"
-  = i:( null_nodes_types ) n:( NULL ) e
+  = i:( "IS"i / expression_is_not_join ) n:( NULL ) o
   { return util.keyify([i, n]); }
 
-null_nodes_types
-  = t:( IS / ( NOT o ) )
-  { return util.key(t); }
-
 expression_isnt "IS Keyword"
-  = i:( IS ) e n:( expression_is_not )?
-  {
-    return util.keyify([i, n]);
-  }
+  = i:( IS ) o n:( expression_is_not )?
+  { return util.keyify([i, n]); }
 
 expression_is_not
-  = n:( NOT ) e
+  = n:( NOT ) o
   { return util.textNode(n); }
+
+expression_is_not_join
+  = t:( "NOT"i ) o
+  { return util.key(t); }
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_between "BETWEEN Expression"
-  = v:( expression_value ) o n:( expression_is_not )? b:( BETWEEN ) e e1:( expression ) o s:( AND ) e e2:( expression )
+  = v:( expression_value ) o n:( expression_is_not )? b:( BETWEEN ) o e1:( expression ) o s:( AND ) o e2:( expression )
   {
     return {
       'type': 'expression',
@@ -286,7 +284,7 @@ expression_between "BETWEEN Expression"
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_in "IN Expression"
-  = v:( expression_value ) o n:( expression_is_not )? i:( IN ) e e:( expression_in_target )
+  = v:( expression_value ) o n:( expression_is_not )? i:( IN ) o e:( expression_in_target )
   {
     return {
       'type': 'expression',
@@ -529,7 +527,7 @@ operation_binary "Binary Expression"
   }
 
 binary_loop_concat
-  = c:( AND / OR ) e
+  = c:( AND / OR ) o
   { return util.key(c); }
 
 expression_list "Expression List"
@@ -569,7 +567,7 @@ function_call_args "Function Call Arguments"
   }
 
 args_list_distinct
-  = s:( DISTINCT ) e
+  = s:( DISTINCT ) o
   {
     return {
       'filter': util.key(s)
@@ -587,7 +585,7 @@ stmt "Statement"
   }
 
 stmt_modifier "QUERY PLAN"
-  = e:( EXPLAIN ) e q:( modifier_query )?
+  = e:( EXPLAIN ) o q:( modifier_query )?
   {
     return {
       'explain': util.isOkay(e)
@@ -595,7 +593,7 @@ stmt_modifier "QUERY PLAN"
   }
 
 modifier_query "QUERY PLAN Keyword"
-  = q:( QUERY ) e p:( PLAN ) e
+  = q:( QUERY ) o p:( PLAN ) o
   { return util.compose([q, p]); }
 
 stmt_nodes
@@ -625,27 +623,23 @@ stmt_transaction "Transaction"
   }
 
 stmt_commit "END Transaction Statement"
-  = s:( COMMIT / END ) t:( commit_transaction )? o
+  = s:( COMMIT / END ) o t:( commit_transaction )?
   {
     return util.keyify([s, t]);
   }
 
 stmt_begin "BEGIN Transaction Statement"
-  = s:( BEGIN ) e m:( stmt_begin_modifier )? t:( begin_transaction )?
+  = s:( BEGIN ) o m:( stmt_begin_modifier )? t:( commit_transaction )?
   {
     return util.extend({}, m);
   }
 
 commit_transaction
-  = e t:( TRANSACTION )
-  { return t; }
-
-begin_transaction
-  = t:( TRANSACTION ) e
+  = t:( TRANSACTION ) o
   { return t; }
 
 stmt_begin_modifier
-  = m:( DEFERRED / IMMEDIATE / EXCLUSIVE ) e
+  = m:( DEFERRED / IMMEDIATE / EXCLUSIVE ) o
   {
     return {
       'defer': util.key(m)
@@ -653,7 +647,7 @@ stmt_begin_modifier
   }
 
 stmt_rollback "ROLLBACK Statement"
-  = s:( ROLLBACK ) e ( begin_transaction )? n:( rollback_savepoint )?
+  = s:( ROLLBACK ) o ( commit_transaction )? n:( rollback_savepoint )?
   {
     return {
       'type': 'statement',
@@ -663,11 +657,11 @@ stmt_rollback "ROLLBACK Statement"
   }
 
 rollback_savepoint "TO Clause"
-  = TO e ( savepoint_alt )? n:( id_savepoint ) o
+  = TO o ( savepoint_alt )? n:( id_savepoint ) o
   { return n; }
 
 savepoint_alt
-  = s:( SAVEPOINT ) e
+  = s:( SAVEPOINT ) o
   { return util.key(s); }
 
 stmt_savepoint "SAVEPOINT Statement"
@@ -681,7 +675,7 @@ stmt_savepoint "SAVEPOINT Statement"
   }
 
 stmt_release "RELEASE Statement"
-  = s:( RELEASE ) e a:( savepoint_alt )? n:( id_savepoint ) o
+  = s:( RELEASE ) o a:( savepoint_alt )? n:( id_savepoint ) o
   {
     return {
       'type': 'statement',
@@ -700,7 +694,7 @@ stmt_alter "ALTER TABLE Statement"
   }
 
 alter_start "ALTER TABLE Keyword"
-  = a:( ALTER ) e t:( TABLE ) e
+  = a:( ALTER ) o t:( TABLE ) o
   { return util.compose([a, t]); }
 
 alter_action
@@ -708,7 +702,7 @@ alter_action
   / alter_action_add
 
 alter_action_rename "RENAME TO Keyword"
-  = s:( RENAME ) e TO e n:( id_table )
+  = s:( RENAME ) o TO o n:( id_table )
   {
     return {
       'action': util.key(s),
@@ -717,7 +711,7 @@ alter_action_rename "RENAME TO Keyword"
   }
 
 alter_action_add "ADD COLUMN Keyword"
-  = s:( ADD ) e ( action_add_modifier )? d:( source_def_column )
+  = s:( ADD ) o ( action_add_modifier )? d:( source_def_column )
   {
     return {
       'action': util.key(s),
@@ -726,7 +720,7 @@ alter_action_add "ADD COLUMN Keyword"
   }
 
 action_add_modifier
-  = s:( COLUMN ) e
+  = s:( COLUMN ) o
   { return util.key(s); }
 
 stmt_crud
@@ -740,7 +734,7 @@ stmt_core_with "WITH Clause"
   }
 
 clause_with
-  = s:( WITH ) e v:( clause_with_recursive )? t:( clause_with_tables )
+  = s:( WITH ) o v:( clause_with_recursive )? t:( clause_with_tables )
   {
     var recursive = {
       'variant': util.isOkay(v) ? 'recursive' : 'common'
@@ -757,7 +751,7 @@ clause_with
   }
 
 clause_with_recursive
-  = s:( RECURSIVE ) e
+  = s:( RECURSIVE ) o
   { return util.key(s); }
 
 clause_with_tables
@@ -802,7 +796,7 @@ stmt_sqlite
   / stmt_pragma
 
 stmt_detach "DETACH Statement"
-  = d:( DETACH ) e b:( DATABASE e )? n:( id_database ) o
+  = d:( DETACH ) o b:( DATABASE o )? n:( id_database ) o
   {
     return {
       'type': 'statement',
@@ -826,7 +820,7 @@ stmt_vacuum "VACUUM Statement"
  *  table or index based on context, so only the name is included.
  */
 stmt_analyze "ANALYZE Statement"
-  = s:( ANALYZE ) a:( analyze_arg )? o
+  = s:( ANALYZE ) o a:( analyze_arg )?
   {
     return util.extend({
       'type': 'statement',
@@ -835,7 +829,7 @@ stmt_analyze "ANALYZE Statement"
   }
 
 analyze_arg
-  = e n:( id_table / id_index / id_database )
+  = n:( id_table / id_index / id_database ) o
   {
     return {
       'target': n['name']
@@ -848,7 +842,7 @@ analyze_arg
  *  table or index based on context, so only the name is included.
  */
 stmt_reindex "REINDEX Statement"
-  = s:( REINDEX ) a:( reindex_arg )? o
+  = s:( REINDEX ) o a:( reindex_arg )? o
   {
     return util.extend({
       'type': 'statement',
@@ -857,7 +851,7 @@ stmt_reindex "REINDEX Statement"
   }
 
 reindex_arg
-  = e a:( id_table / id_index / id_collation )
+  = a:( id_table / id_index / id_collation ) o
   {
     return {
       'target': a['name']
@@ -865,7 +859,7 @@ reindex_arg
   }
 
 stmt_pragma "PRAGMA Statement"
-  = s:( PRAGMA ) e n:( id_pragma ) o v:( pragma_expression )?
+  = s:( PRAGMA ) o n:( id_pragma ) o v:( pragma_expression )?
   {
     return {
       'type': 'statement',
@@ -934,7 +928,7 @@ stmt_select "SELECT Statement"
   }
 
 stmt_core_order "ORDER BY Clause"
-  = ORDER e BY e d:( stmt_core_order_list )
+  = ORDER o BY o d:( stmt_core_order_list )
   {
     return {
       'order': d
@@ -942,7 +936,7 @@ stmt_core_order "ORDER BY Clause"
   }
 
 stmt_core_limit "LIMIT Clause"
-  = s:( LIMIT ) e e:( expression ) o d:( stmt_core_limit_offset )?
+  = s:( LIMIT ) o e:( expression ) o d:( stmt_core_limit_offset )?
   {
     return {
       'limit': util.extend({
@@ -966,7 +960,7 @@ limit_offset_variant
   / sym_comma
 
 limit_offset_variant_name
-  = s:( OFFSET ) e
+  = s:( OFFSET ) o
   { return util.key(s); }
 
 select_loop
@@ -1009,7 +1003,7 @@ select_parts_core
   }
 
 select_core_select "SELECT Results Clause"
-  = SELECT e d:( select_modifier )? o t:( select_target )
+  = SELECT o d:( select_modifier )? o t:( select_target )
   {
     return util.extend({
       'result': t
@@ -1021,7 +1015,7 @@ select_modifier "SELECT Results Modifier"
   / select_modifier_all
 
 select_modifier_distinct
-  = s:( DISTINCT ) e
+  = s:( DISTINCT ) o
   {
     return {
       'distinct': true
@@ -1029,7 +1023,7 @@ select_modifier_distinct
   }
 
 select_modifier_all
-  = s:( ALL ) e
+  = s:( ALL ) o
   {
     return {};
   }
@@ -1043,7 +1037,7 @@ select_target_loop
   { return n; }
 
 select_core_from "FROM Clause"
-  = s:( FROM ) e s:( select_source ) o
+  = s:( FROM ) o s:( select_source ) o
   {
     return {
       'from': s
@@ -1051,7 +1045,7 @@ select_core_from "FROM Clause"
   }
 
 stmt_core_where "WHERE Clause"
-  = s:( WHERE ) e e:( expression ) o
+  = s:( WHERE ) o e:( expression ) o
   {
     return {
       'where': util.makeArray(e)
@@ -1059,7 +1053,7 @@ stmt_core_where "WHERE Clause"
   }
 
 select_core_group "GROUP BY Clause"
-  = s:( GROUP ) e BY e e:( expression_list ) o h:( select_core_having )?
+  = s:( GROUP ) o BY o e:( expression_list ) o h:( select_core_having )?
   {
     return util.extend({
       'group': util.makeArray(e)
@@ -1067,7 +1061,7 @@ select_core_group "GROUP BY Clause"
   }
 
 select_core_having "HAVING Clause"
-  = s:( HAVING ) e e:( expression ) o
+  = s:( HAVING ) o e:( expression ) o
   {
     return {
       'having': e
@@ -1133,7 +1127,7 @@ table_or_sub_index_node "Qualfied Table Index"
   / index_node_none
 
 index_node_indexed
-  = s:( INDEXED ) e BY e n:( name ) o
+  = s:( INDEXED ) o BY o n:( name ) o
   {
     return {
       'index': n
@@ -1194,7 +1188,7 @@ join_operator "JOIN Operator"
   { return util.compose([n, t, j]); }
 
 join_operator_natural
-  = n:( NATURAL ) e
+  = n:( NATURAL ) o
   { return util.textNode(n); }
 
 join_operator_types
@@ -1207,15 +1201,15 @@ join_operator_types
  *  See: {@link https://www.sqlite.org/syntax/join-operator.html}
  */
 operator_types_hand
-  = t:( LEFT / RIGHT / FULL ) e o:( types_hand_outer )?
+  = t:( LEFT / RIGHT / FULL ) o o:( types_hand_outer )?
   { return util.compose([t, o]); }
 
 types_hand_outer
-  = t:( OUTER ) e
+  = t:( OUTER ) o
   { return util.textNode(t); }
 
 operator_types_misc
-  = t:( INNER / CROSS ) e
+  = t:( INNER / CROSS ) o
   { return util.textNode(t); }
 
 join_condition "JOIN Constraint"
@@ -1228,7 +1222,7 @@ join_condition "JOIN Constraint"
   }
 
 join_condition_on "Join ON Clause"
-  = s:( ON ) e e:( expression )
+  = s:( ON ) o e:( expression )
   {
     return {
       'format': util.key(s),
@@ -1299,7 +1293,7 @@ insert_keyword
   / insert_keyword_repl
 
 insert_keyword_ins "INSERT Keyword"
-  = a:( INSERT ) e m:( insert_keyword_mod )?
+  = a:( INSERT ) o m:( insert_keyword_mod )?
   {
     return util.extend({
       'action': util.key(a)
@@ -1307,7 +1301,7 @@ insert_keyword_ins "INSERT Keyword"
   }
 
 insert_keyword_repl "REPLACE Keyword"
-  = a:( REPLACE ) e
+  = a:( REPLACE ) o
   {
     return {
       'action': util.key(a)
@@ -1315,7 +1309,7 @@ insert_keyword_repl "REPLACE Keyword"
   }
 
 insert_keyword_mod "INSERT OR Modifier"
-  = s:( OR ) e m:( stmt_fallback_types )
+  = s:( OR ) o m:( stmt_fallback_types )
   {
     return {
       'or': util.key(m)
@@ -1337,7 +1331,7 @@ insert_into "INTO Clause"
   }
 
 insert_into_start "INTO Keyword"
-  = s:( INTO ) e
+  = s:( INTO ) o
 
 insert_results "VALUES Clause"
   = r:( insert_value / insert_select / insert_default ) o
@@ -1399,7 +1393,7 @@ insert_select "SELECT Results Clause"
   = stmt_select
 
 insert_default "DEFAULT VALUES Clause"
-  = d:( DEFAULT ) e v:( VALUES )
+  = d:( DEFAULT ) o v:( VALUES )
   {
     return {
       'type': 'values',
@@ -1414,11 +1408,11 @@ operator_compound "Compound Operator"
   { return util.key(s); }
 
 compound_union "UNION Operator"
-  = s:( UNION ) a:( compound_union_all )?
+  = s:( UNION ) o a:( compound_union_all )?
   { return util.compose([s, a]); }
 
 compound_union_all
-  = e a:( ALL )
+  = a:( ALL ) o
   { return a; }
 
 /**
@@ -1437,11 +1431,11 @@ stmt_update "UPDATE Statement"
   }
 
 update_start "UPDATE Keyword"
-  = s:( UPDATE ) e
+  = s:( UPDATE ) o
   { return util.key(s); }
 
 update_fallback "UPDATE OR Modifier"
-  = OR e t:( stmt_fallback_types ) e
+  = OR o t:( stmt_fallback_types ) o
   {
     return {
       'or': util.key(t)
@@ -1449,7 +1443,7 @@ update_fallback "UPDATE OR Modifier"
   }
 
 update_set "SET Clause"
-  = SET e c:( update_columns ) o
+  = SET o c:( update_columns ) o
   {
     return {
       'set': c
@@ -1491,7 +1485,7 @@ stmt_delete "DELETE Statement"
   }
 
 delete_start "DELETE Keyword"
-  = s:( DELETE ) e FROM e
+  = s:( DELETE ) o FROM o
   { return util.key(s); }
 
 /**
@@ -1507,7 +1501,7 @@ stmt_create "CREATE Statement"
   / create_virtual_only
 
 create_start
-  = s:( CREATE ) e
+  = s:( CREATE ) o
   { return util.key(s); }
 
 create_table_only
@@ -1541,7 +1535,7 @@ create_table "CREATE TABLE Statement"
   }
 
 create_table_start
-  = s:( create_start ) tmp:( create_core_tmp )? t:( TABLE ) e
+  = s:( create_start ) tmp:( create_core_tmp )? t:( TABLE ) o
   {
     return util.extend({
       'variant': s,
@@ -1550,7 +1544,7 @@ create_table_start
   }
 
 create_core_tmp
-  = t:( TEMPORARY / TEMP ) e
+  = t:( TEMPORARY / TEMP ) o
   {
     return {
       'temporary': util.isOkay(t)
@@ -1558,7 +1552,7 @@ create_core_tmp
   }
 
 create_core_ine "IF NOT EXISTS Modifier"
-  = i:( IF ) e n:( expression_is_not ) e:( EXISTS ) e
+  = i:( IF ) o n:( expression_is_not ) e:( EXISTS ) o
   {
     return {
       'condition': util.makeArray({
@@ -1581,7 +1575,7 @@ table_source_def "Table Definition"
   }
 
 source_def_rowid
-  = r:( WITHOUT ) e w:( ROWID ) o
+  = r:( WITHOUT ) o w:( ROWID ) o
   {
     return {
       'optimization': [{
@@ -1639,7 +1633,7 @@ column_constraint "Column Constraint"
   }
 
 column_constraint_name "Column Constraint Name"
-  = CONSTRAINT e n:( name ) o
+  = CONSTRAINT o n:( name ) o
   {
     return {
       'name': n
@@ -1670,7 +1664,7 @@ column_constraint_primary "PRIMARY KEY Column Constraint"
   }
 
 col_primary_start "PRIMARY KEY Keyword"
-  = s:( PRIMARY ) e k:( KEY ) o
+  = s:( PRIMARY ) o k:( KEY ) o
   {
     return {
       'type': 'constraint',
@@ -1707,7 +1701,7 @@ column_constraint_check "CHECK Column Constraint"
   = constraint_check
 
 column_constraint_default "DEFAULT Column Constraint"
-  = s:( DEFAULT ) v:( col_default_val )
+  = s:( DEFAULT ) o v:( expression_wrapped / literal_number_signed / literal_value )
   {
     return {
       'type': 'constraint',
@@ -1715,11 +1709,6 @@ column_constraint_default "DEFAULT Column Constraint"
       'value': v
     };
   }
-
-col_default_val "DEFAULT Column Value"
-  = ( o v:( expression_wrapped ) ) { return v; }
-  / ( e v:( literal_number_signed ) ) { return v; }
-  / ( e v:( literal_value ) ) { return v; }
 
 column_constraint_collate "COLLATE Column Constraint"
   = c:( column_collate )
@@ -1742,7 +1731,7 @@ table_constraint "Table Constraint"
   }
 
 table_constraint_name "Table Constraint Name"
-  = CONSTRAINT e n:( name )
+  = CONSTRAINT o n:( name )
   {
     return {
       'name': n
@@ -1781,7 +1770,7 @@ primary_start
   }
 
 primary_start_normal "PRIMARY KEY Keyword"
-  = p:( PRIMARY ) e k:( KEY )
+  = p:( PRIMARY ) o k:( KEY )
   { return util.compose([p, k]); }
 
 primary_start_unique "UNIQUE Keyword"
@@ -1804,7 +1793,7 @@ primary_column "Indexed Column"
   }
 
 column_collate "Column Collation"
-  = COLLATE e n:( id_collation ) o
+  = COLLATE o n:( id_collation ) o
   {
     return {
       'collate': n
@@ -1824,7 +1813,7 @@ primary_column_tail
   { return c; }
 
 primary_conflict
-  = s:( primary_conflict_start ) e t:( stmt_fallback_types ) o
+  = s:( primary_conflict_start ) o t:( stmt_fallback_types ) o
   {
     return {
       'conflict': util.key(t)
@@ -1832,7 +1821,7 @@ primary_conflict
   }
 
 primary_conflict_start "ON CONFLICT Keyword"
-  = o:( ON ) e c:( CONFLICT )
+  = o:( ON ) o c:( CONFLICT )
   { return util.keyify([o, c]); }
 
 constraint_check
@@ -1854,7 +1843,7 @@ table_constraint_foreign "FOREIGN KEY Table Constraint"
   }
 
 foreign_start "FOREIGN KEY Keyword"
-  = f:( FOREIGN ) e k:( KEY ) o
+  = f:( FOREIGN ) o k:( KEY ) o
   {
     return {
       'type': 'constraint',
@@ -1874,7 +1863,7 @@ foreign_clause
   }
 
 foreign_references "REFERENCES Clause"
-  = s:( REFERENCES ) e t:( id_cte )
+  = s:( REFERENCES ) o t:( id_cte )
   {
     return {
       'references': t
@@ -1884,11 +1873,11 @@ foreign_references "REFERENCES Clause"
 
 
 foreign_actions
-  = f:( foreign_action ) b:( foreign_actions_tail )* o
+  = f:( foreign_action ) o b:( foreign_actions_tail )*
   { return util.collect([f, b], []); }
 
 foreign_actions_tail
-  = e a:( foreign_action )
+  = a:( foreign_action ) o
   { return a; }
 
 foreign_action "FOREIGN KEY Action Clause"
@@ -1896,7 +1885,7 @@ foreign_action "FOREIGN KEY Action Clause"
   / foreign_action_match
 
 foreign_action_on
-  = m:( ON ) e a:( DELETE / UPDATE ) e n:( action_on_action )
+  = m:( ON ) o a:( DELETE / UPDATE ) o n:( action_on_action )
   {
     return {
       'type': 'action',
@@ -1911,7 +1900,7 @@ action_on_action "FOREIGN KEY Action"
   / on_action_none
 
 on_action_set
-  = s:( SET ) e v:( NULL / DEFAULT )
+  = s:( SET ) o v:( NULL / DEFAULT )
   { return util.compose([s, v]); }
 
 on_action_cascade
@@ -1919,14 +1908,14 @@ on_action_cascade
   { return util.textNode(c); }
 
 on_action_none
-  = n:( NO ) e a:( ACTION )
+  = n:( NO ) o a:( ACTION )
   { return util.compose([n, a]); }
 
 /**
  * @note Not sure what kind of name this should be.
  */
 foreign_action_match
-  = m:( MATCH ) e n:( name )
+  = m:( MATCH ) o n:( name )
   {
     return {
       'type': 'action',
@@ -1936,11 +1925,11 @@ foreign_action_match
   }
 
 foreign_deferrable "DEFERRABLE Clause"
-  = n:( expression_is_not )? d:( DEFERRABLE ) i:( deferrable_initially )?
+  = n:( expression_is_not )? d:( DEFERRABLE ) o i:( deferrable_initially )?
   { return util.keyify([n, d, i]); }
 
 deferrable_initially
-  = e i:( INITIALLY ) e d:( DEFERRED / IMMEDIATE )
+  = i:( INITIALLY ) o d:( DEFERRED / IMMEDIATE ) o
   { return util.compose([i, d]); }
 
 table_source_select
@@ -1963,7 +1952,7 @@ create_index "CREATE INDEX Statement"
   }
 
 create_index_start
-  = s:( create_start ) u:( index_unique )? i:( INDEX ) e
+  = s:( create_start ) u:( index_unique )? i:( INDEX ) o
   {
     return util.extend({
       'variant': util.key(s),
@@ -1972,7 +1961,7 @@ create_index_start
   }
 
 index_unique
-  = u:( UNIQUE ) e
+  = u:( UNIQUE ) o
   {
     return {
       'unique': true
@@ -1980,7 +1969,7 @@ index_unique
   }
 
 index_on "ON Clause"
-  = o:( ON ) e t:( name ) o c:( primary_columns )
+  = o:( ON ) o t:( name ) o c:( primary_columns )
   {
     return {
       'target': t,
@@ -1996,7 +1985,7 @@ index_on "ON Clause"
  */
 create_trigger "CREATE TRIGGER Statement"
   = s:( create_trigger_start ) ne:( create_core_ine )? n:( id_trigger ) o
-    cd:( trigger_conditions ) ( ON ) e o:( name ) o
+    cd:( trigger_conditions ) ( ON ) o o:( name ) o
     me:( trigger_foreach )? wh:( trigger_when )? a:( trigger_action )
   {
     return util.extend({
@@ -2010,7 +1999,7 @@ create_trigger "CREATE TRIGGER Statement"
   }
 
 create_trigger_start
-  = s:( create_start ) tmp:( create_core_tmp )? t:( TRIGGER ) e
+  = s:( create_start ) tmp:( create_core_tmp )? t:( TRIGGER ) o
   {
     return util.extend({
       'variant': util.key(s),
@@ -2027,7 +2016,7 @@ trigger_conditions "Conditional Clause"
   }
 
 trigger_apply_mods
-  = m:( BEFORE / AFTER / trigger_apply_instead ) e
+  = m:( BEFORE / AFTER / trigger_apply_instead ) o
   {
     return {
       'occurs': util.key(m)
@@ -2035,7 +2024,7 @@ trigger_apply_mods
   }
 
 trigger_apply_instead
-  = i:( INSTEAD ) e o:( OF )
+  = i:( INSTEAD ) o o:( OF )
   { return util.compose([i, o]); }
 
 trigger_do "Conditional Action"
@@ -2043,7 +2032,7 @@ trigger_do "Conditional Action"
   / trigger_do_update
 
 trigger_do_on
-  = o:( DELETE / INSERT ) e
+  = o:( DELETE / INSERT ) o
   {
     return {
       'event': util.key(o)
@@ -2051,7 +2040,7 @@ trigger_do_on
   }
 
 trigger_do_update
-  = s:( UPDATE ) e f:( do_update_of )?
+  = s:( UPDATE ) o f:( do_update_of )?
   {
     return {
       'event': util.key(s),
@@ -2060,7 +2049,7 @@ trigger_do_update
   }
 
 do_update_of
-  = s:( OF ) e c:( do_update_columns )
+  = s:( OF ) o c:( do_update_columns )
   { return c; }
 
 do_update_columns
@@ -2073,15 +2062,15 @@ do_update_columns
  *    See {@link https://www.sqlite.org/lang_createtrigger.html}.
  */
 trigger_foreach
-  = f:( FOR ) e e:( EACH ) e r:( ROW / "STATEMENT"i ) e
+  = f:( FOR ) o e:( EACH ) o r:( ROW / "STATEMENT"i ) o
   { return util.key(r); }
 
 trigger_when "WHEN Clause"
-  = w:( WHEN ) e e:( expression ) o
+  = w:( WHEN ) o e:( expression ) o
   { return e; }
 
 trigger_action "Actions Clause"
-  = s:( BEGIN ) e a:( action_loop ) o e:( END ) o
+  = s:( BEGIN ) o a:( action_loop ) o e:( END ) o
   { return a; }
 
 action_loop
@@ -2104,7 +2093,7 @@ create_view "CREATE VIEW Statement"
   }
 
 create_view_start
-  = s:( create_start ) tmp:( create_core_tmp )? v:( VIEW ) e
+  = s:( create_start ) tmp:( create_core_tmp )? v:( VIEW ) o
   {
     return util.extend({
       'variant': util.key(s),
@@ -2113,12 +2102,12 @@ create_view_start
   }
 
 create_as_select
-  = s:( AS ) e r:( stmt_select ) o
+  = s:( AS ) o r:( stmt_select ) o
   { return r; }
 
 create_virtual "CREATE VIRTUAL TABLE Statement"
-  = s:( create_virtual_start ) ne:( create_core_ine )? n:( id_table ) e
-    ( USING ) e m:( virtual_module )
+  = s:( create_virtual_start ) ne:( create_core_ine )? n:( id_table ) o
+    ( USING ) o m:( virtual_module )
   {
     return util.extend({
       'type': 'statement',
@@ -2128,7 +2117,7 @@ create_virtual "CREATE VIRTUAL TABLE Statement"
   }
 
 create_virtual_start
-  = s:( create_start ) v:( VIRTUAL ) e t:( TABLE ) e
+  = s:( create_start ) v:( VIRTUAL ) o t:( TABLE ) o
   {
     return {
       'variant': util.key(s),
@@ -2181,7 +2170,7 @@ stmt_drop "DROP Statement"
   }
 
 drop_start "DROP Keyword"
-  = s:( DROP ) e t:( drop_types ) i:( drop_conditions )?
+  = s:( DROP ) o t:( drop_types ) i:( drop_conditions )?
   {
      return util.extend({
        'variant': util.key(s),
@@ -2191,7 +2180,7 @@ drop_start "DROP Keyword"
   }
 
 drop_types "DROP Type"
-  = t:( TABLE / INDEX / TRIGGER / VIEW ) e
+  = t:( TABLE / INDEX / TRIGGER / VIEW ) o
   { return util.key(t); }
 
 drop_conditions
@@ -2203,7 +2192,7 @@ drop_conditions
   }
 
 drop_ie "IF EXISTS Keyword"
-  = i:( IF ) e e:( EXISTS ) e
+  = i:( IF ) o e:( EXISTS ) o
   {
     return {
       'type': 'condition',
@@ -2293,7 +2282,7 @@ binary_lang
   / binary_lang_misc
 
 binary_lang_isnt "IS"
-  = i:( IS ) e n:( expression_is_not )?
+  = i:( IS ) o n:( expression_is_not )?
   { return util.keyify([i, n]); }
 
 binary_lang_misc
@@ -2512,12 +2501,8 @@ name
   / name_sglquoted
   / name_unquoted
 
-reserved_nodes
-  = r:( datatype_types / reserved_words ) !name_char
-  { return util.textNode(r); }
-
 name_unquoted
-  = !( reserved_nodes / number_digit ) n:( name_char )+
+  = !( datatype_types / reserved_words / number_digit ) n:( name_char )+
   { return util.key(n); }
 
 /** @note Non-standard legacy format */
@@ -2608,276 +2593,279 @@ sym_bslash "Backslash"
 /* Keywords */
 
 ABORT
-  = "ABORT"i
+  = "ABORT"i !name_char
 ACTION
-  = "ACTION"i
+  = "ACTION"i !name_char
 ADD
-  = "ADD"i
+  = "ADD"i !name_char
 AFTER
-  = "AFTER"i
+  = "AFTER"i !name_char
 ALL
-  = "ALL"i
+  = "ALL"i !name_char
 ALTER
-  = "ALTER"i
+  = "ALTER"i !name_char
 ANALYZE
-  = "ANALYZE"i
+  = "ANALYZE"i !name_char
 AND
-  = "AND"i
+  = "AND"i !name_char
 AS
-  = "AS"i
+  = "AS"i !name_char
 ASC
-  = "ASC"i
+  = "ASC"i !name_char
 ATTACH
-  = "ATTACH"i
+  = "ATTACH"i !name_char
 AUTOINCREMENT
-  = "AUTOINCREMENT"i
+  = "AUTOINCREMENT"i !name_char
 BEFORE
-  = "BEFORE"i
+  = "BEFORE"i !name_char
 BEGIN
-  = "BEGIN"i
+  = "BEGIN"i !name_char
 BETWEEN
-  = "BETWEEN"i
+  = "BETWEEN"i !name_char
 BY
-  = "BY"i
+  = "BY"i !name_char
 CASCADE
-  = "CASCADE"i
+  = "CASCADE"i !name_char
 CASE
-  = "CASE"i
+  = "CASE"i !name_char
 CAST
-  = "CAST"i
+  = "CAST"i !name_char
 CHECK
-  = "CHECK"i
+  = "CHECK"i !name_char
 COLLATE
-  = "COLLATE"i
+  = "COLLATE"i !name_char
 COLUMN
-  = "COLUMN"i
+  = "COLUMN"i !name_char
 COMMIT
-  = "COMMIT"i
+  = "COMMIT"i !name_char
 CONFLICT
-  = "CONFLICT"i
+  = "CONFLICT"i !name_char
 CONSTRAINT
-  = "CONSTRAINT"i
+  = "CONSTRAINT"i !name_char
 CREATE
-  = "CREATE"i
+  = "CREATE"i !name_char
 CROSS
-  = "CROSS"i
+  = "CROSS"i !name_char
 CURRENT_DATE
-  = "CURRENT_DATE"i
+  = "CURRENT_DATE"i !name_char
 CURRENT_TIME
-  = "CURRENT_TIME"i
+  = "CURRENT_TIME"i !name_char
 CURRENT_TIMESTAMP
-  = "CURRENT_TIMESTAMP"i
+  = "CURRENT_TIMESTAMP"i !name_char
 DATABASE
-  = "DATABASE"i
+  = "DATABASE"i !name_char
 DEFAULT
-  = "DEFAULT"i
+  = "DEFAULT"i !name_char
 DEFERRABLE
-  = "DEFERRABLE"i
+  = "DEFERRABLE"i !name_char
 DEFERRED
-  = "DEFERRED"i
+  = "DEFERRED"i !name_char
 DELETE
-  = "DELETE"i
+  = "DELETE"i !name_char
 DESC
-  = "DESC"i
+  = "DESC"i !name_char
 DETACH
-  = "DETACH"i
+  = "DETACH"i !name_char
 DISTINCT
-  = "DISTINCT"i
+  = "DISTINCT"i !name_char
 DROP
-  = "DROP"i
+  = "DROP"i !name_char
 EACH
-  = "EACH"i
+  = "EACH"i !name_char
 ELSE
-  = "ELSE"i
+  = "ELSE"i !name_char
 END
-  = "END"i
+  = "END"i !name_char
 ESCAPE
-  = "ESCAPE"i
+  = "ESCAPE"i !name_char
 EXCEPT
-  = "EXCEPT"i
+  = "EXCEPT"i !name_char
 EXCLUSIVE
-  = "EXCLUSIVE"i
+  = "EXCLUSIVE"i !name_char
 EXISTS
-  = "EXISTS"i
+  = "EXISTS"i !name_char
 EXPLAIN
-  = "EXPLAIN"i
+  = "EXPLAIN"i !name_char
 FAIL
-  = "FAIL"i
+  = "FAIL"i !name_char
 FOR
-  = "FOR"i
+  = "FOR"i !name_char
 FOREIGN
-  = "FOREIGN"i
+  = "FOREIGN"i !name_char
 FROM
-  = "FROM"i
+  = "FROM"i !name_char
 FULL
-  = "FULL"i
+  = "FULL"i !name_char
 GLOB
-  = "GLOB"i
+  = "GLOB"i !name_char
 GROUP
-  = "GROUP"i
+  = "GROUP"i !name_char
 HAVING
-  = "HAVING"i
+  = "HAVING"i !name_char
 IF
-  = "IF"i
+  = "IF"i !name_char
 IGNORE
-  = "IGNORE"i
+  = "IGNORE"i !name_char
 IMMEDIATE
-  = "IMMEDIATE"i
+  = "IMMEDIATE"i !name_char
 IN
-  = "IN"i
+  = "IN"i !name_char
 INDEX
-  = "INDEX"i
+  = "INDEX"i !name_char
 INDEXED
-  = "INDEXED"i
+  = "INDEXED"i !name_char
 INITIALLY
-  = "INITIALLY"i
+  = "INITIALLY"i !name_char
 INNER
-  = "INNER"i
+  = "INNER"i !name_char
 INSERT
-  = "INSERT"i
+  = "INSERT"i !name_char
 INSTEAD
-  = "INSTEAD"i
+  = "INSTEAD"i !name_char
 INTERSECT
-  = "INTERSECT"i
+  = "INTERSECT"i !name_char
 INTO
-  = "INTO"i
+  = "INTO"i !name_char
 IS
-  = "IS"i
+  = "IS"i !name_char
 ISNULL
-  = "ISNULL"i
+  = "ISNULL"i !name_char
 JOIN
-  = "JOIN"i
+  = "JOIN"i !name_char
 KEY
-  = "KEY"i
+  = "KEY"i !name_char
 LEFT
-  = "LEFT"i
+  = "LEFT"i !name_char
 LIKE
-  = "LIKE"i
+  = "LIKE"i !name_char
 LIMIT
-  = "LIMIT"i
+  = "LIMIT"i !name_char
 MATCH
-  = "MATCH"i
+  = "MATCH"i !name_char
 NATURAL
-  = "NATURAL"i
+  = "NATURAL"i !name_char
 NO
-  = "NO"i
+  = "NO"i !name_char
 NOT
-  = "NOT"i
+  = "NOT"i !name_char
 NOTNULL
-  = "NOTNULL"i
+  = "NOTNULL"i !name_char
 NULL
-  = "NULL"i
+  = "NULL"i !name_char
 OF
-  = "OF"i
+  = "OF"i !name_char
 OFFSET
-  = "OFFSET"i
+  = "OFFSET"i !name_char
 ON
-  = "ON"i
+  = "ON"i !name_char
 OR
-  = "OR"i
+  = "OR"i !name_char
 ORDER
-  = "ORDER"i
+  = "ORDER"i !name_char
 OUTER
-  = "OUTER"i
+  = "OUTER"i !name_char
 PLAN
-  = "PLAN"i
+  = "PLAN"i !name_char
 PRAGMA
-  = "PRAGMA"i
+  = "PRAGMA"i !name_char
 PRIMARY
-  = "PRIMARY"i
+  = "PRIMARY"i !name_char
 QUERY
-  = "QUERY"i
+  = "QUERY"i !name_char
 RAISE
-  = "RAISE"i
+  = "RAISE"i !name_char
 RECURSIVE
-  = "RECURSIVE"i
+  = "RECURSIVE"i !name_char
 REFERENCES
-  = "REFERENCES"i
+  = "REFERENCES"i !name_char
 REGEXP
-  = "REGEXP"i
+  = "REGEXP"i !name_char
 REINDEX
-  = "REINDEX"i
+  = "REINDEX"i !name_char
 RELEASE
-  = "RELEASE"i
+  = "RELEASE"i !name_char
 RENAME
-  = "RENAME"i
+  = "RENAME"i !name_char
 REPLACE
-  = "REPLACE"i
+  = "REPLACE"i !name_char
 RESTRICT
-  = "RESTRICT"i
+  = "RESTRICT"i !name_char
 RIGHT
-  = "RIGHT"i
+  = "RIGHT"i !name_char
 ROLLBACK
-  = "ROLLBACK"i
+  = "ROLLBACK"i !name_char
 ROW
-  = "ROW"i
+  = "ROW"i !name_char
 ROWID
-  = "ROWID"i
+  = "ROWID"i !name_char
 SAVEPOINT
-  = "SAVEPOINT"i
+  = "SAVEPOINT"i !name_char
 SELECT
-  = "SELECT"i
+  = "SELECT"i !name_char
 SET
-  = "SET"i
+  = "SET"i !name_char
 TABLE
-  = "TABLE"i
+  = "TABLE"i !name_char
 TEMP
-  = "TEMP"i
+  = "TEMP"i !name_char
 TEMPORARY
-  = "TEMPORARY"i
+  = "TEMPORARY"i !name_char
 THEN
-  = "THEN"i
+  = "THEN"i !name_char
 TO
-  = "TO"i
+  = "TO"i !name_char
 TRANSACTION
-  = "TRANSACTION"i
+  = "TRANSACTION"i !name_char
 TRIGGER
-  = "TRIGGER"i
+  = "TRIGGER"i !name_char
 UNION
-  = "UNION"i
+  = "UNION"i !name_char
 UNIQUE
-  = "UNIQUE"i
+  = "UNIQUE"i !name_char
 UPDATE
-  = "UPDATE"i
+  = "UPDATE"i !name_char
 USING
-  = "USING"i
+  = "USING"i !name_char
 VACUUM
-  = "VACUUM"i
+  = "VACUUM"i !name_char
 VALUES
-  = "VALUES"i
+  = "VALUES"i !name_char
 VIEW
-  = "VIEW"i
+  = "VIEW"i !name_char
 VIRTUAL
-  = "VIRTUAL"i
+  = "VIRTUAL"i !name_char
 WHEN
-  = "WHEN"i
+  = "WHEN"i !name_char
 WHERE
-  = "WHERE"i
+  = "WHERE"i !name_char
 WITH
-  = "WITH"i
+  = "WITH"i !name_char
 WITHOUT
-  = "WITHOUT"i
+  = "WITHOUT"i !name_char
 
 reserved_words
   = r:( reserved_word_list )
   { return util.key(r); }
 
 reserved_word_list
-  = ABORT / ACTION / ADD / AFTER / ALL / ALTER / ANALYZE / AND / ASC /
-    ATTACH / AUTOINCREMENT / BEFORE / BEGIN / BETWEEN / BY / CASCADE / CASE /
-    CAST / CHECK / COLLATE / COLUMN / COMMIT / CONFLICT / CONSTRAINT / CREATE /
-    CROSS / CURRENT_DATE / CURRENT_TIME / CURRENT_TIMESTAMP / DATABASE / DEFAULT /
-    DEFERRABLE / DEFERRED / DELETE / DESC / DETACH / DISTINCT / DROP / EACH /
-    ELSE / END / ESCAPE / EXCEPT / EXCLUSIVE / EXISTS / EXPLAIN / FAIL /
-    FOREIGN / FOR / FROM / FULL / GLOB / GROUP / HAVING / IGNORE / IMMEDIATE /
-    INDEXED / INDEX / INITIALLY / INNER / INSERT / INSTEAD / INTERSECT / INTO /
+  = ABORT / ACTION / ADD / AFTER / ALL / ALTER / ANALYZE / AND / AS /
+    ASC / ATTACH / AUTOINCREMENT / BEFORE / BEGIN / BETWEEN / BY /
+    CASCADE / CASE / CAST / CHECK / COLLATE / COLUMN / COMMIT /
+    CONFLICT / CONSTRAINT / CREATE / CROSS / CURRENT_DATE /
+    CURRENT_TIME / CURRENT_TIMESTAMP / DATABASE / DEFAULT /
+    DEFERRABLE / DEFERRED / DELETE / DESC / DETACH / DISTINCT /
+    DROP / EACH / ELSE / END / ESCAPE / EXCEPT / EXCLUSIVE / EXISTS /
+    EXPLAIN / FAIL / FOR / FOREIGN / FROM / FULL / GLOB / GROUP /
+    HAVING / IF / IGNORE / IMMEDIATE / IN / INDEX / INDEXED /
+    INITIALLY / INNER / INSERT / INSTEAD / INTERSECT / INTO / IS /
     ISNULL / JOIN / KEY / LEFT / LIKE / LIMIT / MATCH / NATURAL /
-    NOTNULL / OFFSET / ORDER / OUTER / PLAN / PRAGMA /
-    PRIMARY / QUERY / RAISE / RECURSIVE / REFERENCES / REGEXP / REINDEX /
-    RELEASE / RENAME / REPLACE / RESTRICT / RIGHT / ROLLBACK / ROW / SAVEPOINT /
-    SELECT / SET / TABLE / TEMPORARY / TEMP / THEN / TO / TRANSACTION / TRIGGER /
-    UNION / UNIQUE / UPDATE / USING / VACUUM / VALUES / VIEW / VIRTUAL / WHEN /
-    WHERE / WITHOUT / WITH / NULL / NOT / IN / IF / IS / OF / ON / OR / NO / AS
+    NO / NOT / NOTNULL / NULL / OF / OFFSET / ON / OR / ORDER /
+    OUTER / PLAN / PRAGMA / PRIMARY / QUERY / RAISE / RECURSIVE /
+    REFERENCES / REGEXP / REINDEX / RELEASE / RENAME / REPLACE /
+    RESTRICT / RIGHT / ROLLBACK / ROW / ROWID / SAVEPOINT / SELECT /
+    SET / TABLE / TEMP / TEMPORARY / THEN / TO / TRANSACTION /
+    TRIGGER / UNION / UNIQUE / UPDATE / USING / VACUUM / VALUES /
+    VIEW / VIRTUAL / WHEN / WHERE / WITH / WITHOUT
 
 /* Generic rules */
 
