@@ -70,20 +70,18 @@
           "value": "200"
         }
       },
-      "order": {
-        "result": [
-          {
-            "type": "expression",
-            "variant": "order",
-            "expression": {
-              "type": "identifier",
-              "variant": "column",
-              "name": "h.color"
-            },
-            "direction": "desc"
-          }
-        ]
-      },
+      "order": [
+        {
+          "type": "expression",
+          "variant": "order",
+          "expression": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "h.color"
+          },
+          "direction": "desc"
+        }
+      ],
       "limit": {
         "type": "expression",
         "variant": "limit",

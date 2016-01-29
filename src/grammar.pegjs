@@ -931,7 +931,7 @@ stmt_core_order "ORDER BY Clause"
   = ORDER o BY o d:( stmt_core_order_list )
   {
     return {
-      'order': d
+      'order': d['result']
     };
   }
 
