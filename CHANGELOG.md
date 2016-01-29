@@ -2,13 +2,18 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
+
+## [v0.12.1] - 2016-01-29
 ### Fixed
-- the parser picked up on `INT` instead of the full keyword `INTERSECT` in queries such as the following, causing a parse error:
+- Refactor to solve the different issues that come from trying to use unquoted reserved words as
+part of table names, column names, aliases, etc... This also addresses issues that came from certain SQLite keywords being fully contained within other keywords (e.g.: `IN` is contained in `INT` which is contained in `INTERSECT`).
 
   ``` sql
-  SELECT a, b FROM table1
+  select intersects inid, innot notin
+  from fromson nots
+  where colorwhere IN nots.pon
   INTERSECT
-  SELECT * FROM table2
+  select suit, tie from pants;
   ```
 
 ## [v0.12.0] - 2015-09-29
@@ -437,7 +442,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.12.0...HEAD
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.12.1...HEAD
+[v0.12.1]: https://github.com/codeschool/sqlite-parser/compare/v0.12.0...v0.12.1
 [v0.12.0]: https://github.com/codeschool/sqlite-parser/compare/v0.10.2...v0.12.0
 [v0.10.2]: https://github.com/codeschool/sqlite-parser/compare/v0.9.8...v0.10.2
 [v0.9.8]: https://github.com/codeschool/sqlite-parser/compare/v0.9.1...v0.9.8
