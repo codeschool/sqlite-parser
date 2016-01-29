@@ -62,19 +62,17 @@
           }
         }
       ],
-      "order": {
-        "result": [
-          {
-            "type": "expression",
-            "variant": "order",
-            "expression": {
-              "type": "identifier",
-              "variant": "column",
-              "name": "born"
-            }
+      "order": [
+        {
+          "type": "expression",
+          "variant": "order",
+          "expression": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "born"
           }
-        ]
-      },
+        }
+      ],
       "with": [
         {
           "type": "expression",

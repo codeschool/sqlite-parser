@@ -3,20 +3,18 @@
     {
       "type": "statement",
       "variant": "select",
-      "order": {
-        "result": [
-          {
-            "type": "expression",
-            "variant": "order",
-            "expression": {
-              "type": "identifier",
-              "variant": "column",
-              "name": "ham"
-            },
-            "direction": "desc"
-          }
-        ]
-      }
+      "order": [
+        {
+          "type": "expression",
+          "variant": "order",
+          "expression": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "ham"
+          },
+          "direction": "desc"
+        }
+      ]
     }
   ]
 }
