@@ -9,6 +9,13 @@ All notable changes to this project will be documented in this file.
   select CAST(4 / 9 AS DECIMAL(5,2)) as hat
   from pants;
   ```
+- Fixed `BETWEEN` expression grammar to remove bad recursion.
+
+  ``` sql
+  select num
+  from nums n
+  where num between 100 AND 200;
+  ```
 
 ## [v0.12.2] - 2016-01-29
 ### Fixed
