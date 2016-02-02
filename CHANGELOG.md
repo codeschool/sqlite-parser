@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
+### Fixed
+- Added missing binary division operator so that things like this will now correctly parse.
+
+  ``` sql
+  select CAST(4 / 9 AS DECIMAL(5,2)) as hat
+  from pants;
+  ```
 
 ## [v0.12.2] - 2016-01-29
 ### Fixed
