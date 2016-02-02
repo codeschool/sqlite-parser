@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
+### Fixed
+- Added missing binary division operator so that things like this will now correctly parse.
 
 ## [v0.11.2] - 2016-01-29
 ### Fixed
