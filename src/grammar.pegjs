@@ -2216,6 +2216,7 @@ binary_nodes
   = binary_concat
   / expression_isnt
   / binary_multiply
+  / binary_divide
   / binary_mod
   / binary_plus
   / binary_minus
@@ -2242,6 +2243,9 @@ binary_minus "Subtract"
 
 binary_multiply "Multiply"
   = sym_star
+
+binary_divide "Divide"
+  = sym_fslash
 
 binary_mod "Modulo"
   = sym_mod
