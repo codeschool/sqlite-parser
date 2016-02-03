@@ -1249,7 +1249,7 @@ select_parts_values "VALUES Clause"
   }
 
 stmt_core_order_list
-  = f:( stmt_core_order_list_item ) o b:( stmt_core_order_list_loop )?
+  = f:( stmt_core_order_list_item ) o b:( stmt_core_order_list_loop )*
   {
     return {
       'result': util.listify(f, b)

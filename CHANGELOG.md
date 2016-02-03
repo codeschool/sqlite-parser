@@ -16,6 +16,13 @@ All notable changes to this project will be documented in this file.
   from nums n
   where num between 100 AND 200;
   ```
+- Fixed `ORDER BY` grammar to allow more than two ordering expressions.
+
+  ``` sql
+  select color, size, shape, name
+  from eggs
+  order by color asc, size desc, shape asc
+  ```
 
 ## [v0.12.2] - 2016-01-29
 ### Fixed
