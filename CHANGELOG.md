@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
+
+## [v0.11.3] - 2016-02-02
 ### Fixed
 - Added missing binary division operator so that things like this will now correctly parse.
 
@@ -482,7 +484,8 @@ part of table names, column names, aliases, etc... This also addresses issues th
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.11.2...HEAD
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.11.3...HEAD
+[v0.11.3]: https://github.com/codeschool/sqlite-parser/compare/v0.11.2...v0.11.3
 [v0.11.2]: https://github.com/codeschool/sqlite-parser/compare/v0.11.0...v0.11.2
 [v0.11.0]: https://github.com/codeschool/sqlite-parser/compare/v0.10.2...v0.11.0
 [v0.10.2]: https://github.com/codeschool/sqlite-parser/compare/v0.9.8...v0.10.2
