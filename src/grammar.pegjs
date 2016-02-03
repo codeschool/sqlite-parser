@@ -192,7 +192,6 @@ expression_node
   = expression_collate
   / expression_compare
   / expression_null
-  /*/ expression_is*/
   / expression_between
   / expression_in
   / stmt_select
@@ -262,7 +261,7 @@ expression_is_not_join
 
 /** @note Removed expression on left-hand-side to remove recursion */
 expression_between "BETWEEN Expression"
-  = v:( expression_value ) o n:( expression_is_not )? b:( BETWEEN ) o e1:( expression ) o s:( AND ) o e2:( expression )
+  = v:( expression_value ) o n:( expression_is_not )? b:( BETWEEN ) o e1:( expression_types ) o s:( AND ) o e2:( expression_types )
   {
     return {
       'type': 'expression',
@@ -1250,7 +1249,7 @@ select_parts_values "VALUES Clause"
   }
 
 stmt_core_order_list
-  = f:( stmt_core_order_list_item ) o b:( stmt_core_order_list_loop )?
+  = f:( stmt_core_order_list_item ) o b:( stmt_core_order_list_loop )*
   {
     return {
       'result': util.listify(f, b)
