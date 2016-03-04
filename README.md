@@ -159,7 +159,7 @@ describe('sqlite-parser', function() {
     tree.equals(this, done);
   });
 
-  // uses: test/sql/parseError1.sql
+  // uses: test/sql/parse-error-1.sql
   it('parse error 1', function(done) {
     tree.error({
       'message': 'There is a syntax error near FROM Clause [Table Identifier]'
