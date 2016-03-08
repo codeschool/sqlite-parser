@@ -122,8 +122,8 @@ module.exports = function(grunt) {
           livereload: false
         },
         files: [
-          'index.js', 'test/*.js', 'src/*.js', 'src/*.pegjs',
-          'test/sql/*.sql', 'Gruntfile.js'
+          'index.js', 'test/**/*.js', 'src/*.js', 'src/*.pegjs',
+          'test/sql/**/*.sql', 'test/json/**/*.json', 'Gruntfile.js'
         ],
         tasks: ['build', 'shell:debug']
       },

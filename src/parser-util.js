@@ -56,9 +56,13 @@ function compose(args, glue) {
   }
   res = args.reduce(function (prev, cur) {
     return conc ? (isOkay(cur) ? prev.concat(cur) : prev) :
-                  (prev + (isOkay(cur) ? textNode(cur) + glue : ''));
+                  (prev + (isOkay(cur) ? textCompose(cur) + glue : ''));
   }, start);
-  return conc ? res : res.trim();
+  return conc ? res : textNode(res);
+}
+
+function textCompose(arg) {
+  return nodeToString(isArray(arg) ? arg.join('') : arg);
 }
 
 function stack(arr) {
