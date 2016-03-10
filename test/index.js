@@ -1,1 +1,2 @@
-global.tree = require('./helpers');
+import * as tree from './helpers';
+global.tree = tree;

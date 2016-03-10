@@ -1,16 +1,18 @@
-var expect            = require('chai').expect,
-    fs                = require('fs'),
-    Promise           = require('promise'),
-    read              = Promise.denodeify(fs.readFile),
-    write             = Promise.denodeify(fs.writeFile),
-    _                 = require('lodash'),
-    parser            = require('../index'),
-    sqliteParser      = Promise.denodeify(parser),
-    prettyjson        = require('prettyjson'),
-    format, broadcast,
+import {expect} from 'chai';
+import {readFile, writeFile} from 'fs';
+import {all, promisify} from 'bluebird';
+import _ from 'lodash';
+import parser from '../index';
+import prettyjson from 'prettyjson';
+
+const read = promisify(readFile);
+const write = promisify(writeFile);
+const sqliteParser = promisify(parser);
+
+let format, broadcast,
     filePath,
     getTree, getTestJson, getTestFiles,
-    assertOkTree, assertErrorTree,
+    assertOkTree, assertErrorTree, assertEqualsTree,
     isDefined = function (arg) { return arg != null; };
 
 broadcast = function broadcast(args) {
@@ -65,7 +67,7 @@ getTestJson = function (that) {
 
 getTestFiles = function (that) {
   var getFiles = function () {
-    return Promise.all([getTree(that), getTestJson(that)]);
+    return all([getTree(that), getTestJson(that)]);
   };
   if (_.has(process.env, 'REWRITE')) {
     // REWRITE MODE: Save a new JSON file using parser tree result

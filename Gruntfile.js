@@ -6,6 +6,7 @@ module.exports = function(grunt) {
      ' * @author Nick Wronski <nick@javascript.com>\n' +
      ' */';
   }
+  const mochaCmd = './node_modules/.bin/mocha --compilers js:babel-core/register';
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     browserify: {
@@ -103,13 +104,13 @@ module.exports = function(grunt) {
         options: {
           failOnError: true
         },
-        command: './node_modules/.bin/pegjs --optimize speed src/grammar.pegjs lib/parser.js'
+        command: './node_modules/.bin/pegjs -e parser --optimize speed src/grammar.pegjs .tmp/parser.js'
       },
       test: {
         options: {
           failOnError: true
         },
-        command: './node_modules/.bin/mocha --reporter=nyan'
+        command: `${mochaCmd} --reporter=nyan`
       },
       debug: {
         options: {
@@ -117,13 +118,13 @@ module.exports = function(grunt) {
           debounceDelay: 500,
           forever: true
         },
-        command: 'DEBUG=true ./node_modules/.bin/mocha'
+        command: `DEBUG=true ${mochaCmd}`
       },
       rewrite: {
         options: {
           failOnError: true
         },
-        command: 'REWRITE=true ./node_modules/.bin/mocha'
+        command: `REWRITE=true ${mochaCmd}`
       }
     },
     connect: {
@@ -136,6 +137,17 @@ module.exports = function(grunt) {
       }
     },
     watch: {
+      test: {
+        options: {
+          debounceDelay: 250,
+          livereload: false
+        },
+        files: [
+          'index.js', 'test/**/*.js', 'src/*.js', 'src/*.pegjs',
+          'test/sql/**/*.sql', 'test/json/**/*.json', 'Gruntfile.js'
+        ],
+        tasks: ['build', 'shell:test']
+      },
       debug: {
         options: {
           debounceDelay: 250,
@@ -251,6 +263,9 @@ module.exports = function(grunt) {
   ]);
   grunt.registerTask('test', [
     'build', 'shell:test'
+  ]);
+  grunt.registerTask('test-watch', [
+    'test', 'watch:test'
   ]);
   grunt.registerTask('debug', [
     'build', 'shell:debug', 'watch:debug'
