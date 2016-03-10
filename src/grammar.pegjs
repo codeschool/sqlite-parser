@@ -1,19 +1,16 @@
 /**
  * sqlite-parser grammar
  */
-{
-  var util = require('./parser-util');
-}
 
 /* Start Grammar */
 start
-  = o s:( stmt_list )?
+  = o semi_optional s:( stmt_list )? semi_optional
   {
     return util.extend({}, s);
   }
 
 stmt_list
-  = semi_optional f:( stmt ) o b:( stmt_list_tail )* semi_optional
+  = f:( stmt ) o b:( stmt_list_tail )*
   {
     return {
       'statement': util.listify(f, b)
@@ -2458,12 +2455,8 @@ datatype_real "REAL Datatype Name"
   { return util.key(t); }
 
 datatype_real_double "DOUBLE Datatype Name"
-  = d:( "DOUBLE"i ) p:( real_double_precision )?
-  { return util.compose([d, p]); }
-
-real_double_precision
-  = e p:( "PRECISION"i )
-  { return p; }
+  = d:( "DOUBLE"i ) p:( [\t ]+ "PRECISION"i )?
+  { return util.compose([d, p], ''); }
 
 datatype_numeric "NUMERIC Datatype Name"
   = t:( "NUMERIC"i
@@ -2510,35 +2503,22 @@ name_unquoted
 
 /** @note Non-standard legacy format */
 name_bracketed
-  = sym_bopen n:( name_bracketed_schar )+ o sym_bclose
+  = sym_bopen n:( !( [ \t]* "]" ) [^\]] )+ o sym_bclose
   { return util.textNode(n); }
 
-name_bracketed_schar
-  = !( whitespace_space* "]" ) n:( [^\]] )
-  { return n; }
-
 name_dblquoted
-  = '"' n:( name_dblquoted_schar )+ '"'
+  = '"' n:( '""' / [^\"] )+ '"'
   { return util.unescape(n, '"'); }
-
-name_dblquoted_schar
-  = '""' / [^\"]
 
 /** @note Non-standard format */
 name_sglquoted
-  = "'" n:( name_sglquoted_schar )+ "'"
+  = "'" n:( "''" / [^\'] )+ "'"
   { return util.unescape(n, "'"); }
-
-name_sglquoted_schar
-  = "''" / [^\']
 
 /** @note Non-standard legacy format */
 name_backticked
-  = '`' n:( name_backticked_schar )+ '`'
+  = '`' n:( '``' / [^\`] )+ '`'
   { return util.unescape(n, '`'); }
-
-name_backticked_schar
-  = '``' / [^\`]
 
 /* Symbols */
 
@@ -2879,10 +2859,7 @@ comment
   { return null; }
 
 comment_line "Line Comment"
-  = comment_line_start ( !whitespace_line match_all )*
-
-comment_line_start
-  = "--"
+  = "--" ( ![\n\v\f\r] . )*
 
 comment_block "Block Comment"
   = comment_block_start comment_block_feed comment_block_end
@@ -2894,42 +2871,18 @@ comment_block_end
   = "*/"
 
 comment_block_body
-  = ( !( comment_block_end / comment_block_start ) match_all )+
+  = ( !( comment_block_end / comment_block_start ) . )+
 
 block_body_nodes
   = comment_block_body / comment_block
 
 comment_block_feed
-  = block_body_nodes ( whitespace / block_body_nodes )*
-
-match_all
-  = .
-  /*= [\s\S]*/
+  = block_body_nodes ( [\n\v\f\r\t ] / block_body_nodes )*
 
 /* Optional Whitespace */
-o
-  = n:( whitespace_nodes )*
+o "Whitespace"
+  = n:( [\n\v\f\r\t ] / comment )*
   { return n; }
-
-/* Enforced Whitespace */
-e
-  = n:( whitespace_nodes )+
-  { return n; }
-
-whitespace_nodes
-  = whitespace
-  / comment
-
-/* Whitespace */
-whitespace
-  = whitespace_space
-  / whitespace_line
-
-whitespace_space "Whitespace"
-  = [ \t]
-
-whitespace_line "New Line"
-  = [\n\v\f\r]
 
 /* TODO: Everything with this symbol */
 _TODO_

@@ -3,39 +3,39 @@
  */
 var slice = [].slice;
 
-function makeArray(arr) {
+export function makeArray(arr) {
   return !isArray(arr) ? (isOkay(arr) ? [arr] : []) : arr;
 }
 
-function typed(obj) {
+export function typed(obj) {
   return Object.prototype.toString.call(obj);
 }
 
-function isPlain(obj) {
+export function isPlain(obj) {
   return typed(obj) === '[object Object]';
 }
 
-function isPattern(obj) {
+export function isPattern(obj) {
   return typed(obj) === '[object RegExp]';
 }
 
-function isFunc(obj) {
+export function isFunc(obj) {
   return typed(obj) === '[object Function]';
 }
 
-function isString(obj) {
+export function isString(obj) {
   return typed(obj) === '[object String]';
 }
 
-function isArray(obj) {
+export function isArray(obj) {
   return Array.isArray ? Array.isArray(obj) : (typed(obj) === '[object Array]');
 }
 
-function isOkay(obj) {
+export function isOkay(obj) {
   return obj != null;
 }
 
-function collapse(arr) {
+export function collapse(arr) {
   var i, len, n, obj, ref, v;
   if (isArray(arr) && arr.length) {
     obj = {};
@@ -49,26 +49,30 @@ function collapse(arr) {
   }
 }
 
-function compose(args, glue) {
+export function compose(args, glue) {
   var conc = isArray(glue), res, start = conc ? [] : '';
   if (!isOkay(glue)) {
     glue = ' ';
   }
   res = args.reduce(function (prev, cur) {
     return conc ? (isOkay(cur) ? prev.concat(cur) : prev) :
-                  (prev + (isOkay(cur) ? textNode(cur) + glue : ''));
+                  (prev + (isOkay(cur) ? textCompose(cur) + glue : ''));
   }, start);
-  return conc ? res : res.trim();
+  return conc ? res : textNode(res);
 }
 
-function stack(arr) {
+export function textCompose(arg) {
+  return nodeToString(isArray(arg) ? arg.join('') : arg);
+}
+
+export function stack(arr) {
   return (isArray(arr) ?
     arr.map(function (elem) {
       return elem[1];
     }) : []);
 }
 
-function nodeToString(node) {
+export function nodeToString(node) {
   var elem = ((isArray(node) || isString(node)) ? node : []);
   if (isArray(elem)) {
     if (elem.length && isArray(elem[0])) {
@@ -79,7 +83,7 @@ function nodeToString(node) {
   return elem;
 }
 
-function textNode(elem) {
+export function textNode(elem) {
   /*
    * A text node has
    * - no leading or trailing whitespace
@@ -87,11 +91,11 @@ function textNode(elem) {
   return nodeToString(elem).trim();
 }
 
-function textMerge() {
+export function textMerge() {
   return compose.call(this, slice.call(arguments, 0), '');
 }
 
-function unescape(str, quoteChar) {
+export function unescape(str, quoteChar) {
   var re;
   if (quoteChar == null) {
     quoteChar = '\'';
@@ -100,7 +104,7 @@ function unescape(str, quoteChar) {
   return nodeToString(str).replace(re, quoteChar);
 }
 
-function extend() {
+export function extend() {
   var first = arguments[0],
       rest = slice.call(arguments, 1);
 
@@ -118,7 +122,7 @@ function extend() {
   return first;
 }
 
-function has(thing, item) {
+export function has(thing, item) {
   var k, v, len;
   if (isArray(thing)) {
     if (isString(item)) {
@@ -157,7 +161,7 @@ function has(thing, item) {
   return false;
 }
 
-function findWhere(arr, props) {
+export function findWhere(arr, props) {
   var i, len, val;
   for (i = 0, len = arr.length; i < len; i++) {
     val = arr[i];
@@ -168,23 +172,23 @@ function findWhere(arr, props) {
   return null;
 }
 
-function key(elem) {
+export function key(elem) {
   return textNode(elem).toLowerCase();
 }
 
-function keyify(arr, glue) {
+export function keyify(arr, glue) {
   return key(compose(arr, glue));
 }
 
-function listify() {
+export function listify() {
   return compose.call(this, slice.call(arguments, 0), []);
 }
 
-function findLastIndex(arr, props) {
+export function findLastIndex(arr, props) {
   return findLast(arr, props, true);
 }
 
-function findLast(arr, props, index) {
+export function findLast(arr, props, index) {
   var elem, i;
   for (i = arr.length - 1; i >= 0; i += -1) {
     elem = arr[i];
@@ -195,7 +199,7 @@ function findLast(arr, props, index) {
   return index ? -1 : null;
 }
 
-function takeWhile(arr, func) {
+export function takeWhile(arr, func) {
   var elem, i, len;
   for (i = 0, len = arr.length; i < len; i++) {
     elem = arr[i];
@@ -206,41 +210,9 @@ function takeWhile(arr, func) {
   return arr.slice(0, i);
 }
 
-function isArrayOkay(arr) {
+export function isArrayOkay(arr) {
   if (isArray(arr)) {
     return arr.length > 0 && isOkay(arr[0]);
   }
   return false;
 }
-
-module.exports = {
-  // Array methods
-  'stack':                stack,
-  'collapse':             collapse,
-  'compose':              compose,
-  'findWhere':            findWhere,
-  'has':                  has,
-  'findLastIndex':        findLastIndex,
-  'findLast':             findLast,
-  'takeWhile':            takeWhile,
-  'isArrayOkay':          isArrayOkay,
-  'listify':              listify,
-  // String methods
-  'nodeToString':         nodeToString,
-  'textNode':             textNode,
-  'unescape':             unescape,
-  'key':                  key,
-  'keyify':               keyify,
-  'textMerge':            textMerge,
-  // Type detection
-  'typed':                typed,
-  'isPlain':              isPlain,
-  'isPattern':            isPattern,
-  'isFunc':               isFunc,
-  'isString':             isString,
-  'isArray':              isArray,
-  'isOkay':								isOkay,
-  // Misc methods
-  'extend':               extend,
-  'makeArray':            makeArray
-};

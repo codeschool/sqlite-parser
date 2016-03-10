@@ -2,17 +2,25 @@ module.exports = function(grunt) {
   function getBanner(isDemo) {
     return '/*!\n' +
      ' * <%= pkg.name %>' + (isDemo ? '-demo' : '') + ' - v<%= pkg.version %>\n' +
-     ' * @copyright <%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
+     ' * @copyright 2015-<%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
      ' * @author Nick Wronski <nick@javascript.com>\n' +
      ' */';
   }
+  const mochaCmd = './node_modules/.bin/mocha --compilers js:babel-core/register';
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     browserify: {
+      options: {
+        transform: [require('babelify').configure({
+          sourceMapRelative: './',
+          compact: true,
+          sourceMaps: true
+        })]
+      },
       dist: {
         options: {
           browserifyOptions: {
-            debug: false,
+            debug: true,
             standalone: 'sqliteParser'
           }
         },
@@ -73,23 +81,36 @@ module.exports = function(grunt) {
       }
     },
     clean: {
-      build: ['lib/*.js'],
+      build: ['.tmp/*.js', 'lib/*.js'],
       dist: ['dist/*.js'],
       interactive: ['.tmp/**/*'],
       demo: ['demo/**/*']
+    },
+    concat: {
+      options: {
+        stripBanners: true,
+        // This imports the utilities used by the parser
+        banner: "\nimport * as util from './parser-util';\n\nconst ",
+        // This exports the compiled parser
+        footer: "\nexport default parser.parse;"
+      },
+      build: {
+        src: ['.tmp/parser.js'],
+        dest: 'lib/parser.js'
+      }
     },
     shell: {
       build: {
         options: {
           failOnError: true
         },
-        command: './node_modules/.bin/pegjs --trace src/grammar.pegjs lib/parser.js'
+        command: './node_modules/.bin/pegjs --trace -e parser src/grammar.pegjs .tmp/parser.js'
       },
       test: {
         options: {
           failOnError: true
         },
-        command: './node_modules/.bin/mocha --reporter=nyan'
+        command: `${mochaCmd} --reporter=nyan`
       },
       debug: {
         options: {
@@ -97,13 +118,13 @@ module.exports = function(grunt) {
           debounceDelay: 500,
           forever: true
         },
-        command: 'DEBUG=true ./node_modules/.bin/mocha'
+        command: `DEBUG=true ${mochaCmd}`
       },
       rewrite: {
         options: {
           failOnError: true
         },
-        command: 'REWRITE=true ./node_modules/.bin/mocha'
+        command: `REWRITE=true ${mochaCmd}`
       }
     },
     connect: {
@@ -116,14 +137,25 @@ module.exports = function(grunt) {
       }
     },
     watch: {
+      test: {
+        options: {
+          debounceDelay: 250,
+          livereload: false
+        },
+        files: [
+          'index.js', 'test/**/*.js', 'src/*.js', 'src/*.pegjs',
+          'test/sql/**/*.sql', 'test/json/**/*.json', 'Gruntfile.js'
+        ],
+        tasks: ['build', 'shell:test']
+      },
       debug: {
         options: {
           debounceDelay: 250,
           livereload: false
         },
         files: [
-          'index.js', 'test/*.js', 'src/*.js', 'src/*.pegjs',
-          'test/sql/*.sql', 'Gruntfile.js'
+          'index.js', 'test/**/*.js', 'src/*.js', 'src/*.pegjs',
+          'test/sql/**/*.sql', 'test/json/**/*.json', 'Gruntfile.js'
         ],
         tasks: ['build', 'shell:debug']
       },
@@ -227,10 +259,13 @@ module.exports = function(grunt) {
     'build'
   ]);
   grunt.registerTask('build', [
-    'clean:build', 'shell:build', 'copy:build'
+    'clean:build', 'shell:build', 'concat:build', 'copy:build'
   ]);
   grunt.registerTask('test', [
     'build', 'shell:test'
+  ]);
+  grunt.registerTask('test-watch', [
+    'test', 'watch:test'
   ]);
   grunt.registerTask('debug', [
     'build', 'shell:debug', 'watch:debug'
@@ -248,8 +283,11 @@ module.exports = function(grunt) {
   grunt.registerTask('demo', [
     'interactive', 'clean:demo', 'copy:demo', 'uglify:demo', 'usebanner:demo'
   ]);
+  grunt.registerTask('minidist', [
+    'default', 'clean:dist', 'browserify:dist'
+  ]);
   grunt.registerTask('dist', [
-    'default', 'clean:dist', 'browserify:dist', 'uglify:dist', 'replace:dist', 'usebanner:dist'
+    'minidist', 'uglify:dist', 'replace:dist', 'usebanner:dist'
   ]);
   grunt.registerTask('release', [
     'test', 'dist', 'demo', 'clean:interactive'
