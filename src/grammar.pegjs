@@ -1,9 +1,6 @@
 /**
  * sqlite-parser grammar
  */
-{
-  var util = require('./parser-util');
-}
 
 /* Start Grammar */
 start
