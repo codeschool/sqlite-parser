@@ -3,10 +3,10 @@
  * @copyright Code School 2015 {@link http://codeschool.com}
  * @author Nick Wronski <nick@javascript.com>
  */
-var parserUtils = require('./parser-util');
+import {findLastIndex, takeWhile, findWhere, extend} from './parser-util';
 
-module.exports = (function (util) {
-  Tracer = function Tracer() {
+export default (function () {
+  function Tracer() {
     if (!(this instanceof Tracer)) {
       return new Tracer();
     }
@@ -31,8 +31,8 @@ module.exports = (function (util) {
         break;
       case 'rule.fail':
         // remove failed leaf
-        lastIndex = util.findLastIndex(this.events, {rule: event.rule});
-        lastWsIndex = util.findLastIndex(this.events, function (e) {
+        lastIndex = findLastIndex(this.events, {rule: event.rule});
+        lastWsIndex = findLastIndex(this.events, function (e) {
           return !that.whitespaceRule.test(e.rule);
         });
         if (that.whitespaceRule.test(event.rule) || lastIndex === lastWsIndex) {
@@ -58,7 +58,7 @@ module.exports = (function (util) {
                   !that.whitespaceRule.test(e.rule);
         })
         .reverse();
-    chain = util.takeWhile(namedEvents, function (elem) {
+    chain = takeWhile(namedEvents, function (elem) {
       if (/^(sym\_semi)$/i.test(elem.rule)) {
         stmts += 1;
       }
@@ -77,10 +77,10 @@ module.exports = (function (util) {
       }
       return true;
     });
-    
+
     if (chain.length) {
       location = bestNode.location;
-      firstNode = util.findWhere(chain, function (elem) {
+      firstNode = findWhere(chain, function (elem) {
         return that.firstNodeRule.test(elem.description)  &&
                 elem.description !== bestNode.description &&
                 elem.indentation !== bestNode.indentation;
@@ -96,7 +96,7 @@ module.exports = (function (util) {
         chainDetail = bestNode.description;
       }
       message = 'Syntax error found near ' + chainDetail;
-      util.extend(err, {
+      extend(err, {
         'message': message,
         'location': location
       });
@@ -105,4 +105,4 @@ module.exports = (function (util) {
   };
 
   return Tracer;
-})(parserUtils);
+})();
