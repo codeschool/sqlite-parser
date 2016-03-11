@@ -2,20 +2,25 @@
  * sqlite-parser
  */
 import parser from './lib/parser';
+import {isFunc} from './lib/parser-util';
 import Tracer from './lib/tracer';
 
 export default function sqliteParser(source, callback) {
+  let res, err;
   const t = Tracer();
-  let res;
+  const isAsync = isFunc(callback);
   try {
-    callback(null, parser(source, {
-      'tracer': t
-    }));
+    res = parser(source, { 'tracer': t });
   } catch (e) {
-    callback(t.smartError(e));
+    err = t.smartError(e);
+  }
+  if (isAsync) {
+    callback(err, res);
+  } else {
+    if (err) { throw err; }
+    return res;
   }
 };
-
 
 
 sqliteParser['NAME'] = 'sqlite-parser';
