@@ -104,7 +104,7 @@ module.exports = function(grunt) {
         options: {
           failOnError: true
         },
-        command: './node_modules/.bin/pegjs --cache --optimize speed --trace -e parser src/grammar.pegjs .tmp/parser.js'
+        command: './node_modules/.bin/pegjs --trace --cache --optimize size -e parser src/grammar.pegjs .tmp/parser.js'
       },
       test: {
         options: {

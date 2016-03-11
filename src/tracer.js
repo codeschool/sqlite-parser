@@ -54,7 +54,7 @@ export default (function () {
         bestNode = {indentation: -1}, deep = false, stmts = 0,
         namedEvents = this.events
         .filter(function (e) {
-          return e.description !== null &&
+          return e.description != null &&
                   !that.whitespaceRule.test(e.rule);
         })
         .reverse();
