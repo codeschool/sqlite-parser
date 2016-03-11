@@ -5,9 +5,6 @@
 [![devDependencies Status Image](https://img.shields.io/david/dev/codeschool/sqlite-parser.svg)](https://github.com/codeschool/sqlite-parser/)
 [![License Type Image](https://img.shields.io/github/license/codeschool/sqlite-parser.svg)](https://github.com/codeschool/sqlite-parser/blob/master/LICENSE)
 
-## This branch is a work-in-progress
-_Note: There is a currently a significant performance penalty (14x) to using this branch for the smart-error functionality._
-
 This library parses SQLite queries, using JavaScript, and generates
 _abstract syntax tree_ (AST) representations of the input strings. A
 syntax error is produced if an AST cannot be generated.
@@ -37,18 +34,19 @@ containing SQL to parse and a callback function. The function will invoke
 the callback function with the AST object generated from the source string.
 
 ``` javascript
-// Standard usage
-var sqliteParser    = require('sqlite-parser'),
-    sampleSQL       = "SELECT type, quantity FROM apples WHERE amount > 1";
+var sqliteParser = require('sqlite-parser');
+var query = 'select pants from laundry;';
+// sync
+var ast = sqliteParser(query);
+console.log(ast);
 
-sqliteParser(sampleSQL, function (err, res) {
+// async
+sqliteParser(query, function (err, ast) {
   if (err) {
-    // Error
     console.log(err);
-  } else {
-    // Result AST
-    console.log(res);
+    return;
   }
+  console.log(ast);
 });
 ```
 

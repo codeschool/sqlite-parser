@@ -3,6 +3,51 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+## [v0.14.0] - 2016-03-11
+### Added
+- Latest version includes smart error functionality from the tracer branch that was not included in the last few versions. The latest release includes the smart syntax functionality now that it is as performant as the previous release that did not include smart errors.
+- Parser can now be invoke synchronously or asynchronously:
+  ``` javascript
+  var sqliteParser = require('sqlite-parser');
+  var query = 'select pants from laundry;';
+  // sync
+  var ast = sqliteParser(query);
+  console.log(ast);
+
+  // async
+  sqliteParser(query, function (err, ast) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    console.log(ast);
+  });
+  ```
+
+### Changed
+- Upgrade sqlite-parser to ES2015
+
+  ``` javascript
+  import sqliteParser from 'sqlite-parser';
+  const query = 'select name, color from cats;';
+  const ast = JSON.stringify(sqliteParser(query), null, 2);
+  console.log(ast);
+  ```
+
+  - Process is not complete, but as of now most of the parser, tests, and demo are now in ES2015.
+- Publish the browserified bundle in the [sqlite-parser npm package](https://www.npmjs.com/package/sqlite-parser) under `dist/` folder
+  - This includes the un-minified `sqlite-parser.js` with sourcemaps and the minified `sqlite-parser-min.js` without sourcemaps (the default file as defined in the `package.json`).
+- Do not publish the intermediate files from the build process to github
+  - The `lib/` and `dist/` folders are no longer in version control as a part of this github repository.
+  - The `demo/` folder is also removed from the master branch as well and must be built using `grunt demo` to use it (or `grunt live` to build the demo and serve it locally with livereload).
+
+### Fixed
+- Add `--cache` flag to pegjs compiler and reduce total rule count to increase performance of tracing parser and smart error functionality.
+  - Early results show that `--cache` makes the tracer parser just as fast as the non-tracer branch for a moderate (`~150kB`) increase in file size.
+  - Removing the number of whitespace rules reduced the chance of the process running out of memory while parsing larger queries.
+- Massive reduction in bundled parser size
+  - To help combat the extra size added from the `--cache` option of pegjs, I reduced the size of the parser from `416.89 kB` to `86.7 kB` (~20% of the original size). I did this by switching pegjs option `--optimize` from `speed` to `size` and modifying [my fork of pegjs)(http://github.com/nwronski/pegjs) to allow rule descriptions to be looked up by rule index instead of by rule name as the `optimize` `size` mode required.
+
 ## [v0.11.3] - 2016-02-02
 ### Fixed
 - Added missing binary division operator so that things like this will now correctly parse.
@@ -484,7 +529,8 @@ part of table names, column names, aliases, etc... This also addresses issues th
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.11.3...HEAD
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.14.0...HEAD
+[v0.14.0]: https://github.com/codeschool/sqlite-parser/compare/v0.11.3...v0.14.0
 [v0.11.3]: https://github.com/codeschool/sqlite-parser/compare/v0.11.2...v0.11.3
 [v0.11.2]: https://github.com/codeschool/sqlite-parser/compare/v0.11.0...v0.11.2
 [v0.11.0]: https://github.com/codeschool/sqlite-parser/compare/v0.10.2...v0.11.0
