@@ -1,8 +1,6 @@
 /**
 * sqlite-parser demo
 */
-import sqliteParser from 'sqlite-parser';
-import {extend} from 'sqlite-parser-util';
 import CodeMirror from 'codemirror';
 
 require('foldgutter');
@@ -105,10 +103,10 @@ document.addEventListener('DOMContentLoaded', function () {
     tabSize: 4,
     gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
   },
-  sql = CodeMirror.fromTextArea(elemSql, extend({
+  sql = CodeMirror.fromTextArea(elemSql, Object.assign({
     mode: 'text/x-plsql'
   }, cmDefaults)),
-  ast = CodeMirror.fromTextArea(elemAst, extend({
+  ast = CodeMirror.fromTextArea(elemAst, Object.assign({
     mode: "application/ld+json",
     foldGutter: true,
     readOnly: true

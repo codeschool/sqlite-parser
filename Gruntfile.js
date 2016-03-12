@@ -30,8 +30,6 @@ module.exports = function(grunt) {
       interactive: {
         options: {
           alias: {
-            'sqlite-parser': './index',
-            'sqlite-parser-util': './lib/parser-util',
             'codemirror': './node_modules/codemirror/lib/codemirror',
             'foldcode': './node_modules/codemirror/addon/fold/foldcode',
             'foldgutter': './node_modules/codemirror/addon/fold/foldgutter',
@@ -42,7 +40,6 @@ module.exports = function(grunt) {
           },
         },
         require: [
-          'lib/parser-util.js', 'lib/parser.js', './index.js',
           'node_modules/codemirror/lib/codemirror',
           'node_modules/codemirror/addon/fold/foldcode',
           'node_modules/codemirror/addon/fold/foldgutter',
@@ -67,10 +64,15 @@ module.exports = function(grunt) {
       },
       interactive: {
         files: [{
-          src: ['src/demo/index.html'],
-          flatten: true,
+          src: ['index.html'],
           expand: true,
+          cwd: 'src/demo/',
           dest: '.tmp/'
+        }, {
+          src: ['sqlite-parser.js'],
+          expand: true,
+          cwd: 'dist/',
+          dest: '.tmp/js/'
         }],
       },
       demo: {
@@ -159,7 +161,7 @@ module.exports = function(grunt) {
         ],
         tasks: ['build', 'shell:debug']
       },
-      live: {
+      interactive: {
         options: {
           debounceDelay: 1000,
           livereload: {
@@ -168,7 +170,7 @@ module.exports = function(grunt) {
           },
         },
         files: [
-          'index.js', 'src/**/*.{js,pegjs,css,html}', 'Gruntfile.js'
+          'index.js', 'src/**/*.{js,css,html,pegjs}', 'Gruntfile.js'
         ],
         tasks: ['interactive']
       }
@@ -187,7 +189,8 @@ module.exports = function(grunt) {
       },
       demo: {
         files: {
-          'demo/js/sqlite-parser-demo.js': ['.tmp/js/sqlite-parser-demo.js']
+          'demo/js/sqlite-parser-demo.js': ['.tmp/js/sqlite-parser-demo.js'],
+          'demo/js/sqlite-parser.js': ['.tmp/js/sqlite-parser.js']
         }
       }
     },
@@ -229,6 +232,7 @@ module.exports = function(grunt) {
         files: {
           src: [
             'demo/js/sqlite-parser-demo.js',
+            'demo/css/sqlite-parser-demo.css'
           ]
         }
       }
@@ -274,20 +278,20 @@ module.exports = function(grunt) {
     'build', 'shell:rewrite'
   ]);
   grunt.registerTask('interactive', [
-    'clean:interactive', 'default', 'copy:interactive', 'cssmin:interactive',
-    'browserify:interactive'
+    'clean:interactive', 'minidist', 'copy:interactive',
+    'cssmin:interactive', 'browserify:interactive'
   ]);
   grunt.registerTask('live', [
-    'interactive', 'connect:server', 'watch:live'
+    'interactive', 'connect:server', 'watch:interactive'
   ]);
   grunt.registerTask('demo', [
     'interactive', 'clean:demo', 'copy:demo', 'uglify:demo', 'usebanner:demo'
   ]);
   grunt.registerTask('minidist', [
-    'default', 'clean:dist', 'browserify:dist'
+    'default', 'clean:dist', 'browserify:dist', 'replace:dist'
   ]);
   grunt.registerTask('dist', [
-    'minidist', 'uglify:dist', 'replace:dist', 'usebanner:dist'
+    'minidist', 'uglify:dist', 'usebanner:dist'
   ]);
   grunt.registerTask('release', [
     'test', 'dist', 'demo', 'clean:interactive'
