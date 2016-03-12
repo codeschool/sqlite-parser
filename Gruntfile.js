@@ -221,7 +221,17 @@ module.exports = function(grunt) {
         files: {
           src: [
             'dist/sqlite-parser-min.js',
-            'dist/sqlite-parser.js',
+            'dist/sqlite-parser.js'
+          ]
+        }
+      },
+      demolib: {
+        options: {
+          banner: getBanner(false)
+        },
+        files: {
+          src: [
+            'demo/js/sqlite-parser.js'
           ]
         }
       },
@@ -285,7 +295,8 @@ module.exports = function(grunt) {
     'interactive', 'connect:server', 'watch:interactive'
   ]);
   grunt.registerTask('demo', [
-    'interactive', 'clean:demo', 'copy:demo', 'uglify:demo', 'usebanner:demo'
+    'interactive', 'clean:demo', 'copy:demo', 'uglify:demo',
+    'usebanner:demo', 'usebanner:demolib'
   ]);
   grunt.registerTask('minidist', [
     'default', 'clean:dist', 'browserify:dist', 'replace:dist'
