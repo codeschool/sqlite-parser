@@ -20,10 +20,9 @@ npm install sqlite-parser
 ## Demo
 
 There is an interactive demo of the parser hosted
-[at this location](http://codeschool.github.io/sqlite-parser/demo/). The source
-for the interactive demo exists in the `demo/` folder of this repository. You
-can serve up a LiveReload version of the demo on your local machine by running
-`grunt live`.
+[at this location](http://codeschool.github.io/sqlite-parser/demo/). You 
+can run a copy of the demo on your local machine by cloning this repository 
+and then using the command `grunt live`.
 
 ## Usage
 
