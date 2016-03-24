@@ -1,3 +1,6 @@
+var path = require('path');
+var fs = require('fs');
+
 module.exports = function(grunt) {
   function getBanner(isDemo) {
     return '/*!\n' +
@@ -6,7 +9,20 @@ module.exports = function(grunt) {
      ' * @author Nick Wronski <nick@javascript.com>\n' +
      ' */';
   }
-  const mochaCmd = './node_modules/.bin/mocha --compilers js:babel-core/register';
+  function getCmdString(cmd, args) {
+    if (!args) args = '';
+    const binPath = path.normalize(`node_modules/.bin/${cmd}`);
+    return `${binPath} ${customArgs[cmd]} ${args}`.trim();
+  }
+  const customArgs = {
+    mocha: '--compilers js:babel-core/register',
+    pegjs: `--trace --cache --optimize size -e parser src/grammar.pegjs .tmp/parser.js`
+  };
+
+  const tmpDir = './.tmp/';
+  if (!fs.existsSync(tmpDir)){
+    fs.mkdirSync(tmpDir);
+  }
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     browserify: {
@@ -106,13 +122,13 @@ module.exports = function(grunt) {
         options: {
           failOnError: true
         },
-        command: './node_modules/.bin/pegjs --trace --cache --optimize size -e parser src/grammar.pegjs .tmp/parser.js'
+        command: getCmdString('pegjs')
       },
       test: {
         options: {
           failOnError: true
         },
-        command: `${mochaCmd} --reporter=nyan`
+        command: getCmdString('mocha', '--reporter=nyan')
       },
       debug: {
         options: {
@@ -120,13 +136,13 @@ module.exports = function(grunt) {
           debounceDelay: 500,
           forever: true
         },
-        command: `DEBUG=true ${mochaCmd}`
+        command: `DEBUG=true ${getCmdString('mocha')}`
       },
       rewrite: {
         options: {
           failOnError: true
         },
-        command: `REWRITE=true ${mochaCmd}`
+        command: `REWRITE=true ${getCmdString('mocha')}`
       }
     },
     connect: {
