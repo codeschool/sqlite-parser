@@ -321,6 +321,6 @@ module.exports = function(grunt) {
     'minidist', 'uglify:dist', 'usebanner:dist'
   ]);
   grunt.registerTask('release', [
-    'test', 'dist', 'demo', 'clean:interactive'
+    'test', 'demo', 'dist', 'clean:interactive'
   ]);
 };
