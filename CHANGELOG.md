@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+## [v0.14.1] - 2016-03-23
+### Fixed
+- Fixed broken Grunt tasks (e.g. `grunt release`) in Windows
+
 ## [v0.14.0] - 2016-03-11
 ### Added
 - Latest version includes smart error functionality from the tracer branch that was not included in the last few versions. The latest release includes the smart syntax functionality now that it is as performant as the previous release that did not include smart errors.
@@ -529,7 +533,8 @@ part of table names, column names, aliases, etc... This also addresses issues th
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.14.0...HEAD
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.14.1...HEAD
+[v0.14.1]: https://github.com/codeschool/sqlite-parser/compare/v0.14.0...v0.14.1
 [v0.14.0]: https://github.com/codeschool/sqlite-parser/compare/v0.11.3...v0.14.0
 [v0.11.3]: https://github.com/codeschool/sqlite-parser/compare/v0.11.2...v0.11.3
 [v0.11.2]: https://github.com/codeschool/sqlite-parser/compare/v0.11.0...v0.11.2
