@@ -26,7 +26,11 @@
     "url": "https://github.com/codeschool/sqlite-parser/issues"
   },
   "scripts": {
-    "prepublish": "grunt release"
+    "test": "grunt test",
+    "build": "grunt dist",
+    "preversion": "npm test",
+    "version": "npm run build && git add .",
+    "postversion": "git push && git push --tags"
   },
   "devDependencies": {
     "babel-core": "^6.7.2",
