@@ -2,7 +2,7 @@
   "name": "sqlite-parser",
   "description": "JavaScript implentation of SQLite 3 query parser",
   "author": "Code School (http://codeschool.com)",
-  "version": "0.14.0",
+  "version": "0.14.3",
   "contributors": [
     "Nick Wronski <nick@javascript.com>"
   ],
@@ -27,7 +27,10 @@
   },
   "scripts": {
     "test": "grunt test",
-    "prepublish": "grunt release"
+    "build": "grunt dist",
+    "preversion": "npm test",
+    "version": "npm run build && git add .",
+    "postversion": "git push && git push --tags"
   },
   "devDependencies": {
     "babel-core": "^6.7.2",

@@ -3,6 +3,19 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+## [v0.14.3] - 2016-03-28
+### Fixed
+- Do not run grunt tasks on `npm install`. Did not realize that `prepublish` is run on a regular `npm install` command.
+
+## [v0.14.2] - 2016-03-24
+### Fixed
+- Minified bundle was missing from `dist/` folder after running `grunt release`
+  - This would have caused the parser to not work as an installed npm module since the `package.json` `main` property points to the minified bundle
+
+## [v0.14.1] - 2016-03-23
+### Fixed
+- Fixed broken Grunt tasks (e.g. `grunt release`) in Windows
+
 ## [v0.14.0] - 2016-03-11
 ### Added
 - Latest version includes smart error functionality from the tracer branch that was not included in the last few versions. The latest release includes the smart syntax functionality now that it is as performant as the previous release that did not include smart errors.
@@ -529,7 +542,10 @@ part of table names, column names, aliases, etc... This also addresses issues th
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.14.0...HEAD
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.14.3...HEAD
+[v0.14.3]: https://github.com/codeschool/sqlite-parser/compare/v0.14.2...v0.14.3
+[v0.14.2]: https://github.com/codeschool/sqlite-parser/compare/v0.14.1...v0.14.2
+[v0.14.1]: https://github.com/codeschool/sqlite-parser/compare/v0.14.0...v0.14.1
 [v0.14.0]: https://github.com/codeschool/sqlite-parser/compare/v0.11.3...v0.14.0
 [v0.11.3]: https://github.com/codeschool/sqlite-parser/compare/v0.11.2...v0.11.3
 [v0.11.2]: https://github.com/codeschool/sqlite-parser/compare/v0.11.0...v0.11.2

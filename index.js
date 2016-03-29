@@ -6,19 +6,25 @@ import {isFunc} from './lib/parser-util';
 import Tracer from './lib/tracer';
 
 export default function sqliteParser(source, callback) {
-  let res, err;
   const t = Tracer();
   const isAsync = isFunc(callback);
-  try {
-    res = parser(source, { 'tracer': t });
-  } catch (e) {
-    err = t.smartError(e);
-  }
+  const opts = { 'tracer': t };
+  // Async
   if (isAsync) {
-    callback(err, res);
-  } else {
-    if (err) { throw err; }
-    return res;
+    setTimeout(function () {
+      try {
+        callback(null, parser(source, opts));
+      } catch (e) {
+        callback(t.smartError(e));
+      }
+    }, 0);
+    return;
+  }
+  // Sync
+  try {
+    return parser(source, opts);
+  } catch (e) {
+    throw t.smartError(e);
   }
 };
 

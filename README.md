@@ -13,8 +13,6 @@ syntax error is produced if an AST cannot be generated.
 
 ## Install
 
-**IMPORTANT: If you want intelligent error messages for syntax errors, then use the `v0.11.3` release. If you want the fastest possible version of the parser, with the tradeoff of poor syntax error feedback, use the `v0.12.3` release.**
-
 ```
 npm install sqlite-parser
 ```
@@ -22,16 +20,17 @@ npm install sqlite-parser
 ## Demo
 
 There is an interactive demo of the parser hosted
-[at this location](http://codeschool.github.io/sqlite-parser/demo/). The source
-for the interactive demo exists in the `demo/` folder of this repository. You
-can serve up a LiveReload version of the demo on your local machine by running
-`grunt live`.
+[at this location](http://codeschool.github.io/sqlite-parser/demo/). You 
+can run a copy of the demo on your local machine by cloning this repository 
+and then using the command `grunt live`.
 
 ## Usage
 
 The library exposes a function that accepts two arguments: a string
-containing SQL to parse and a callback function. The function will invoke
-the callback function with the AST object generated from the source string.
+containing SQL to parse and a callback function.
+
+If invoked without a callback function the parser will runs synchronously and
+return the resulting AST or throw an error if one occurs.
 
 ``` javascript
 var sqliteParser = require('sqlite-parser');
@@ -52,10 +51,10 @@ sqliteParser(query, function (err, ast) {
 
 ## Syntax Errors
 
-This parser uses the `--trace` flag exposed in `pegjs` to create "smart" error
-messages. The parser includes a `Trace` class that keeps track of which grammar
-rules were being traversed just prior to the error and uses that information
-to improve the error message and location information.
+This parser will try to create _smart_ error messages when it cannot parse
+some input SQL. In addition to an approximate location for the syntax error,
+the parser will attempt to describe the area of concern
+(e.g.: `Syntax error found near Column Identifier (WHERE Clause)`).
 
 ## AST
 
@@ -127,50 +126,77 @@ FROM
 
 Once the dependencies are installed, start development with the following command:
 
-`grunt test`
+```
+grunt test-watch
+```
 
-which will automatically compile the parser and run the tests in `test/core/**/*-spec.js`.
+which will automatically compile the parser and run the tests in
+`test/core/**/*-spec.js` each time a change is made to the tests and/or
+the source code.
 
-Optionally, run `grunt debug` to get extended output and start a file watcher.
+Optionally, run `grunt debug` to get AST output from each test in addition to
+live reloading.
 
-Finally, you should run `grunt release`, before creating any PR, to run all tests
-and rebuild the `dist/` and `demo/` folders.
+Finally, you should run `grunt release` before creating any PR. **Do not** change
+the version number in `package.json` inside of the pull request.
 
 ### Writing tests
 
-Tests refer to a SQL test file in `test/sql/` and the test name is a
-reference to the filename of the test file. For example `super test 2` as a test name in an `it()` block within a `describe()` block with title `parent block` points to the file `test/sql/parent-block/super-test-2.sql`.
+Each test refers to a SQL input file in `test/sql/` and an expected output
+JSON AST file.
 
-The expected AST that should be generated from `super-test-2.sql` should
-be located in a JSON file in the following location:
-`test/json/super-test-2.json`.
+For example a `describe()` block with the title `parent block` that contains an
+`it()` block named `super test 2` will look for the SQL input at
+`test/sql/parent-block/super-test-2.sql` and the JSON AST at
+`test/json/parent-block/super-test-2.json`.
 
 There are three options for the test helpers exposed by `tree`:
-- `tree.ok(this, done)` to assert that the test file successfully generates an AST
-- `tree.equals(this, done)` to assert that the test file generates an AST that exactly matches the expected output JSON file
-- `tree.error()` to assert that a test throws an error
-  - `tree.error("This is the error message", this, done)` assert an error `message`
-  - `tree.error({'line': 2}, this, done)` assert an object of properties that each exist in the error
+- Assert that the test file successfully generates _any_ valid AST
+  ``` javascript
+  tree.ok(this, done);
+  ```
 
-Use `grunt rewrite-json` generate new JSON files for each of the specs in
-`test/core/**/*-spec.js` and save them in `test/json/`. Example:
-the AST for `test/sql/parent-block/it-block.sql` will be re-parsed and the
-results will overwrite the existing `json/parent block/it-block.json` file.
+- Assert that the test file generates an AST that exactly matches the expected output JSON file
+  ``` javascript
+  tree.equals(this, done);
+  ```
+
+- `tree.error()` to assert that a test throws an error
+  - Assert a specific error `message` for the thrown error
+    ``` javascript
+    tree.error('My error message.', this, done);
+    ```
+  - Assert an object of properties that all exist in the thrown error object
+    ``` javascript
+    tree.error({
+      message: 'You forgot to add a boop to the beep.',
+      location: {
+        start: { offset: 0, line: 1, column: 1 },
+        end: { offset: 0, line: 1, column: 1 }
+      }
+    }, this, done)
+    ```
 
 ``` javascript
-var tree = require('./helpers');
-
-describe('sqlite-parser', function() {
-  // Test SQL: test/sql/select/basic-select.sql
-  // Expected JSON: test/json/select/basic-select.json
-  it('basic select', function(done) {
+/* All the helper functions in `/test/helpers.js` are already available
+ * and do not need to be explicitly imported.
+ */
+describe('select', function () {
+  /* Test SQL: test/sql/select/basic-select.sql
+   * Expected JSON AST: test/json/select/basic-select.json
+   */
+  it('basic select', function (done) {
     tree.equals(this, done);
   });
+});
 
-  // uses: test/sql/parse-error-1.sql
+describe('parse errors', function (done) {
+  /* Test SQL: test/sql/parse-errors/parse-error-1.sql
+   * Expected JSON AST: test/json/parse-errors/parse-error-1.json
+   */
   it('parse error 1', function(done) {
     tree.error({
-      'message': 'There is a syntax error near FROM Clause [Table Identifier]'
+      'message': 'Syntax error found near Column Identifier (WHERE Clause)'
     }, this, done);
   });
 });
