@@ -1,5 +1,5 @@
 /*!
- * sqlite-parser-demo - v0.14.0
+ * sqlite-parser-demo - v0.14.3
  * @copyright 2015-2016 Code School (http://codeschool.com)
  * @author Nick Wronski <nick@javascript.com>
  */
