@@ -537,7 +537,7 @@ expression_list_rest
   { return e; }
 
 function_call "Function Call"
-  = n:( name_unquoted ) sym_popen a:( function_call_args )? o sym_pclose
+  = n:( name_unquoted ) o sym_popen a:( function_call_args )? o sym_pclose
   {
     return util.extend({
       'type': 'function',
