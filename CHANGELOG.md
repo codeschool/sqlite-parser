@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ## [v0.14.4] - 2016-05-31
 ### Fixed
 - Allow spaces between a function name and the argument list
+
   ``` sql
   SELECT COUNT (*)
   FROM hats;
