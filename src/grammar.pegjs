@@ -2216,16 +2216,17 @@ binary_nodes
   / binary_mod
   / binary_plus
   / binary_minus
+  / binary_notequal_b
   / binary_left
   / binary_right
   / binary_and
   / binary_or
   / binary_lte
-  / binary_lt
   / binary_gte
+  / binary_lt
   / binary_gt
   / binary_lang
-  / binary_notequal
+  / binary_notequal_a
   / binary_equal
 
 binary_concat "Or"
@@ -2273,9 +2274,11 @@ binary_gte "Greater Than Or Equal"
 binary_equal "Equal"
   = sym_equal ( sym_equal )?
 
-binary_notequal "Not Equal"
-  = ( sym_excl sym_equal )
-  / ( sym_lt sym_gt )
+binary_notequal_a "Not Equal"
+  = sym_excl sym_equal
+
+binary_notequal_b "Not Equal"
+  =  sym_lt sym_gt
 
 binary_lang
   = binary_lang_isnt
