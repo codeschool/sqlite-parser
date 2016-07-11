@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+## [v0.14.5] - 2016-07-11
+### Fixed
+- Fix alternate not equal operator `<>`
+
+  ``` sql
+  SELECT *
+  FROM hats
+  WHERE quantity <> 1
+  ```
+
 ## [v0.14.4] - 2016-05-31
 ### Fixed
 - Allow spaces between a function name and the argument list
@@ -551,7 +561,8 @@ part of table names, column names, aliases, etc... This also addresses issues th
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.14.4...HEAD
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.14.5...HEAD
+[v0.14.5]: https://github.com/codeschool/sqlite-parser/compare/v0.14.4...v0.14.5
 [v0.14.4]: https://github.com/codeschool/sqlite-parser/compare/v0.14.3...v0.14.4
 [v0.14.3]: https://github.com/codeschool/sqlite-parser/compare/v0.14.2...v0.14.3
 [v0.14.2]: https://github.com/codeschool/sqlite-parser/compare/v0.14.1...v0.14.2
