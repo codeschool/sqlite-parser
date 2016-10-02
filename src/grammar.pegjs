@@ -33,274 +33,6 @@ stmt_list_tail
   { return s; }
 
 /**
- * Expression definition reworked without left recursion for pegjs
- * {@link https://www.sqlite.org/lang_expr.html}
- */
-expression "Expression"
-  = t:( expression_concat / expression_types ) o
-  { return t; }
-
-expression_types
-  = expression_wrapped / expression_unary / expression_node / expression_value
-
-expression_concat "Logical Expression Group"
-  = l:( expression_types ) o o:( binary_loop_concat ) o r:( expression )
-  {
-    return {
-      'type': 'expression',
-      'format': 'binary',
-      'variant': 'operation',
-      'operation': util.key(o),
-      'left': l,
-      'right': r
-    };
-  }
-
-expression_wrapped "Wrapped Expression"
-  = sym_popen n:( expression ) o sym_pclose
-  { return n; }
-
-expression_value
-  = expression_cast
-  / expression_exists
-  / expression_case
-  / expression_raise
-  / bind_parameter
-  / function_call
-  / literal_value
-  / id_column
-
-expression_unary "Unary Expression"
-  = o:( operator_unary ) e:( expression_types )
-  {
-    return {
-      'type': 'expression',
-      'format': 'unary',
-      'variant': 'operation',
-      'expression': e,
-      'operator': util.key(o)
-    };
-  }
-
-expression_cast "CAST Expression"
-  = s:( CAST ) o sym_popen e:( expression ) o a:( type_alias ) o sym_pclose
-  {
-    return {
-      'type': 'expression',
-      'format': 'unary',
-      'variant': util.key(s),
-      'expression': e,
-      'as': a
-    };
-  }
-
-type_alias "Type Alias"
-  = AS o d:( type_definition )
-  { return d; }
-
-expression_exists "EXISTS Expression"
-  = n:( expression_exists_ne ) o e:( select_wrapped )
-  {
-    return {
-      'type': 'expression',
-      'format': 'unary',
-      'variant': 'exists',
-      'expression': e,
-      'operator': util.key(n)
-    };
-  }
-
-expression_exists_ne "EXISTS Keyword"
-  = n:( expression_is_not )? x:( EXISTS ) o
-  { return util.compose([n, x]); }
-
-expression_case "CASE Expression"
-  = t:( CASE ) o e:( expression )? o w:( expression_case_when )+ o
-    s:( expression_case_else )? o END o
-  {
-    return {
-      'type': 'expression',
-      'format': 'binary',
-      'variant': util.key(t),
-      'expression': e,
-      'condition': util.listify(w, s)
-    };
-  }
-
-expression_case_when "WHEN Clause"
-  = s:( WHEN ) o w:( expression ) o THEN o t:( expression ) o
-  {
-    return {
-      'type': 'condition',
-      'format': util.key(s),
-      'when': w,
-      'then': t
-    };
-  }
-
-expression_case_else "ELSE Clause"
-  = s:( ELSE ) o e:( expression ) o
-  {
-    return {
-      'type': 'condition',
-      'format': util.key(s),
-      'else': e
-    };
-  }
-
-expression_raise "RAISE Expression"
-  = s:( RAISE ) o sym_popen o a:( expression_raise_args ) o sym_pclose
-  {
-    return util.extend({
-      'type': 'expression',
-      'format': 'unary',
-      'variant': util.key(s),
-      'expression': a
-    }, a);
-  }
-
-expression_raise_args "RAISE Expression Arguments"
-  = a:( raise_args_ignore / raise_args_message )
-  {
-    return util.extend({
-      'type': 'error'
-    }, a);
-  }
-
-raise_args_ignore "IGNORE Keyword"
-  = f:( IGNORE )
-  {
-    return {
-      'action': util.key(f)
-    };
-  }
-
-raise_args_message
-  = f:( ROLLBACK / ABORT / FAIL ) o sym_comma o m:( error_message )
-  {
-    return {
-      'action': util.key(f),
-      'message': m
-    };
-  }
-
-/* Expression Nodes */
-expression_node
-  = expression_collate
-  / expression_compare
-  / expression_null
-  / expression_between
-  / expression_in
-  / stmt_select
-  / operation_binary
-
-/** @note Removed expression on left-hand-side to remove recursion */
-expression_collate "COLLATE Expression"
-  = v:( expression_value ) o s:( COLLATE ) o c:( id_collation )
-  {
-    return util.extend(v, {
-      'collate': c
-    });
-  }
-
-/** @note Removed expression on left-hand-side to remove recursion */
-expression_compare "Comparison Expression"
-  = v:( expression_value ) o n:( expression_is_not )?
-    m:( LIKE / GLOB / REGEXP / MATCH ) o e:( expression ) o
-    x:( expression_escape )?
-  {
-    return util.extend({
-      'type': 'expression',
-      'format': 'binary',
-      'variant': 'operation',
-      'operation': util.keyify([n, m]),
-      'left': v,
-      'right': e
-    }, x);
-  }
-
-expression_escape "ESCAPE Expression"
-  = s:( ESCAPE ) o e:( expression )
-  {
-    return {
-      'escape': e
-    };
-  }
-
-/** @note Removed expression on left-hand-side to remove recursion */
-expression_null "NULL Expression"
-  = v:( expression_value ) o n:( expression_null_nodes )
-  {
-    return {
-      'type': 'expression',
-      'format': 'unary',
-      'variant': 'operation',
-      'expression': v,
-      'operation': n
-    };
-  }
-
-expression_null_nodes "NULL Keyword"
-  = i:( "IS"i / expression_is_not_join ) n:( NULL ) o
-  { return util.keyify([i, n]); }
-
-expression_isnt "IS Keyword"
-  = i:( IS ) o n:( expression_is_not )?
-  { return util.keyify([i, n]); }
-
-expression_is_not
-  = n:( NOT ) o
-  { return util.textNode(n); }
-
-expression_is_not_join
-  = t:( "NOT"i ) o
-  { return util.key(t); }
-
-/** @note Removed expression on left-hand-side to remove recursion */
-expression_between "BETWEEN Expression"
-  = v:( expression_value ) o n:( expression_is_not )? b:( BETWEEN ) o e1:( expression_types ) o s:( AND ) o e2:( expression_types )
-  {
-    return {
-      'type': 'expression',
-      'format': 'binary',
-      'variant': 'operation',
-      'operation': util.keyify([n, b]),
-      'left': v,
-      'right': {
-        'type': 'expression',
-        'format': 'binary',
-        'variant': 'operation',
-        'operation': util.key(s),
-        'left': e1,
-        'right': e2
-      }
-    };
-  }
-
-
-/** @note Removed expression on left-hand-side to remove recursion */
-expression_in "IN Expression"
-  = v:( expression_value ) o n:( expression_is_not )? i:( IN ) o e:( expression_in_target )
-  {
-    return {
-      'type': 'expression',
-      'format': 'binary',
-      'variant': 'operation',
-      'operation': util.keyify([n, i]),
-      'left': v,
-      'right': e
-    };
-  }
-
-expression_in_target
-  = expression_list_or_select
-  / id_table
-
-expression_list_or_select
-  = sym_popen e:( stmt_select / expression_list ) o sym_pclose
-  { return e; }
-
-/**
  * Type definitions
  */
  type_definition "Type Definition"
@@ -441,7 +173,7 @@ number_decimal_exponent "Decimal Literal Exponent"
   { return util.textMerge(e, s, d); }
 
 literal_number_hex "Hexidecimal Literal"
-  = f:( "0x"i ) b:( number_hex )*
+  = f:( "0x"i ) b:( number_hex )+
   {
     return {
       'type': 'literal',
@@ -508,19 +240,302 @@ tcl_suffix
     };
   }
 
-/** @note Removed expression on left-hand-side to remove recursion */
-operation_binary "Binary Expression"
-  = v:( expression_value ) o o:( operator_binary ) o e:( expression_types )
+/* START: Unary and Binary Expression
+ * Syntax: v2.0
+ * {@link https://www.sqlite.org/lang_expr.html}
+ */
+
+expression_exists "EXISTS Expression"
+  = n:( expression_exists_ne )? o e:( select_wrapped )
+  {
+    if (util.isOkay(n)) {
+      return {
+        'type': 'expression',
+        'format': 'unary',
+        'variant': 'exists',
+        'expression': e,
+        'operator': util.key(n)
+      };
+    }
+    return e;
+  }
+expression_exists_ne "EXISTS Keyword"
+  = n:( expression_is_not )? x:( EXISTS ) o
+  { return util.compose([n, x]); }
+
+expression_raise "RAISE Expression"
+  = s:( RAISE ) o sym_popen o a:( expression_raise_args ) o sym_pclose
+  {
+    return util.extend({
+      'type': 'expression',
+      'format': 'unary',
+      'variant': util.key(s),
+      'expression': a
+    }, a);
+  }
+
+expression_raise_args "RAISE Expression Arguments"
+  = a:( raise_args_ignore / raise_args_message )
+  {
+    return util.extend({
+      'type': 'error'
+    }, a);
+  }
+
+raise_args_ignore "IGNORE Keyword"
+  = f:( IGNORE )
+  {
+    return {
+      'action': util.key(f)
+    };
+  }
+
+raise_args_message
+  = f:( ROLLBACK / ABORT / FAIL ) o sym_comma o m:( error_message )
+  {
+    return {
+      'action': util.key(f),
+      'message': m
+    };
+  }
+
+o_root
+  = expression_raise
+  / expression_exists
+  / bind_parameter
+  / function_call
+  / literal_value
+  / id_column
+
+o_unary
+  = op:( o_unary_op ) o e:( o_root ) {
+    return {
+      'type': 'expression',
+      'format': 'unary',
+      'variant': 'operation',
+      'expression': e,
+      'operator': util.key(op)
+    };
+  }
+  / o_root
+
+o_unary_op
+  = sym_tilde
+  / sym_minus
+  / sym_plus
+  / expression_is_not
+
+o_concat
+  = f:( o_unary ) rest:( o o_concat_op o o_unary )*
+  { return util.composeBinary(f, rest); }
+o_concat_op
+  = binary_concat
+
+o_multiplication
+  = f:( o_concat ) rest:( o o_multiplication_op o o_concat )*
+  { return util.composeBinary(f, rest); }
+o_multiplication_op
+  = binary_multiply
+  / binary_divide
+  / binary_mod
+
+o_addition
+  = f:( o_multiplication ) rest:( o o_addition_op o o_multiplication )*
+  { return util.composeBinary(f, rest); }
+o_addition_op
+  = binary_plus
+  / binary_minus
+
+o_shift
+  = f:( o_addition ) rest:( o o_shift_op o o_addition )*
+  { return util.composeBinary(f, rest); }
+o_shift_op
+  = binary_left
+  / binary_right
+  / binary_and
+  / $(binary_or !binary_or)
+
+o_comparison
+  = f:( o_shift ) rest:( o o_comparison_op o o_shift )*
+  { return util.composeBinary(f, rest); }
+o_comparison_op
+  = binary_lte
+  / binary_gte
+  / $(binary_lt !o_s_op)
+  / $(binary_gt !o_s_op)
+o_s_op
+  = sym_lt
+  / sym_gt
+  / sym_equal
+
+o_equal
+  = f:( o_comparison ) rest:( o_equal_tails )*
+  { return util.composeBinary(f, rest); }
+o_equal_tails
+  = o i:( o_equal_null_op ) {
+    return [null, i, null, {
+      'type': 'literal',
+      'variant': 'null',
+      'value': 'null'
+    }];
+  }
+  / o o_equal_op o o_comparison
+o_equal_null_op
+  = "NOT "i o "NULL"i { return 'not'; }
+  / ISNULL { return 'is'; }
+  / NOTNULL { return 'not'; }
+o_equal_op
+  = binary_lang
+  / binary_notequal_a
+  / binary_notequal_b
+  / binary_equal
+
+expression_compare "Comparison Expression"
+  = v:( o_equal ) o n:( expression_is_not )?
+    m:( LIKE / GLOB / REGEXP / MATCH ) o e:( expression ) o
+    x:( expression_escape )? {
+    return util.extend({
+      'type': 'expression',
+      'format': 'binary',
+      'variant': 'operation',
+      'operation': util.keyify([n, m]),
+      'left': v,
+      'right': e
+    }, x);
+  }
+  / o_equal
+expression_escape "ESCAPE Expression"
+  = s:( ESCAPE ) o e:( expression )
+  {
+    return {
+      'escape': e
+    };
+  }
+
+expression_between "BETWEEN Expression"
+  = v:( expression_compare ) o n:( expression_is_not )? b:( BETWEEN ) o e1:( expression ) o s:( AND ) o e2:( expression )
   {
     return {
       'type': 'expression',
       'format': 'binary',
       'variant': 'operation',
-      'operation': util.key(o),
+      'operation': util.keyify([n, b]),
+      'left': v,
+      'right': {
+        'type': 'expression',
+        'format': 'binary',
+        'variant': 'operation',
+        'operation': util.key(s),
+        'left': e1,
+        'right': e2
+      }
+    };
+  }
+  / expression_compare
+expression_is_not
+  = n:( NOT ) o
+  { return util.textNode(n); }
+
+expression_in "IN Expression"
+  = v:( expression_between ) o n:( expression_is_not )? i:( IN ) o e:( expression_in_target )
+  {
+    return {
+      'type': 'expression',
+      'format': 'binary',
+      'variant': 'operation',
+      'operation': util.keyify([n, i]),
       'left': v,
       'right': e
     };
   }
+  / expression_between
+expression_in_target
+  = expression_list_or_select
+  / id_table
+expression_list_or_select
+  = sym_popen e:( stmt_select / expression_list ) o sym_pclose
+  { return e; }
+
+expression_cast "CAST Expression"
+  = s:( CAST ) o sym_popen e:( expression ) o a:( type_alias ) o sym_pclose
+  {
+    return {
+      'type': 'expression',
+      'format': 'unary',
+      'variant': util.key(s),
+      'expression': e,
+      'as': a
+    };
+  }
+  / expression_in
+type_alias "Type Alias"
+  = AS o d:( type_definition )
+  { return d; }
+
+expression_case "CASE Expression"
+  = t:( CASE ) o e:( expression )? o w:( expression_case_when )+ o
+    s:( expression_case_else )? o END o
+  {
+    return {
+      'type': 'expression',
+      'format': 'binary',
+      'variant': util.key(t),
+      'expression': e,
+      'condition': util.listify(w, s)
+    };
+  }
+  / expression_cast
+expression_case_when "WHEN Clause"
+  = s:( WHEN ) o w:( expression ) o THEN o t:( expression ) o
+  {
+    return {
+      'type': 'condition',
+      'format': util.key(s),
+      'when': w,
+      'then': t
+    };
+  }
+expression_case_else "ELSE Clause"
+  = s:( ELSE ) o e:( expression ) o
+  {
+    return {
+      'type': 'condition',
+      'format': util.key(s),
+      'else': e
+    };
+  }
+
+o_collate "COLLATE Expression"
+  = v:( expression_case ) o s:( COLLATE ) o c:( id_collation ) {
+    return {
+      'type': 'expression',
+      'format': 'unary',
+      'variant': 'operation',
+      'expression': v,
+      'collate': c,
+      'operator': util.key(s)
+    };
+  }
+  / expression_case
+
+expression_and
+  = f:( o_collate ) rest:( o AND o expression )*
+  { return util.composeBinary(f, rest); }
+  / o_collate
+expression_or
+  = f:( expression_and ) rest:( o OR o expression )*
+  { return util.composeBinary(f, rest); }
+
+expression_wrapped
+  = sym_popen n:( expression ) o sym_pclose {
+    return n;
+  }
+
+expression
+  = expression_wrapped
+  / expression_or
+
+/* END: Unary and Binary Expression */
 
 binary_loop_concat
   = c:( AND / OR ) o
@@ -1455,7 +1470,7 @@ update_columns_tail
   { return c; }
 
 update_column "Column Assignment"
-  = f:( id_column ) o sym_equal e:( expression_types ) o
+  = f:( id_column ) o sym_equal e:( expression ) o
   {
     return {
       'type': 'assignment',
@@ -2195,39 +2210,6 @@ drop_ie "IF EXISTS Keyword"
       'condition': util.keyify([i, e])
     };
   }
-
-/* Unary and Binary Operators */
-
-operator_unary "Unary Operator"
-  = sym_tilde
-  / sym_minus
-  / sym_plus
-  / expression_is_not
-
-operator_binary "Binary Operator"
-  = o:( binary_nodes )
-  { return util.key(o); }
-
-binary_nodes
-  = binary_concat
-  / expression_isnt
-  / binary_multiply
-  / binary_divide
-  / binary_mod
-  / binary_plus
-  / binary_minus
-  / binary_notequal_b
-  / binary_left
-  / binary_right
-  / binary_and
-  / binary_or
-  / binary_lte
-  / binary_gte
-  / binary_lt
-  / binary_gt
-  / binary_lang
-  / binary_notequal_a
-  / binary_equal
 
 binary_concat "Or"
   = sym_pipe sym_pipe

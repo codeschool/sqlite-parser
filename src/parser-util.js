@@ -216,3 +216,18 @@ export function isArrayOkay(arr) {
   }
   return false;
 }
+
+
+export function composeBinary(first, rest) {
+  return rest
+  .reduce((left, [ x, operation, y, right ]) => {
+    return {
+      'type': 'expression',
+      'format': 'binary',
+      'variant': 'operation',
+      'operation': key(operation),
+      'left': left,
+      'right': right
+    };
+  }, first);
+}
