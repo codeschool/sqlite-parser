@@ -42,11 +42,6 @@
           "format": "binary",
           "variant": "operation",
           "operation": "not in",
-          "left": {
-            "type": "identifier",
-            "variant": "column",
-            "name": "name"
-          },
           "right": {
             "type": "statement",
             "variant": "select",
@@ -82,6 +77,11 @@
                 }
               }
             ]
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "name"
           }
         }
       ]

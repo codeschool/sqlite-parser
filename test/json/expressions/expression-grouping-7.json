@@ -33,24 +33,24 @@
           "type": "expression",
           "format": "binary",
           "variant": "operation",
-          "operation": "or",
+          "operation": "and",
           "left": {
-            "type": "expression",
-            "format": "unary",
-            "variant": "operation",
-            "expression": {
-              "type": "identifier",
-              "variant": "column",
-              "name": "happiness"
-            },
-            "operator": "not"
-          },
-          "right": {
             "type": "expression",
             "format": "binary",
             "variant": "operation",
-            "operation": "and",
+            "operation": "or",
             "left": {
+              "type": "expression",
+              "format": "unary",
+              "variant": "operation",
+              "expression": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "happiness"
+              },
+              "operator": "not"
+            },
+            "right": {
               "type": "expression",
               "format": "unary",
               "variant": "operation",
@@ -60,22 +60,22 @@
                 "name": "ANGER"
               },
               "operator": "~"
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "is not",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "anger"
             },
             "right": {
-              "type": "expression",
-              "format": "binary",
-              "variant": "operation",
-              "operation": "is not",
-              "left": {
-                "type": "identifier",
-                "variant": "column",
-                "name": "anger"
-              },
-              "right": {
-                "type": "literal",
-                "variant": "decimal",
-                "value": "0"
-              }
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
             }
           }
         }

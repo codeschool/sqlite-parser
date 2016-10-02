@@ -2,12 +2,11 @@
  * sqlite-parser
  */
 import parser from './lib/parser';
-import {isFunc} from './lib/parser-util';
 import Tracer from './lib/tracer';
 
 export default function sqliteParser(source, callback) {
   const t = Tracer();
-  const isAsync = isFunc(callback);
+  const isAsync = typeof callback === 'function';
   const opts = { 'tracer': t };
   // Async
   if (isAsync) {

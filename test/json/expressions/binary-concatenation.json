@@ -22,29 +22,29 @@
           "type": "expression",
           "format": "binary",
           "variant": "operation",
-          "operation": "and",
+          "operation": "or",
           "left": {
             "type": "expression",
             "format": "binary",
             "variant": "operation",
-            "operation": "!=",
+            "operation": "and",
             "left": {
-              "type": "literal",
-              "variant": "decimal",
-              "value": "1"
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "!=",
+              "left": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "1"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "2"
+              }
             },
             "right": {
-              "type": "literal",
-              "variant": "decimal",
-              "value": "2"
-            }
-          },
-          "right": {
-            "type": "expression",
-            "format": "binary",
-            "variant": "operation",
-            "operation": "or",
-            "left": {
               "type": "expression",
               "format": "binary",
               "variant": "operation",
@@ -59,22 +59,22 @@
                 "variant": "string",
                 "value": "blue"
               }
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "==",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "pees"
             },
             "right": {
-              "type": "expression",
-              "format": "binary",
-              "variant": "operation",
-              "operation": "==",
-              "left": {
-                "type": "identifier",
-                "variant": "column",
-                "name": "pees"
-              },
-              "right": {
-                "type": "identifier",
-                "variant": "column",
-                "name": "crackers"
-              }
+              "type": "identifier",
+              "variant": "column",
+              "name": "crackers"
             }
           }
         }

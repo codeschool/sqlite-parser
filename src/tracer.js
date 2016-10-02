@@ -3,7 +3,26 @@
  * @copyright Code School 2015 {@link http://codeschool.com}
  * @author Nick Wronski <nick@javascript.com>
  */
-import {findLastIndex, takeWhile, findWhere, extend} from './parser-util';
+
+function findLastIndex(arr, func) {
+  for (let i = arr.length - 1; i >= 0; i -= 1) {
+    if (func(arr[i])) {
+     return i;
+    }
+  }
+  return -1;
+}
+
+function takeWhile(arr, func) {
+  const len = arr.length;
+  let i = 0;
+  for (; i < len; i += 1) {
+    if (!func(arr[i])) {
+      return arr.slice(0, i);
+    }
+  }
+  return arr;
+}
 
 export default (function () {
   function Tracer() {
@@ -31,7 +50,9 @@ export default (function () {
         break;
       case 'rule.fail':
         // remove failed leaf
-        lastIndex = findLastIndex(this.events, {rule: event.rule});
+        lastIndex = findLastIndex(this.events, function ({ rule }) {
+          return rule === event.rule;
+        });
         lastWsIndex = findLastIndex(this.events, function (e) {
           return !that.whitespaceRule.test(e.rule);
         });
@@ -80,7 +101,7 @@ export default (function () {
 
     if (chain.length) {
       location = bestNode.location;
-      firstNode = findWhere(chain, function (elem) {
+      firstNode = chain.find(function (elem) {
         return that.firstNodeRule.test(elem.description)  &&
                 elem.description !== bestNode.description &&
                 elem.indentation !== bestNode.indentation;
@@ -96,7 +117,7 @@ export default (function () {
         chainDetail = bestNode.description;
       }
       message = 'Syntax error found near ' + chainDetail;
-      extend(err, {
+      Object.assign(err, {
         'message': message,
         'location': location
       });

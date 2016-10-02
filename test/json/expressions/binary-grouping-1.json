@@ -1,0 +1,173 @@
+{
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": [
+        {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t"
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "*",
+          "left": {
+            "type": "expression",
+            "format": "unary",
+            "variant": "operation",
+            "expression": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            "operator": "-"
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "+",
+            "left": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": [
+        {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t"
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": ">",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "+",
+            "left": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "*",
+              "left": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "4"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "5"
+              }
+            }
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "20"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": [
+        {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t"
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "v1"
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "-",
+            "left": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "*",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "v2"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "5"
+              }
+            },
+            "right": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "v3"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

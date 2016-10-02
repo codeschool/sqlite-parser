@@ -68,4 +68,8 @@ describe('expressions', function() {
     tree.equals(this, done);
   });
 
+  it('binary grouping 1', function(done) {
+    tree.equals(this, done);
+  });
+
 });

@@ -150,7 +150,7 @@ assertEqualsTree = function (that, done) {
   .catch(done);
 };
 
-module.exports = {
+export default {
   'get': getTree,
   'ok': assertOkTree,
   'error': assertErrorTree,

@@ -107,9 +107,8 @@ module.exports = function(grunt) {
     concat: {
       options: {
         stripBanners: true,
-        // This imports the utilities used by the parser
-        banner: "\nimport * as util from './parser-util';\n\nconst ",
         // This exports the compiled parser
+        banner: "\nconst ",
         footer: "\nexport default parser.parse;"
       },
       build: {

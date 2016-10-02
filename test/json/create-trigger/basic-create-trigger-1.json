@@ -66,13 +66,18 @@
         }
       ],
       "variant": "operation",
-      "format": "unary",
-      "expression": {
+      "format": "binary",
+      "operation": "not",
+      "left": {
         "type": "identifier",
         "variant": "column",
         "name": "cust_addr"
       },
-      "operation": "not null"
+      "right": {
+        "type": "literal",
+        "variant": "null",
+        "value": "null"
+      }
     }
   ]
 }
