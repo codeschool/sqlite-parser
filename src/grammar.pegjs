@@ -566,23 +566,19 @@ expression_escape "ESCAPE Expression"
   }
 
 expression_between "BETWEEN Expression"
-  = n:( expression_is_not )? b:( BETWEEN ) o e1:( expression ) o s:( AND ) o e2:( expression )
+  = n:( expression_is_not )? b:( BETWEEN ) o tail:( expression_between_tail )
   {
     return {
       'type': 'expression',
       'format': 'binary',
       'variant': 'operation',
       'operation': foldStringKey([ n, b ]),
-      'right': {
-        'type': 'expression',
-        'format': 'binary',
-        'variant': 'operation',
-        'operation': keyNode(s),
-        'left': e1,
-        'right': e2
-      }
+      'right': tail
     };
   }
+expression_between_tail
+  = f:( expression_postfix ) rest:( o AND o expression_postfix )
+  { return composeBinary(f, [ rest ]); }
 expression_is_not
   = n:( NOT ) o
   { return textNode(n); }

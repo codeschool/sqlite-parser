@@ -72,4 +72,8 @@ describe('expressions', function() {
     tree.equals(this, done);
   });
 
+  it('binary between', function(done) {
+    tree.equals(this, done);
+  });
+
 });
