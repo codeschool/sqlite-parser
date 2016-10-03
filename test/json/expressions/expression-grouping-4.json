@@ -36,14 +36,19 @@
           "operation": "and",
           "left": {
             "type": "expression",
-            "format": "unary",
+            "format": "binary",
             "variant": "operation",
-            "expression": {
+            "operation": "is",
+            "left": {
               "type": "identifier",
               "variant": "column",
               "name": "happiness"
             },
-            "operation": "is null"
+            "right": {
+              "type": "literal",
+              "variant": "null",
+              "value": "null"
+            }
           },
           "right": {
             "type": "expression",

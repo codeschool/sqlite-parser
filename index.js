@@ -1,19 +1,18 @@
 /**
  * sqlite-parser
  */
-import parser from './lib/parser';
-import {isFunc} from './lib/parser-util';
-import Tracer from './lib/tracer';
+import { parse } from './lib/parser';
+import { Tracer } from './lib/tracer';
 
 export default function sqliteParser(source, callback) {
   const t = Tracer();
-  const isAsync = isFunc(callback);
+  const isAsync = typeof callback === 'function';
   const opts = { 'tracer': t };
   // Async
   if (isAsync) {
     setTimeout(function () {
       try {
-        callback(null, parser(source, opts));
+        callback(null, parse(source, opts));
       } catch (e) {
         callback(t.smartError(e));
       }
@@ -22,7 +21,7 @@ export default function sqliteParser(source, callback) {
   }
   // Sync
   try {
-    return parser(source, opts);
+    return parse(source, opts);
   } catch (e) {
     throw t.smartError(e);
   }

@@ -34,16 +34,16 @@
             "variant": "operation",
             "operation": "and",
             "left": {
-              "type": "identifier",
-              "variant": "column",
-              "name": "shirt"
-            },
-            "right": {
               "type": "expression",
               "format": "binary",
               "variant": "operation",
               "operation": "and",
               "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "shirt"
+              },
+              "right": {
                 "type": "expression",
                 "format": "binary",
                 "variant": "operation",
@@ -58,12 +58,12 @@
                   "variant": "column",
                   "name": "wig"
                 }
-              },
-              "right": {
-                "type": "identifier",
-                "variant": "column",
-                "name": "pants"
               }
+            },
+            "right": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "pants"
             }
           }
         }

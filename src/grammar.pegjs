@@ -1,4 +1,83 @@
 /**
+ * sqlite-parser utilities
+ */
+
+{
+  function makeArray(arr) {
+    if (!isOkay(arr)) {
+      return [];
+    }
+    return !Array.isArray(arr) ? [arr] : arr;
+  }
+
+  function isOkay(obj) {
+    return obj != null;
+  }
+
+  function foldString(parts, glue = ' ') {
+    const folded = parts
+    .filter((part) => isOkay(part))
+    .reduce((prev, cur) => {
+      return `${prev}${nodeToString(cur)}${glue}`;
+    }, '');
+    return folded.trim();
+  }
+
+  function foldStringWord(parts) {
+    return foldString(parts, '');
+  }
+
+  function foldStringKey(parts) {
+    return foldString(parts).toLowerCase();
+  }
+
+  function flattenAll(arr) {
+    return arr
+    .filter((part) => isOkay(part))
+    .reduce((prev, cur) => prev.concat(cur), []);
+  }
+
+  function unescape(str, quoteChar = '\'') {
+    const re = new RegExp(`${quoteChar}{2}`, 'g');
+    return nodeToString(str).replace(re, quoteChar);
+  }
+
+  function nodeToString(node = []) {
+    return makeArray(node).join('');
+  }
+
+  /*
+   * A text node has
+   * - no leading or trailing whitespace
+   */
+  function textNode(node) {
+    return nodeToString(node).trim();
+  }
+
+  function keyNode(node) {
+    return textNode(node).toLowerCase();
+  }
+
+  function isArrayOkay(arr) {
+    return Array.isArray(arr) && arr.length > 0 && isOkay(arr[0]);
+  }
+
+  function composeBinary(first, rest) {
+    return rest
+    .reduce((left, [ x, operation, y, right ]) => {
+      return {
+        'type': 'expression',
+        'format': 'binary',
+        'variant': 'operation',
+        'operation': keyNode(operation),
+        'left': left,
+        'right': right
+      };
+    }, first);
+  }
+}
+
+/**
  * sqlite-parser grammar
  */
 
@@ -6,14 +85,14 @@
 start
   = o semi_optional s:( stmt_list )? semi_optional
   {
-    return util.extend({}, s);
+    return Object.assign({}, s);
   }
 
 stmt_list
   = f:( stmt ) o b:( stmt_list_tail )*
   {
     return {
-      'statement': util.listify(f, b)
+      'statement': flattenAll([ f, b ])
     };
   }
 
@@ -33,280 +112,12 @@ stmt_list_tail
   { return s; }
 
 /**
- * Expression definition reworked without left recursion for pegjs
- * {@link https://www.sqlite.org/lang_expr.html}
- */
-expression "Expression"
-  = t:( expression_concat / expression_types ) o
-  { return t; }
-
-expression_types
-  = expression_wrapped / expression_unary / expression_node / expression_value
-
-expression_concat "Logical Expression Group"
-  = l:( expression_types ) o o:( binary_loop_concat ) o r:( expression )
-  {
-    return {
-      'type': 'expression',
-      'format': 'binary',
-      'variant': 'operation',
-      'operation': util.key(o),
-      'left': l,
-      'right': r
-    };
-  }
-
-expression_wrapped "Wrapped Expression"
-  = sym_popen n:( expression ) o sym_pclose
-  { return n; }
-
-expression_value
-  = expression_cast
-  / expression_exists
-  / expression_case
-  / expression_raise
-  / bind_parameter
-  / function_call
-  / literal_value
-  / id_column
-
-expression_unary "Unary Expression"
-  = o:( operator_unary ) e:( expression_types )
-  {
-    return {
-      'type': 'expression',
-      'format': 'unary',
-      'variant': 'operation',
-      'expression': e,
-      'operator': util.key(o)
-    };
-  }
-
-expression_cast "CAST Expression"
-  = s:( CAST ) o sym_popen e:( expression ) o a:( type_alias ) o sym_pclose
-  {
-    return {
-      'type': 'expression',
-      'format': 'unary',
-      'variant': util.key(s),
-      'expression': e,
-      'as': a
-    };
-  }
-
-type_alias "Type Alias"
-  = AS o d:( type_definition )
-  { return d; }
-
-expression_exists "EXISTS Expression"
-  = n:( expression_exists_ne ) o e:( select_wrapped )
-  {
-    return {
-      'type': 'expression',
-      'format': 'unary',
-      'variant': 'exists',
-      'expression': e,
-      'operator': util.key(n)
-    };
-  }
-
-expression_exists_ne "EXISTS Keyword"
-  = n:( expression_is_not )? x:( EXISTS ) o
-  { return util.compose([n, x]); }
-
-expression_case "CASE Expression"
-  = t:( CASE ) o e:( expression )? o w:( expression_case_when )+ o
-    s:( expression_case_else )? o END o
-  {
-    return {
-      'type': 'expression',
-      'format': 'binary',
-      'variant': util.key(t),
-      'expression': e,
-      'condition': util.listify(w, s)
-    };
-  }
-
-expression_case_when "WHEN Clause"
-  = s:( WHEN ) o w:( expression ) o THEN o t:( expression ) o
-  {
-    return {
-      'type': 'condition',
-      'format': util.key(s),
-      'when': w,
-      'then': t
-    };
-  }
-
-expression_case_else "ELSE Clause"
-  = s:( ELSE ) o e:( expression ) o
-  {
-    return {
-      'type': 'condition',
-      'format': util.key(s),
-      'else': e
-    };
-  }
-
-expression_raise "RAISE Expression"
-  = s:( RAISE ) o sym_popen o a:( expression_raise_args ) o sym_pclose
-  {
-    return util.extend({
-      'type': 'expression',
-      'format': 'unary',
-      'variant': util.key(s),
-      'expression': a
-    }, a);
-  }
-
-expression_raise_args "RAISE Expression Arguments"
-  = a:( raise_args_ignore / raise_args_message )
-  {
-    return util.extend({
-      'type': 'error'
-    }, a);
-  }
-
-raise_args_ignore "IGNORE Keyword"
-  = f:( IGNORE )
-  {
-    return {
-      'action': util.key(f)
-    };
-  }
-
-raise_args_message
-  = f:( ROLLBACK / ABORT / FAIL ) o sym_comma o m:( error_message )
-  {
-    return {
-      'action': util.key(f),
-      'message': m
-    };
-  }
-
-/* Expression Nodes */
-expression_node
-  = expression_collate
-  / expression_compare
-  / expression_null
-  / expression_between
-  / expression_in
-  / stmt_select
-  / operation_binary
-
-/** @note Removed expression on left-hand-side to remove recursion */
-expression_collate "COLLATE Expression"
-  = v:( expression_value ) o s:( COLLATE ) o c:( id_collation )
-  {
-    return util.extend(v, {
-      'collate': c
-    });
-  }
-
-/** @note Removed expression on left-hand-side to remove recursion */
-expression_compare "Comparison Expression"
-  = v:( expression_value ) o n:( expression_is_not )?
-    m:( LIKE / GLOB / REGEXP / MATCH ) o e:( expression ) o
-    x:( expression_escape )?
-  {
-    return util.extend({
-      'type': 'expression',
-      'format': 'binary',
-      'variant': 'operation',
-      'operation': util.keyify([n, m]),
-      'left': v,
-      'right': e
-    }, x);
-  }
-
-expression_escape "ESCAPE Expression"
-  = s:( ESCAPE ) o e:( expression )
-  {
-    return {
-      'escape': e
-    };
-  }
-
-/** @note Removed expression on left-hand-side to remove recursion */
-expression_null "NULL Expression"
-  = v:( expression_value ) o n:( expression_null_nodes )
-  {
-    return {
-      'type': 'expression',
-      'format': 'unary',
-      'variant': 'operation',
-      'expression': v,
-      'operation': n
-    };
-  }
-
-expression_null_nodes "NULL Keyword"
-  = i:( "IS"i / expression_is_not_join ) n:( NULL ) o
-  { return util.keyify([i, n]); }
-
-expression_isnt "IS Keyword"
-  = i:( IS ) o n:( expression_is_not )?
-  { return util.keyify([i, n]); }
-
-expression_is_not
-  = n:( NOT ) o
-  { return util.textNode(n); }
-
-expression_is_not_join
-  = t:( "NOT"i ) o
-  { return util.key(t); }
-
-/** @note Removed expression on left-hand-side to remove recursion */
-expression_between "BETWEEN Expression"
-  = v:( expression_value ) o n:( expression_is_not )? b:( BETWEEN ) o e1:( expression_types ) o s:( AND ) o e2:( expression_types )
-  {
-    return {
-      'type': 'expression',
-      'format': 'binary',
-      'variant': 'operation',
-      'operation': util.keyify([n, b]),
-      'left': v,
-      'right': {
-        'type': 'expression',
-        'format': 'binary',
-        'variant': 'operation',
-        'operation': util.key(s),
-        'left': e1,
-        'right': e2
-      }
-    };
-  }
-
-
-/** @note Removed expression on left-hand-side to remove recursion */
-expression_in "IN Expression"
-  = v:( expression_value ) o n:( expression_is_not )? i:( IN ) o e:( expression_in_target )
-  {
-    return {
-      'type': 'expression',
-      'format': 'binary',
-      'variant': 'operation',
-      'operation': util.keyify([n, i]),
-      'left': v,
-      'right': e
-    };
-  }
-
-expression_in_target
-  = expression_list_or_select
-  / id_table
-
-expression_list_or_select
-  = sym_popen e:( stmt_select / expression_list ) o sym_pclose
-  { return e; }
-
-/**
  * Type definitions
  */
- type_definition "Type Definition"
+type_definition "Type Definition"
   = n:( datatype_types ) o a:( type_definition_args )?
   {
-    return util.extend({
+    return Object.assign({
       'type': 'datatype',
       'variant': n[0],
       'affinity': n[1],
@@ -318,7 +129,7 @@ type_definition_args "Type Definition Arguments"
   = sym_popen a1:( literal_number_signed ) o a2:( definition_args_loop )? sym_pclose
   {
     return {
-      'args': util.listify(a1, a2)
+      'args': flattenAll([ a1, a2 ])
     };
   }
 
@@ -343,7 +154,7 @@ literal_null "Null Literal"
     return {
       'type': 'literal',
       'variant': 'null',
-      'value': util.key(n)
+      'value': keyNode(n)
     };
   }
 
@@ -353,7 +164,7 @@ literal_date "Date Literal"
     return {
       'type': 'literal',
       'variant': 'date',
-      'value': util.key(d)
+      'value': keyNode(d)
     };
   }
 
@@ -380,7 +191,7 @@ literal_string_single "Single-quoted String Literal"
       * @note Unescaped the pairs of literal single quotation marks
       * @note Not sure if the BLOB type should be un-escaped
       */
-    return util.unescape(s, "'");
+    return unescape(s, "'");
   }
 
 literal_string_schar
@@ -404,15 +215,15 @@ number_sign "Number Sign"
 literal_number_signed
   = s:( number_sign )? n:( literal_number )
   {
-    if (util.isOkay(s)) {
-      n['value'] = util.textMerge(s, n['value']);
+    if (isOkay(s)) {
+      n['value'] = foldStringWord([ s, n['value'] ]);
     }
     return n;
   }
 
 literal_number
-  = literal_number_decimal
-  / literal_number_hex
+  = literal_number_hex
+  / literal_number_decimal
 
 literal_number_decimal
   = d:( number_decimal_node ) e:( number_decimal_exponent )?
@@ -420,7 +231,7 @@ literal_number_decimal
     return {
       'type': 'literal',
       'variant': 'decimal',
-      'value': util.textMerge(d, e)
+      'value': foldStringWord([ d, e ])
     };
   }
 
@@ -430,23 +241,23 @@ number_decimal_node "Decimal Literal"
 
 number_decimal_full
   = f:( number_digit )+ b:( number_decimal_fraction )?
-  { return util.textMerge(f, b); }
+  { return foldStringWord([ f, b ]); }
 
 number_decimal_fraction
   = t:( sym_dot ) d:( number_digit )+
-  { return util.textMerge(t, d); }
+  { return foldStringWord([ t, d ]); }
 
 number_decimal_exponent "Decimal Literal Exponent"
   = e:( "E"i ) s:( [\+\-] )? d:( number_digit )+
-  { return util.textMerge(e, s, d); }
+  { return foldStringWord([ e, s, d ]); }
 
 literal_number_hex "Hexidecimal Literal"
-  = f:( "0x"i ) b:( number_hex )*
+  = f:( "0x"i ) b:( number_hex )+
   {
     return {
       'type': 'literal',
       'variant': 'hexidecimal',
-      'value': util.textMerge(f, b)
+      'value': foldStringWord([ f, b ])
     };
   }
 
@@ -465,7 +276,7 @@ number_digit
 bind_parameter "Bind Parameter"
   = b:( bind_parameter_numbered / bind_parameter_named / bind_parameter_tcl )
   {
-    return util.extend({
+    return Object.assign({
       'type': 'variable'
     }, b);
   }
@@ -478,7 +289,7 @@ bind_parameter_numbered "Numbered Bind Parameter"
   {
     return {
       'format': 'numbered',
-      'name': util.textMerge(q, id)
+      'name': foldStringWord([ q, id ])
     };
   }
 
@@ -487,16 +298,16 @@ bind_parameter_named "Named Bind Parameter"
   {
     return {
       'format': 'named',
-      'name': util.textMerge(s, name)
+      'name': foldStringWord([ s, name ])
     };
   }
 
 bind_parameter_tcl "TCL Bind Parameter"
   = d:( "$" ) name:( name_char / ":" )+ o s:( tcl_suffix )?
   {
-    return util.extend({
+    return Object.assign({
       'format': 'tcl',
-      'name': util.textMerge(d, name)
+      'name': foldStringWord([ d, name ])
     }, s);
   }
 
@@ -508,28 +319,305 @@ tcl_suffix
     };
   }
 
-/** @note Removed expression on left-hand-side to remove recursion */
-operation_binary "Binary Expression"
-  = v:( expression_value ) o o:( operator_binary ) o e:( expression_types )
+/* START: Unary and Binary Expression
+ * Syntax: v2.0
+ * {@link https://www.sqlite.org/lang_expr.html}
+ */
+
+expression_exists "EXISTS Expression"
+  = n:( expression_exists_ne )? o e:( select_wrapped )
+  {
+    if (isOkay(n)) {
+      return {
+        'type': 'expression',
+        'format': 'unary',
+        'variant': 'exists',
+        'expression': e,
+        'operator': keyNode(n)
+      };
+    }
+    return e;
+  }
+expression_exists_ne "EXISTS Keyword"
+  = n:( expression_is_not )? x:( EXISTS ) o
+  { return foldString([ n, x ]); }
+
+expression_raise "RAISE Expression"
+  = s:( RAISE ) o sym_popen o a:( expression_raise_args ) o sym_pclose
+  {
+    return Object.assign({
+      'type': 'expression',
+      'format': 'unary',
+      'variant': keyNode(s),
+      'expression': a
+    }, a);
+  }
+
+expression_raise_args "RAISE Expression Arguments"
+  = a:( raise_args_ignore / raise_args_message )
+  {
+    return Object.assign({
+      'type': 'error'
+    }, a);
+  }
+
+raise_args_ignore "IGNORE Keyword"
+  = f:( IGNORE )
+  {
+    return {
+      'action': keyNode(f)
+    };
+  }
+
+raise_args_message
+  = f:( ROLLBACK / ABORT / FAIL ) o sym_comma o m:( error_message )
+  {
+    return {
+      'action': keyNode(f),
+      'message': m
+    };
+  }
+
+expression_wrapped
+  = sym_popen n:( expression ) o sym_pclose {
+    return n;
+  }
+
+expression_root
+  = expression_wrapped
+  / expression_cast
+  / expression_case
+  / expression_raise
+  / expression_exists
+  / bind_parameter
+  / function_call
+  / literal_value
+  / id_column
+
+expression_unary
+  = op:( expression_unary_op ) o e:( expression_root ) {
+    return {
+      'type': 'expression',
+      'format': 'unary',
+      'variant': 'operation',
+      'expression': e,
+      'operator': keyNode(op)
+    };
+  }
+  / expression_root
+expression_unary_op
+  = sym_tilde
+  / sym_minus
+  / sym_plus
+  / expression_is_not
+
+expression_concat
+  = f:( expression_unary ) rest:( o expression_concat_op o expression_unary )*
+  { return composeBinary(f, rest); }
+expression_concat_op
+  = binary_concat
+
+expression_multiply
+  = f:( expression_concat ) rest:( o expression_multiply_op o expression_concat )*
+  { return composeBinary(f, rest); }
+expression_multiply_op
+  = binary_multiply
+  / binary_divide
+  / binary_mod
+
+expression_add
+  = f:( expression_multiply ) rest:( o expression_add_op o expression_multiply )*
+  { return composeBinary(f, rest); }
+expression_add_op
+  = binary_plus
+  / binary_minus
+
+expression_shift
+  = f:( expression_add ) rest:( o expression_shift_op o expression_add )*
+  { return composeBinary(f, rest); }
+expression_shift_op
+  = binary_left
+  / binary_right
+  / binary_and
+  / $(binary_or !binary_or)
+
+expression_compare
+  = f:( expression_shift ) rest:( o expression_compare_op o expression_shift )*
+  { return composeBinary(f, rest); }
+expression_compare_op
+  = binary_lte
+  / binary_gte
+  / $(binary_lt !expression_shift_op)
+  / $(binary_gt !expression_shift_op)
+
+expression_equiv
+  = f:( expression_compare ) rest:( expression_equiv_tails )*
+  { return composeBinary(f, rest); }
+expression_equiv_tails
+  = o i:( expression_equiv_null_op ) {
+    return [null, i, null, {
+      'type': 'literal',
+      'variant': 'null',
+      'value': 'null'
+    }];
+  }
+  / o expression_equiv_op o expression_compare
+expression_equiv_null_op
+  = "NOT "i o "NULL"i { return 'not'; }
+  / ISNULL { return 'is'; }
+  / NOTNULL { return 'not'; }
+expression_equiv_op
+  = binary_lang
+  / binary_notequal_a
+  / binary_notequal_b
+  / binary_equal
+
+expression_cast "CAST Expression"
+  = s:( CAST ) o sym_popen e:( expression ) o a:( type_alias ) o sym_pclose
+  {
+    return {
+      'type': 'expression',
+      'format': 'unary',
+      'variant': keyNode(s),
+      'expression': e,
+      'as': a
+    };
+  }
+type_alias "Type Alias"
+  = AS o d:( type_definition )
+  { return d; }
+
+expression_case "CASE Expression"
+  = t:( CASE ) o e:( expression )? o w:( expression_case_when )+ o
+    s:( expression_case_else )? o END o
+  {
+    return {
+      'type': 'expression',
+      'format': 'binary',
+      'variant': keyNode(t),
+      'expression': e,
+      'condition': flattenAll([ w, s ])
+    };
+  }
+expression_case_when "WHEN Clause"
+  = s:( WHEN ) o w:( expression ) o THEN o t:( expression ) o
+  {
+    return {
+      'type': 'condition',
+      'format': keyNode(s),
+      'when': w,
+      'then': t
+    };
+  }
+expression_case_else "ELSE Clause"
+  = s:( ELSE ) o e:( expression ) o
+  {
+    return {
+      'type': 'condition',
+      'format': keyNode(s),
+      'else': e
+    };
+  }
+
+expression_postfix
+  = v:( expression_equiv ) o postfix:( expression_postfix_tail ) {
+    if (postfix['format'] === 'binary') {
+      postfix['left'] = v;
+    } else if (postfix['format'] === 'unary') {
+      postfix['expression'] = v;
+    }
+    return postfix;
+  }
+  / expression_equiv
+expression_postfix_tail
+  = expression_collate
+  / expression_in
+  / expression_between
+  / expression_like
+
+expression_collate "COLLATE Expression"
+  = c:( column_collate ) {
+    return Object.assign({
+      'type': 'expression',
+      'format': 'unary',
+      'variant': 'operation',
+      'operator': 'collate'
+    }, c);
+  }
+
+expression_like "Comparison Expression"
+  = n:( expression_is_not )?
+    m:( LIKE / GLOB / REGEXP / MATCH ) o e:( expression ) o
+    x:( expression_escape )? {
+    return Object.assign({
+      'type': 'expression',
+      'format': 'binary',
+      'variant': 'operation',
+      'operation': foldStringKey([ n, m ]),
+      'right': e
+    }, x);
+  }
+expression_escape "ESCAPE Expression"
+  = s:( ESCAPE ) o e:( expression )
+  {
+    return {
+      'escape': e
+    };
+  }
+
+expression_between "BETWEEN Expression"
+  = n:( expression_is_not )? b:( BETWEEN ) o e1:( expression ) o s:( AND ) o e2:( expression )
   {
     return {
       'type': 'expression',
       'format': 'binary',
       'variant': 'operation',
-      'operation': util.key(o),
-      'left': v,
+      'operation': foldStringKey([ n, b ]),
+      'right': {
+        'type': 'expression',
+        'format': 'binary',
+        'variant': 'operation',
+        'operation': keyNode(s),
+        'left': e1,
+        'right': e2
+      }
+    };
+  }
+expression_is_not
+  = n:( NOT ) o
+  { return textNode(n); }
+
+expression_in "IN Expression"
+  = n:( expression_is_not )? i:( IN ) o e:( expression_in_target )
+  {
+    return {
+      'type': 'expression',
+      'format': 'binary',
+      'variant': 'operation',
+      'operation': foldStringKey([ n, i ]),
       'right': e
     };
   }
+expression_in_target
+  = expression_list_or_select
+  / id_table
+expression_list_or_select
+  = sym_popen e:( stmt_select / expression_list ) o sym_pclose
+  { return e; }
 
-binary_loop_concat
-  = c:( AND / OR ) o
-  { return util.key(c); }
+expression
+  = f:( expression_postfix ) rest:( o expression_and_op o expression_postfix )*
+  { return composeBinary(f, rest); }
+expression_and_op
+  = AND
+  / OR
+
+/* END: Unary and Binary Expression */
 
 expression_list "Expression List"
   = f:( expression ) o rest:( expression_list_rest )*
   {
-    return util.listify(f, rest);
+    return flattenAll([ f, rest ]);
   }
 
 expression_list_rest
@@ -539,7 +627,7 @@ expression_list_rest
 function_call "Function Call"
   = n:( name_unquoted ) o sym_popen a:( function_call_args )? o sym_pclose
   {
-    return util.extend({
+    return Object.assign({
       'type': 'function',
       'name': n,
       'args': []
@@ -547,7 +635,7 @@ function_call "Function Call"
   }
 
 function_call_args "Function Call Arguments"
-  = ( s:( select_star ) ) {
+  = s:( select_star ) {
     return {
       'args': [{
         'type': 'identifier',
@@ -556,8 +644,8 @@ function_call_args "Function Call Arguments"
       }]
     };
   }
-  / ( d:( args_list_distinct )? e:( expression_list ) ) {
-    return util.extend({
+  / d:( args_list_distinct )? e:( expression_list ) {
+    return Object.assign({
       'args': e
     }, d);
   }
@@ -566,7 +654,7 @@ args_list_distinct
   = s:( DISTINCT ) o
   {
     return {
-      'filter': util.key(s)
+      'filter': keyNode(s)
     };
   }
 
@@ -577,20 +665,20 @@ error_message "Error Message"
 stmt "Statement"
   = m:( stmt_modifier )? s:( stmt_nodes ) o
   {
-    return util.extend(s, m);
+    return Object.assign(s, m);
   }
 
 stmt_modifier "QUERY PLAN"
   = e:( EXPLAIN ) o q:( modifier_query )?
   {
     return {
-      'explain': util.isOkay(e)
+      'explain': isOkay(e)
     };
   }
 
 modifier_query "QUERY PLAN Keyword"
   = q:( QUERY ) o p:( PLAN ) o
-  { return util.compose([q, p]); }
+  { return foldString([ q, p ]); }
 
 stmt_nodes
   = stmt_crud
@@ -612,7 +700,7 @@ stmt_nodes
 stmt_transaction "Transaction"
   = b:( stmt_begin ) s:( stmt_list )? e:( stmt_commit )
   {
-    return util.extend({
+    return Object.assign({
       'type': 'statement',
       'variant': 'transaction'
     }, b, s);
@@ -621,13 +709,13 @@ stmt_transaction "Transaction"
 stmt_commit "END Transaction Statement"
   = s:( COMMIT / END ) o t:( commit_transaction )?
   {
-    return util.keyify([s, t]);
+    return foldStringKey([ s, t ]);
   }
 
 stmt_begin "BEGIN Transaction Statement"
   = s:( BEGIN ) o m:( stmt_begin_modifier )? t:( commit_transaction )?
   {
-    return util.extend({}, m);
+    return Object.assign({}, m);
   }
 
 commit_transaction
@@ -638,7 +726,7 @@ stmt_begin_modifier
   = m:( DEFERRED / IMMEDIATE / EXCLUSIVE ) o
   {
     return {
-      'defer': util.key(m)
+      'defer': keyNode(m)
     };
   }
 
@@ -647,7 +735,7 @@ stmt_rollback "ROLLBACK Statement"
   {
     return {
       'type': 'statement',
-      'variant': util.key(s),
+      'variant': keyNode(s),
       'to': n
     };
   }
@@ -658,7 +746,7 @@ rollback_savepoint "TO Clause"
 
 savepoint_alt
   = s:( SAVEPOINT ) o
-  { return util.key(s); }
+  { return keyNode(s); }
 
 stmt_savepoint "SAVEPOINT Statement"
   = s:( savepoint_alt ) n:( id_savepoint ) o
@@ -675,7 +763,7 @@ stmt_release "RELEASE Statement"
   {
     return {
       'type': 'statement',
-      'variant': util.key(s),
+      'variant': keyNode(s),
       'target': n
     };
   }
@@ -685,13 +773,13 @@ stmt_alter "ALTER TABLE Statement"
   {
     return {
       'type': 'statement',
-      'variant': util.key(s)
+      'variant': keyNode(s)
     };
   }
 
 alter_start "ALTER TABLE Keyword"
   = a:( ALTER ) o t:( TABLE ) o
-  { return util.compose([a, t]); }
+  { return foldString([ a, t ]); }
 
 alter_action
   = alter_action_rename
@@ -701,7 +789,7 @@ alter_action_rename "RENAME TO Keyword"
   = s:( RENAME ) o TO o n:( id_table )
   {
     return {
-      'action': util.key(s),
+      'action': keyNode(s),
       'name': n
     };
   }
@@ -710,18 +798,18 @@ alter_action_add "ADD COLUMN Keyword"
   = s:( ADD ) o ( action_add_modifier )? d:( source_def_column )
   {
     return {
-      'action': util.key(s),
+      'action': keyNode(s),
       'definition': d
     };
   }
 
 action_add_modifier
   = s:( COLUMN ) o
-  { return util.key(s); }
+  { return keyNode(s); }
 
 stmt_crud
   = w:( stmt_core_with ) s:( stmt_crud_types )
-  { return util.extend(s, w); }
+  { return Object.assign(s, w); }
 
 stmt_core_with "WITH Clause"
   = w:( clause_with )? o
@@ -733,12 +821,12 @@ clause_with
   = s:( WITH ) o v:( clause_with_recursive )? t:( clause_with_tables )
   {
     var recursive = {
-      'variant': util.isOkay(v) ? 'recursive' : 'common'
+      'variant': isOkay(v) ? 'recursive' : 'common'
     };
-    if (util.isArrayOkay(t)) {
+    if (isArrayOkay(t)) {
       // Add 'recursive' property into each table expression
       t = t.map(function (elem) {
-        return util.extend(elem, recursive);
+        return Object.assign(elem, recursive);
       });
     }
     return {
@@ -748,11 +836,11 @@ clause_with
 
 clause_with_recursive
   = s:( RECURSIVE ) o
-  { return util.key(s); }
+  { return keyNode(s); }
 
 clause_with_tables
   = f:( expression_cte ) o r:( clause_with_loop )*
-  { return util.listify(f, r); }
+  { return flattenAll([ f, r ]); }
 
 clause_with_loop
   = sym_comma e:( expression_cte ) o
@@ -761,7 +849,7 @@ clause_with_loop
 expression_cte "Common Table Expression"
   = t:( id_cte ) s:( select_alias )
   {
-    return util.extend({
+    return Object.assign({
       'type': 'expression',
       'format': 'table',
       'variant': 'common',
@@ -796,7 +884,7 @@ stmt_detach "DETACH Statement"
   {
     return {
       'type': 'statement',
-      'variant': util.key(d),
+      'variant': keyNode(d),
       'target': n
     };
   }
@@ -818,9 +906,9 @@ stmt_vacuum "VACUUM Statement"
 stmt_analyze "ANALYZE Statement"
   = s:( ANALYZE ) o a:( analyze_arg )?
   {
-    return util.extend({
+    return Object.assign({
       'type': 'statement',
-      'variant': util.key(s)
+      'variant': keyNode(s)
     }, a);
   }
 
@@ -840,9 +928,9 @@ analyze_arg
 stmt_reindex "REINDEX Statement"
   = s:( REINDEX ) o a:( reindex_arg )? o
   {
-    return util.extend({
+    return Object.assign({
       'type': 'statement',
-      'variant': util.key(s)
+      'variant': keyNode(s)
     }, a);
   }
 
@@ -859,15 +947,15 @@ stmt_pragma "PRAGMA Statement"
   {
     return {
       'type': 'statement',
-      'variant': util.key(s),
+      'variant': keyNode(s),
       'target': n,
-      'args': (util.isOkay(v) ? util.makeArray(v) : [])
+      'args': (isOkay(v) ? makeArray(v) : [])
     };
   }
 
 pragma_expression
-  = ( sym_equal v:( pragma_value ) o ) { return v; }
-  / ( sym_popen v:( pragma_value ) o sym_pclose ) { return v; }
+  = sym_equal v:( pragma_value ) o { return v; }
+  / sym_popen v:( pragma_value ) o sym_pclose { return v; }
 
 pragma_value
   = pragma_value_bool
@@ -875,8 +963,8 @@ pragma_value
   / pragma_value_name
 
 pragma_value_literal
-  = v:( literal_number_signed / literal_string )
-  { return v; }
+  = literal_number_signed
+  / literal_string
 
 /**
  * @note
@@ -920,7 +1008,7 @@ stmt_crud_types
 stmt_select "SELECT Statement"
   = s:( select_loop ) o o:( stmt_core_order )? o l:( stmt_core_limit )?
   {
-    return util.extend(s, o, l);
+    return Object.assign(s, o, l);
   }
 
 stmt_core_order "ORDER BY Clause"
@@ -935,7 +1023,7 @@ stmt_core_limit "LIMIT Clause"
   = s:( LIMIT ) o e:( expression ) o d:( stmt_core_limit_offset )?
   {
     return {
-      'limit': util.extend({
+      'limit': Object.assign({
         'type': 'expression',
         'variant': 'limit',
         'start': e
@@ -957,12 +1045,12 @@ limit_offset_variant
 
 limit_offset_variant_name
   = s:( OFFSET ) o
-  { return util.key(s); }
+  { return keyNode(s); }
 
 select_loop
   = s:( select_parts ) o u:( select_loop_union )*
   {
-    if (util.isArrayOkay(u)) {
+    if (isArrayOkay(u)) {
       return {
         'type': 'statement',
         'variant': 'compound',
@@ -992,7 +1080,7 @@ select_parts_core
   = s:( select_core_select ) f:( select_core_from )? w:( stmt_core_where )?
     g:( select_core_group )?
   {
-    return util.extend({
+    return Object.assign({
       'type': 'statement',
       'variant': 'select',
     }, s, f, w, g);
@@ -1001,7 +1089,7 @@ select_parts_core
 select_core_select "SELECT Results Clause"
   = SELECT o d:( select_modifier )? o t:( select_target )
   {
-    return util.extend({
+    return Object.assign({
       'result': t
     }, d);
   }
@@ -1026,14 +1114,14 @@ select_modifier_all
 
 select_target
   = f:( select_node ) o r:( select_target_loop )*
-  { return util.listify(f, r); }
+  { return flattenAll([ f, r ]); }
 
 select_target_loop
   = sym_comma n:( select_node ) o
   { return n; }
 
 select_core_from "FROM Clause"
-  = s:( FROM ) o s:( select_source ) o
+  = f:( FROM ) o s:( select_source ) o
   {
     return {
       'from': s
@@ -1041,23 +1129,23 @@ select_core_from "FROM Clause"
   }
 
 stmt_core_where "WHERE Clause"
-  = s:( WHERE ) o e:( expression ) o
+  = f:( WHERE ) o e:( expression ) o
   {
     return {
-      'where': util.makeArray(e)
+      'where': makeArray(e)
     };
   }
 
 select_core_group "GROUP BY Clause"
-  = s:( GROUP ) o BY o e:( expression_list ) o h:( select_core_having )?
+  = f:( GROUP ) o BY o e:( expression_list ) o h:( select_core_having )?
   {
-    return util.extend({
-      'group': util.makeArray(e)
+    return Object.assign({
+      'group': makeArray(e)
     }, h);
   }
 
 select_core_having "HAVING Clause"
-  = s:( HAVING ) o e:( expression ) o
+  = f:( HAVING ) o e:( expression ) o
   {
     return {
       'having': e
@@ -1074,18 +1162,18 @@ select_node_star
     return {
       'type': 'identifier',
       'variant': 'star',
-      'name': util.textMerge(q, s)
+      'name': foldStringWord([ q, s ])
     };
   }
 
 select_node_star_qualified
   = n:( name ) s:( sym_dot )
-  { return util.textMerge(n, s); }
+  { return foldStringWord([ n, s ]); }
 
 select_node_aliased
   = e:( expression ) o a:( alias )?
   {
-    return util.extend(e, a);
+    return Object.assign(e, a);
   }
 
 select_source
@@ -1094,7 +1182,7 @@ select_source
 
 select_source_loop
   = f:( table_or_sub ) o t:( source_loop_tail )*
-  { return util.listify(f, t); }
+  { return flattenAll([ f, t ]); }
 
 source_loop_tail
   = sym_comma t:( table_or_sub ) o
@@ -1108,13 +1196,13 @@ table_or_sub
 table_qualified "Qualified Table"
   = d:( table_qualified_id ) o i:( table_or_sub_index_node )?
   {
-    return util.extend(d, i);
+    return Object.assign(d, i);
   }
 
 table_qualified_id "Qualified Table Identifier"
   = n:( id_table ) o a:( alias )?
   {
-    return util.extend(n, a);
+    return Object.assign(n, a);
   }
 
 
@@ -1135,7 +1223,7 @@ index_node_none
   {
     // TODO: Not sure what should happen here
     return {
-      'index': util.keyify([n, i])
+      'index': foldStringKey([ n, i ])
     };
   }
 
@@ -1146,7 +1234,7 @@ table_or_sub_sub "SELECT Source"
 table_or_sub_select "Subquery"
   = s:( select_wrapped ) a:( alias )?
   {
-    return util.extend(s, a);
+    return Object.assign(s, a);
   }
 
 alias "Alias"
@@ -1173,7 +1261,7 @@ select_join_clause "JOIN Operation"
   {
     return {
       'type': 'join',
-      'variant': util.key(o),
+      'variant': keyNode(o),
       'source': n,
       'constraint': c
     };
@@ -1181,11 +1269,11 @@ select_join_clause "JOIN Operation"
 
 join_operator "JOIN Operator"
   = n:( join_operator_natural )? o t:( join_operator_types )? j:( JOIN )
-  { return util.compose([n, t, j]); }
+  { return foldString([ n, t, j ]); }
 
 join_operator_natural
   = n:( NATURAL ) o
-  { return util.textNode(n); }
+  { return textNode(n); }
 
 join_operator_types
   = operator_types_hand
@@ -1198,20 +1286,20 @@ join_operator_types
  */
 operator_types_hand
   = t:( LEFT / RIGHT / FULL ) o o:( types_hand_outer )?
-  { return util.compose([t, o]); }
+  { return foldString([ t, o ]); }
 
 types_hand_outer
   = t:( OUTER ) o
-  { return util.textNode(t); }
+  { return textNode(t); }
 
 operator_types_misc
   = t:( INNER / CROSS ) o
-  { return util.textNode(t); }
+  { return textNode(t); }
 
 join_condition "JOIN Constraint"
   = c:( join_condition_on / join_condition_using )
   {
-    return util.extend({
+    return Object.assign({
       'type': 'constraint',
       'variant': 'join'
     }, c);
@@ -1221,7 +1309,7 @@ join_condition_on "Join ON Clause"
   = s:( ON ) o e:( expression )
   {
     return {
-      'format': util.key(s),
+      'format': keyNode(s),
       'on': e
     };
   }
@@ -1230,7 +1318,7 @@ join_condition_using "Join USING Clause"
   = s:( USING ) o e:( loop_columns )
   {
     return {
-      'format': util.key(s),
+      'format': keyNode(s),
       'using': e
     };
   }
@@ -1239,17 +1327,18 @@ join_condition_using "Join USING Clause"
 select_parts_values "VALUES Clause"
   = s:( VALUES ) o l:( insert_values_list )
   {
-    return util.extend({
+    return {
       'type': 'statement',
-      'variant': 'select'
-    }, l);
+      'variant': 'select',
+      'result': l
+    };
   }
 
 stmt_core_order_list
   = f:( stmt_core_order_list_item ) o b:( stmt_core_order_list_loop )*
   {
     return {
-      'result': util.listify(f, b)
+      'result': flattenAll([ f, b ])
     };
   }
 
@@ -1260,7 +1349,7 @@ stmt_core_order_list_loop
 stmt_core_order_list_item "Ordering Expression"
   = e:( expression ) o c:( column_collate )? o d:( primary_column_dir )?
   {
-    return util.extend({
+    return Object.assign({
       'type': 'expression',
       'variant': 'order',
       'expression': e
@@ -1278,7 +1367,7 @@ stmt_fallback_types "Fallback Type"
 stmt_insert "INSERT Statement"
   = k:( insert_keyword ) o t:( insert_target )
   {
-    return util.extend({
+    return Object.assign({
       'type': 'statement',
       'variant': 'insert'
     }, k, t);
@@ -1291,8 +1380,8 @@ insert_keyword
 insert_keyword_ins "INSERT Keyword"
   = a:( INSERT ) o m:( insert_keyword_mod )?
   {
-    return util.extend({
-      'action': util.key(a)
+    return Object.assign({
+      'action': keyNode(a)
     }, m);
   }
 
@@ -1300,7 +1389,7 @@ insert_keyword_repl "REPLACE Keyword"
   = a:( REPLACE ) o
   {
     return {
-      'action': util.key(a)
+      'action': keyNode(a)
     };
   }
 
@@ -1308,14 +1397,14 @@ insert_keyword_mod "INSERT OR Modifier"
   = s:( OR ) o m:( stmt_fallback_types )
   {
     return {
-      'or': util.key(m)
+      'or': keyNode(m)
     };
   }
 
 insert_target
   = i:( insert_into ) r:( insert_results )
   {
-    return util.extend({
+    return Object.assign({
       'into': i
     }, r);
   }
@@ -1341,7 +1430,7 @@ loop_columns "Column List"
   = sym_popen f:( loop_name ) o b:( loop_column_tail )* sym_pclose
   {
     return {
-      'columns': util.listify(f, b)
+      'columns': flattenAll([ f, b ])
     };
   }
 
@@ -1365,11 +1454,11 @@ insert_value "VALUES Clause"
 
 insert_value_start "VALUES Keyword"
   = s:( VALUES ) o
-  { return util.key(s); }
+  { return keyNode(s); }
 
 insert_values_list
   = f:( insert_values ) o b:( insert_values_loop )*
-  { return util.listify(f, b); }
+  { return flattenAll([ f, b ]); }
 
 insert_values_loop
   = sym_comma e:( insert_values ) o
@@ -1401,11 +1490,11 @@ insert_default "DEFAULT VALUES Clause"
 
 operator_compound "Compound Operator"
   = s:( compound_union / INTERSECT / EXCEPT )
-  { return util.key(s); }
+  { return keyNode(s); }
 
 compound_union "UNION Operator"
   = s:( UNION ) o a:( compound_union_all )?
-  { return util.compose([s, a]); }
+  { return foldString([ s, a ]); }
 
 compound_union_all
   = a:( ALL ) o
@@ -1419,7 +1508,7 @@ stmt_update "UPDATE Statement"
     t:( table_qualified ) o u:( update_set ) w:( stmt_core_where )?
     o:( stmt_core_order )? o l:( stmt_core_limit )?
   {
-    return util.extend({
+    return Object.assign({
       'type': 'statement',
       'variant': s,
       'into': t
@@ -1428,13 +1517,13 @@ stmt_update "UPDATE Statement"
 
 update_start "UPDATE Keyword"
   = s:( UPDATE ) o
-  { return util.key(s); }
+  { return keyNode(s); }
 
 update_fallback "UPDATE OR Modifier"
   = OR o t:( stmt_fallback_types ) o
   {
     return {
-      'or': util.key(t)
+      'or': keyNode(t)
     };
   }
 
@@ -1448,14 +1537,14 @@ update_set "SET Clause"
 
 update_columns
   = f:( update_column ) b:( update_columns_tail )*
-  { return util.listify(f, b); }
+  { return flattenAll([ f, b ]); }
 
 update_columns_tail
   = o sym_comma c:( update_column )
   { return c; }
 
 update_column "Column Assignment"
-  = f:( id_column ) o sym_equal e:( expression_types ) o
+  = f:( id_column ) o sym_equal e:( expression ) o
   {
     return {
       'type': 'assignment',
@@ -1473,7 +1562,7 @@ stmt_delete "DELETE Statement"
   = s:( delete_start ) t:( table_qualified ) o w:( stmt_core_where )?
     o:( stmt_core_order )? l:( stmt_core_limit )?
   {
-    return util.extend({
+    return Object.assign({
       'type': 'statement',
       'variant': s,
       'from': t
@@ -1482,7 +1571,7 @@ stmt_delete "DELETE Statement"
 
 delete_start "DELETE Keyword"
   = s:( DELETE ) o FROM o
-  { return util.key(s); }
+  { return keyNode(s); }
 
 /**
  * @note
@@ -1498,7 +1587,7 @@ stmt_create "CREATE Statement"
 
 create_start
   = s:( CREATE ) o
-  { return util.key(s); }
+  { return keyNode(s); }
 
 create_table_only
   = !( create_start ( INDEX / TRIGGER / VIEW / VIRTUAL ) ) c:( create_table )
@@ -1524,7 +1613,7 @@ create_table "CREATE TABLE Statement"
   = s:( create_table_start ) ne:( create_core_ine )? id:( id_table ) o
     r:( create_table_source )
   {
-    return util.extend({
+    return Object.assign({
       'type': 'statement',
       'name': id
     }, s, r, ne);
@@ -1533,9 +1622,9 @@ create_table "CREATE TABLE Statement"
 create_table_start
   = s:( create_start ) tmp:( create_core_tmp )? t:( TABLE ) o
   {
-    return util.extend({
+    return Object.assign({
       'variant': s,
-      'format': util.key(t)
+      'format': keyNode(t)
     }, tmp);
   }
 
@@ -1543,7 +1632,7 @@ create_core_tmp
   = t:( TEMPORARY / TEMP ) o
   {
     return {
-      'temporary': util.isOkay(t)
+      'temporary': isOkay(t)
     };
   }
 
@@ -1551,9 +1640,9 @@ create_core_ine "IF NOT EXISTS Modifier"
   = i:( IF ) o n:( expression_is_not ) e:( EXISTS ) o
   {
     return {
-      'condition': util.makeArray({
+      'condition': makeArray({
         'type': 'condition',
-        'condition': util.keyify([i, n, e])
+        'condition': foldStringKey([ i, n, e ])
       })
     };
   }
@@ -1565,8 +1654,8 @@ create_table_source
 table_source_def "Table Definition"
   = sym_popen s:( source_def_loop ) t:( source_tbl_loop )* sym_pclose r:( source_def_rowid )?
   {
-    return util.extend({
-      'definition': util.listify(s, t)
+    return Object.assign({
+      'definition': flattenAll([ s, t ])
     }, r);
   }
 
@@ -1576,14 +1665,14 @@ source_def_rowid
     return {
       'optimization': [{
         'type': 'optimization',
-        'value': util.keyify([r, w])
+        'value': foldStringKey([ r, w ])
       }]
     };
   }
 
 source_def_loop
   = f:( source_def_column ) o b:( source_def_tail )*
-  { return util.listify(f, b); }
+  { return flattenAll([ f, b ]); }
 
 source_def_tail
   = sym_comma t:( source_def_column ) o
@@ -1597,11 +1686,11 @@ source_tbl_loop
 source_def_column "Column Definition"
   = n:( name ) ( !( name_char ) o ) t:( column_type )? o c:( column_constraints )?
   {
-    return util.extend({
+    return Object.assign({
       'type': 'definition',
       'variant': 'column',
       'name': n,
-      'definition': (util.isOkay(c) ? c : []),
+      'definition': (isOkay(c) ? c : []),
     }, t);
   }
 
@@ -1615,7 +1704,7 @@ column_type "Column Datatype"
 
 column_constraints
   = f:( column_constraint ) b:( column_constraint_tail )* o
-  { return util.listify(f, b); }
+  { return flattenAll([ f, b ]); }
 
 column_constraint_tail
   = o c:( column_constraint )
@@ -1625,7 +1714,7 @@ column_constraint_tail
 column_constraint "Column Constraint"
   = n:( column_constraint_name )? c:( column_constraint_types )
   {
-    return util.extend(c, n);
+    return Object.assign(c, n);
   }
 
 column_constraint_name "Column Constraint Name"
@@ -1647,7 +1736,7 @@ column_constraint_types
 column_constraint_foreign "FOREIGN KEY Column Constraint"
   = f:( foreign_clause )
   {
-    return util.extend({
+    return Object.assign({
       'variant': 'foreign key'
     }, f);
   }
@@ -1656,7 +1745,7 @@ column_constraint_primary "PRIMARY KEY Column Constraint"
   = p:( col_primary_start ) d:( primary_column_dir )? c:( primary_conflict )?
     a:( col_primary_auto )?
   {
-    return util.extend(p, c, d, a);
+    return Object.assign(p, c, d, a);
   }
 
 col_primary_start "PRIMARY KEY Keyword"
@@ -1664,7 +1753,7 @@ col_primary_start "PRIMARY KEY Keyword"
   {
     return {
       'type': 'constraint',
-      'variant': util.keyify([s, k])
+      'variant': foldStringKey([ s, k ])
     };
   }
 
@@ -1679,7 +1768,7 @@ col_primary_auto "AUTOINCREMENT Keyword"
 column_constraint_null
   = s:( constraint_null_types ) c:( primary_conflict )? o
   {
-    return util.extend({
+    return Object.assign({
       'type': 'constraint',
       'variant': s
     }, c);
@@ -1687,11 +1776,11 @@ column_constraint_null
 
 constraint_null_types "UNIQUE Column Constraint"
   = t:( constraint_null_value / UNIQUE )
-  { return util.key(t); }
+  { return keyNode(t); }
 
 constraint_null_value "NULL Column Constraint"
   = n:( expression_is_not )? l:( NULL )
-  { return util.compose([n, l]); }
+  { return foldString([ n, l ]); }
 
 column_constraint_check "CHECK Column Constraint"
   = constraint_check
@@ -1701,7 +1790,7 @@ column_constraint_default "DEFAULT Column Constraint"
   {
     return {
       'type': 'constraint',
-      'variant': util.key(s),
+      'variant': keyNode(s),
       'value': v
     };
   }
@@ -1720,7 +1809,7 @@ column_constraint_collate "COLLATE Column Constraint"
 table_constraint "Table Constraint"
   = n:( table_constraint_name )? o c:( table_constraint_types ) o
   {
-    return util.extend({
+    return Object.assign({
       'type': 'definition',
       'variant': 'constraint'
     }, c, n);
@@ -1743,7 +1832,7 @@ table_constraint_check "CHECK Table Constraint"
   = c:( constraint_check )
   {
     return {
-      'definition': util.makeArray(c)
+      'definition': makeArray(c)
     };
   }
 
@@ -1751,7 +1840,7 @@ table_constraint_primary "PRIMARY KEY Table Constraint"
   = k:( primary_start ) o c:( primary_columns ) t:( primary_conflict )?
   {
     return {
-      'definition': util.makeArray(util.extend(k, t)),
+      'definition': makeArray(Object.assign(k, t)),
       'columns': c
     };
   }
@@ -1761,26 +1850,26 @@ primary_start
   {
     return {
       'type': 'constraint',
-      'variant': util.key(s)
+      'variant': keyNode(s)
     };
   }
 
 primary_start_normal "PRIMARY KEY Keyword"
   = p:( PRIMARY ) o k:( KEY )
-  { return util.compose([p, k]); }
+  { return foldString([ p, k ]); }
 
 primary_start_unique "UNIQUE Keyword"
   = u:( UNIQUE )
-  { return util.textNode(u); }
+  { return textNode(u); }
 
 primary_columns "PRIMARY KEY Columns"
   = sym_popen f:( primary_column ) o b:( primary_column_tail )* sym_pclose
-  { return util.listify(f, b); }
+  { return flattenAll([ f, b ]); }
 
 primary_column "Indexed Column"
   = e:( name ) o c:( column_collate )? d:( primary_column_dir )?
   {
-    return util.extend({
+    return Object.assign({
       'type': 'identifier',
       'variant': 'column',
       'format': 'indexed',
@@ -1788,7 +1877,7 @@ primary_column "Indexed Column"
     }, c, d);
   }
 
-column_collate "Column Collation"
+column_collate "Collation"
   = COLLATE o n:( id_collation ) o
   {
     return {
@@ -1800,7 +1889,7 @@ primary_column_dir "Column Direction"
   = t:( ASC / DESC ) o
   {
     return {
-      'direction': util.key(t),
+      'direction': keyNode(t),
     };
   }
 
@@ -1812,20 +1901,20 @@ primary_conflict
   = s:( primary_conflict_start ) o t:( stmt_fallback_types ) o
   {
     return {
-      'conflict': util.key(t)
+      'conflict': keyNode(t)
     };
   }
 
 primary_conflict_start "ON CONFLICT Keyword"
   = o:( ON ) o c:( CONFLICT )
-  { return util.keyify([o, c]); }
+  { return foldStringKey([ o, c ]); }
 
 constraint_check
   = k:( CHECK ) o c:( expression_wrapped )
   {
     return {
       'type': 'constraint',
-      'variant': util.key(k),
+      'variant': keyNode(k),
       'expression': c
     };
   }
@@ -1833,8 +1922,8 @@ constraint_check
 table_constraint_foreign "FOREIGN KEY Table Constraint"
   = k:( foreign_start ) l:( loop_columns ) c:( foreign_clause ) o
   {
-    return util.extend({
-      'definition': util.makeArray(util.extend(k, c))
+    return Object.assign({
+      'definition': makeArray(Object.assign(k, c))
     }, l);
   }
 
@@ -1843,7 +1932,7 @@ foreign_start "FOREIGN KEY Keyword"
   {
     return {
       'type': 'constraint',
-      'variant': util.keyify([f, k])
+      'variant': foldStringKey([ f, k ])
     };
   }
 
@@ -1851,7 +1940,7 @@ foreign_start "FOREIGN KEY Keyword"
 foreign_clause
   = r:( foreign_references ) a:( foreign_actions )? d:( foreign_deferrable )?
   {
-    return util.extend({
+    return Object.assign({
       'type': 'constraint',
       'action': a,
       'defer': d
@@ -1870,7 +1959,7 @@ foreign_references "REFERENCES Clause"
 
 foreign_actions
   = f:( foreign_action ) o b:( foreign_actions_tail )*
-  { return util.collect([f, b], []); }
+  { return collect([f, b], []); }
 
 foreign_actions_tail
   = a:( foreign_action ) o
@@ -1885,8 +1974,8 @@ foreign_action_on
   {
     return {
       'type': 'action',
-      'variant': util.key(m),
-      'action': util.key(n)
+      'variant': keyNode(m),
+      'action': keyNode(n)
     };
   }
 
@@ -1897,15 +1986,15 @@ action_on_action "FOREIGN KEY Action"
 
 on_action_set
   = s:( SET ) o v:( NULL / DEFAULT )
-  { return util.compose([s, v]); }
+  { return foldString([ s, v ]); }
 
 on_action_cascade
   = c:( CASCADE / RESTRICT )
-  { return util.textNode(c); }
+  { return textNode(c); }
 
 on_action_none
   = n:( NO ) o a:( ACTION )
-  { return util.compose([n, a]); }
+  { return foldString([ n, a ]); }
 
 /**
  * @note Not sure what kind of name this should be.
@@ -1915,24 +2004,24 @@ foreign_action_match
   {
     return {
       'type': 'action',
-      'variant': util.key(m),
+      'variant': keyNode(m),
       'action': n
     };
   }
 
 foreign_deferrable "DEFERRABLE Clause"
   = n:( expression_is_not )? d:( DEFERRABLE ) o i:( deferrable_initially )?
-  { return util.keyify([n, d, i]); }
+  { return foldStringKey([ n, d, i ]); }
 
 deferrable_initially
   = i:( INITIALLY ) o d:( DEFERRED / IMMEDIATE ) o
-  { return util.compose([i, d]); }
+  { return foldString([ i, d ]); }
 
 table_source_select
   = s:( create_as_select )
   {
     return {
-      'definition': util.makeArray(s)
+      'definition': makeArray(s)
     };
   }
 
@@ -1940,7 +2029,7 @@ create_index "CREATE INDEX Statement"
   = s:( create_index_start ) ne:( create_core_ine )? n:( id_index ) o
     o:( index_on ) w:( stmt_core_where )?
   {
-    return util.extend({
+    return Object.assign({
       'type': 'statement',
       'target': n,
       'on': o,
@@ -1950,9 +2039,9 @@ create_index "CREATE INDEX Statement"
 create_index_start
   = s:( create_start ) u:( index_unique )? i:( INDEX ) o
   {
-    return util.extend({
-      'variant': util.key(s),
-      'format': util.key(i)
+    return Object.assign({
+      'variant': keyNode(s),
+      'format': keyNode(i)
     }, u);
   }
 
@@ -1984,29 +2073,29 @@ create_trigger "CREATE TRIGGER Statement"
     cd:( trigger_conditions ) ( ON ) o o:( name ) o
     me:( trigger_foreach )? wh:( trigger_when )? a:( trigger_action )
   {
-    return util.extend({
+    return Object.assign({
       'type': 'statement',
       'target': n,
       'on': o,
       'event': cd,
-      'by': (util.isOkay(me) ? me : 'row'),
-      'action': util.makeArray(a)
+      'by': (isOkay(me) ? me : 'row'),
+      'action': makeArray(a)
     }, s, ne, wh);
   }
 
 create_trigger_start
   = s:( create_start ) tmp:( create_core_tmp )? t:( TRIGGER ) o
   {
-    return util.extend({
-      'variant': util.key(s),
-      'format': util.key(t)
+    return Object.assign({
+      'variant': keyNode(s),
+      'format': keyNode(t)
     }, tmp);
   }
 
 trigger_conditions "Conditional Clause"
   = m:( trigger_apply_mods )? d:( trigger_do )
   {
-    return util.extend({
+    return Object.assign({
       'type': 'event'
     }, m, d);
   }
@@ -2015,13 +2104,13 @@ trigger_apply_mods
   = m:( BEFORE / AFTER / trigger_apply_instead ) o
   {
     return {
-      'occurs': util.key(m)
+      'occurs': keyNode(m)
     };
   }
 
 trigger_apply_instead
   = i:( INSTEAD ) o o:( OF )
-  { return util.compose([i, o]); }
+  { return foldString([ i, o ]); }
 
 trigger_do "Conditional Action"
   = trigger_do_on
@@ -2031,7 +2120,7 @@ trigger_do_on
   = o:( DELETE / INSERT ) o
   {
     return {
-      'event': util.key(o)
+      'event': keyNode(o)
     };
   }
 
@@ -2039,7 +2128,7 @@ trigger_do_update
   = s:( UPDATE ) o f:( do_update_of )?
   {
     return {
-      'event': util.key(s),
+      'event': keyNode(s),
       'of': f
     };
   }
@@ -2050,7 +2139,7 @@ do_update_of
 
 do_update_columns
   = f:( loop_name ) o b:( loop_column_tail )*
-  { return util.listify(f, b); }
+  { return flattenAll([ f, b ]); }
 
 /**
  *  @note
@@ -2059,7 +2148,7 @@ do_update_columns
  */
 trigger_foreach
   = f:( FOR ) o e:( EACH ) o r:( ROW / "STATEMENT"i ) o
-  { return util.key(r); }
+  { return keyNode(r); }
 
 trigger_when "WHEN Clause"
   = w:( WHEN ) o e:( expression ) o
@@ -2081,7 +2170,7 @@ create_view "CREATE VIEW Statement"
   = s:( create_view_start ) ne:( create_core_ine )? n:( id_view ) o
     r:( create_as_select )
   {
-    return util.extend({
+    return Object.assign({
       'type': 'statement',
       'target': n,
       'result': r
@@ -2091,9 +2180,9 @@ create_view "CREATE VIEW Statement"
 create_view_start
   = s:( create_start ) tmp:( create_core_tmp )? v:( VIEW ) o
   {
-    return util.extend({
-      'variant': util.key(s),
-      'format': util.key(v)
+    return Object.assign({
+      'variant': keyNode(s),
+      'format': keyNode(v)
     }, tmp);
   }
 
@@ -2105,7 +2194,7 @@ create_virtual "CREATE VIRTUAL TABLE Statement"
   = s:( create_virtual_start ) ne:( create_core_ine )? n:( id_table ) o
     ( USING ) o m:( virtual_module )
   {
-    return util.extend({
+    return Object.assign({
       'type': 'statement',
       'target': n,
       'result': m
@@ -2116,15 +2205,15 @@ create_virtual_start
   = s:( create_start ) v:( VIRTUAL ) o t:( TABLE ) o
   {
     return {
-      'variant': util.key(s),
-      'format': util.key(v)
+      'variant': keyNode(s),
+      'format': keyNode(v)
     };
   }
 
 virtual_module
   = m:( name_unquoted ) o a:( virtual_args )?
   {
-    return util.extend({
+    return Object.assign({
       'type': 'module',
       'name': m,
       'args': []
@@ -2157,9 +2246,9 @@ stmt_drop "DROP Statement"
     /**
      * @note Manually copy in the correct variant for the target
      */
-    return util.extend({
+    return Object.assign({
       'type': 'statement',
-      'target': util.extend(q, {
+      'target': Object.assign(q, {
                   'variant': s['format']
                 })
     }, s);
@@ -2168,8 +2257,8 @@ stmt_drop "DROP Statement"
 drop_start "DROP Keyword"
   = s:( DROP ) o t:( drop_types ) i:( drop_conditions )?
   {
-     return util.extend({
-       'variant': util.key(s),
+     return Object.assign({
+       'variant': keyNode(s),
        'format': t,
        'condition': []
      }, i);
@@ -2177,13 +2266,13 @@ drop_start "DROP Keyword"
 
 drop_types "DROP Type"
   = t:( TABLE / INDEX / TRIGGER / VIEW ) o
-  { return util.key(t); }
+  { return keyNode(t); }
 
 drop_conditions
   = c:( drop_ie )
   {
     return {
-      'condition': util.makeArray(c)
+      'condition': makeArray(c)
     };
   }
 
@@ -2192,41 +2281,9 @@ drop_ie "IF EXISTS Keyword"
   {
     return {
       'type': 'condition',
-      'condition': util.keyify([i, e])
+      'condition': foldStringKey([ i, e ])
     };
   }
-
-/* Unary and Binary Operators */
-
-operator_unary "Unary Operator"
-  = sym_tilde
-  / sym_minus
-  / sym_plus
-  / expression_is_not
-
-operator_binary "Binary Operator"
-  = o:( binary_nodes )
-  { return util.key(o); }
-
-binary_nodes
-  = binary_concat
-  / expression_isnt
-  / binary_multiply
-  / binary_divide
-  / binary_mod
-  / binary_plus
-  / binary_minus
-  / binary_left
-  / binary_right
-  / binary_and
-  / binary_or
-  / binary_lte
-  / binary_lt
-  / binary_gte
-  / binary_gt
-  / binary_lang
-  / binary_notequal
-  / binary_equal
 
 binary_concat "Or"
   = sym_pipe sym_pipe
@@ -2273,9 +2330,11 @@ binary_gte "Greater Than Or Equal"
 binary_equal "Equal"
   = sym_equal ( sym_equal )?
 
-binary_notequal "Not Equal"
-  = ( sym_excl sym_equal )
-  / ( sym_lt sym_gt )
+binary_notequal_a "Not Equal"
+  = sym_excl sym_equal
+
+binary_notequal_b "Not Equal"
+  =  sym_lt sym_gt
 
 binary_lang
   = binary_lang_isnt
@@ -2283,11 +2342,11 @@ binary_lang
 
 binary_lang_isnt "IS"
   = i:( IS ) o n:( expression_is_not )?
-  { return util.keyify([i, n]); }
+  { return foldStringKey([ i, n ]); }
 
 binary_lang_misc
   = m:( IN / LIKE / GLOB / MATCH / REGEXP )
-  { return util.key(m); }
+  { return keyNode(m); }
 
 /* Database, Table and Column IDs */
 
@@ -2307,13 +2366,13 @@ id_table "Table Identifier"
     return {
       'type': 'identifier',
       'variant': 'table',
-      'name': util.textMerge(d, n)
+      'name': foldStringWord([ d, n ])
     };
   }
 
 id_table_qualified
   = n:( name ) d:( sym_dot )
-  { return util.textMerge(n, d); }
+  { return foldStringWord([ n, d ]); }
 
 id_column "Column Identifier"
   = q:( column_qualifiers / id_column_qualified / column_unqualified ) n:( name )
@@ -2321,7 +2380,7 @@ id_column "Column Identifier"
     return {
       'type': 'identifier',
       'variant': 'column',
-      'name': util.textMerge(q, n)
+      'name': foldStringWord([ q, n ])
     };
   }
 
@@ -2331,11 +2390,11 @@ column_unqualified
 
 column_qualifiers
   = d:( id_table_qualified ) t:( id_column_qualified )
-  { return util.textMerge(d, t); }
+  { return foldStringWord([ d, t ]); }
 
 id_column_qualified
   = t:( name ) d:( sym_dot )
-  { return util.textMerge(t, d); }
+  { return foldStringWord([ t, d ]); }
 
 id_collation "Collation Identifier"
   = n:( name_unquoted )
@@ -2363,7 +2422,7 @@ id_index "Index Identifier"
     return {
       'type': 'identifier',
       'variant': 'index',
-      'name': util.textMerge(d, n)
+      'name': foldStringWord([ d, n ])
     };
   }
 
@@ -2373,7 +2432,7 @@ id_trigger "Trigger Identifier"
     return {
       'type': 'identifier',
       'variant': 'trigger',
-      'name': util.textMerge(d, n)
+      'name': foldStringWord([ d, n ])
     };
   }
 
@@ -2383,7 +2442,7 @@ id_view "View Identifier"
     return {
       'type': 'identifier',
       'variant': 'view',
-      'name': util.textMerge(d, n)
+      'name': foldStringWord([ d, n ])
     };
   }
 
@@ -2393,7 +2452,7 @@ id_pragma "Pragma Identifier"
     return {
       'type': 'identifier',
       'variant': 'pragma',
-      'name': util.textMerge(d, n)
+      'name': foldStringWord([ d, n ])
     };
   }
 
@@ -2404,7 +2463,7 @@ id_cte "CTE Identifier"
 id_table_expression
   = n:( name ) o a:( loop_columns )
   {
-    return util.extend({
+    return Object.assign({
       'type': 'identifier',
       'variant': 'expression',
       'format': 'table',
@@ -2448,15 +2507,15 @@ datatype_text "TEXT Datatype Name"
   = t:( ( ( "N"i )? ( "VAR"i )? "CHAR"i )
   / ( ( "TINY"i / "MEDIUM"i / "LONG"i )? "TEXT"i )
   / "CLOB"i )
-  { return util.key(t); }
+  { return keyNode(t); }
 
 datatype_real "REAL Datatype Name"
   = t:( datatype_real_double / "FLOAT"i / "REAL"i )
-  { return util.key(t); }
+  { return keyNode(t); }
 
 datatype_real_double "DOUBLE Datatype Name"
   = d:( "DOUBLE"i ) p:( [\t ]+ "PRECISION"i )?
-  { return util.compose([d, p], ''); }
+  { return foldStringWord([ d, p ]); }
 
 datatype_numeric "NUMERIC Datatype Name"
   = t:( "NUMERIC"i
@@ -2464,16 +2523,16 @@ datatype_numeric "NUMERIC Datatype Name"
   / "BOOLEAN"i
   / ( "DATE"i ( "TIME"i )? )
   / ( "TIME"i ( "STAMP"i )? ) )
-  { return util.key(t); }
+  { return keyNode(t); }
 
 datatype_integer "INTEGER Datatype Name"
   = t:( ( "INT"i ( "2" / "4" / "8" / "EGER"i ) )
   / ( ( "BIG"i / "MEDIUM"i / "SMALL"i / "TINY"i )? "INT"i ) )
-  { return util.key(t); }
+  { return keyNode(t); }
 
 datatype_none "BLOB Datatype Name"
   = t:( "BLOB"i )
-  { return util.key(t); }
+  { return keyNode(t); }
 
 /* Naming rules */
 
@@ -2499,26 +2558,26 @@ name
 
 name_unquoted
   = !( datatype_types / reserved_words / number_digit ) n:( name_char )+
-  { return util.key(n); }
+  { return keyNode(n); }
 
 /** @note Non-standard legacy format */
 name_bracketed
-  = sym_bopen n:( !( [ \t]* "]" ) [^\]] )+ o sym_bclose
-  { return util.textNode(n); }
+  = sym_bopen n:$( !( [ \t]* "]" ) [^\]] )+ o sym_bclose
+  { return textNode(n); }
 
 name_dblquoted
   = '"' n:( '""' / [^\"] )+ '"'
-  { return util.unescape(n, '"'); }
+  { return unescape(n, '"'); }
 
 /** @note Non-standard format */
 name_sglquoted
   = "'" n:( "''" / [^\'] )+ "'"
-  { return util.unescape(n, "'"); }
+  { return unescape(n, "'"); }
 
 /** @note Non-standard legacy format */
 name_backticked
   = '`' n:( '``' / [^\`] )+ '`'
-  { return util.unescape(n, '`'); }
+  { return unescape(n, '`'); }
 
 /* Symbols */
 
@@ -2828,7 +2887,7 @@ WITHOUT
 
 reserved_words
   = r:( reserved_word_list )
-  { return util.key(r); }
+  { return keyNode(r); }
 
 reserved_word_list
   = ABORT / ACTION / ADD / AFTER / ALL / ALTER / ANALYZE / AND / AS /
