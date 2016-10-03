@@ -2,8 +2,22 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
+### Added
+- The root node of the AST now has `type` and `variant` properties:
 
-## [v0.15.0] - 2016-10-03
+  ``` json
+  {
+    "type": "statement",
+    "variant": "list",
+    "statement": [{
+      "type": "statement",
+      "variant": "select",
+      "statement": {}
+    }]
+  }
+  ```
+
+## [v0.15.0-beta] - 2016-10-03
 ### Changed
 - **BREAKING CHANGE** Because of changes to how binary expressions are parsed, the order that expressions are composed may be different then the previous release. For example, ASTs may change such as those for queries that contain multiple binary expressions:
 

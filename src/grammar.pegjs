@@ -89,9 +89,10 @@ start
   }
 
 stmt_list
-  = f:( stmt ) o b:( stmt_list_tail )*
-  {
+  = f:( stmt ) o b:( stmt_list_tail )* {
     return {
+      'type': 'statement',
+      'variant': 'list',
       'statement': flattenAll([ f, b ])
     };
   }
