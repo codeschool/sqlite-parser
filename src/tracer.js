@@ -24,7 +24,7 @@ function takeWhile(arr, func) {
   return arr;
 }
 
-export default (function () {
+export const Tracer = (function () {
   function Tracer() {
     if (!(this instanceof Tracer)) {
       return new Tracer();

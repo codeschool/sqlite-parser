@@ -16,7 +16,7 @@ module.exports = function(grunt) {
   }
   const customArgs = {
     mocha: '--compilers js:babel-core/register',
-    pegjs: `--trace --cache --optimize size -e parser src/grammar.pegjs .tmp/parser.js`
+    pegjs: `--trace --cache --optimize size --output lib/parser.js src/grammar.pegjs`
   };
 
   const tmpDir = './.tmp/';
@@ -28,7 +28,6 @@ module.exports = function(grunt) {
     browserify: {
       options: {
         transform: [require('babelify').configure({
-          sourceMapRelative: './',
           compact: true,
           sourceMaps: true
         })]
@@ -103,18 +102,6 @@ module.exports = function(grunt) {
       dist: ['dist/*.js'],
       interactive: ['.tmp/**/*'],
       demo: ['demo/**/*']
-    },
-    concat: {
-      options: {
-        stripBanners: true,
-        // This exports the compiled parser
-        banner: "\nconst ",
-        footer: "\nexport default parser.parse;"
-      },
-      build: {
-        src: ['.tmp/parser.js'],
-        dest: 'lib/parser.js'
-      }
     },
     shell: {
       build: {
@@ -288,7 +275,7 @@ module.exports = function(grunt) {
     'build'
   ]);
   grunt.registerTask('build', [
-    'clean:build', 'shell:build', 'concat:build', 'copy:build'
+    'clean:build', 'shell:build', 'copy:build'
   ]);
   grunt.registerTask('test', [
     'build', 'shell:test'

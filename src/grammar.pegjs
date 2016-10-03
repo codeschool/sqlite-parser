@@ -222,8 +222,8 @@ literal_number_signed
   }
 
 literal_number
-  = literal_number_decimal
-  / literal_number_hex
+  = literal_number_hex
+  / literal_number_decimal
 
 literal_number_decimal
   = d:( number_decimal_node ) e:( number_decimal_exponent )?
@@ -954,8 +954,8 @@ stmt_pragma "PRAGMA Statement"
   }
 
 pragma_expression
-  = ( sym_equal v:( pragma_value ) o ) { return v; }
-  / ( sym_popen v:( pragma_value ) o sym_pclose ) { return v; }
+  = sym_equal v:( pragma_value ) o { return v; }
+  / sym_popen v:( pragma_value ) o sym_pclose { return v; }
 
 pragma_value
   = pragma_value_bool
@@ -963,8 +963,8 @@ pragma_value
   / pragma_value_name
 
 pragma_value_literal
-  = v:( literal_number_signed / literal_string )
-  { return v; }
+  = literal_number_signed
+  / literal_string
 
 /**
  * @note
@@ -1121,7 +1121,7 @@ select_target_loop
   { return n; }
 
 select_core_from "FROM Clause"
-  = s:( FROM ) o s:( select_source ) o
+  = f:( FROM ) o s:( select_source ) o
   {
     return {
       'from': s
@@ -1129,7 +1129,7 @@ select_core_from "FROM Clause"
   }
 
 stmt_core_where "WHERE Clause"
-  = s:( WHERE ) o e:( expression ) o
+  = f:( WHERE ) o e:( expression ) o
   {
     return {
       'where': makeArray(e)
@@ -1137,7 +1137,7 @@ stmt_core_where "WHERE Clause"
   }
 
 select_core_group "GROUP BY Clause"
-  = s:( GROUP ) o BY o e:( expression_list ) o h:( select_core_having )?
+  = f:( GROUP ) o BY o e:( expression_list ) o h:( select_core_having )?
   {
     return Object.assign({
       'group': makeArray(e)
@@ -1145,7 +1145,7 @@ select_core_group "GROUP BY Clause"
   }
 
 select_core_having "HAVING Clause"
-  = s:( HAVING ) o e:( expression ) o
+  = f:( HAVING ) o e:( expression ) o
   {
     return {
       'having': e
