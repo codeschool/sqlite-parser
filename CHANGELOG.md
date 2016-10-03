@@ -3,6 +3,27 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+## [v0.15.0] - 2016-10-03
+### Changed
+- **BREAKING CHANGE** Because of changes to how binary expressions are parsed, the order that expressions are composed may be different then the previous release. For example, ASTs may change such as those for queries that contain multiple binary expressions:
+
+  ``` sql
+  SELECT *
+  FROM hats
+  WHERE x != 2 OR x == 3 AND y > 5
+  ```
+
+- **BREAKING CHANGE** Expressions such as  `x NOT NULL` were previously treated as a unary expressions but are now considered binary expressions.
+
+### Fixed
+- Fixed binary expression parsing logic so that it can handle expressions such as:
+
+  ``` sql
+  SELECT * FROM t where -1 * (2 + 3);
+  SELECT * FROM t where 3 + 4 * 5 > 20;
+  SELECT * FROM t where v1 = ((v2 * 5) - v3);
+  ```
+
 ## [v0.14.5] - 2016-07-11
 ### Fixed
 - Fix alternate not equal operator `<>`
@@ -561,7 +582,8 @@ part of table names, column names, aliases, etc... This also addresses issues th
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.14.5...HEAD
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.15.0-beta...HEAD
+[v0.15.0-beta]: https://github.com/codeschool/sqlite-parser/compare/v0.14.5...v0.15.0-beta
 [v0.14.5]: https://github.com/codeschool/sqlite-parser/compare/v0.14.4...v0.14.5
 [v0.14.4]: https://github.com/codeschool/sqlite-parser/compare/v0.14.3...v0.14.4
 [v0.14.3]: https://github.com/codeschool/sqlite-parser/compare/v0.14.2...v0.14.3
