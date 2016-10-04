@@ -31,6 +31,62 @@ All notable changes to this project will be documented in this file.
   ```
 
 ### Changed
+- **BREAKING CHANGE** The `on` property of a `CREATE INDEX` statement is now treated as a table expression identifier, and has the corresponding `type` and `variant`:
+
+  ``` json
+  {
+    "type": "statement",
+    "variant": "create",
+    "format": "index",
+    "target": {
+      "type": "identifier",
+      "variant": "index",
+      "name": "bees.hive_state"
+    },
+    "on": {
+      "type": "identifier",
+      "variant": "expression",
+      "format": "table",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "hive"
+      },
+      "columns": []
+    }
+  }
+  ```
+
+- **BREAKING CHANGE** Indexed columns (e.g., the column list in the `ON` part of a `CREATE INDEX` statement) and ordering expressions (e.g., the `ORDER BY` part of a `SELECT` statement) now have the following format:
+  - When they are proceeded by an ordering term (e.g., `ASC`, `DESC`) and/or `COLLATE`, such as `ORDER BY nick ASC`
+
+  ``` json
+  {
+    "order": [{
+      "type": "expression",
+      "variant": "order",
+      "expression": {
+        "type": "identifier",
+        "variant": "column",
+        "name": "nick"
+      },
+      "direction": "asc"
+    }]
+  }
+  ```
+
+  - But, when it is only an expression or column name without any ordering term or `COLLATE` then it will only be the expression itself, and the implicit `"direction": "asc"` will not be added to the AST, such as `ORDER BY nick`:
+
+  ``` sql
+  {
+    "order": [{
+      "type": "identifier",
+      "variant": "column",
+      "name": "nick"
+    }]
+  }
+  ```
+
 - **BREAKING CHANGE** Because of changes to how binary expressions are parsed, the order that expressions are composed may be different then the previous release. For example, ASTs may change such as those for queries that contain multiple binary expressions:
 
   ``` sql
@@ -41,6 +97,24 @@ All notable changes to this project will be documented in this file.
 
 - **BREAKING CHANGE** Expressions such as  `x NOT NULL` were previously treated as a unary expressions but are now considered binary expressions.
 
+  ``` sql
+  {
+    "type": "expression",
+    "format": "binary",
+    "variant": "operation",
+    "operation": "not",
+    "left": {
+      "type": "identifier",
+      "variant": "column",
+      "name": "x"
+    },
+    "right": {
+      "type": "literal",
+      "variant": "null",
+      "value": "null"
+    }
+  }
+  ```
 - **BREAKING CHANGE** Now, instead of transaction statements being parsed as a single statement of type `transaction` to be considered valid, each statement that makes up a the transaction (e.g., `BEGIN`, `END`) is considered its own distinct statement that can exist independent of the others. Because a single transaction can be spread across multiple input strings given to the parser, it is no longer treated as a single, large, _transaction_ statement.
 
   ``` sql
@@ -88,6 +162,8 @@ All notable changes to this project will be documented in this file.
   SELECT * FROM t where v1 = ((v2 * 5) - v3);
   ```
 
+- Allow qualified table name in `ON` clause of `CREATE TRIGGER` statement (e.g., `ON dbName.tableName`).
+
 - Allow _literal boolean values_ `on` and `off` in `PRAGMA` statements:
 
   ``` sql
@@ -99,6 +175,12 @@ All notable changes to this project will be documented in this file.
   ``` sql
   CREATE TABLE temp.t1(a, b);
   SELECT rowid AS "Internal Row ID" FROM bees;
+  ```
+
+- Require semicolons to delineate `BEGIN` and `END` statements for transactions while also allowing unnecessary semicolons to be omitted:
+
+  ``` sql
+  BEGIN;CREATE TABLE nick(a, b);END
   ```
 
 - Only allow CRUD operations inside of the body of a `CREATE TRIGGER` statement.
