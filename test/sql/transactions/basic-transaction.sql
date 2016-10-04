@@ -1,4 +1,4 @@
-BEGIN IMMEDIATE TRANSACTION
+BEGIN IMMEDIATE TRANSACTION;
 CREATE TABLE foods (
   id int PRIMARY KEY,
   item varchar(50),
@@ -9,6 +9,6 @@ CREATE TABLE foods (
 INSERT INTO foods (item, size, id, price)
   SELECT 'banana', size, null, price
   FROM bananas
-  WHERE color != 'red'
+  WHERE color != 'red';
 
-COMMIT
+COMMIT;

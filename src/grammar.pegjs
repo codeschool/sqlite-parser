@@ -998,9 +998,6 @@ pragma_value_literal
 
 /**
  * @note
- *  This method allows all possible values EXCEPT an unquoted 'no',
- *  because that is a reserved word.
- * @note
  *  There is no such thing as a boolean literal in SQLite
  *  {@link http://www.sqlite.org/datatype3.html}. However, the
  *  documentation for PRAGMA mentions the ability to use

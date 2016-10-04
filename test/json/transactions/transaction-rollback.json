@@ -4,8 +4,9 @@
   "statement": [
     {
       "type": "statement",
-      "variant": "rollback",
-      "to": {
+      "variant": "transaction",
+      "action": "rollback",
+      "savepoint": {
         "type": "identifier",
         "variant": "savepoint",
         "name": "super_save"
