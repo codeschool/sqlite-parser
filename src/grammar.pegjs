@@ -116,14 +116,34 @@ stmt_list_tail
  * Type definitions
  */
 type_definition "Type Definition"
-  = n:( datatype_types ) o a:( type_definition_args )?
-  {
-    return Object.assign({
+  = t:( type_definition_types / datatype_custom ) o a:( type_definition_args )? {
+    return Object.assign(t, a);
+  }
+
+type_definition_types
+  = n:( datatype_types ) {
+    return {
       'type': 'datatype',
       'variant': n[0],
       'affinity': n[1],
       'args': [] // datatype definition arguments
-    }, a);
+    };
+  }
+
+/* Note: SQLite allows you to enter basically anything you want for a datatype
+ *       because it doesn't enforce types you provide. Creating new affinity
+ *       named 'unknown' to classify any datatype name that does not correspond
+ *       to a known affinty.
+ * See:  {@link http://stackoverflow.com/a/8417411}
+ */
+datatype_custom "Custom Datatype Name"
+  = t:( name_unquoted ) {
+    return {
+      'type': 'datatype',
+      'variant': t,
+      'affinity': 'unknown',
+      'args': []
+    };
   }
 
 type_definition_args "Type Definition Arguments"
