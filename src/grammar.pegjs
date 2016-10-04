@@ -2051,10 +2051,13 @@ index_unique
   }
 
 index_on "ON Clause"
-  = o:( ON ) o t:( name ) o c:( primary_columns )
+  = o:( ON ) o t:( id_table ) o c:( primary_columns )
   {
     return {
-      'target': t,
+      'type': 'identifier',
+      'variant': 'expression',
+      'format': 'table',
+      'name': t['name'],
       'columns': c
     };
   }
