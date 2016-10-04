@@ -94,6 +94,13 @@ All notable changes to this project will be documented in this file.
   PRAGMA legacy_file_format = ON;
   ```
 
+- Do not treat `TEMP` or `ROWID` as reserved words, since the official parser allows `temp` or `rowid`, when used as an identifier (e.g., a table named `temp` or the `rowid` column of a table).
+
+  ``` sql
+  CREATE TABLE temp.t1(a, b);
+  SELECT rowid AS "Internal Row ID" FROM bees;
+  ```
+
 - Some `CREATE TRIGGER` statements were previously parsed as a binary expressions instead of create trigger statements.
 
 ## [v0.14.5] - 2016-07-11

@@ -2936,6 +2936,9 @@ reserved_words
   = r:( reserved_word_list )
   { return keyNode(r); }
 
+/* Note: TEMP and ROWID removed here to be used as table and column names,
+ *       respectively.
+ */
 reserved_word_list
   = ABORT / ACTION / ADD / AFTER / ALL / ALTER / ANALYZE / AND / AS /
     ASC / ATTACH / AUTOINCREMENT / BEFORE / BEGIN / BETWEEN / BY /
@@ -2951,8 +2954,8 @@ reserved_word_list
     NO / NOT / NOTNULL / NULL / OF / OFFSET / ON / OR / ORDER /
     OUTER / PLAN / PRAGMA / PRIMARY / QUERY / RAISE / RECURSIVE /
     REFERENCES / REGEXP / REINDEX / RELEASE / RENAME / REPLACE /
-    RESTRICT / RIGHT / ROLLBACK / ROW / ROWID / SAVEPOINT / SELECT /
-    SET / TABLE / TEMP / TEMPORARY / THEN / TO / TRANSACTION /
+    RESTRICT / RIGHT / ROLLBACK / ROW / SAVEPOINT / SELECT /
+    SET / TABLE / TEMPORARY / THEN / TO / TRANSACTION /
     TRIGGER / UNION / UNIQUE / UPDATE / USING / VACUUM / VALUES /
     VIEW / VIRTUAL / WHEN / WHERE / WITH / WITHOUT
 
