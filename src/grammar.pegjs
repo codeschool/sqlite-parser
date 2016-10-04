@@ -2443,8 +2443,11 @@ id_column_qualified
   = t:( name ) d:( sym_dot )
   { return foldStringWord([ t, d ]); }
 
+/* Note: Datatype names are accepted as collation identifier in the
+ *       reference implementation of SQLite.
+ */
 id_collation "Collation Identifier"
-  = n:( name_unquoted )
+  = n:( id_collation_types )
   {
     return {
       'type': 'identifier',
@@ -2452,6 +2455,13 @@ id_collation "Collation Identifier"
       'name': n
     };
   }
+id_collation_types
+  = !( reserved_words / number_digit ) n:( name_char )+ {
+    return keyNode(n);
+  }
+  / name_bracketed
+  / name_backticked
+  / name_dblquoted
 
 id_savepoint "Savepoint Indentifier"
   = n:( name )

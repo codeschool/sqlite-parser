@@ -109,6 +109,14 @@ All notable changes to this project will be documented in this file.
   ATTACH DATABASE '' AS ''
   ```
 
+- Allow datatype names to be provided to `COLLATE` to match the behavior of the official SQLite parser:
+
+  ``` sql
+  SELECT c1
+  FROM t
+  ORDER BY 1 COLLATE numeric
+  ```
+
 - Some `CREATE TRIGGER` statements were previously parsed as a binary expressions instead of create trigger statements.
 
 ## [v0.14.5] - 2016-07-11
