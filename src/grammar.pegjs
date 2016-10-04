@@ -870,11 +870,23 @@ select_wrapped
  * @note Uncommon or SQLite-specific statement types
  */
 stmt_sqlite
-  = stmt_detach
+  = stmt_attach
+  / stmt_detach
   / stmt_vacuum
   / stmt_analyze
   / stmt_reindex
   / stmt_pragma
+
+stmt_attach "ATTACH Statement"
+  = a:( ATTACH ) o b:( DATABASE o )? e:( expression ) o AS o n:( id_database / literal_null ) o
+  {
+    return {
+      'type': 'statement',
+      'variant': keyNode(a),
+      'target': n,
+      'attach': e
+    };
+  }
 
 stmt_detach "DETACH Statement"
   = d:( DETACH ) o b:( DATABASE o )? n:( id_database ) o

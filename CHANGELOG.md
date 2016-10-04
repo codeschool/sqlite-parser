@@ -18,6 +18,12 @@ All notable changes to this project will be documented in this file.
   ```
 
 ## [v0.15.0-beta] - 2016-10-03
+- Added missing `ATTACH DATABASE` statement. It will pair nicely with the existing `DETACH DATABASE` statement.
+
+  ``` sql
+  ATTACH DATABASE 'bees2.db' AS more_bees
+  ```
+
 ### Changed
 - **BREAKING CHANGE** Because of changes to how binary expressions are parsed, the order that expressions are composed may be different then the previous release. For example, ASTs may change such as those for queries that contain multiple binary expressions:
 
