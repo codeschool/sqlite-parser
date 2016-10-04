@@ -983,8 +983,8 @@ stmt_pragma "PRAGMA Statement"
   }
 
 pragma_expression
-  = sym_equal v:( pragma_value ) o { return v; }
-  / sym_popen v:( pragma_value ) o sym_pclose { return v; }
+  = sym_popen v:( pragma_value ) o sym_pclose { return v; }
+  / sym_equal v:( pragma_value ) o { return v; }
 
 pragma_value
   = pragma_value_bool
@@ -1007,14 +1007,18 @@ pragma_value_literal
  *  See: {@link https://www.sqlite.org/pragma.html}
  */
 pragma_value_bool
-  = v:( name ) & { return /^(yes|no|false|true|0|1)$/i.test(v) }
+  = v:( pragma_bool_id ) & { return /^(yes|no|on|off|false|true|0|1)$/i.test(v) }
   {
     return {
       'type': 'literal',
       'variant': 'boolean',
-      'normalized': (/^(yes|true|1)$/i.test(v) ? '1' : '0'),
+      'normalized': (/^(yes|on|true|1)$/i.test(v) ? '1' : '0'),
       'value': v
     };
+  }
+pragma_bool_id
+  = n:( name_char )+ {
+    return keyNode(n);
   }
 
 pragma_value_name

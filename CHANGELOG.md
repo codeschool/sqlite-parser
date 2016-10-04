@@ -88,6 +88,12 @@ All notable changes to this project will be documented in this file.
   SELECT * FROM t where v1 = ((v2 * 5) - v3);
   ```
 
+- Allow _literal boolean values_ `on` and `off` in `PRAGMA` statements:
+
+  ``` sql
+  PRAGMA legacy_file_format = ON;
+  ```
+
 - Some `CREATE TRIGGER` statements were previously parsed as a binary expressions instead of create trigger statements.
 
 ## [v0.14.5] - 2016-07-11
