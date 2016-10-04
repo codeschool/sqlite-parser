@@ -103,6 +103,12 @@ All notable changes to this project will be documented in this file.
 
 - Only allow CRUD operations inside of the body of a `CREATE TRIGGER` statement.
 
+- Allow empty strings or `NULL` to be used as aliases, to match behavior of the native SQLite parser, such as in an `ATTACH DATABASE` statement:
+
+  ``` sql
+  ATTACH DATABASE '' AS ''
+  ```
+
 - Some `CREATE TRIGGER` statements were previously parsed as a binary expressions instead of create trigger statements.
 
 ## [v0.14.5] - 2016-07-11

@@ -909,7 +909,7 @@ stmt_attach "ATTACH Statement"
   }
 
 stmt_detach "DETACH Statement"
-  = d:( DETACH ) o b:( DATABASE o )? n:( id_database ) o
+  = d:( DETACH ) o b:( DATABASE o )? n:( id_database / literal_null ) o
   {
     return {
       'type': 'statement',
@@ -2613,17 +2613,17 @@ name_bracketed
   { return textNode(n); }
 
 name_dblquoted
-  = '"' n:( '""' / [^\"] )+ '"'
+  = '"' n:( '""' / [^\"] )* '"'
   { return unescape(n, '"'); }
 
 /** @note Non-standard format */
 name_sglquoted
-  = "'" n:( "''" / [^\'] )+ "'"
+  = "'" n:( "''" / [^\'] )* "'"
   { return unescape(n, "'"); }
 
 /** @note Non-standard legacy format */
 name_backticked
-  = '`' n:( '``' / [^\`] )+ '`'
+  = '`' n:( '``' / [^\`] )* '`'
   { return unescape(n, '`'); }
 
 /* Symbols */
