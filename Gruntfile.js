@@ -15,7 +15,7 @@ module.exports = function(grunt) {
     return `${binPath} ${customArgs[cmd]} ${args}`.trim();
   }
   const customArgs = {
-    mocha: '--compilers js:babel-core/register',
+    mocha: '',
     pegjs: `--trace --cache --optimize size --output lib/parser.js src/grammar.pegjs`
   };
 
@@ -114,7 +114,7 @@ module.exports = function(grunt) {
         options: {
           failOnError: true
         },
-        command: getCmdString('mocha', '--reporter=nyan')
+        command: getCmdString('mocha', '--reporter=dot')
       },
       debug: {
         options: {

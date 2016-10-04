@@ -1,6 +1,8 @@
 import {expect} from 'chai';
 import {readFile, writeFile} from 'fs';
-import {all, promisify} from 'bluebird';
+import _glob from 'glob';
+import {all, each, promisify} from 'bluebird';
+import { basename, relative } from 'path';
 import _ from 'lodash';
 import parser from '../index';
 import prettyjson from 'prettyjson';
@@ -8,11 +10,13 @@ import prettyjson from 'prettyjson';
 const read = promisify(readFile);
 const write = promisify(writeFile);
 const sqliteParser = promisify(parser);
+const glob = promisify(_glob);
 
 let format, broadcast,
     filePath,
     getTree, getTestJson, getTestFiles,
     assertOkTree, assertErrorTree, assertEqualsTree,
+    assertGlobTree,
     isDefined = function (arg) { return arg != null; };
 
 broadcast = function broadcast(args) {
@@ -36,9 +40,10 @@ broadcast = function broadcast(args) {
   b.ugly = b.should && _.has(p.env, 'UGLY');
 })(broadcast, console, process);
 
-filePath = function (that, ext) {
-  var fileTitle = _.kebabCase(that.test.title.trim()),
-      folderTitle = _.kebabCase(that.test.parent.title.trim());
+filePath = function (that, ext, glob = false) {
+  var testTitle = (that.test ? that.test : that).title.trim(),
+      fileTitle = !glob ? _.kebabCase(testTitle) : testTitle,
+      folderTitle = _.kebabCase((that.test ? that.test : that).parent.title.trim());
   return __dirname + '/' + ext + '/' + folderTitle + '/' + fileTitle + '.' + ext;
 };
 
@@ -155,5 +160,10 @@ export default {
   'ok': assertOkTree,
   'error': assertErrorTree,
   'equals': assertEqualsTree,
-  'broadcast': broadcast
+  'glob': assertGlobTree,
+  'broadcast': broadcast,
+  'read': read,
+  'write': write,
+  'sqliteParser': sqliteParser,
+  'glob': glob
 };
