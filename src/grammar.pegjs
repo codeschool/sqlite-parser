@@ -2211,7 +2211,7 @@ action_loop
   { return l; }
 
 action_loop_stmt
-  = s:( stmt ) o semi_required
+  = s:( stmt_crud ) o semi_required
   { return s; }
 
 create_view "CREATE VIEW Statement"

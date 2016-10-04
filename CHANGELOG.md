@@ -101,6 +101,8 @@ All notable changes to this project will be documented in this file.
   SELECT rowid AS "Internal Row ID" FROM bees;
   ```
 
+- Only allow CRUD operations inside of the body of a `CREATE TRIGGER` statement.
+
 - Some `CREATE TRIGGER` statements were previously parsed as a binary expressions instead of create trigger statements.
 
 ## [v0.14.5] - 2016-07-11
