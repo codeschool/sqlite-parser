@@ -119,6 +119,12 @@ All notable changes to this project will be documented in this file.
 
 - Some `CREATE TRIGGER` statements were previously parsed as a binary expressions instead of create trigger statements.
 
+- Allow indexed columns to be parsed when they include a `COLLATE` and/or a ordering direction (e.g., `ASC`, `DESC`) when part of a table constraint in a `CREATE TABLE` statement or a `ON` part of a `CREATE INDEX` statement:
+
+  ``` sql
+  CREATE TABLE t1(id int, PRIMARY KEY(x COLLATE binary ASC, y COLLATE hex, z DESC))
+  ```
+
 ## [v0.14.5] - 2016-07-11
 ### Fixed
 - Fix alternate not equal operator `<>`

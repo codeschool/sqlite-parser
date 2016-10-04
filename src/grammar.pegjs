@@ -425,12 +425,27 @@ expression_unary
       'operator': keyNode(op)
     };
   }
+  / e:( expression_root ) o c:( expression_collate ) {
+    return Object.assign(c, {
+      'expression': e
+    });
+  }
   / expression_root
 expression_unary_op
   = sym_tilde
   / sym_minus
   / sym_plus
   / expression_is_not
+
+expression_collate "COLLATE Expression"
+  = c:( column_collate ) {
+    return Object.assign({
+      'type': 'expression',
+      'format': 'unary',
+      'variant': 'operation',
+      'operator': 'collate'
+    }, c);
+  }
 
 expression_concat
   = f:( expression_unary ) rest:( o expression_concat_op o expression_unary )*
@@ -541,30 +556,16 @@ expression_case_else "ELSE Clause"
   }
 
 expression_postfix
-  = v:( expression_equiv ) o postfix:( expression_postfix_tail ) {
-    if (postfix['format'] === 'binary') {
-      postfix['left'] = v;
-    } else if (postfix['format'] === 'unary') {
-      postfix['expression'] = v;
-    }
-    return postfix;
+  = v:( expression_equiv ) o p:( expression_postfix_tail ) {
+    return Object.assign(p, {
+      'left': v
+    });
   }
   / expression_equiv
 expression_postfix_tail
-  = expression_collate
-  / expression_in
+  = expression_in
   / expression_between
   / expression_like
-
-expression_collate "COLLATE Expression"
-  = c:( column_collate ) {
-    return Object.assign({
-      'type': 'expression',
-      'format': 'unary',
-      'variant': 'operation',
-      'operator': 'collate'
-    }, c);
-  }
 
 expression_like "Comparison Expression"
   = n:( expression_is_not )?
@@ -1909,7 +1910,7 @@ primary_column_tail
   { return c; }
 
 primary_column "Indexed Column"
-  = e:( loop_name / expression ) o d:( primary_column_dir )?
+  = e:( primary_column_types ) o d:( primary_column_dir )?
   {
     // Only convert this into an ordering expression if it contains
     // more than just the expression.
@@ -1922,6 +1923,11 @@ primary_column "Indexed Column"
     }
     return e;
   }
+primary_column_types
+  = n:( loop_name ) &( o ( sym_semi / sym_pclose / primary_column_dir ) ) {
+    return n;
+  }
+  / expression
 
 column_collate "Collation"
   = COLLATE o n:( id_collation ) o
