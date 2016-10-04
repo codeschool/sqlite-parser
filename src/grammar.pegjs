@@ -701,7 +701,8 @@ stmt_nodes
   = stmt_crud
   / stmt_create
   / stmt_drop
-  / stmt_transaction
+  / stmt_begin
+  / stmt_commit
   / stmt_alter
   / stmt_rollback
   / stmt_savepoint
@@ -714,25 +715,24 @@ stmt_nodes
  *  for the BEGIN, COMMIT, and ROLLBACK statements.
  *  {@link https://www.sqlite.org/lang_savepoint.html}
  */
-stmt_transaction "Transaction"
-  = b:( stmt_begin ) s:( stmt_list )? e:( stmt_commit )
-  {
-    return Object.assign({}, b, s, {
-      'type': 'statement',
-      'variant': 'transaction'
-    });
-  }
-
 stmt_commit "END Transaction Statement"
   = s:( COMMIT / END ) o t:( commit_transaction )?
   {
-    return foldStringKey([ s, t ]);
+    return {
+      'type': 'statement',
+      'variant': 'transaction',
+      'action': 'commit'
+    };
   }
 
 stmt_begin "BEGIN Transaction Statement"
   = s:( BEGIN ) o m:( stmt_begin_modifier )? t:( commit_transaction )?
   {
-    return Object.assign({}, m);
+    return Object.assign({
+      'type': 'statement',
+      'variant': 'transaction',
+      'action': 'begin'
+    }, m);
   }
 
 commit_transaction
@@ -750,16 +750,16 @@ stmt_begin_modifier
 stmt_rollback "ROLLBACK Statement"
   = s:( ROLLBACK ) o ( commit_transaction )? n:( rollback_savepoint )?
   {
-    return {
+    return Object.assign({
       'type': 'statement',
-      'variant': keyNode(s),
-      'to': n
-    };
+      'variant': 'transaction',
+      'action': 'rollback'
+    }, n);
   }
 
 rollback_savepoint "TO Clause"
   = TO o ( savepoint_alt )? n:( id_savepoint ) o
-  { return n; }
+  { return { 'savepoint': n }; }
 
 savepoint_alt
   = s:( SAVEPOINT ) o

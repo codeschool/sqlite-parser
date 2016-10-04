@@ -41,6 +41,44 @@ All notable changes to this project will be documented in this file.
 
 - **BREAKING CHANGE** Expressions such as  `x NOT NULL` were previously treated as a unary expressions but are now considered binary expressions.
 
+- **BREAKING CHANGE** Now, instead of transaction statements being parsed as a single statement of type `transaction` to be considered valid, each statement that makes up a the transaction (e.g., `BEGIN`, `END`) is considered its own distinct statement that can exist independent of the others. Because a single transaction can be spread across multiple input strings given to the parser, it is no longer treated as a single, large, _transaction_ statement.
+
+  ``` sql
+  BEGIN;
+  DROP TABLE t1;
+  END;
+  ```
+
+  ``` json
+  {
+    "type": "statement",
+    "variant": "list",
+    "statement": [
+      {
+        "type": "statement",
+        "variant": "transaction",
+        "action": "begin"
+      },
+      {
+        "type": "statement",
+        "target": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        },
+        "variant": "drop",
+        "format": "table",
+        "condition": []
+      },
+      {
+        "type": "statement",
+        "variant": "transaction",
+        "action": "commit"
+      }
+    ]
+  }
+  ```
+
 ### Fixed
 - Fixed binary expression parsing logic so that it can handle expressions such as:
 
