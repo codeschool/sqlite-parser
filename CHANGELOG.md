@@ -207,6 +207,14 @@ All notable changes to this project will be documented in this file.
   CREATE TABLE t1(id int, PRIMARY KEY(x COLLATE binary ASC, y COLLATE hex, z DESC))
   ```
 
+- Allow `UNIQUE` column constraint type to be correctly parsed.
+
+  ``` sql
+  CREATE TABLE bees(
+    a INTEGER UNIQUE ON CONFLICT IGNORE
+  )
+  ```
+
 ## [v0.14.5] - 2016-07-11
 ### Fixed
 - Fix alternate not equal operator `<>`

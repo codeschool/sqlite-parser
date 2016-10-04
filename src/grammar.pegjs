@@ -1396,8 +1396,11 @@ select_star "Star"
   = sym_star
 
 stmt_fallback_types "Fallback Type"
-  = k:( REPLACE / ROLLBACK / ABORT / FAIL / IGNORE )
-  { return k; }
+  = REPLACE
+  / ROLLBACK
+  / ABORT
+  / FAIL
+  / IGNORE
 
 /** {@link https://www.sqlite.org/lang_insert.html} */
 stmt_insert "INSERT Statement"
@@ -1811,7 +1814,7 @@ column_constraint_null
   }
 
 constraint_null_types "UNIQUE Column Constraint"
-  = t:( constraint_null_value / UNIQUE )
+  = t:( constraint_null_value / UNIQUE ) o
   { return keyNode(t); }
 
 constraint_null_value "NULL Column Constraint"
@@ -1943,7 +1946,7 @@ primary_column_dir "Column Direction"
   }
 
 primary_conflict
-  = s:( primary_conflict_start ) o t:( stmt_fallback_types ) o
+  = s:( primary_conflict_start ) t:( stmt_fallback_types ) o
   {
     return {
       'conflict': keyNode(t)
@@ -1951,7 +1954,7 @@ primary_conflict
   }
 
 primary_conflict_start "ON CONFLICT Keyword"
-  = o:( ON ) o c:( CONFLICT )
+  = o:( ON ) o c:( CONFLICT ) o
   { return foldStringKey([ o, c ]); }
 
 constraint_check
