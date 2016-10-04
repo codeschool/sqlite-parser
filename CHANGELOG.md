@@ -38,6 +38,8 @@ All notable changes to this project will be documented in this file.
   SELECT * FROM t where v1 = ((v2 * 5) - v3);
   ```
 
+- Some `CREATE TRIGGER` statements were previously parsed as a binary expressions instead of create trigger statements.
+
 ## [v0.14.5] - 2016-07-11
 ### Fixed
 - Fix alternate not equal operator `<>`

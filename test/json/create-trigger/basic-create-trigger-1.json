@@ -3,13 +3,17 @@
   "variant": "list",
   "statement": [
     {
-      "type": "expression",
+      "type": "statement",
       "target": {
         "type": "identifier",
         "variant": "trigger",
         "name": "cust_addr_chng"
       },
-      "on": "customer_address",
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "customer_address"
+      },
       "event": {
         "type": "event",
         "occurs": "instead of",
@@ -67,18 +71,23 @@
           ]
         }
       ],
-      "variant": "operation",
-      "format": "binary",
-      "operation": "not",
-      "left": {
-        "type": "identifier",
-        "variant": "column",
-        "name": "cust_addr"
-      },
-      "right": {
-        "type": "literal",
-        "variant": "null",
-        "value": "null"
+      "variant": "create",
+      "format": "trigger",
+      "when": {
+        "type": "expression",
+        "format": "binary",
+        "variant": "operation",
+        "operation": "not",
+        "left": {
+          "type": "identifier",
+          "variant": "column",
+          "name": "cust_addr"
+        },
+        "right": {
+          "type": "literal",
+          "variant": "null",
+          "value": "null"
+        }
       }
     }
   ]

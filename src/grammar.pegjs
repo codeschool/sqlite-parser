@@ -2079,7 +2079,7 @@ index_on "ON Clause"
  */
 create_trigger "CREATE TRIGGER Statement"
   = s:( create_trigger_start ) ne:( create_core_ine )? n:( id_trigger ) o
-    cd:( trigger_conditions ) ( ON ) o o:( name ) o
+    cd:( trigger_conditions ) ( ON ) o o:( id_table ) o
     me:( trigger_foreach )? wh:( trigger_when )? a:( trigger_action )
   {
     return Object.assign({
@@ -2160,8 +2160,11 @@ trigger_foreach
   { return keyNode(r); }
 
 trigger_when "WHEN Clause"
-  = w:( WHEN ) o e:( expression ) o
-  { return e; }
+  = w:( WHEN ) o e:( expression ) o {
+    return {
+      'when': e
+    };
+  }
 
 trigger_action "Actions Clause"
   = s:( BEGIN ) o a:( action_loop ) o e:( END ) o

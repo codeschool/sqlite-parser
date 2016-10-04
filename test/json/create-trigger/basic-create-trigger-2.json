@@ -3,13 +3,17 @@
   "variant": "list",
   "statement": [
     {
-      "type": "expression",
+      "type": "statement",
       "target": {
         "type": "identifier",
         "variant": "trigger",
         "name": "happy_bee_time"
       },
-      "on": "bees",
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "bees"
+      },
       "event": {
         "type": "event",
         "occurs": "before",
@@ -110,8 +114,8 @@
           ]
         }
       ],
-      "variant": "operation",
-      "format": "binary",
+      "variant": "create",
+      "format": "trigger",
       "temporary": true,
       "condition": [
         {
@@ -119,16 +123,21 @@
           "condition": "if not exists"
         }
       ],
-      "operation": "==",
-      "left": {
-        "type": "identifier",
-        "variant": "column",
-        "name": "name"
-      },
-      "right": {
-        "type": "literal",
-        "variant": "string",
-        "value": "Nick"
+      "when": {
+        "type": "expression",
+        "format": "binary",
+        "variant": "operation",
+        "operation": "==",
+        "left": {
+          "type": "identifier",
+          "variant": "column",
+          "name": "name"
+        },
+        "right": {
+          "type": "literal",
+          "variant": "string",
+          "value": "Nick"
+        }
       }
     }
   ]
