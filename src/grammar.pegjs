@@ -1344,7 +1344,7 @@ stmt_core_order_list_loop
   { return i; }
 
 stmt_core_order_list_item "Ordering Expression"
-  = e:( expression ) o c:( column_collate )? o d:( primary_column_dir )?
+  = e:( expression ) o d:( primary_column_dir )?
   {
     return Object.assign({
       'type': 'expression',
@@ -1859,12 +1859,12 @@ primary_start_unique "UNIQUE Keyword"
   = u:( UNIQUE )
   { return textNode(u); }
 
-primary_columns "PRIMARY KEY Columns"
+primary_columns
   = sym_popen f:( primary_column ) o b:( primary_column_tail )* sym_pclose
   { return flattenAll([ f, b ]); }
 
 primary_column "Indexed Column"
-  = e:( name ) o c:( column_collate )? d:( primary_column_dir )?
+  = e:( loop_name / expression ) o d:( primary_column_dir )?
   {
     return Object.assign({
       'type': 'identifier',
