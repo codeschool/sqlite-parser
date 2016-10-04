@@ -2385,8 +2385,7 @@ id_column "Column Identifier"
   }
 
 column_unqualified
-  = o
-  { return ''; }
+  = o { return ''; }
 
 column_qualifiers
   = d:( id_table_qualified ) t:( id_column_qualified )
@@ -2461,13 +2460,13 @@ id_cte "CTE Identifier"
   { return d; }
 
 id_table_expression
-  = n:( name ) o a:( loop_columns )
+  = n:( id_table ) o a:( loop_columns )
   {
     return Object.assign({
       'type': 'identifier',
       'variant': 'expression',
       'format': 'table',
-      'name': n,
+      'name': n['name'],
       'columns': []
     }, a);
   }
