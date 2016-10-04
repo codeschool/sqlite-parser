@@ -697,10 +697,10 @@ stmt_nodes
 stmt_transaction "Transaction"
   = b:( stmt_begin ) s:( stmt_list )? e:( stmt_commit )
   {
-    return Object.assign({
+    return Object.assign({}, b, s, {
       'type': 'statement',
       'variant': 'transaction'
-    }, b, s);
+    });
   }
 
 stmt_commit "END Transaction Statement"
