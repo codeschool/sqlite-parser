@@ -1346,11 +1346,16 @@ stmt_core_order_list_loop
 stmt_core_order_list_item "Ordering Expression"
   = e:( expression ) o d:( primary_column_dir )?
   {
-    return Object.assign({
-      'type': 'expression',
-      'variant': 'order',
-      'expression': e
-    }, c, d);
+    // Only convert this into an ordering expression if it contains
+    // more than just the expression.
+    if (isOkay(d)) {
+      return Object.assign({
+        'type': 'expression',
+        'variant': 'order',
+        'expression': e
+      }, d);
+    }
+    return e;
   }
 
 select_star "Star"
@@ -1863,15 +1868,23 @@ primary_columns
   = sym_popen f:( primary_column ) o b:( primary_column_tail )* sym_pclose
   { return flattenAll([ f, b ]); }
 
+primary_column_tail
+  = sym_comma c:( primary_column ) o
+  { return c; }
+
 primary_column "Indexed Column"
   = e:( loop_name / expression ) o d:( primary_column_dir )?
   {
-    return Object.assign({
-      'type': 'identifier',
-      'variant': 'column',
-      'format': 'indexed',
-      'name': e
-    }, c, d);
+    // Only convert this into an ordering expression if it contains
+    // more than just the expression.
+    if (isOkay(d)) {
+      return Object.assign({
+        'type': 'expression',
+        'variant': 'order',
+        'expression': e
+      }, d);
+    }
+    return e;
   }
 
 column_collate "Collation"
@@ -1889,10 +1902,6 @@ primary_column_dir "Column Direction"
       'direction': keyNode(t),
     };
   }
-
-primary_column_tail
-  = sym_comma c:( primary_column ) o
-  { return c; }
 
 primary_conflict
   = s:( primary_conflict_start ) o t:( stmt_fallback_types ) o
