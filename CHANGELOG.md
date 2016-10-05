@@ -215,6 +215,13 @@ All notable changes to this project will be documented in this file.
   )
   ```
 
+- Allow nested unary expressions while preserving also the correct order of precedence.
+
+  ``` sql
+  SELECT not not foo
+  FROM bees
+  ```
+
 ## [v0.14.5] - 2016-07-11
 ### Fixed
 - Fix alternate not equal operator `<>`

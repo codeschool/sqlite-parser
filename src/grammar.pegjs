@@ -415,8 +415,11 @@ expression_root
   / literal_value
   / id_column
 
+/* Note: Bind to expression_root before expression to bind the unary
+ *       operator to the closest expression first.
+ */
 expression_unary
-  = op:( expression_unary_op ) o e:( expression_root ) {
+  = op:( expression_unary_op ) o e:( expression_root / expression ) {
     return {
       'type': 'expression',
       'format': 'unary',
@@ -1020,7 +1023,7 @@ pragma_bool_id
   }
 
 pragma_value_name
-  = n:( name )
+  = n:( pragma_bool_id )
   {
     return {
       'type': 'identifier',
