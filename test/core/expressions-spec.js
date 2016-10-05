@@ -1,3 +1,5 @@
+import * as tree from '../helpers';
+
 describe('expressions', function() {
 
   it('expression unary 1', function(done) {

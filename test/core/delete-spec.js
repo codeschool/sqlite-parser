@@ -1,3 +1,5 @@
+import * as tree from '../helpers';
+
 describe('delete', function() {
 
   it('basic delete', function(done) {

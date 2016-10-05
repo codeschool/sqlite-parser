@@ -1,3 +1,5 @@
+import * as tree from '../helpers';
+
 describe('insert', function() {
 
   it('basic insert', function(done) {

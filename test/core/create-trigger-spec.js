@@ -1,3 +1,5 @@
+import * as tree from '../helpers';
+
 describe('create trigger', function() {
 
   it('basic create trigger 1', function(done) {

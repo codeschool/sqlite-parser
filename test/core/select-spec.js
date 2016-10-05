@@ -1,3 +1,5 @@
+import * as tree from '../helpers';
+
 describe('select', function() {
 
   it('basic select', function(done) {

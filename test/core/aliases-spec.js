@@ -1,3 +1,5 @@
+import * as tree from '../helpers';
+
 describe('aliases', function() {
 
   it('basic aliases', function(done) {

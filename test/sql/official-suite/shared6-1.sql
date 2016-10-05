@@ -1,0 +1,45 @@
+-- original: shared6.test
+-- credit:   http://www.sqlite.org/src/tree?ci=trunk&name=test
+
+CREATE TABLE t1(a, b);
+    CREATE TABLE t2(c, d);
+    CREATE TABLE t3(e, f)
+;SELECT * FROM t1
+;BEGIN EXCLUSIVE
+;SELECT * FROM t1
+;COMMIT;
+    BEGIN;
+    INSERT INTO t2 VALUES(3, 4)
+;SELECT * FROM t1
+;COMMIT
+;BEGIN;
+    INSERT INTO t1 VALUES(1, 2)
+;SELECT * FROM t1
+;SELECT * FROM t2
+;COMMIT;
+    BEGIN;
+    SELECT * FROM t1
+;SELECT * FROM t1
+;COMMIT
+;PRAGMA read_uncommitted = 1
+;BEGIN;
+    INSERT INTO t1 VALUES(5, 6)
+;SELECT * FROM t1
+;CREATE TABLE t4(a, b)
+;COMMIT;
+    BEGIN;
+    SELECT * FROM t1
+;BEGIN; INSERT INTO t1 VALUES(9, 10)
+;SELECT * FROM t1
+;COMMIT
+;BEGIN; INSERT INTO t1 VALUES(11, 12)
+;SELECT * FROM t1
+;COMMIT
+;SELECT * FROM t1
+;BEGIN EXCLUSIVE
+;SELECT * FROM t1
+;BEGIN
+;BEGIN
+;SELECT * FROM t1
+;BEGIN ; ROLLBACK
+;CREATE TABLE t5(a, b);

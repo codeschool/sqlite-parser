@@ -1,3 +1,5 @@
+import * as tree from '../helpers';
+
 describe('multiple queries', function() {
 
   it('multiple queries 1', function(done) {

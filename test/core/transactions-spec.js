@@ -1,3 +1,5 @@
+import * as tree from '../helpers';
+
 describe('transactions', function() {
 
   it('basic transaction', function(done) {

@@ -1,3 +1,5 @@
+import * as tree from '../helpers';
+
 describe('uncommon', function() {
 
   // SQLite-specific and internal

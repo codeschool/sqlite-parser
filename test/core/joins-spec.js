@@ -1,3 +1,5 @@
+import * as tree from '../helpers';
+
 describe('joins', function() {
 
   it('join types 1', function(done) {

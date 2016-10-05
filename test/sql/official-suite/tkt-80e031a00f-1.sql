@@ -1,0 +1,129 @@
+-- original: tkt-80e031a00f.test
+-- credit:   http://www.sqlite.org/src/tree?ci=trunk&name=test
+
+SELECT 1 IN ()
+;SELECT 1 IN (2)
+;SELECT 1 IN (2,3,4,5,6,7,8,9)
+;SELECT 1 NOT IN ()
+;SELECT 1 NOT IN (2)
+;SELECT 1 NOT IN (2,3,4,5,6,7,8,9)
+;SELECT null IN ()
+;SELECT null NOT IN ()
+;CREATE TABLE t1(x);
+  SELECT 1 IN t1
+;SELECT 1 NOT IN t1
+;SELECT null IN t1
+;SELECT null NOT IN t1
+;CREATE TABLE t2(y INTEGER PRIMARY KEY);
+  SELECT 1 IN t2
+;SELECT 1 NOT IN t2
+;SELECT null IN t2
+;SELECT null NOT IN t2
+;CREATE TABLE t3(z INT UNIQUE);
+  SELECT 1 IN t3
+;SELECT 1 NOT IN t3
+;SELECT null IN t3
+;SELECT null NOT IN t3
+;SELECT 1 IN (SELECT x+y FROM t1, t2)
+;SELECT 1 NOT IN (SELECT x+y FROM t1,t2)
+;SELECT null IN (SELECT x+y FROM t1,t2)
+;SELECT null NOT IN (SELECT x+y FROM t1,t2)
+;SELECT 1.23 IN ()
+;SELECT 1.23 NOT IN ()
+;SELECT 1.23 IN t1
+;SELECT 1.23 NOT IN t1
+;SELECT 'hello' IN ()
+;SELECT 'hello' NOT IN ()
+;SELECT 'hello' IN t1
+;SELECT 'hello' NOT IN t1
+;SELECT x'303132' IN ()
+;SELECT x'303132' NOT IN ()
+;SELECT x'303132' IN t1
+;SELECT x'303132' NOT IN t1
+;SELECT 1 IN (2,3,4)
+;SELECT 1 NOT IN (2,3,4)
+;SELECT 'a' IN ('b','c','d')
+;SELECT 'a' NOT IN ('b','c','d')
+;CREATE TABLE t4(a UNIQUE);
+     CREATE TABLE t5(b INTEGER PRIMARY KEY);
+     CREATE TABLE t6(c);
+     INSERT INTO t4 VALUES(2);
+     INSERT INTO t4 VALUES(3);
+     INSERT INTO t4 VALUES(4);
+     INSERT INTO t5 SELECT * FROM t4;
+     INSERT INTO t6 SELECT * FROM t4;
+     CREATE TABLE t4n(a UNIQUE);
+     CREATE TABLE t6n(c);
+     INSERT INTO t4n SELECT * FROM t4;
+     INSERT INTO t4n VALUES(null);
+     INSERT INTO t6n SELECT * FROM t4n;
+     CREATE TABLE t7(a UNIQUE);
+     CREATE TABLE t8(c);
+     INSERT INTO t7 VALUES('b');
+     INSERT INTO t7 VALUES('c');
+     INSERT INTO t7 VALUES('d');
+     INSERT INTO t8 SELECT * FROM t7;
+     CREATE TABLE t7n(a UNIQUE);
+     CREATE TABLE t8n(c);
+     INSERT INTO t7n SELECT * FROM t7;
+     INSERT INTO t7n VALUES(null);
+     INSERT INTO t8n SELECT * FROM t7n
+;SELECT 1 IN t4
+;SELECT 1 NOT IN t4
+;SELECT 1 IN t5
+;SELECT 1 NOT IN t5
+;SELECT 1 IN t6
+;SELECT 1 NOT IN t6
+;SELECT 'a' IN t7
+;SELECT 'a' NOT IN t7
+;SELECT 'a' IN t8
+;SELECT 'a' NOT IN t8
+;SELECT 2 IN (2,3,4,null)
+;SELECT 3 NOT IN (2,3,4,null)
+;SELECT 4 IN (2,3,4)
+;SELECT 2 NOT IN (2,3,4)
+;SELECT 'b' IN ('b','c','d')
+;SELECT 'c' NOT IN ('b','c','d')
+;SELECT 'd' IN ('b','c',null,'d')
+;SELECT 'b' NOT IN (null,'b','c','d')
+;SELECT 2 IN t4
+;SELECT 3 NOT IN t4
+;SELECT 4 IN t4n
+;SELECT 2 NOT IN t4n
+;SELECT 2 IN t5
+;SELECT 3 NOT IN t5
+;SELECT 2 IN t6
+;SELECT 3 NOT IN t6
+;SELECT 4 IN t6n
+;SELECT 2 NOT IN t6n
+;SELECT 'b' IN t7
+;SELECT 'c' NOT IN t7
+;SELECT 'c' IN t7n
+;SELECT 'd' NOT IN t7n
+;SELECT 'b' IN t8
+;SELECT 'c' NOT IN t8
+;SELECT 'c' IN t8n
+;SELECT 'd' NOT IN t8n
+;SELECT 'a' IN (NULL,'a')
+;SELECT 'a' IN (NULL,'b')
+;SELECT 'a' NOT IN (NULL,'a')
+;SELECT 'a' NOT IN (NULL,'b')
+;SELECT 1 IN (2,3,4,null)
+;SELECT 1 NOT IN (2,3,4,null)
+;SELECT 'a' IN ('b','c',null,'d')
+;SELECT 'a' NOT IN (null,'b','c','d')
+;SELECT 1 IN t4n
+;SELECT 5 NOT IN t4n
+;SELECT 6 IN t6n
+;SELECT 7 NOT IN t6n
+;SELECT 'a' IN t7n
+;SELECT 'e' NOT IN t7n
+;SELECT 'f' IN t8n
+;SELECT 'g' NOT IN t8n
+;SELECT null IN (2,3,4,null)
+;SELECT null NOT IN (2,3,4,null)
+;SELECT null IN (2,3,4)
+;SELECT null NOT IN (2,3,4)
+;SELECT null IN ('b','c','d')
+;SELECT null NOT IN ('b','c','d')
+;SELECT null IN ('b','c',null,'d');

@@ -30,6 +30,9 @@ All notable changes to this project will be documented in this file.
   CREATE TABLE t1(x DINOSAUR, y BIRD_PERSON);
   ```
 
+- Run parser against entire SQLite test corpus using `grunt testall` command.
+  - **Warning**: This command will parse ~49,000 of queries, across almost 900 different files, representing the entire SQLite test corpus at the time it was processed.
+
 ### Changed
 - **BREAKING CHANGE** The `on` property of a `CREATE INDEX` statement is now treated as a table expression identifier, and has the corresponding `type` and `variant`:
 

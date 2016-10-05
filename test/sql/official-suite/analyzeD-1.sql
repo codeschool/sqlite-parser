@@ -1,0 +1,25 @@
+-- original: analyzeD.test
+-- credit:   http://www.sqlite.org/src/tree?ci=trunk&name=test
+
+CREATE TABLE t1(a, b, c)
+;INSERT INTO t1(a, b, c) VALUES( 2*(sub_i/100), sub_i%10, sub_c )
+;INSERT INTO t1 VALUES(3001, 3001, 3001);
+    INSERT INTO t1 VALUES(3001, 3001, 3002);
+    INSERT INTO t1 VALUES(3001, 3001, 3003);
+    INSERT INTO t1 VALUES(3001, 3001, 3004);
+    INSERT INTO t1 VALUES(3001, 3001, 3005);
+    INSERT INTO t1 VALUES(3001, 3001, 3006);
+    INSERT INTO t1 VALUES(3001, 3001, 3007);
+
+    CREATE INDEX t1_ab ON t1(a, b);
+    CREATE INDEX t1_c ON t1(c);
+
+    ANALYZE
+;SELECT * FROM t1 WHERE a=3001 AND c=150
+;DELETE FROM sqlite_stat1
+;SELECT * FROM t1 WHERE a=3001 AND c=150
+;UPDATE t1 SET a=13 WHERE a = 3001;
+    ANALYZE
+;SELECT * FROM t1 WHERE a=13 AND c=150
+;DELETE FROM sqlite_stat1
+;SELECT * FROM t1 WHERE a=13 AND c=150;

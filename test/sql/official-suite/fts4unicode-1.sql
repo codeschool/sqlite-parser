@@ -1,0 +1,42 @@
+-- original: fts4unicode.test
+-- credit:   http://www.sqlite.org/src/tree?ci=trunk&name=test
+
+INSERT INTO t2 VALUES(sub_d)
+;SELECT * FROM t2 WHERE t2 MATCH sub_q
+;SELECT snippet(t2, '[', ']', '...') FROM t2 WHERE t2 MATCH sub_q
+;SELECT snippet(t1, '[', ']') FROM t1 WHERE t1 MATCH 'b'
+;BEGIN;
+  DELETE FROM t1;
+  INSERT INTO t1 VALUES('b b b b b b b b b b b', 'b b b b b b b b b b b b b');
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 SELECT * FROM t1;
+  INSERT INTO t1 VALUES('a b c', NULL);
+  INSERT INTO t1 VALUES('a x c', NULL);
+  COMMIT
+;SELECT * FROM t1 WHERE t1 MATCH 'a b'
+;INSERT INTO t1 VALUES(sub_a);
+    INSERT INTO t1 VALUES(sub_b);
+    INSERT INTO t1 VALUES(sub_c);
+    INSERT INTO t1 VALUES(sub_d)
+;INSERT INTO t1 VALUES(sub_a);
+    INSERT INTO t1 VALUES(sub_b);
+    INSERT INTO t1 VALUES(sub_c);
+    INSERT INTO t1 VALUES(sub_d)
+;SELECT rowid FROM t3 WHERE t3 MATCH 'o'
+;SELECT rowid FROM t3 WHERE t3 MATCH 'a'
+;SELECT rowid FROM t4 WHERE t4 MATCH 'o'
+;SELECT rowid FROM t4 WHERE t4 MATCH 'a';

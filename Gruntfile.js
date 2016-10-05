@@ -15,7 +15,7 @@ module.exports = function(grunt) {
     return `${binPath} ${customArgs[cmd]} ${args}`.trim();
   }
   const customArgs = {
-    mocha: '',
+    mocha: 'test/**/*-spec.js --colors --bail --compilers=js:babel-core/register',
     pegjs: `--trace --cache --optimize size --output lib/parser.js src/grammar.pegjs`
   };
 
@@ -101,7 +101,8 @@ module.exports = function(grunt) {
       build: ['.tmp/*.js', 'lib/*.js'],
       dist: ['dist/*.js'],
       interactive: ['.tmp/**/*'],
-      demo: ['demo/**/*']
+      demo: ['demo/**/*'],
+      testProcess: ['test/sql/official-suite/**/*.sql']
     },
     shell: {
       build: {
@@ -114,7 +115,13 @@ module.exports = function(grunt) {
         options: {
           failOnError: true
         },
-        command: getCmdString('mocha', '--reporter=dot')
+        command: getCmdString('mocha', '--reporter=list')
+      },
+      testAll: {
+        options: {
+          failOnError: true
+        },
+        command: `ALL_TESTS=true ${getCmdString('mocha', '--reporter=list --timeout=90000')}`
       },
       debug: {
         options: {
@@ -122,13 +129,22 @@ module.exports = function(grunt) {
           debounceDelay: 500,
           forever: true
         },
-        command: `DEBUG=true ${getCmdString('mocha')}`
+        command: `DEBUG=true ${getCmdString('mocha', '--reporter=list')}`
       },
       rewrite: {
         options: {
           failOnError: true
         },
-        command: `REWRITE=true ${getCmdString('mocha')}`
+        command: `REWRITE=true ${getCmdString('mocha', '--reporter=list')}`
+      },
+      testProcess: {
+        options: {
+          failOnError: true,
+          execOptions: {
+            cwd: path.normalize(`${process.cwd()}/test/misc/`)
+          }
+        },
+        command: `sh process-tests.sh`
       }
     },
     connect: {
@@ -280,7 +296,13 @@ module.exports = function(grunt) {
   grunt.registerTask('test', [
     'build', 'shell:test'
   ]);
-  grunt.registerTask('test-watch', [
+  grunt.registerTask('testall', [
+    'build', 'shell:testAll'
+  ]);
+  grunt.registerTask('testprocess', [
+    'clean:testProcess', 'shell:testProcess'
+  ]);
+  grunt.registerTask('testwatch', [
     'test', 'watch:test'
   ]);
   grunt.registerTask('debug', [
