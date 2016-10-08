@@ -773,13 +773,13 @@ stmt_commit "END Transaction Statement"
   }
 
 stmt_begin "BEGIN Transaction Statement"
-  = s:( BEGIN ) o m:( stmt_begin_modifier )? t:( commit_transaction )?
+  = s:( BEGIN ) o m:( stmt_begin_modifier )? t:( commit_transaction )? n:( savepoint_name )?
   {
     return Object.assign({
       'type': 'statement',
       'variant': 'transaction',
       'action': 'begin'
-    }, m);
+    }, m, n);
   }
 
 commit_transaction
