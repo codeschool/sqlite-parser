@@ -1774,15 +1774,26 @@ column_constraint_tail
   { return c; }
 
 /** {@link https://www.sqlite.org/syntax/column-constraint.html} */
+/* Note from SQLite official tests:
+ * Undocumented behavior:  The CONSTRAINT name clause can follow a constraint.
+ * Such a clause is ignored.  But the parser must accept it for backwards
+ * compatibility.
+ */
 column_constraint "Column Constraint"
-  = n:( column_constraint_name )? c:( column_constraint_types )
+  = n:( constraint_name )? c:( column_constraint_types ) ln:( constraint_name )?
   {
     return Object.assign(c, n);
   }
 
-column_constraint_name "Column Constraint Name"
-  = CONSTRAINT o n:( name ) o
-  {
+// Note: Allow an arbitrary number of CONSTRAINT names but take the last
+//       one specified in the sequence
+constraint_name
+  = cl:( constraint_name_loop )+ {
+    return cl[cl.length - 1];
+  }
+
+constraint_name_loop "CONSTRAINT Name"
+  = CONSTRAINT o n:( name ) o {
     return {
       'name': n
     };

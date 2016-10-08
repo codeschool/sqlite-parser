@@ -174,6 +174,23 @@ All notable changes to this project will be documented in this file.
   ORDER BY 1 COLLATE nocase COLLATE nocase
   ```
 
+- **BREAKING CHANGE** `CONSTRAINT` names can now appear multiple times before or after a column or table constraint in a `CREATE TABLE` statement. Having a `CONSTRAINT` name *after* the constraint is an undocumented SQLite feature. However, while it will not give an error, any constraint name appearing after the constraint is ignored.
+
+  ``` sql
+  CREATE TABLE t2c(
+    -- Two leading and two trailing CONSTRAINT clauses
+    -- Name used: x_two
+    x INTEGER CONSTRAINT x_one CONSTRAINT x_two
+      CHECK( typeof( coalesce(x,0) ) == 'integer' )
+      CONSTRAINT x_two CONSTRAINT x_three,
+    y INTEGER,
+    z INTEGER,
+    -- Two trailing CONSTRAINT clauses
+    -- Name used: (none)
+    UNIQUE(x, y, z) CONSTRAINT u_one CONSTRAINT u_two
+  )
+  ```
+
 ### Fixed
 - Fixed binary expression parsing logic so that it can handle expressions such as:
 
