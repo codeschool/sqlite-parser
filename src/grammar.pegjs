@@ -332,12 +332,17 @@ bind_parameter "Bind Parameter"
  * Bind parameters start at index 1 instead of 0.
  */
 bind_parameter_numbered "Numbered Bind Parameter"
-  = q:( sym_quest ) id:( [1-9] [0-9]* )? o
+  = q:( sym_quest ) id:( bind_number_id )? o
   {
     return {
       'format': 'numbered',
       'name': foldStringWord([ q, id ])
     };
+  }
+
+bind_number_id
+  = f:( [1-9] ) r:( number_digit* ) {
+    return foldStringWord([ f, r ]);
   }
 
 bind_parameter_named "Named Bind Parameter"
