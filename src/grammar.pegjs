@@ -715,7 +715,7 @@ function_call_args "Function Call Arguments"
   }
 
 args_list_distinct
-  = s:( DISTINCT ) o
+  = s:( DISTINCT / ALL ) o
   {
     return {
       'filter': keyNode(s)
