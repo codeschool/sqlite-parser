@@ -2713,13 +2713,19 @@ datatype_numeric "NUMERIC Datatype Name"
   / "DECIMAL"i
   / "BOOLEAN"i
   / ( "DATE"i ( "TIME"i )? )
-  / ( "TIME"i ( "STAMP"i )? ) )
+  / ( "TIME"i ( "STAMP"i )? )
+  / "STRING"i )
   { return keyNode(t); }
 
 datatype_integer "INTEGER Datatype Name"
   = t:( ( "INT"i ( "2" / "4" / "8" / "EGER"i ) )
-  / ( ( "BIG"i / "MEDIUM"i / "SMALL"i / "TINY"i )? "INT"i ) )
+  / ( ( "BIG"i / "MEDIUM"i / "SMALL"i / "TINY"i )? "INT"i )
+  / datatype_integer_fp )
   { return keyNode(t); }
+datatype_integer_fp
+  = f:( "FLOATING"i ) p:( [\t ]+ "POINT"i ) {
+    return foldStringWord([ f, p ]);
+  }
 
 datatype_none "BLOB Datatype Name"
   = t:( "BLOB"i )
