@@ -2371,16 +2371,26 @@ virtual_args "Module Arguments"
   }
 
 virtual_arg_types
-  = virtual_arg_list
-  / virtual_arg_def
+  = !( name o ( type_definition / column_constraint ) ) e:( expression ) o {
+    return e;
+  }
+  / n:( virtual_column_name ) ( !( name_char ) o ) t:( column_type )? c:( column_constraints )? {
+    return Object.assign({
+      'type': 'definition',
+      'variant': 'column',
+      'name': n,
+      'definition': (isOkay(c) ? c : []),
+    }, t);
+  }
 
-virtual_arg_list
-  = !( name o ( type_definition / column_constraint ) ) l:( expression_list )
-  { return l; }
-
-virtual_arg_def
-  = l:( source_def_loop )
-  { return l; }
+/**
+ * @note
+ *   SQLite allows reserved words in the a VIRTUAL TABLE statement USING
+ *   clause CTE columns (e.g., from, to).
+ */
+virtual_column_name
+  = name
+  / name_reserved
 
 stmt_drop "DROP Statement"
   = s:( drop_start ) q:( id_table ) o

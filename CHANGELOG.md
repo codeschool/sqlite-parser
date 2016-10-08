@@ -372,6 +372,8 @@ All notable changes to this project will be documented in this file.
 
 - Allow functions to have datatype names such as `date(arg)` or `time(now)`.
 
+- Allow reserved words in the a `VIRTUAL TABLE` statement `USING` clause CTE columns (e.g., `from`, `to`).
+
 ## [v0.14.5] - 2016-07-11
 ### Fixed
 - Fix alternate not equal operator `<>`
