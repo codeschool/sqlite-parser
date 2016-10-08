@@ -105,8 +105,8 @@ semi_required
 
 /**
  * @note
- *  You need semicolon between multiple statements, otherwise can omit last
- *  semicolon in a group of statements.
+ *   You need semicolon between multiple statements, otherwise can omit last
+ *   semicolon in a group of statements.
  */
 stmt_list_tail
   = semi_required s:( stmt ) o
@@ -190,10 +190,10 @@ literal_date "Date Literal"
   }
 
 /**
- * Notes:
- *    1) [ENFORCED] SQL uses single quotes for string literals.
- *    2) [NOT IMPLEMENTED] Value is an identier or a string literal based on context.
- * {@link https://www.sqlite.org/lang_keywords.html}
+ * @note
+ *   1) [ENFORCED] SQL uses single quotes for string literals.
+ *   2) [NOT IMPLEMENTED] Value is an identier or a string literal based on context.
+ *   {@link https://www.sqlite.org/lang_keywords.html}
  */
 literal_string "String Literal"
   = s:( literal_string_single )
@@ -209,9 +209,11 @@ literal_string_single "Single-quoted String Literal"
   = sym_sglquote s:( literal_string_schar )* sym_sglquote
   {
     /**
-      * @note Unescaped the pairs of literal single quotation marks
-      * @note Not sure if the BLOB type should be un-escaped
-      */
+     * @note Unescaped the pairs of literal single quotation marks
+     */
+    /**
+     * @note Not sure if the BLOB type should be un-escaped
+     */
     return unescape(s, "'");
   }
 
@@ -715,9 +717,9 @@ stmt_nodes
 
 /**
  * @note
- *  Transaction statement rules do not follow the transaction nesting rules
- *  for the BEGIN, COMMIT, and ROLLBACK statements.
- *  {@link https://www.sqlite.org/lang_savepoint.html}
+ *   Transaction statement rules do not follow the transaction nesting rules
+ *   for the BEGIN, COMMIT, and ROLLBACK statements.
+ *   {@link https://www.sqlite.org/lang_savepoint.html}
  */
 stmt_commit "END Transaction Statement"
   = s:( COMMIT / END ) o t:( commit_transaction )?
@@ -933,8 +935,8 @@ stmt_vacuum "VACUUM Statement"
 
 /**
  * @note
- *  The argument from this statement cannot be categorized as a
- *  table or index based on context, so only the name is included.
+ *   The argument from this statement cannot be categorized as a
+ *   table or index based on context, so only the name is included.
  */
 stmt_analyze "ANALYZE Statement"
   = s:( ANALYZE ) o a:( analyze_arg )?
@@ -955,8 +957,8 @@ analyze_arg
 
 /**
  * @note
- *  The argument from this statement cannot be categorized as a
- *  table or index based on context, so only the name is included.
+ *   The argument from this statement cannot be categorized as a
+ *   table or index based on context, so only the name is included.
  */
 stmt_reindex "REINDEX Statement"
   = s:( REINDEX ) o a:( reindex_arg )? o
@@ -1001,11 +1003,11 @@ pragma_value_literal
 
 /**
  * @note
- *  There is no such thing as a boolean literal in SQLite
- *  {@link http://www.sqlite.org/datatype3.html}. However, the
- *  documentation for PRAGMA mentions the ability to use
- *  literal boolean values in this one specific instance.
- *  See: {@link https://www.sqlite.org/pragma.html}
+ *   There is no such thing as a boolean literal in SQLite
+ *   {@link http://www.sqlite.org/datatype3.html}. However, the
+ *   documentation for PRAGMA mentions the ability to use
+ *   literal boolean values in this one specific instance.
+ *   See: {@link https://www.sqlite.org/pragma.html}
  */
 pragma_value_bool
   = v:( pragma_bool_id ) & { return /^(yes|no|on|off|false|true|0|1)$/i.test(v) }
@@ -1314,9 +1316,10 @@ join_operator_types
   / operator_types_misc
 
 /**
- * @note FULL (OUTER)? JOIN included from PostgreSQL although it is not a
- *  join operarator allowed in SQLite.
- *  See: {@link https://www.sqlite.org/syntax/join-operator.html}
+ * @note
+ *   FULL (OUTER)? JOIN included from PostgreSQL although it is not a
+ *   join operarator allowed in SQLite.
+ *   See: {@link https://www.sqlite.org/syntax/join-operator.html}
  */
 operator_types_hand
   = t:( LEFT / RIGHT / FULL ) o o:( types_hand_outer )?
@@ -1543,7 +1546,9 @@ compound_union_all
   { return a; }
 
 /**
- * @note Includes limited update syntax {@link https://www.sqlite.org/syntax/update-stmt-limited.html}
+ * @note
+ *   Includes limited update syntax
+ *   {@link https://www.sqlite.org/syntax/update-stmt-limited.html}
  */
 stmt_update "UPDATE Statement"
   = s:( update_start ) f:( update_fallback )?
@@ -1596,10 +1601,10 @@ update_column "Column Assignment"
   }
 
 /**
- * @note Includes limited update syntax {@link https://www.sqlite.org/syntax/delete-stmt-limited.html}
+ * @note
+ *   Includes limited update syntax
+ *   {@link https://www.sqlite.org/syntax/delete-stmt-limited.html}
  */
-
-
 stmt_delete "DELETE Statement"
   = s:( delete_start ) t:( table_qualified ) o w:( stmt_core_where )?
     o:( stmt_core_order )? l:( stmt_core_limit )?
@@ -1617,8 +1622,8 @@ delete_start "DELETE Keyword"
 
 /**
  * @note
- *  The "only" rules were created to help the tracer to not traverse
- *  the wrong path.
+ *   The "only" rules were created to help the tracer to not traverse
+ *   the wrong path.
  */
 stmt_create "CREATE Statement"
   = create_table_only
@@ -2118,9 +2123,9 @@ index_on "ON Clause"
 
 /**
  * @note
- *  This statement type has missing syntax restrictions that need to be
- *  enforced on UPDATE, DELETE, and INSERT statements in the trigger_action.
- *  See {@link https://www.sqlite.org/lang_createtrigger.html}.
+ *   This statement type has missing syntax restrictions that need to be
+ *   enforced on UPDATE, DELETE, and INSERT statements in the trigger_action.
+ *   See {@link https://www.sqlite.org/lang_createtrigger.html}.
  */
 create_trigger "CREATE TRIGGER Statement"
   = s:( create_trigger_start ) ne:( create_core_ine )? n:( id_trigger ) o
@@ -2452,8 +2457,10 @@ id_column_qualified
   = t:( name ) d:( sym_dot )
   { return foldStringWord([ t, d ]); }
 
-/* Note: Datatype names are accepted as collation identifier in the
- *       reference implementation of SQLite.
+/**
+ * @note
+ *   Datatype names are accepted as collation identifier in the
+ *   reference implementation of SQLite.
  */
 id_collation "Collation Identifier"
   = n:( id_collation_types )
@@ -2955,8 +2962,10 @@ reserved_words
   = r:( reserved_word_list )
   { return keyNode(r); }
 
-/* Note: TEMP and ROWID removed here to be used as table and column names,
- *       respectively.
+/**
+ * @note
+ *   CROSS, RELEASE, ROWID, and TEMP removed here to be used as table
+ *   and column names.
  */
 reserved_word_list
   = ABORT / ACTION / ADD / AFTER / ALL / ALTER / ANALYZE / AND / AS /
