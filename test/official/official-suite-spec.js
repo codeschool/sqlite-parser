@@ -1,7 +1,7 @@
 import { resolve, basename, relative, dirname } from 'path';
 import { all } from 'bluebird';
 import { expect } from 'chai';
-import { read, write, glob, sqliteParser, mkdirSafe } from '../helpers';
+import { read, write, glob, sqliteParser, mkdirSafe } from '../misc/helpers';
 
 // Note: You must add ALL_TESTS=true to the environment to run these.
 if (process.env['ALL_TESTS'] === 'true') {

@@ -1,4 +1,4 @@
-import * as tree from '../helpers';
+import * as tree from '../misc/helpers';
 
 describe('expressions', function() {
 

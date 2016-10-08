@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {readFile, writeFile, stat } from 'fs';
+import {readFile, writeFile, stat, mkdir } from 'fs';
 import _glob from 'glob';
 import {all, each, promisify} from 'bluebird';
 import { basename, relative, dirname } from 'path';
@@ -44,7 +44,7 @@ filePath = function (that, ext, glob = false) {
   var testTitle = (that.test ? that.test : that).title.trim(),
       fileTitle = !glob ? _.kebabCase(testTitle) : testTitle,
       folderTitle = _.kebabCase((that.test ? that.test : that).parent.title.trim());
-  return __dirname + '/' + ext + '/' + folderTitle + '/' + fileTitle + '.' + ext;
+  return __dirname + '/../' + ext + '/' + folderTitle + '/' + fileTitle + '.' + ext;
 };
 
 /**
