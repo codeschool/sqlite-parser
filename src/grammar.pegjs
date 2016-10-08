@@ -217,14 +217,15 @@ literal_date "Date Literal"
  * @note
  *   1) [ENFORCED] SQL uses single quotes for string literals.
  *   2) [NOT IMPLEMENTED] Value is an identier or a string literal based on context.
+ *   3) [IMPLEMENTED] SQLite allows a negative default value on an added text column.
  *   {@link https://www.sqlite.org/lang_keywords.html}
  */
 literal_string "String Literal"
-  = s:( literal_string_single )
+  = n:( number_sign )? s:( literal_string_single )
   {
     return {
       'type': 'literal',
-      'variant': 'string',
+      'variant': 'text',
       'value': s
     };
   }
@@ -256,8 +257,7 @@ literal_blob "Blob Literal"
   }
 
 number_sign "Number Sign"
-  = s:( sym_plus / sym_minus )
-  { return s; }
+  = s:( sym_plus / sym_minus ) { return s; }
 
 literal_number_signed
   = s:( number_sign )? n:( literal_number )
