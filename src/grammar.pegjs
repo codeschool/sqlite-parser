@@ -1954,11 +1954,16 @@ primary_column_types
   / expression
 
 column_collate "Collation"
+  = c: ( column_collate_loop )+ {
+    return {
+      'collate': makeArray(c)
+    };
+  }
+
+column_collate_loop
   = COLLATE o n:( id_collation ) o
   {
-    return {
-      'collate': n
-    };
+    return n;
   }
 
 primary_column_dir "Column Direction"

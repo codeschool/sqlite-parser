@@ -167,6 +167,13 @@ All notable changes to this project will be documented in this file.
   }
   ```
 
+- **BREAKING CHANGE** `COLLATE` can now appear multiple times in a row wherever it would previously be allowed to appear, and as a result, the `collate` property of the AST will contain an array.
+
+  ``` sql
+  SELECT 'cats'
+  ORDER BY 1 COLLATE nocase COLLATE nocase
+  ```
+
 ### Fixed
 - Fixed binary expression parsing logic so that it can handle expressions such as:
 
