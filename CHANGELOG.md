@@ -370,6 +370,8 @@ All notable changes to this project will be documented in this file.
 
 - Allow trailing `.` in decimal value (e.g., `SELECT 1. + 1`).
 
+- Allow functions to have datatype names such as `date(arg)` or `time(now)`.
+
 ## [v0.14.5] - 2016-07-11
 ### Fixed
 - Fix alternate not equal operator `<>`

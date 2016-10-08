@@ -671,8 +671,12 @@ expression_list_rest
   = sym_comma e:( expression ) o
   { return e; }
 
+/**
+ * @note
+ *  Allow functions to have datatype names: date(arg), time(now), etc...
+ */
 function_call "Function Call"
-  = n:( name_unquoted ) o sym_popen a:( function_call_args )? o sym_pclose
+  = n:( id_function ) o sym_popen a:( function_call_args )? o sym_pclose
   {
     return Object.assign({
       'type': 'function',
