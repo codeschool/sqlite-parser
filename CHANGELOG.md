@@ -374,6 +374,14 @@ All notable changes to this project will be documented in this file.
 
 - Allow reserved words in the a `VIRTUAL TABLE` statement `USING` clause CTE columns (e.g., `from`, `to`).
 
+- Allow `WITH` clause before a `SELECT` statement wherever a `SELECT` statement can be found in a complex query, such as in a _insert into select_ query.
+
+  ``` sql
+  INSERT INTO t6
+  WITH s(x) AS ( VALUES (2) UNION ALL SELECT x + 2 FROM s WHERE x < 49 )
+  SELECT * FROM s;
+  ```
+
 ## [v0.14.5] - 2016-07-11
 ### Fixed
 - Fix alternate not equal operator `<>`

@@ -649,7 +649,7 @@ expression_in_target
   = expression_list_or_select
   / id_table
 expression_list_or_select
-  = sym_popen e:( stmt_select / expression_list ) o sym_pclose
+  = sym_popen e:( stmt_select_full / expression_list ) o sym_pclose
   { return e; }
 
 expression
@@ -918,8 +918,14 @@ select_alias
   }
 
 select_wrapped
-  = sym_popen s:( stmt_select ) o sym_pclose
-  { return s; }
+  = sym_popen s:( stmt_select_full ) o sym_pclose {
+    return s;
+  }
+
+stmt_select_full
+  = w:( stmt_core_with ) s:( stmt_select ) {
+    return Object.assign(s, w);
+  }
 
 /**
  * @note Uncommon or SQLite-specific statement types
@@ -1509,7 +1515,7 @@ insert_into_start "INTO Keyword"
   = s:( INTO ) o
 
 insert_results "VALUES Clause"
-  = r:( insert_value / insert_select / insert_default ) o
+  = r:( insert_value / stmt_select_full / insert_default ) o
   {
     return {
       'result': r
