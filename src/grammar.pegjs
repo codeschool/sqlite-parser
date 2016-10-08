@@ -960,7 +960,7 @@ stmt_sqlite
   / stmt_pragma
 
 stmt_attach "ATTACH Statement"
-  = a:( ATTACH ) o b:( DATABASE o )? e:( expression ) o AS o n:( id_database / literal_null ) o
+  = a:( ATTACH ) o b:( DATABASE o )? e:( expression ) o AS o n:( attach_arg ) o
   {
     return {
       'type': 'statement',
@@ -970,8 +970,11 @@ stmt_attach "ATTACH Statement"
     };
   }
 
+attach_arg
+  = id_database / literal_null / bind_parameter
+
 stmt_detach "DETACH Statement"
-  = d:( DETACH ) o b:( DATABASE o )? n:( id_database / literal_null ) o
+  = d:( DETACH ) o b:( DATABASE o )? n:( attach_arg ) o
   {
     return {
       'type': 'statement',
