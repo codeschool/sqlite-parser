@@ -35,6 +35,15 @@ All notable changes to this project will be documented in this file.
 
 - Allow multi-byte UTF-8 characters (e.g., `\u1234`) in identifier names.
 
+- Add support for table functions in the `FROM` clause of a `SELECT` statement.
+
+  ``` sql
+  SELECT
+    j2.rowid, jx.rowid
+  FROM
+    j2, json_tree(j2.json) AS jx
+  ```
+
 ### Changed
 - **BREAKING CHANGE** The `on` property of a `CREATE INDEX` statement is now treated as a table expression identifier, and has the corresponding `type` and `variant`:
 

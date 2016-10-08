@@ -1226,8 +1226,19 @@ source_loop_tail
 
 table_or_sub
   = table_or_sub_sub
+  / table_or_sub_func
   / table_qualified
   / table_or_sub_select
+
+table_or_sub_func
+  = n:( id_function ) o l:( expression_list_wrapped ) o a:( alias )? {
+    return Object.assign({
+      'type': 'function',
+      'variant': 'table',
+      'name': n,
+      'args': l
+    }, a);
+  }
 
 table_qualified "Qualified Table"
   = d:( table_qualified_id ) o i:( table_or_sub_index_node )?
@@ -1521,6 +1532,11 @@ insert_values "Insert Values List"
 
 insert_select "SELECT Results Clause"
   = stmt_select
+  
+expression_list_wrapped "Wrapped Expression List"
+  = sym_popen e:( expression_list ) o sym_pclose {
+    return e;
+  }
 
 insert_default "DEFAULT VALUES Clause"
   = d:( DEFAULT ) o v:( VALUES )
