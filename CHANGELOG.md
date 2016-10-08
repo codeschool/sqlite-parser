@@ -353,6 +353,21 @@ All notable changes to this project will be documented in this file.
   );
   ```
 
+- Now supporting custom datatypes with affinity inference where possible. See [this page](https://www.sqlite.org/datatype3.html) for explanation for choosing type affinity for custom types.
+
+  ``` sql
+  CREATE TABLE t3(
+    -- Affinity: NUMERIC
+    d STRING,
+    -- Affinity: INTEGER
+    e FLOATING POINT(5,10),
+    -- Affinity: TEXT
+    f NATIONAL CHARACTER(15) COLLATE RTRIM,
+    -- Affinity: INTEGER
+    g LONG INTEGER DEFAULT( 3600*12 )
+  );
+  ```
+
 ## [v0.14.5] - 2016-07-11
 ### Fixed
 - Fix alternate not equal operator `<>`

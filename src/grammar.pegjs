@@ -125,25 +125,49 @@ type_definition_types
     return {
       'type': 'datatype',
       'variant': n[0],
-      'affinity': n[1],
       'args': [] // datatype definition arguments
+      'affinity': n[1]
     };
   }
 
-/* Note: SQLite allows you to enter basically anything you want for a datatype
- *       because it doesn't enforce types you provide. Creating new affinity
- *       named 'unknown' to classify any datatype name that does not correspond
- *       to a known affinty.
- * See:  {@link http://stackoverflow.com/a/8417411}
+/**
+ * @note
+ *   SQLite allows you to enter basically anything you want for a datatype
+ *   because it doesn't enforce types you provide. The rules are as follows:
+ *   1) If the declared type contains the string "INT" then it is assigned
+ *   INTEGER affinity.
+ *   2) If the declared type of the column contains any of the strings "CHAR",
+ *   "CLOB", or "TEXT" then that column has TEXT affinity. Notice that the type
+ *   VARCHAR contains the string "CHAR" and is thus assigned TEXT affinity.
+ *   3) If the declared type for a column contains the string "BLOB" or if no
+ *   type is specified then the column has affinity BLOB.
+ *   4) If the declared type for a column contains any of the strings "REAL",
+ *   "FLOA", or "DOUB" then the column has REAL affinity.
+ *   5) Otherwise, the affinity is NUMERIC.
+ *   See:  {@link http://stackoverflow.com/a/8417411}
  */
 datatype_custom "Custom Datatype Name"
-  = t:( name_unquoted ) {
+  = t:( name ) r:( datatype_word_tail )* {
+    const variant = foldString([ t, r ]);
+    let affinity = 'numeric';
+    if (/int/i.test(variant)) {
+      affinity = 'integer';
+    } else if (/char|clob|text/i.test(variant)) {
+      affinity = 'text';
+    } else if (/blob/i.test(variant)) {
+      affinity = 'blob';
+    } else if (/real|floa|doub/i.test(variant)) {
+      affinity = 'real';
+    }
     return {
       'type': 'datatype',
-      'variant': t,
-      'affinity': 'unknown',
-      'args': []
+      'variant': variant,
+      'affinity': affinity
     };
+  }
+datatype_word_tail
+  = [\t ] w:( name_unquoted ) {
+    return w;
   }
 
 type_definition_args "Type Definition Arguments"
