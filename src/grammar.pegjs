@@ -794,10 +794,11 @@ stmt_release "RELEASE Statement"
 stmt_alter "ALTER TABLE Statement"
   = s:( alter_start ) n:( id_table ) o e:( alter_action ) o
   {
-    return {
+    return Object.assign({
       'type': 'statement',
-      'variant': keyNode(s)
-    };
+      'variant': keyNode(s),
+      'target': n
+    }, e);
   }
 
 alter_start "ALTER TABLE Keyword"

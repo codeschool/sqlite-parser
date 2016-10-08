@@ -341,6 +341,8 @@ All notable changes to this project will be documented in this file.
   FROM bees
   ```
 
+- The action (e.g., `ADD COLUMN`) and target (e.g., the table name) of a `ALTER TABLE` statement was not being added to the AST.
+
 ## [v0.14.5] - 2016-07-11
 ### Fixed
 - Fix alternate not equal operator `<>`
