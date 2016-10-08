@@ -191,6 +191,87 @@ All notable changes to this project will be documented in this file.
   )
   ```
 
+- **BREAKING CHANGE** `JOIN` clauses and table lists can now occur in the same `FROM` clause of a single `SELECT` statement. Tables separated by a comma will be included in the `JOIN` map as a cross join.
+
+  ``` sql
+  SELECT *
+  FROM aa LEFT JOIN bb, cc
+  WHERE cc.c = aa.a;
+  ```
+
+- **BREAKING CHANGE** A comma-separated list of table or subquery names in the `FROM` clause of a `SELECT` statement are now treated as a join map of cross joins. Also, each pair of comma-separated tables or subqueries can include a join constraint expression (e.g., `ON t.col1 = b.col2`).
+
+  ``` sql
+  SELECT t1.rowid, t2.rowid
+  FROM t1, t2 ON t1.a = t2.b;
+  ```
+
+  ``` json
+  {
+    "type": "statement",
+    "variant": "list",
+    "statement": [
+      {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t1.rowid"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t2.rowid"
+          }
+        ],
+        "from": {
+          "type": "map",
+          "variant": "join",
+          "source": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "t1"
+          },
+          "map": [
+            {
+              "type": "join",
+              "variant": "cross join",
+              "source": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "t2"
+              },
+              "constraint": {
+                "type": "constraint",
+                "variant": "join",
+                "format": "on",
+                "on": {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "=",
+                  "left": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "t1.a"
+                  },
+                  "right": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "t2.b"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+  ```
+
 ### Fixed
 - Fixed binary expression parsing logic so that it can handle expressions such as:
 

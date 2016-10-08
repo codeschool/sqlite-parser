@@ -1213,16 +1213,41 @@ select_node_aliased
   }
 
 select_source
-  = select_join_loop
-  / select_source_loop
-
-select_source_loop
   = f:( table_or_sub ) o t:( source_loop_tail )*
-  { return flattenAll([ f, t ]); }
+  {
+    if (isArrayOkay(t)) {
+      return {
+        'type': 'map',
+        'variant': 'join',
+        'source': f,
+        'map': t
+      };
+    }
+    return f;
 
 source_loop_tail
-  = sym_comma t:( table_or_sub ) o
-  { return t; }
+  = cl:( select_cross_clause / select_join_clause ) c:( join_condition )? {
+    return Object.assign(cl, c);
+  }
+
+select_cross_clause "CROSS JOIN Operation"
+  = sym_comma n:( table_or_sub ) o {
+    return {
+      'type': 'join',
+      'variant': 'cross join',
+      'source': n
+    };
+  }
+
+select_join_clause "JOIN Operation"
+  = o:( join_operator ) o n:( table_or_sub ) o
+  {
+    return {
+      'type': 'join',
+      'variant': keyNode(o),
+      'source': n
+    };
+  }
 
 table_or_sub
   = table_or_sub_sub
@@ -1292,28 +1317,6 @@ alias "Alias"
     };
   }
 
-select_join_loop
-  = t:( table_or_sub ) o j:( select_join_clause )+
-  {
-    return {
-      'type': 'map',
-      'variant': 'join',
-      'source': t,
-      'map': j
-    };
-  }
-
-select_join_clause "JOIN Operation"
-  = o:( join_operator ) o n:( table_or_sub ) o c:( join_condition )?
-  {
-    return {
-      'type': 'join',
-      'variant': keyNode(o),
-      'source': n,
-      'constraint': c
-    };
-  }
-
 join_operator "JOIN Operator"
   = n:( join_operator_natural )? o t:( join_operator_types )? j:( JOIN )
   { return foldString([ n, t, j ]); }
@@ -1345,12 +1348,14 @@ operator_types_misc
   { return textNode(t); }
 
 join_condition "JOIN Constraint"
-  = c:( join_condition_on / join_condition_using )
+  = c:( join_condition_on / join_condition_using ) o
   {
-    return Object.assign({
-      'type': 'constraint',
-      'variant': 'join'
-    }, c);
+    return {
+      'constraint': Object.assign({
+        'type': 'constraint',
+        'variant': 'join'
+      }, c)
+    }
   }
 
 join_condition_on "Join ON Clause"
