@@ -2426,11 +2426,28 @@ virtual_module
   }
 
 virtual_args "Module Arguments"
-  = sym_popen f:( virtual_arg_types ) o sym_pclose
+  = sym_popen o l:( virtual_args_loop )? o sym_pclose o
   {
     return {
-      'args': f
+      'args': {
+        'type': 'expression',
+        'variant': 'list',
+        'expression': isOkay(l) ? l : []
+      }
     };
+  }
+/**
+ * @note
+ *   The offical SQLite parser allows trailing commas in VIRTUAL TABLE
+ *   definitions.
+ */
+virtual_args_loop
+  = f:( virtual_arg_types ) b:( virtual_args_tail )* {
+    return flattenAll([ f, b ]).filter((arg) => isOkay(arg));
+  }
+virtual_args_tail
+  = o sym_comma o a:( virtual_arg_types )? {
+    return a;
   }
 
 virtual_arg_types
