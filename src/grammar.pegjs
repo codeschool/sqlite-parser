@@ -425,27 +425,40 @@ raise_args_message
     };
   }
 
+expression_root
+  = bind_parameter
+  / function_call
+  / literal_value
+  / id_column
+
 expression_wrapped
-  = sym_popen n:( expression ) o sym_pclose {
+  = sym_popen o n:( expression ) o sym_pclose {
     return n;
   }
 
-expression_root
+expression_recur
   = expression_wrapped
   / expression_cast
   / expression_case
   / expression_raise
   / expression_exists
-  / bind_parameter
-  / function_call
-  / literal_value
-  / id_column
+  / expression_root
 
-/* Note: Bind to expression_root before expression to bind the unary
- *       operator to the closest expression first.
+expression_unary_collate
+  = e:( expression_recur ) o c:( expression_collate ) {
+    return Object.assign(c, {
+      'expression': e
+    });
+  }
+  / expression_recur
+
+/**
+ * @note
+ *   Bind to expression_root before expression to bind the unary
+ *   operator to the closest expression first.
  */
 expression_unary
-  = op:( expression_unary_op ) o e:( expression_root / expression ) {
+  = op:( expression_unary_op ) o e:( expression_unary_collate / expression ) {
     return {
       'type': 'expression',
       'format': 'unary',
@@ -454,12 +467,7 @@ expression_unary
       'operator': keyNode(op)
     };
   }
-  / e:( expression_root ) o c:( expression_collate ) {
-    return Object.assign(c, {
-      'expression': e
-    });
-  }
-  / expression_root
+  / expression_unary_collate
 expression_unary_op
   = sym_tilde
   / sym_minus
@@ -553,15 +561,20 @@ type_alias "Type Alias"
   { return d; }
 
 expression_case "CASE Expression"
-  = t:( CASE ) o e:( expression )? o w:( expression_case_when )+ o
+  = t:( CASE ) o e:( case_expression  )? o w:( expression_case_when )+ o
     s:( expression_case_else )? o END o
   {
-    return {
+    return Object.assign({
       'type': 'expression',
       'format': 'binary',
       'variant': keyNode(t),
-      'expression': e,
       'condition': flattenAll([ w, s ])
+    }, e);
+  }
+case_expression
+  = !WHEN e:( expression ) {
+    return {
+      'expression': e
     };
   }
 expression_case_when "WHEN Clause"
@@ -609,7 +622,7 @@ expression_like "Comparison Expression"
     }, x);
   }
 expression_escape "ESCAPE Expression"
-  = s:( ESCAPE ) o e:( expression )
+  = s:( ESCAPE ) o e:( expression ) o
   {
     return {
       'escape': e

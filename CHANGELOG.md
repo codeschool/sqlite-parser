@@ -374,6 +374,20 @@ All notable changes to this project will be documented in this file.
 
 - Allow reserved words in the a `VIRTUAL TABLE` statement `USING` clause CTE columns (e.g., `from`, `to`).
 
+- Better nested expression parsing when unnecessary parenthesis are used within a complex expression.
+
+  ``` sql
+  SELECT
+    SUM(
+      CASE
+        WHEN ( t.color != 'yellow' ) THEN 1
+        ELSE 0
+      END
+    ) AS imposter_bee_count
+  FROM
+    bees t;
+  ```
+
 - Allow a reserved word to be used as a column name in a `CREATE TABLE` statement as long as it can be safely implied that it is meant to be a column name.
 
   ``` sql
