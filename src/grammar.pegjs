@@ -187,11 +187,12 @@ definition_args_loop
  * {@link https://www.sqlite.org/syntax/literal-value.html}
  */
 literal_value
-  = literal_number
-  / literal_string
+  = literal_number_signed
+  / literal_number
   / literal_blob
   / literal_null
   / literal_date
+  / literal_string
 
 literal_null "Null Literal"
   = n:( NULL ) o
@@ -253,6 +254,21 @@ literal_blob "Blob Literal"
       'type': 'literal',
       'variant': 'blob',
       'value': b
+    };
+  }
+
+/**
+ * @note
+ *   This is an undocumented SQLite feature that allows you to specify a
+ *   default column value as an _unquoted_ (e.g., DEFAULT foo) or a
+ *   double-quoted string value (e.g., DEFAULT "foo").
+ */
+literal_text
+  = n:( name_unquoted / name_dblquoted ) {
+    return {
+      'type': 'literal',
+      'variant': 'text',
+      'value': n
     };
   }
 
@@ -1936,7 +1952,7 @@ column_constraint_check "CHECK Column Constraint"
   = constraint_check
 
 column_constraint_default "DEFAULT Column Constraint"
-  = s:( DEFAULT ) o v:( expression_wrapped / literal_number_signed / literal_value )
+  = s:( DEFAULT ) o v:( column_default_values ) o
   {
     return {
       'type': 'constraint',
@@ -1944,6 +1960,11 @@ column_constraint_default "DEFAULT Column Constraint"
       'value': v
     };
   }
+column_default_values
+  = expression_wrapped
+  / literal_number_signed
+  / literal_value
+  / literal_text
 
 column_constraint_collate "COLLATE Column Constraint"
   = c:( column_collate )
