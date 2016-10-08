@@ -792,15 +792,23 @@ stmt_rollback "ROLLBACK Statement"
   }
 
 rollback_savepoint "TO Clause"
-  = TO o ( savepoint_alt )? n:( id_savepoint ) o
-  { return { 'savepoint': n }; }
+  = ( TO o )? ( savepoint_alt )? n:( savepoint_name ) {
+    return n;
+  }
+
+savepoint_name
+  = n:( id_savepoint ) o {
+    return {
+      'savepoint': n
+    }
+  }
 
 savepoint_alt
   = s:( SAVEPOINT ) o
   { return keyNode(s); }
 
 stmt_savepoint "SAVEPOINT Statement"
-  = s:( savepoint_alt ) n:( id_savepoint ) o
+  = s:( savepoint_alt ) n:( savepoint_name )
   {
     return {
       'type': 'statement',
@@ -810,7 +818,7 @@ stmt_savepoint "SAVEPOINT Statement"
   }
 
 stmt_release "RELEASE Statement"
-  = s:( RELEASE ) o a:( savepoint_alt )? n:( id_savepoint ) o
+  = s:( RELEASE ) o a:( savepoint_alt )? n:( savepoint_name )
   {
     return {
       'type': 'statement',
@@ -1535,7 +1543,7 @@ loop_column_tail
   { return c; }
 
 loop_name "Column Name"
-  = n:( name )
+  = n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -1787,7 +1795,7 @@ source_tbl_loop
 
 /** {@link https://www.sqlite.org/syntaxdiagrams.html#column-def} */
 source_def_column "Column Definition"
-  = n:( name ) ( !( name_char ) o ) t:( column_type )? o c:( column_constraints )?
+  = n:( source_def_name ) o t:( column_type )? c:( column_constraints )?
   {
     return Object.assign({
       'type': 'definition',
@@ -1796,9 +1804,16 @@ source_def_column "Column Definition"
       'definition': (isOkay(c) ? c : []),
     }, t);
   }
+source_def_name
+  = n:( name ) &( o ) {
+    return n;
+  }
+  / !( column_type / column_constraint / table_constraint ) o n:( name_reserved ) {
+    return n;
+  }
 
 column_type "Column Datatype"
-  = t:( type_definition )
+  = t:( type_definition ) o
   {
     return {
       'datatype': t
@@ -2508,8 +2523,12 @@ binary_lang_misc
 
 /* Database, Table and Column IDs */
 
+id_name "Identifier"
+  = name
+  / name_reserved
+
 id_database "Database Identifier"
-  = n:( name )
+  = n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -2518,8 +2537,18 @@ id_database "Database Identifier"
     };
   }
 
+id_function
+  = d:( id_table_qualified )? n:( id_name ) {
+    return {
+      'type': 'identifier',
+      // TODO: Should this be `table function` since it is table-function name
+      'variant': 'function',
+      'name': foldStringWord([ d, n ])
+    };
+  }
+
 id_table "Table Identifier"
-  = d:( id_table_qualified )? n:( name )
+  = d:( id_table_qualified )? n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -2529,11 +2558,11 @@ id_table "Table Identifier"
   }
 
 id_table_qualified
-  = n:( name ) d:( sym_dot )
+  = n:( id_name ) d:( sym_dot )
   { return foldStringWord([ n, d ]); }
 
 id_column "Column Identifier"
-  = q:( column_qualifiers / id_column_qualified / column_unqualified ) n:( name )
+  = q:( column_qualifiers / id_column_qualified / column_unqualified ) n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -2550,7 +2579,7 @@ column_qualifiers
   { return foldStringWord([ d, t ]); }
 
 id_column_qualified
-  = t:( name ) d:( sym_dot )
+  = t:( id_name ) d:( sym_dot )
   { return foldStringWord([ t, d ]); }
 
 /**
@@ -2559,7 +2588,7 @@ id_column_qualified
  *   reference implementation of SQLite.
  */
 id_collation "Collation Identifier"
-  = n:( id_collation_types )
+  = n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -2567,16 +2596,9 @@ id_collation "Collation Identifier"
       'name': n
     };
   }
-id_collation_types
-  = !( reserved_words / number_digit ) n:( name_char )+ {
-    return keyNode(n);
-  }
-  / name_bracketed
-  / name_backticked
-  / name_dblquoted
 
 id_savepoint "Savepoint Indentifier"
-  = n:( name )
+  = n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -2586,7 +2608,7 @@ id_savepoint "Savepoint Indentifier"
   }
 
 id_index "Index Identifier"
-  = d:( id_table_qualified )? n:( name )
+  = d:( id_table_qualified )? n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -2596,7 +2618,7 @@ id_index "Index Identifier"
   }
 
 id_trigger "Trigger Identifier"
-  = d:( id_table_qualified )? n:( name )
+  = d:( id_table_qualified )? n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -2606,7 +2628,7 @@ id_trigger "Trigger Identifier"
   }
 
 id_view "View Identifier"
-  = d:( id_table_qualified )? n:( name )
+  = d:( id_table_qualified )? n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -2616,7 +2638,7 @@ id_view "View Identifier"
   }
 
 id_pragma "Pragma Identifier"
-  = d:( id_table_qualified )? n:( name )
+  = d:( id_table_qualified )? n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -2626,12 +2648,12 @@ id_pragma "Pragma Identifier"
   }
 
 id_cte "CTE Identifier"
-  = d:( id_table_expression / id_table ) o
-  { return d; }
+  = d:( id_table_expression / id_table ) o {
+    return d;
+  }
 
 id_table_expression
-  = n:( id_table ) o a:( loop_columns )
-  {
+  = n:( id_table ) o a:( loop_columns ) {
     return Object.assign({
       'type': 'identifier',
       'variant': 'expression',
@@ -2642,7 +2664,7 @@ id_table_expression
   }
 
 id_constraint_table "Table Constraint Identifier"
-  = n:( name )
+  = n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -2653,7 +2675,7 @@ id_constraint_table "Table Constraint Identifier"
   }
 
 id_constraint_column "Column Constraint Identifier"
-  = n:( name )
+  = n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -2724,21 +2746,37 @@ unicode_char
 *  parser allows single-quoted string literals to be interpreted as aliases.
 */
 name
+  = name_quoted
+  / name_unquoted
+
+name_quoted
   = name_bracketed
   / name_backticked
   / name_dblquoted
   / name_sglquoted
-  / name_unquoted
 
 name_unquoted
-  = !( datatype_types / reserved_words / number_digit ) n:( unicode_char / name_char )+ {
+  = !( reserved_words / number_digit ) n:( unicode_char / name_char )+ {
     return keyNode(n);
+  }
+
+/**
+ * @note
+ *   This is for places where reserved words can be used as unquoted
+ *   identifiers to mimic the native SQLite parser behavior.
+ */
+name_reserved
+  = !( reserved_critical_list / number_digit ) n:( unicode_char / name_char )+ {
+   return keyNode(n);
   }
 
 /** @note Non-standard legacy format */
 name_bracketed
-  = sym_bopen n:$( !( [ \t]* "]" ) [^\]] )+ o sym_bclose
-  { return textNode(n); }
+  = sym_bopen o n:$( !bracket_terminator . )* bracket_terminator {
+    return textNode(n);
+  }
+bracket_terminator
+  = [ \t]* sym_bclose o
 
 name_dblquoted
   = '"' n:( '""' / [^\"] )* '"'
@@ -3088,6 +3126,23 @@ reserved_word_list
     SET / TABLE / TEMPORARY / THEN / TO / TRANSACTION /
     TRIGGER / UNION / UNIQUE / UPDATE / USING / VACUUM / VALUES /
     VIEW / VIRTUAL / WHEN / WHERE / WITH / WITHOUT
+
+/**
+ * @note
+ *   Not all reserved words are created equal in SQLite as these are
+ *   words that cannot be used as an unquoted column identifer while
+ *   the words on the master list (reserved_word_list) that do not
+ *   also appear here _can_ be used as column or table names.
+ */
+reserved_critical_list
+  = ADD / ALL / ALTER / AND / AS / AUTOINCREMENT / BETWEEN / CASE /
+    CHECK / COLLATE / COMMIT / CONSTRAINT / CREATE / DEFAULT /
+    DEFERRABLE / DELETE / DISTINCT / DROP / ELSE / ESCAPE / EXCEPT /
+    EXISTS / FOREIGN / FROM / GROUP / HAVING / IN / INDEX / INSERT /
+    INTERSECT / INTO / IS / ISNULL / JOIN / LIMIT / NOT / NOTNULL /
+    NULL / ON / OR / ORDER / PRIMARY / REFERENCES / SELECT / SET /
+    TABLE / THEN / TO / TRANSACTION / UNION / UNIQUE / UPDATE /
+    USING / VALUES / WHEN / WHERE
 
 /* Generic rules */
 

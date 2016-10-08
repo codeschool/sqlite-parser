@@ -374,6 +374,14 @@ All notable changes to this project will be documented in this file.
 
 - Allow reserved words in the a `VIRTUAL TABLE` statement `USING` clause CTE columns (e.g., `from`, `to`).
 
+- Allow a reserved word to be used as a column name in a `CREATE TABLE` statement as long as it can be safely implied that it is meant to be a column name.
+
+  ``` sql
+  CREATE TABLE changelog(
+    desc TEXT
+  );
+  ```
+
 - Allow `WITH` clause before a `SELECT` statement wherever a `SELECT` statement can be found in a complex query, such as in a _insert into select_ query.
 
   ``` sql
