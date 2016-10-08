@@ -2617,6 +2617,11 @@ datatype_none "BLOB Datatype Name"
 name_char
   = [a-z0-9\$\_]i
 
+unicode_char
+  = u:( "\\u" ) s:( [a-f0-9]{4} ) {
+  return foldStringKey([ u, s ]);
+}
+
 /**
 * @note
 *  Since SQLite is tolerant of this behavior, although it is non-standard,
@@ -2630,8 +2635,9 @@ name
   / name_unquoted
 
 name_unquoted
-  = !( datatype_types / reserved_words / number_digit ) n:( name_char )+
-  { return keyNode(n); }
+  = !( datatype_types / reserved_words / number_digit ) n:( unicode_char / name_char )+ {
+    return keyNode(n);
+  }
 
 /** @note Non-standard legacy format */
 name_bracketed
