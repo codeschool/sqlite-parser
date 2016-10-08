@@ -1917,11 +1917,11 @@ table_constraint_check "CHECK Table Constraint"
   }
 
 table_constraint_primary "PRIMARY KEY Table Constraint"
-  = k:( primary_start ) o c:( primary_columns ) t:( primary_conflict )?
+  = k:( primary_start ) o c:( primary_columns_table ) t:( primary_conflict )?
   {
     return {
-      'definition': makeArray(Object.assign(k, t)),
-      'columns': c
+      'definition': makeArray(Object.assign(k, t, c[1])),
+      'columns': c[0]
     };
   }
 
@@ -1943,26 +1943,40 @@ primary_start_unique "UNIQUE Keyword"
   { return textNode(u); }
 
 primary_columns
-  = sym_popen f:( primary_column ) o b:( primary_column_tail )* sym_pclose
-  { return flattenAll([ f, b ]); }
+  = sym_popen f:( primary_column ) o b:( primary_column_tail )* sym_pclose {
+    return [f].concat(b);
+  }
+primary_columns_index
+  = c:( primary_columns ) {
+    return c.map(([ res ]) => res);
+  }
+primary_columns_table
+  = c:( primary_columns ) {
+    const auto = c.find(([ res, a ]) => isOkay(a));
+    return [
+      c.map(([ res, a ]) => res),
+      auto ? auto[1] : null
+    ];
+  }
 
 primary_column_tail
   = sym_comma c:( primary_column ) o
   { return c; }
 
 primary_column "Indexed Column"
-  = e:( primary_column_types ) o d:( primary_column_dir )?
+  = e:( primary_column_types ) o d:( primary_column_dir )? a:( col_primary_auto )?
   {
     // Only convert this into an ordering expression if it contains
     // more than just the expression.
+    let res = e;
     if (isOkay(d)) {
-      return Object.assign({
+      res = Object.assign({
         'type': 'expression',
         'variant': 'order',
         'expression': e
       }, d);
     }
-    return e;
+    return [ res, a ];
   }
 primary_column_types
   = n:( loop_name ) &( o ( sym_semi / sym_pclose / primary_column_dir ) ) {

@@ -343,6 +343,16 @@ All notable changes to this project will be documented in this file.
 
 - The action (e.g., `ADD COLUMN`) and target (e.g., the table name) of a `ALTER TABLE` statement was not being added to the AST.
 
+- Allow `AUTOINCREMENT` in the column list of a `PRIMARY KEY` **table** constraint.
+
+  ``` sql
+  CREATE TABLE t7(
+    x INTEGER,
+    y REAL,
+    PRIMARY KEY(x AUTOINCREMENT)
+  );
+  ```
+
 ## [v0.14.5] - 2016-07-11
 ### Fixed
 - Fix alternate not equal operator `<>`
