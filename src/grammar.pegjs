@@ -291,7 +291,7 @@ number_decimal_full
   { return foldStringWord([ f, b ]); }
 
 number_decimal_fraction
-  = t:( sym_dot ) d:( number_digit )+
+  = t:( sym_dot ) d:( number_digit )*
   { return foldStringWord([ t, d ]); }
 
 number_decimal_exponent "Decimal Literal Exponent"
