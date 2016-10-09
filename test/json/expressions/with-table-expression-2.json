@@ -12,18 +12,26 @@
           "name": "family.name"
         }
       ],
-      "from": [
-        {
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
           "type": "identifier",
           "variant": "table",
           "name": "ancestor_of_alice"
         },
-        {
-          "type": "identifier",
-          "variant": "table",
-          "name": "family"
-        }
-      ],
+        "map": [
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "family"
+            }
+          }
+        ]
+      },
       "where": [
         {
           "type": "expression",
@@ -112,13 +120,11 @@
                   "name": "mom"
                 }
               ],
-              "from": [
-                {
-                  "type": "identifier",
-                  "variant": "table",
-                  "name": "family"
-                }
-              ]
+              "from": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "family"
+              }
             },
             "compound": [
               {
@@ -139,13 +145,11 @@
                       "name": "dad"
                     }
                   ],
-                  "from": [
-                    {
-                      "type": "identifier",
-                      "variant": "table",
-                      "name": "family"
-                    }
-                  ]
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "family"
+                  }
                 }
               }
             ]
@@ -181,13 +185,11 @@
                   "name": "parent"
                 }
               ],
-              "from": [
-                {
-                  "type": "identifier",
-                  "variant": "table",
-                  "name": "parent_of"
-                }
-              ],
+              "from": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "parent_of"
+              },
               "where": [
                 {
                   "type": "expression",
@@ -201,7 +203,7 @@
                   },
                   "right": {
                     "type": "literal",
-                    "variant": "string",
+                    "variant": "text",
                     "value": "Alice"
                   }
                 }

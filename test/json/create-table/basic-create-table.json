@@ -25,8 +25,7 @@
           "datatype": {
             "type": "datatype",
             "variant": "int",
-            "affinity": "integer",
-            "args": []
+            "affinity": "integer"
           }
         },
         {
@@ -38,13 +37,17 @@
             "type": "datatype",
             "variant": "varchar",
             "affinity": "text",
-            "args": [
-              {
-                "type": "literal",
-                "variant": "decimal",
-                "value": "50"
-              }
-            ]
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "50"
+                }
+              ]
+            }
           }
         },
         {
@@ -56,13 +59,17 @@
             "type": "datatype",
             "variant": "varchar",
             "affinity": "text",
-            "args": [
-              {
-                "type": "literal",
-                "variant": "decimal",
-                "value": "15"
-              }
-            ]
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "15"
+                }
+              ]
+            }
           }
         },
         {
@@ -73,8 +80,7 @@
           "datatype": {
             "type": "datatype",
             "variant": "int",
-            "affinity": "integer",
-            "args": []
+            "affinity": "integer"
           }
         }
       ]

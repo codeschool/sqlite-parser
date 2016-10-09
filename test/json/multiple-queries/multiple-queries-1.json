@@ -21,13 +21,17 @@
             "type": "datatype",
             "variant": "varchar",
             "affinity": "text",
-            "args": [
-              {
-                "type": "literal",
-                "variant": "decimal",
-                "value": "50"
-              }
-            ]
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "50"
+                }
+              ]
+            }
           }
         },
         {
@@ -39,13 +43,17 @@
             "type": "datatype",
             "variant": "varchar",
             "affinity": "text",
-            "args": [
-              {
-                "type": "literal",
-                "variant": "decimal",
-                "value": "50"
-              }
-            ]
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "50"
+                }
+              ]
+            }
           }
         },
         {
@@ -56,8 +64,7 @@
           "datatype": {
             "type": "datatype",
             "variant": "integer",
-            "affinity": "integer",
-            "args": []
+            "affinity": "integer"
           }
         }
       ]
@@ -91,17 +98,17 @@
       },
       "result": [
         {
-          "type": "values",
+          "type": "expression",
           "variant": "list",
-          "values": [
+          "expression": [
             {
               "type": "literal",
-              "variant": "string",
+              "variant": "text",
               "value": "Vivien Leigh"
             },
             {
               "type": "literal",
-              "variant": "string",
+              "variant": "text",
               "value": "IN"
             },
             {
@@ -112,17 +119,17 @@
           ]
         },
         {
-          "type": "values",
+          "type": "expression",
           "variant": "list",
-          "values": [
+          "expression": [
             {
               "type": "literal",
-              "variant": "string",
+              "variant": "text",
               "value": "Clark Gable"
             },
             {
               "type": "literal",
-              "variant": "string",
+              "variant": "text",
               "value": "USA"
             },
             {
@@ -133,17 +140,17 @@
           ]
         },
         {
-          "type": "values",
+          "type": "expression",
           "variant": "list",
-          "values": [
+          "expression": [
             {
               "type": "literal",
-              "variant": "string",
+              "variant": "text",
               "value": "Olivia de Havilland"
             },
             {
               "type": "literal",
-              "variant": "string",
+              "variant": "text",
               "value": "Japan"
             },
             {
@@ -154,17 +161,17 @@
           ]
         },
         {
-          "type": "values",
+          "type": "expression",
           "variant": "list",
-          "values": [
+          "expression": [
             {
               "type": "literal",
-              "variant": "string",
+              "variant": "text",
               "value": "Hattie McDaniel"
             },
             {
               "type": "literal",
-              "variant": "string",
+              "variant": "text",
               "value": "USA"
             },
             {
@@ -182,36 +189,50 @@
       "result": [
         {
           "type": "function",
-          "name": "min",
-          "args": [
-            {
-              "type": "identifier",
-              "variant": "column",
-              "name": "salary"
-            }
-          ],
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "min"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "salary"
+              }
+            ]
+          },
           "alias": "MinSalary"
         },
         {
           "type": "function",
-          "name": "max",
-          "args": [
-            {
-              "type": "identifier",
-              "variant": "column",
-              "name": "salary"
-            }
-          ],
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "max"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "salary"
+              }
+            ]
+          },
           "alias": "MaxSalary"
         }
       ],
-      "from": [
-        {
-          "type": "identifier",
-          "variant": "table",
-          "name": "actors"
-        }
-      ]
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "actors"
+      }
     }
   ]
 }

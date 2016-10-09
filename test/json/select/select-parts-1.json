@@ -12,14 +12,12 @@
           "name": "*"
         }
       ],
-      "from": [
-        {
-          "type": "identifier",
-          "variant": "table",
-          "name": "hats",
-          "alias": "h"
-        }
-      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "hats",
+        "alias": "h"
+      },
       "where": [
         {
           "type": "expression",
@@ -33,23 +31,27 @@
           },
           "right": {
             "type": "literal",
-            "variant": "string",
+            "variant": "text",
             "value": "red"
           }
         }
       ],
-      "group": [
-        {
-          "type": "identifier",
-          "variant": "column",
-          "name": "h.color"
-        },
-        {
-          "type": "identifier",
-          "variant": "column",
-          "name": "h.material"
-        }
-      ],
+      "group": {
+        "type": "expression",
+        "variant": "list",
+        "expression": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "h.color"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "h.material"
+          }
+        ]
+      },
       "having": {
         "type": "expression",
         "format": "binary",
@@ -57,14 +59,22 @@
         "operation": ">=",
         "left": {
           "type": "function",
-          "name": "count",
-          "args": [
-            {
-              "type": "identifier",
-              "variant": "column",
-              "name": "h.quantity"
-            }
-          ]
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "count"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "h.quantity"
+              }
+            ]
+          }
         },
         "right": {
           "type": "literal",

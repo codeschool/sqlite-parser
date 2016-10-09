@@ -13,25 +13,25 @@
         },
         {
           "type": "function",
-          "name": "count",
-          "args": [
-            {
-              "type": "identifier",
-              "variant": "star",
-              "name": "*"
-            }
-          ],
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "count"
+          },
+          "args": {
+            "type": "identifier",
+            "variant": "star",
+            "name": "*"
+          },
           "alias": "pants"
         }
       ],
-      "from": [
-        {
-          "type": "identifier",
-          "variant": "table",
-          "name": "hats",
-          "alias": "hat"
-        }
-      ]
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "hats",
+        "alias": "hat"
+      }
     }
   ]
 }

@@ -12,28 +12,26 @@
           "name": "*"
         }
       ],
-      "from": [
-        {
-          "type": "identifier",
-          "variant": "table",
-          "name": "hats"
-        }
-      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "hats"
+      },
       "where": [
         {
           "type": "expression",
           "format": "binary",
           "variant": "operation",
           "operation": "like",
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "%somebees%"
+          },
           "left": {
             "type": "identifier",
             "variant": "column",
             "name": "bees"
-          },
-          "right": {
-            "type": "literal",
-            "variant": "string",
-            "value": "%somebees%"
           }
         }
       ]

@@ -12,15 +12,17 @@
           "name": "*"
         }
       ],
-      "from": [
-        {
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "bees",
+        "alias": "b",
+        "index": {
           "type": "identifier",
-          "variant": "table",
-          "name": "bees",
-          "alias": "b",
-          "index": "bees_index"
+          "variant": "index",
+          "name": "bees_index"
         }
-      ]
+      }
     }
   ]
 }

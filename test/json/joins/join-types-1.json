@@ -41,14 +41,12 @@
                   "name": "r2.movie_id"
                 }
               ],
-              "from": [
-                {
-                  "type": "identifier",
-                  "variant": "table",
-                  "name": "rooms",
-                  "alias": "r2"
-                }
-              ],
+              "from": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "rooms",
+                "alias": "r2"
+              },
               "where": [
                 {
                   "type": "expression",
@@ -106,7 +104,7 @@
                   },
                   "right": {
                     "type": "literal",
-                    "variant": "string",
+                    "variant": "text",
                     "value": "Batman"
                   }
                 }

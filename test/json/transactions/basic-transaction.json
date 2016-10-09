@@ -31,8 +31,7 @@
           "datatype": {
             "type": "datatype",
             "variant": "int",
-            "affinity": "integer",
-            "args": []
+            "affinity": "integer"
           }
         },
         {
@@ -44,13 +43,17 @@
             "type": "datatype",
             "variant": "varchar",
             "affinity": "text",
-            "args": [
-              {
-                "type": "literal",
-                "variant": "decimal",
-                "value": "50"
-              }
-            ]
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "50"
+                }
+              ]
+            }
           }
         },
         {
@@ -62,13 +65,17 @@
             "type": "datatype",
             "variant": "varchar",
             "affinity": "text",
-            "args": [
-              {
-                "type": "literal",
-                "variant": "decimal",
-                "value": "15"
-              }
-            ]
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "15"
+                }
+              ]
+            }
           }
         },
         {
@@ -79,8 +86,7 @@
           "datatype": {
             "type": "datatype",
             "variant": "int",
-            "affinity": "integer",
-            "args": []
+            "affinity": "integer"
           }
         }
       ]
@@ -123,7 +129,7 @@
         "result": [
           {
             "type": "literal",
-            "variant": "string",
+            "variant": "text",
             "value": "banana"
           },
           {
@@ -142,13 +148,11 @@
             "name": "price"
           }
         ],
-        "from": [
-          {
-            "type": "identifier",
-            "variant": "table",
-            "name": "bananas"
-          }
-        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "bananas"
+        },
         "where": [
           {
             "type": "expression",
@@ -162,7 +166,7 @@
             },
             "right": {
               "type": "literal",
-              "variant": "string",
+              "variant": "text",
               "value": "red"
             }
           }

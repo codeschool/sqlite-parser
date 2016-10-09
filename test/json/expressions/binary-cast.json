@@ -19,23 +19,25 @@
             "type": "datatype",
             "variant": "varchar",
             "affinity": "text",
-            "args": [
-              {
-                "type": "literal",
-                "variant": "decimal",
-                "value": "20"
-              }
-            ]
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "20"
+                }
+              ]
+            }
           }
         }
       ],
-      "from": [
-        {
-          "type": "identifier",
-          "variant": "table",
-          "name": "bees"
-        }
-      ]
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "bees"
+      }
     }
   ]
 }

@@ -23,14 +23,12 @@
           "name": "movie_id"
         }
       ],
-      "from": [
-        {
-          "type": "identifier",
-          "variant": "table",
-          "name": "rooms",
-          "alias": "hat"
-        }
-      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "rooms",
+        "alias": "hat"
+      },
       "where": [
         {
           "type": "expression",
@@ -60,13 +58,11 @@
           "value": "2"
         }
       ],
-      "from": [
-        {
-          "type": "identifier",
-          "variant": "table",
-          "name": "hats"
-        }
-      ]
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "hats"
+      }
     }
   ]
 }

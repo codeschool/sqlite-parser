@@ -12,34 +12,38 @@
       "result": {
         "type": "module",
         "name": "happy_module",
-        "args": [
-          {
-            "type": "expression",
-            "format": "binary",
-            "variant": "operation",
-            "operation": "!=",
-            "left": {
-              "type": "identifier",
-              "variant": "column",
-              "name": "some"
+        "args": {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "!=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "some"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "text",
+                "value": "expression"
+              }
             },
-            "right": {
+            {
               "type": "literal",
-              "variant": "string",
-              "value": "expression"
+              "variant": "text",
+              "value": "just a string"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "33.0"
             }
-          },
-          {
-            "type": "literal",
-            "variant": "string",
-            "value": "just a string"
-          },
-          {
-            "type": "literal",
-            "variant": "decimal",
-            "value": "33.0"
-          }
-        ]
+          ]
+        }
       },
       "variant": "create",
       "format": "virtual"

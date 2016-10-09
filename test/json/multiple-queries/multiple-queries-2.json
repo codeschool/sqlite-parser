@@ -25,8 +25,7 @@
           "datatype": {
             "type": "datatype",
             "variant": "int",
-            "affinity": "integer",
-            "args": []
+            "affinity": "integer"
           }
         },
         {
@@ -47,13 +46,17 @@
             "type": "datatype",
             "variant": "varchar",
             "affinity": "text",
-            "args": [
-              {
-                "type": "literal",
-                "variant": "decimal",
-                "value": "50"
-              }
-            ]
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "50"
+                }
+              ]
+            }
           }
         }
       ]
@@ -77,34 +80,34 @@
       },
       "result": [
         {
-          "type": "values",
+          "type": "expression",
           "variant": "list",
-          "values": [
+          "expression": [
             {
               "type": "literal",
-              "variant": "string",
+              "variant": "text",
               "value": "Vivien Leigh"
             }
           ]
         },
         {
-          "type": "values",
+          "type": "expression",
           "variant": "list",
-          "values": [
+          "expression": [
             {
               "type": "literal",
-              "variant": "string",
+              "variant": "text",
               "value": "Clark Gable"
             }
           ]
         },
         {
-          "type": "values",
+          "type": "expression",
           "variant": "list",
-          "values": [
+          "expression": [
             {
               "type": "literal",
-              "variant": "string",
+              "variant": "text",
               "value": "Olivia de Havilland"
             }
           ]
@@ -134,8 +137,7 @@
           "datatype": {
             "type": "datatype",
             "variant": "int",
-            "affinity": "integer",
-            "args": []
+            "affinity": "integer"
           }
         },
         {
@@ -156,13 +158,17 @@
             "type": "datatype",
             "variant": "varchar",
             "affinity": "text",
-            "args": [
-              {
-                "type": "literal",
-                "variant": "decimal",
-                "value": "50"
-              }
-            ]
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "50"
+                }
+              ]
+            }
           }
         }
       ]
@@ -186,56 +192,56 @@
       },
       "result": [
         {
-          "type": "values",
+          "type": "expression",
           "variant": "list",
-          "values": [
+          "expression": [
             {
               "type": "literal",
-              "variant": "string",
+              "variant": "text",
               "value": "Don Juan"
             }
           ]
         },
         {
-          "type": "values",
+          "type": "expression",
           "variant": "list",
-          "values": [
+          "expression": [
             {
               "type": "literal",
-              "variant": "string",
+              "variant": "text",
               "value": "The Lost World"
             }
           ]
         },
         {
-          "type": "values",
+          "type": "expression",
           "variant": "list",
-          "values": [
+          "expression": [
             {
               "type": "literal",
-              "variant": "string",
+              "variant": "text",
               "value": "Peter Pan"
             }
           ]
         },
         {
-          "type": "values",
+          "type": "expression",
           "variant": "list",
-          "values": [
+          "expression": [
             {
               "type": "literal",
-              "variant": "string",
+              "variant": "text",
               "value": "Robin Hood"
             }
           ]
         },
         {
-          "type": "values",
+          "type": "expression",
           "variant": "list",
-          "values": [
+          "expression": [
             {
               "type": "literal",
-              "variant": "string",
+              "variant": "text",
               "value": "Wolfman"
             }
           ]
@@ -260,8 +266,6 @@
             {
               "variant": "foreign key",
               "type": "constraint",
-              "action": null,
-              "defer": null,
               "references": {
                 "type": "identifier",
                 "variant": "table",
@@ -272,8 +276,7 @@
           "datatype": {
             "type": "datatype",
             "variant": "int",
-            "affinity": "integer",
-            "args": []
+            "affinity": "integer"
           }
         },
         {
@@ -284,8 +287,6 @@
             {
               "variant": "foreign key",
               "type": "constraint",
-              "action": null,
-              "defer": null,
               "references": {
                 "type": "identifier",
                 "variant": "table",
@@ -296,8 +297,7 @@
           "datatype": {
             "type": "datatype",
             "variant": "int",
-            "affinity": "integer",
-            "args": []
+            "affinity": "integer"
           }
         }
       ]
@@ -326,9 +326,9 @@
       },
       "result": [
         {
-          "type": "values",
+          "type": "expression",
           "variant": "list",
-          "values": [
+          "expression": [
             {
               "type": "literal",
               "variant": "decimal",

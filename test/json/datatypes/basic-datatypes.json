@@ -19,13 +19,17 @@
             "type": "datatype",
             "variant": "nvarchar",
             "affinity": "text",
-            "args": [
-              {
-                "type": "literal",
-                "variant": "decimal",
-                "value": "20"
-              }
-            ]
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "20"
+                }
+              ]
+            }
           },
           "alias": "a1"
         },
@@ -42,13 +46,17 @@
             "type": "datatype",
             "variant": "varchar",
             "affinity": "text",
-            "args": [
-              {
-                "type": "literal",
-                "variant": "decimal",
-                "value": "10"
-              }
-            ]
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                }
+              ]
+            }
           },
           "alias": "b1"
         },
@@ -65,13 +73,17 @@
             "type": "datatype",
             "variant": "char",
             "affinity": "text",
-            "args": [
-              {
-                "type": "literal",
-                "variant": "decimal",
-                "value": "4"
-              }
-            ]
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "4"
+                }
+              ]
+            }
           },
           "alias": "c1"
         },
@@ -87,8 +99,7 @@
           "as": {
             "type": "datatype",
             "variant": "tinytext",
-            "affinity": "text",
-            "args": []
+            "affinity": "text"
           },
           "alias": "d1"
         },
@@ -104,8 +115,7 @@
           "as": {
             "type": "datatype",
             "variant": "mediumtext",
-            "affinity": "text",
-            "args": []
+            "affinity": "text"
           },
           "alias": "e1"
         },
@@ -121,8 +131,7 @@
           "as": {
             "type": "datatype",
             "variant": "longtext",
-            "affinity": "text",
-            "args": []
+            "affinity": "text"
           },
           "alias": "f1"
         },
@@ -139,13 +148,17 @@
             "type": "datatype",
             "variant": "clob",
             "affinity": "text",
-            "args": [
-              {
-                "type": "literal",
-                "variant": "decimal",
-                "value": "400"
-              }
-            ]
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "400"
+                }
+              ]
+            }
           },
           "alias": "g1"
         },
@@ -161,8 +174,7 @@
           "as": {
             "type": "datatype",
             "variant": "double precision",
-            "affinity": "real",
-            "args": []
+            "affinity": "real"
           },
           "alias": "h1"
         },
@@ -178,8 +190,7 @@
           "as": {
             "type": "datatype",
             "variant": "double",
-            "affinity": "real",
-            "args": []
+            "affinity": "real"
           },
           "alias": "i1"
         },
@@ -195,8 +206,7 @@
           "as": {
             "type": "datatype",
             "variant": "float",
-            "affinity": "real",
-            "args": []
+            "affinity": "real"
           },
           "alias": "j1"
         },
@@ -212,8 +222,7 @@
           "as": {
             "type": "datatype",
             "variant": "real",
-            "affinity": "real",
-            "args": []
+            "affinity": "real"
           },
           "alias": "k1"
         },
@@ -229,8 +238,7 @@
           "as": {
             "type": "datatype",
             "variant": "numeric",
-            "affinity": "numeric",
-            "args": []
+            "affinity": "numeric"
           },
           "alias": "l1"
         },
@@ -247,18 +255,22 @@
             "type": "datatype",
             "variant": "decimal",
             "affinity": "numeric",
-            "args": [
-              {
-                "type": "literal",
-                "variant": "decimal",
-                "value": "6"
-              },
-              {
-                "type": "literal",
-                "variant": "decimal",
-                "value": "2"
-              }
-            ]
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "6"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "2"
+                }
+              ]
+            }
           },
           "alias": "m1"
         },
@@ -274,8 +286,7 @@
           "as": {
             "type": "datatype",
             "variant": "boolean",
-            "affinity": "numeric",
-            "args": []
+            "affinity": "numeric"
           },
           "alias": "n1"
         },
@@ -291,8 +302,7 @@
           "as": {
             "type": "datatype",
             "variant": "date",
-            "affinity": "numeric",
-            "args": []
+            "affinity": "numeric"
           },
           "alias": "o1"
         },
@@ -308,8 +318,7 @@
           "as": {
             "type": "datatype",
             "variant": "datetime",
-            "affinity": "numeric",
-            "args": []
+            "affinity": "numeric"
           },
           "alias": "p1"
         },
@@ -325,8 +334,7 @@
           "as": {
             "type": "datatype",
             "variant": "timestamp",
-            "affinity": "numeric",
-            "args": []
+            "affinity": "numeric"
           },
           "alias": "q1"
         },
@@ -342,8 +350,7 @@
           "as": {
             "type": "datatype",
             "variant": "time",
-            "affinity": "numeric",
-            "args": []
+            "affinity": "numeric"
           },
           "alias": "r1"
         },
@@ -359,8 +366,7 @@
           "as": {
             "type": "datatype",
             "variant": "int",
-            "affinity": "integer",
-            "args": []
+            "affinity": "integer"
           },
           "alias": "s1"
         },
@@ -376,8 +382,7 @@
           "as": {
             "type": "datatype",
             "variant": "integer",
-            "affinity": "integer",
-            "args": []
+            "affinity": "integer"
           },
           "alias": "t1"
         },
@@ -393,8 +398,7 @@
           "as": {
             "type": "datatype",
             "variant": "int4",
-            "affinity": "integer",
-            "args": []
+            "affinity": "integer"
           },
           "alias": "u1"
         },
@@ -410,8 +414,7 @@
           "as": {
             "type": "datatype",
             "variant": "bigint",
-            "affinity": "integer",
-            "args": []
+            "affinity": "integer"
           },
           "alias": "v1"
         },
@@ -427,8 +430,7 @@
           "as": {
             "type": "datatype",
             "variant": "mediumint",
-            "affinity": "integer",
-            "args": []
+            "affinity": "integer"
           },
           "alias": "w1"
         },
@@ -444,8 +446,7 @@
           "as": {
             "type": "datatype",
             "variant": "smallint",
-            "affinity": "integer",
-            "args": []
+            "affinity": "integer"
           },
           "alias": "x1"
         },
@@ -461,8 +462,7 @@
           "as": {
             "type": "datatype",
             "variant": "tinyint",
-            "affinity": "integer",
-            "args": []
+            "affinity": "integer"
           },
           "alias": "y1"
         },
@@ -478,19 +478,16 @@
           "as": {
             "type": "datatype",
             "variant": "blob",
-            "affinity": "none",
-            "args": []
+            "affinity": "none"
           },
           "alias": "z1"
         }
       ],
-      "from": [
-        {
-          "type": "identifier",
-          "variant": "table",
-          "name": "ALL_DATATYPES"
-        }
-      ]
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "ALL_DATATYPES"
+      }
     },
     {
       "type": "statement",
@@ -516,13 +513,17 @@
             "type": "datatype",
             "variant": "varchar",
             "affinity": "text",
-            "args": [
-              {
-                "type": "literal",
-                "variant": "decimal",
-                "value": "20"
-              }
-            ]
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "20"
+                }
+              ]
+            }
           }
         },
         {
@@ -538,8 +539,7 @@
           "datatype": {
             "type": "datatype",
             "variant": "text",
-            "affinity": "text",
-            "args": []
+            "affinity": "text"
           }
         },
         {
@@ -555,8 +555,7 @@
           "datatype": {
             "type": "datatype",
             "variant": "int8",
-            "affinity": "integer",
-            "args": []
+            "affinity": "integer"
           }
         },
         {
@@ -572,8 +571,7 @@
           "datatype": {
             "type": "datatype",
             "variant": "double",
-            "affinity": "real",
-            "args": []
+            "affinity": "real"
           }
         },
         {
@@ -589,8 +587,7 @@
           "datatype": {
             "type": "datatype",
             "variant": "blob",
-            "affinity": "none",
-            "args": []
+            "affinity": "none"
           }
         }
       ]

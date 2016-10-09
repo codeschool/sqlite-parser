@@ -12,13 +12,11 @@
           "name": "*"
         }
       ],
-      "from": [
-        {
-          "type": "identifier",
-          "variant": "table",
-          "name": "bananas"
-        }
-      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "bananas"
+      },
       "where": [
         {
           "type": "expression",
@@ -32,7 +30,7 @@
           },
           "right": {
             "type": "literal",
-            "variant": "string",
+            "variant": "text",
             "value": "red"
           }
         }
