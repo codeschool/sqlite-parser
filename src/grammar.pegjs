@@ -2169,25 +2169,24 @@ foreign_clause
   = r:( foreign_references ) a:( foreign_actions )? d:( foreign_deferrable )?
   {
     return Object.assign({
-      'type': 'constraint',
-      'action': a,
-      'defer': d
-    }, r);
+      'type': 'constraint'
+    }, r, a, d);
   }
 
 foreign_references "REFERENCES Clause"
-  = s:( REFERENCES ) o t:( id_cte )
+  = s:( REFERENCES ) o t:( id_cte ) o
   {
     return {
       'references': t
     };
   }
 
-
-
 foreign_actions
-  = f:( foreign_action ) o b:( foreign_actions_tail )*
-  { return collect([f, b], []); }
+  = f:( foreign_action ) o b:( foreign_actions_tail )* {
+    return {
+      'action': flattenAll([ f, b ])
+    };
+  }
 
 foreign_actions_tail
   = a:( foreign_action ) o
@@ -2213,22 +2212,22 @@ action_on_action "FOREIGN KEY Action"
   / on_action_none
 
 on_action_set
-  = s:( SET ) o v:( NULL / DEFAULT )
+  = s:( SET ) o v:( NULL / DEFAULT ) o
   { return foldString([ s, v ]); }
 
 on_action_cascade
-  = c:( CASCADE / RESTRICT )
+  = c:( CASCADE / RESTRICT ) o
   { return textNode(c); }
 
 on_action_none
-  = n:( NO ) o a:( ACTION )
+  = n:( NO ) o a:( ACTION ) o
   { return foldString([ n, a ]); }
 
 /**
  * @note Not sure what kind of name this should be.
  */
 foreign_action_match
-  = m:( MATCH ) o n:( name )
+  = m:( MATCH ) o n:( name ) o
   {
     return {
       'type': 'action',
@@ -2238,8 +2237,11 @@ foreign_action_match
   }
 
 foreign_deferrable "DEFERRABLE Clause"
-  = n:( expression_is_not )? d:( DEFERRABLE ) o i:( deferrable_initially )?
-  { return foldStringKey([ n, d, i ]); }
+  = n:( expression_is_not )? d:( DEFERRABLE ) o i:( deferrable_initially )? {
+    return {
+      'defer': foldStringKey([ n, d, i ])
+    };
+  }
 
 deferrable_initially
   = i:( INITIALLY ) o d:( DEFERRED / IMMEDIATE ) o
@@ -2282,7 +2284,7 @@ index_unique
   }
 
 index_on "ON Clause"
-  = o:( ON ) o t:( id_table ) o c:( primary_columns )
+  = o:( ON ) o t:( id_table ) o c:( primary_columns_index )
   {
     return {
       'type': 'identifier',
