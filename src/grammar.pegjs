@@ -2843,8 +2843,8 @@ name_char
   = [a-z0-9\$\_]i
 
 unicode_char
-  = u:( "\\u" ) s:( [a-f0-9]{4} ) {
-  return foldStringKey([ u, s ]);
+  = u:( "\\u" ) s:( [a-f0-9]i+ ) {
+  return foldStringWord([ u, s ]).toLowerCase();
 }
 
 /**
