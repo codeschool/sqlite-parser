@@ -1396,7 +1396,7 @@ table_or_sub_index_node "Qualfied Table Index"
   / index_node_none
 
 index_node_indexed
-  = s:( INDEXED ) o BY o n:( name ) o
+  = s:( INDEXED ) o BY o n:( id_index ) o
   {
     return {
       'index': n
