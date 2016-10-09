@@ -1939,8 +1939,13 @@ column_constraint_primary "PRIMARY KEY Column Constraint"
     return Object.assign(p, c, d, a);
   }
 
+/**
+ * @note
+ *    PRAGMA KEY appears to be another undocumented feature
+ *    that is accepted by the SQLite parser but is not documented.
+ */
 col_primary_start "PRIMARY KEY Keyword"
-  = s:( PRIMARY ) o k:( KEY ) o
+  = s:( PRIMARY / PRAGMA ) o k:( KEY ) o
   {
     return {
       'type': 'constraint',
