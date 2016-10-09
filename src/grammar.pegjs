@@ -1846,8 +1846,13 @@ source_def_tail
   = sym_comma t:( source_def_column ) o
   { return t; }
 
+/**
+ * @note
+ *  Table constraints should be separated by commas, but they do not have
+ *  to be according to SQLite.
+ */
 source_tbl_loop
-  = sym_comma f:( table_constraint )
+  = sym_comma? f:( table_constraint )
   { return f; }
 
 /** {@link https://www.sqlite.org/syntaxdiagrams.html#column-def} */
