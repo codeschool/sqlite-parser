@@ -2301,8 +2301,13 @@ index_on "ON Clause"
  *   enforced on UPDATE, DELETE, and INSERT statements in the trigger_action.
  *   See {@link https://www.sqlite.org/lang_createtrigger.html}.
  */
+ /**
+  * @note
+  *   Omitting the trigger name in a CREATE TRIGGER is another undocumented
+  *   feature of the SQLite parser.
+  */
 create_trigger "CREATE TRIGGER Statement"
-  = s:( create_trigger_start ) ne:( create_core_ine )? n:( id_trigger ) o
+  = s:( create_trigger_start ) ne:( create_core_ine )? n:( id_trigger )? o
     cd:( trigger_conditions ) ( ON ) o o:( id_table ) o
     me:( trigger_foreach )? wh:( trigger_when )? a:( trigger_action )
   {
