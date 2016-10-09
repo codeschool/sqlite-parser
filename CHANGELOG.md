@@ -25,7 +25,7 @@ All notable changes to this project will be documented in this file.
   ATTACH DATABASE 'bees2.db' AS more_bees
   ```
 
-- SQLite allows you to enter basically anything you want for a datatype, such as the datatype for a column in a `CREATE TABLE` statement, because it doesn't enforce types you provide. So, the parser will accept almost any unquoted string in place of a datatype, and there is now a new affinity named `unknown` to classify any datatype that does not correspond to a known affinity. [ref1](http://stackoverflow.com/a/8417411) [ref2](http://www.sqlite.org/datatype3.html)
+- SQLite allows you to enter basically anything you want for a datatype, such as the datatype for a column in a `CREATE TABLE` statement, because it doesn't enforce types you provide. So, the parser will accept almost any unquoted string in place of a datatype. [ref1](http://stackoverflow.com/a/8417411) [ref2](http://www.sqlite.org/datatype3.html)
 
   ``` sql
   CREATE TABLE t1(x DINOSAUR, y BIRD_PERSON);
