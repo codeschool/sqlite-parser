@@ -1363,6 +1363,7 @@ select_join_clause "JOIN Operation"
 
 table_or_sub
   = table_or_sub_sub
+  / bind_parameter
   / table_or_sub_func
   / table_qualified
   / table_or_sub_select
