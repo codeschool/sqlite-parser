@@ -17,11 +17,19 @@ syntax error is produced if an AST cannot be generated.
 npm install sqlite-parser
 ```
 
+### Beta Version Available
+
+If you want the latest and greatest, install the _beta_ version of the parser (currently [v1.0.0-beta](https://github.com/codeschool/sqlite-parser/releases/tag/v1.0.0-beta)) with loads of new features and fixes.
+
+```
+npm install sqlite-parser@beta
+```
+
 ## Demo
 
 There is an interactive demo of the parser hosted
-[at this location](http://codeschool.github.io/sqlite-parser/demo/). You 
-can run a copy of the demo on your local machine by cloning this repository 
+[at this location](http://codeschool.github.io/sqlite-parser/demo/). You
+can run a copy of the demo on your local machine by cloning this repository
 and then using the command `grunt live`.
 
 ## Usage
@@ -80,6 +88,8 @@ FROM
 
 ``` json
 {
+  "type": "statement",
+  "variant": "list",
   "statement": [
     {
       "type": "statement",
@@ -87,36 +97,50 @@ FROM
       "result": [
         {
           "type": "function",
-          "name": "min",
-          "args": [
-            {
-              "type": "identifier",
-              "variant": "column",
-              "name": "honey"
-            }
-          ],
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "min"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "honey"
+              }
+            ]
+          },
           "alias": "Min Honey"
         },
         {
           "type": "function",
-          "name": "max",
-          "args": [
-            {
-              "type": "identifier",
-              "variant": "column",
-              "name": "honey"
-            }
-          ],
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "max"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "honey"
+              }
+            ]
+          },
           "alias": "Max Honey"
         }
       ],
-      "from": [
-        {
-          "type": "identifier",
-          "variant": "table",
-          "name": "beehive"
-        }
-      ]
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "beehive"
+      }
     }
   ]
 }
