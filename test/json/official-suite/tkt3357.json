@@ -1,0 +1,631 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "a"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "id",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b_id",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "myvalue",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "b"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "id",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "bvalue",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "a",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b_id"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "myvalue"
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "Test"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "a",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b_id"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "myvalue"
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "Test2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "a",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b_id"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "myvalue"
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "Test3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "b",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "bvalue"
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "btest"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "cc.id"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "cc.b_id"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "cc.myvalue"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "dd.bvalue"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "statement",
+          "variant": "select",
+          "result": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a.id"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a.b_id"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a.myvalue"
+            }
+          ],
+          "distinct": true,
+          "from": {
+            "type": "map",
+            "variant": "join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "a"
+            },
+            "map": [
+              {
+                "type": "join",
+                "variant": "inner join",
+                "source": {
+                  "type": "identifier",
+                  "variant": "table",
+                  "name": "b"
+                },
+                "constraint": {
+                  "type": "constraint",
+                  "variant": "join",
+                  "format": "on",
+                  "on": {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "a.b_id"
+                    },
+                    "right": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "b.id"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "where": [
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "b.bvalue"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "text",
+                "value": "btest"
+              }
+            }
+          ],
+          "alias": "cc"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "left outer join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "b",
+              "alias": "dd"
+            },
+            "constraint": {
+              "type": "constraint",
+              "variant": "join",
+              "format": "on",
+              "on": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "=",
+                "left": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "cc.b_id"
+                },
+                "right": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "dd.id"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "cc.id"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "cc.b_id"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "cc.myvalue"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "statement",
+          "variant": "select",
+          "result": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a.id"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a.b_id"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a.myvalue"
+            }
+          ],
+          "from": {
+            "type": "map",
+            "variant": "join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "a"
+            },
+            "map": [
+              {
+                "type": "join",
+                "variant": "cross join",
+                "source": {
+                  "type": "identifier",
+                  "variant": "table",
+                  "name": "b"
+                }
+              }
+            ]
+          },
+          "where": [
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "a.b_id"
+              },
+              "right": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "b.id"
+              }
+            }
+          ],
+          "alias": "cc"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "left outer join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "b",
+              "alias": "dd"
+            },
+            "constraint": {
+              "type": "constraint",
+              "variant": "join",
+              "format": "on",
+              "on": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "=",
+                "left": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "cc.b_id"
+                },
+                "right": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "dd.id"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "cc.id"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "cc.b_id"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "cc.myvalue"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "statement",
+          "variant": "select",
+          "result": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a.id"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a.b_id"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a.myvalue"
+            }
+          ],
+          "distinct": true,
+          "from": {
+            "type": "map",
+            "variant": "join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "a"
+            },
+            "map": [
+              {
+                "type": "join",
+                "variant": "cross join",
+                "source": {
+                  "type": "identifier",
+                  "variant": "table",
+                  "name": "b"
+                }
+              }
+            ]
+          },
+          "where": [
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "a.b_id"
+              },
+              "right": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "b.id"
+              }
+            }
+          ],
+          "alias": "cc"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "left outer join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "b",
+              "alias": "dd"
+            },
+            "constraint": {
+              "type": "constraint",
+              "variant": "join",
+              "format": "on",
+              "on": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "=",
+                "left": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "cc.b_id"
+                },
+                "right": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "dd.id"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

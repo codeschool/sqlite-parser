@@ -1,0 +1,4498 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "aa",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "int",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "bb",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "int",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "cc",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "int",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "dd",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "int",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "ee",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "int",
+            "affinity": "integer"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "ix"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t1",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "aa"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "bb"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "cc"
+          },
+          {
+            "type": "expression",
+            "variant": "order",
+            "expression": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "dd"
+            },
+            "direction": "desc"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "variant": "analyze",
+      "target": "sqlite_master"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2695116 1347558 264 18 2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 196859 196859 32 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 15043 15043 92468 92499"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 19 286 81846 92499"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "0609010804031552977BD725BD28"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 14687 161 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 289067 299306 299457 299457"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 199 6772 273984 299457"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "060902020403013406314D67456415B819"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 19313 19308 22 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 325815 325815 343725 343746"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 261 9545 315009 343746"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "060902080403018A49B0A3AD1ED931"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 25047 9051 15 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 350443 350443 356590 356604"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 266 9795 325519 356604"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "06090208040301914C2DD2E91F93CF"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 42327 9906 7 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 376381 376381 380291 380297"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 268 10100 344232 380297"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "06090208040301934BF672511F7ED3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 24513 2237 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 455150 467779 470015 470015"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 286 10880 425401 470015"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "06090202040301A703464A28F2611EF1EE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 18730 18724 15 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 479663 479663 498271 498285"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 287 10998 450793 498285"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "06090208040301A8494AF3A41EC50C"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 119603 47125 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 572425 572425 598915 598915"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 404 14230 546497 598915"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "06090208040302474FD1929A03194F"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 1454 1454 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 898346 898346 898373 898373"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 952 31165 827562 898373"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "06090208040304FD53F6A2A2097F64"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 57138 7069 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 1122389 1122389 1129457 1129457"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 1967 46801 1045943 1129457"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "06090208040309884BC4C52F1F6EB7"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 285 11 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 1197683 1197824 1197831 1197831"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 2033 50990 1112280 1197831"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "06090202040309D80346503FE2A9038E4F"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 25365 9773 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 1301013 1301013 1310785 1310785"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 2561 58806 1217877 1310785"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "0609020804030C5F4C8F88AB0AF2A2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 45180 7222 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 1326378 1326378 1333599 1333599"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 2562 59921 1240187 1333599"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "0609020804030C604CAB75490B0351"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 8537 41 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 1496959 1497288 1497289 1497289"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 3050 68246 1394126 1497289"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "0609020204030EA0057F527459B0257C4B"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 26139 26131 17 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 1507977 1507977 1520578 1520594"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 3074 69188 1416111 1520594"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "0609020804030EB95169453423D4EA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 102894 29678 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 1537421 1550467 1564894 1564894"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 3109 69669 1459820 1564894"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "0609020204030EE3183652A6ED3006EBCB"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 319 3 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 1796728 1796746 1796747 1796747"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 3650 86468 1682243 1796747"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "0609020204031163033550D0C41018C28D"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 127 127 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 2096194 2096194 2096205 2096205"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 5145 106437 1951535 2096205"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "060902080403180F53BB1AF727EE50"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 66574 5252 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 2230524 2265961 2271212 2271212"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 5899 114976 2085829 2271212"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "0609020204031B8A05195009976D223B90"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 19440 19440 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 2391680 2391680 2395663 2395663"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 6718 123714 2184781 2395663"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "0609020804031F7452E00A7B07431A"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 18321 2177 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 2522928 2523231 2525407 2525407"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 7838 139084 2299958 2525407"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "06090201040324A7475231103B1AA7B8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 22384 1361 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 2541249 2544834 2546194 2546194"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 7839 139428 2308416 2546194"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "06090202040324A8011652323D4B1AA9EB"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 18699 855 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 2563633 2578178 2579032 2579032"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 7840 139947 2321671 2579032"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "06090202040324A9077452323D7D1052C5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ix"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "17965 1579 1579 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 2690666 2690666 2692244 2692244"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "1 9870 153959 2418294 2692244"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "060102080403021B8A4FE1AB84032B35"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "analyze",
+      "target": "sqlite_master"
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "count"
+          },
+          "args": {
+            "type": "identifier",
+            "variant": "star",
+            "name": "*"
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "and",
+            "left": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "bb"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "21"
+              }
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "aa"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "1"
+              }
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "between",
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "and",
+              "left": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "1413833728"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "1413837331"
+              }
+            },
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "dd"
+            }
+          }
+        }
+      ],
+      "explain": true
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "ix"
+      },
+      "variant": "drop",
+      "format": "index",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "good"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t1",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "bb"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "aa"
+          },
+          {
+            "type": "expression",
+            "variant": "order",
+            "expression": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "dd"
+            },
+            "direction": "desc"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "bad"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t1",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "aa"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "bb"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "cc"
+          },
+          {
+            "type": "expression",
+            "variant": "order",
+            "expression": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "dd"
+            },
+            "direction": "desc"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2695116 299 264 2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2695116 1347558 264 18 2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "197030 196859 32 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "15086 15086 92511 92536"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "19 25 81644 92536"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "05010904031552977BD725BD22"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "14972 14687 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "289878 289878 299457 299457"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "199 244 267460 299457"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "050209040301344F7E569402C419"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "19600 19313 22 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "327127 327127 346222 346243"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "261 319 306884 346243"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "0502090403018A49503BC01EC577"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "25666 25047 15 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "352087 352087 372692 372706"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "266 327 325601 372706"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "050209040301914C2DD2E91F93CF"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "42392 42327 26 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "378657 378657 382547 382572"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "268 331 333529 382572"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "05020904030193533B2FE326ED48"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "24619 24513 11 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "457872 457872 461748 461758"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "286 358 399322 461758"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "050209040301A752B1557825EA7C"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "18969 18730 15 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "482491 482491 501105 501119"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "287 360 433605 501119"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "050209040301A8494AF3A41EC50C"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "119710 119603 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "576500 576500 598915 598915"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "404 505 519877 598915"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "05020904030247539A7A7912F617"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "11955 11946 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "889796 889796 898373 898373"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "938 1123 794694 898373"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "050209040304EF4DF9C4150BBB28"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "57197 57138 24 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "1129865 1129865 1151492 1151515"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "1967 2273 1027048 1151515"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "05020904030988533510BC26E20A"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "3609 3543 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "1196265 1196265 1197831 1197831"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2002 2313 1070108 1197831"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "050209040309B050E95CD718D94D"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "25391 25365 13 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "1309378 1309378 1315567 1315579"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2561 2936 1178358 1315579"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "05020904030C5F53DF9E13283570"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "45232 45180 17 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "1334769 1334769 1337946 1337962"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2562 2938 1198998 1337962"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "05020904030C60541CACEE28BCAC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "5496 5493 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "1495882 1495882 1497289 1497289"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "3043 3479 1348695 1497289"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "05020904030E99515C62AD0F0B34"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "26348 26139 17 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "1517381 1517381 1529990 1530006"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "3074 3519 1378320 1530006"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "05020904030EB95169453423D4EA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "102927 102894 10 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "1547088 1547088 1649950 1649959"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "3109 3559 1494260 1649959"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "05020904030EE34D309F671FFA47"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "3602 3576 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "1793873 1793873 1796747 1796747"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "3601 4128 1630783 1796747"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "050209040311294FE88B432219B9"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "154 154 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2096059 2096059 2096205 2096205"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "5037 5779 1893039 2096205"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "050209040317994EFF05A016DCED"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "68153 66574 60 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2244039 2244039 2268892 2268951"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "5899 6749 2027553 2268951"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "05020904031B8A532DBC5A26D2BA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "321 321 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2395618 2395618 2395663 2395663"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "6609 7528 2118435 2395663"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "05020904031EFA54078EEE1E2D65"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "19449 19440 22 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2407769 2407769 2426049 2426070"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "6718 7651 2146904 2426070"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "05020904031F7450E6118C2336BD"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "18383 18321 56 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2539949 2539949 2551080 2551135"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "7838 8897 2245459 2551135"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "050209040324A752EA2E1E2642B2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "22479 22384 60 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2558332 2558332 2565233 2565292"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "7839 8899 2251202 2565292"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "050209040324A853926538279A5F"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "good"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "18771 18699 63 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2580811 2580811 2596914 2596976"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "7840 8901 2263572 2596976"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "050209040324A9526C1DE9256E72"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 196859 196859 32 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 15043 15043 92468 92499"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 19 286 81846 92499"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "0609010804031552977BD725BD28"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 14687 161 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 289067 299306 299457 299457"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 199 6772 273984 299457"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "060902020403013406314D67456415B819"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 19313 19308 22 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 325815 325815 343725 343746"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 261 9545 315009 343746"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "060902080403018A49B0A3AD1ED931"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 25047 9051 15 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 350443 350443 356590 356604"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 266 9795 325519 356604"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "06090208040301914C2DD2E91F93CF"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 42327 9906 7 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 376381 376381 380291 380297"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 268 10100 344232 380297"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "06090208040301934BF672511F7ED3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 24513 2237 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 455150 467779 470015 470015"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 286 10880 425401 470015"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "06090202040301A703464A28F2611EF1EE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 18730 18724 15 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 479663 479663 498271 498285"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 287 10998 450793 498285"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "06090208040301A8494AF3A41EC50C"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 119603 47125 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 572425 572425 598915 598915"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 404 14230 546497 598915"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "06090208040302474FD1929A03194F"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 1454 1454 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 898346 898346 898373 898373"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 952 31165 827562 898373"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "06090208040304FD53F6A2A2097F64"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 57138 7069 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 1122389 1122389 1129457 1129457"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 1967 46801 1045943 1129457"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "06090208040309884BC4C52F1F6EB7"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 285 11 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 1197683 1197824 1197831 1197831"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 2033 50990 1112280 1197831"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "06090202040309D80346503FE2A9038E4F"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 25365 9773 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 1301013 1301013 1310785 1310785"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 2561 58806 1217877 1310785"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "0609020804030C5F4C8F88AB0AF2A2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 45180 7222 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 1326378 1326378 1333599 1333599"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 2562 59921 1240187 1333599"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "0609020804030C604CAB75490B0351"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 8537 41 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 1496959 1497288 1497289 1497289"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 3050 68246 1394126 1497289"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "0609020204030EA0057F527459B0257C4B"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 26139 26131 17 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 1507977 1507977 1520578 1520594"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 3074 69188 1416111 1520594"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "0609020804030EB95169453423D4EA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 102894 29678 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 1537421 1550467 1564894 1564894"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 3109 69669 1459820 1564894"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "0609020204030EE3183652A6ED3006EBCB"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 319 3 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 1796728 1796746 1796747 1796747"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 3650 86468 1682243 1796747"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "0609020204031163033550D0C41018C28D"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 127 127 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 2096194 2096194 2096205 2096205"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 5145 106437 1951535 2096205"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "060902080403180F53BB1AF727EE50"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 66574 5252 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 2230524 2265961 2271212 2271212"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 5899 114976 2085829 2271212"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "0609020204031B8A05195009976D223B90"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 19440 19440 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 2391680 2391680 2395663 2395663"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 6718 123714 2184781 2395663"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "0609020804031F7452E00A7B07431A"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 18321 2177 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 2522928 2523231 2525407 2525407"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 7838 139084 2299958 2525407"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "06090201040324A7475231103B1AA7B8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 22384 1361 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 2541249 2544834 2546194 2546194"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 7839 139428 2308416 2546194"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "06090202040324A8011652323D4B1AA9EB"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 18699 855 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 2563633 2578178 2579032 2579032"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "0 7840 139947 2321671 2579032"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "06090202040324A9077452323D7D1052C5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "t1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bad"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "17965 1579 1579 1 1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "2677151 2690666 2690666 2692244 2692244"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "1 9870 153959 2418294 2692244"
+            },
+            {
+              "type": "literal",
+              "variant": "blob",
+              "value": "060102080403021B8A4FE1AB84032B35"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "analyze",
+      "target": "sqlite_master"
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "count"
+          },
+          "args": {
+            "type": "identifier",
+            "variant": "star",
+            "name": "*"
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "and",
+            "left": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "bb"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "21"
+              }
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "aa"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "1"
+              }
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "between",
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "and",
+              "left": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "1413833728"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "1413837331"
+              }
+            },
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "dd"
+            }
+          }
+        }
+      ],
+      "explain": true
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "d",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "t3_ba"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t3",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "c"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "t3_a"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t3",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          {
+            "type": "literal",
+            "variant": "text",
+            "value": "c"
+          },
+          {
+            "type": "literal",
+            "variant": "text",
+            "value": "d"
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "d"
+        }
+      },
+      "with": [
+        {
+          "type": "expression",
+          "format": "table",
+          "variant": "common",
+          "target": {
+            "type": "identifier",
+            "variant": "expression",
+            "format": "table",
+            "name": "d",
+            "columns": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "a"
+              },
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "b"
+              }
+            ]
+          },
+          "expression": {
+            "type": "statement",
+            "variant": "compound",
+            "statement": {
+              "type": "statement",
+              "variant": "select",
+              "result": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1"
+                }
+              ]
+            },
+            "compound": [
+              {
+                "type": "compound",
+                "variant": "union all",
+                "statement": {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "+",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "a"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "1"
+                      }
+                    },
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "%",
+                      "left": {
+                        "type": "expression",
+                        "format": "binary",
+                        "variant": "operation",
+                        "operation": "+",
+                        "left": {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "a"
+                        },
+                        "right": {
+                          "type": "literal",
+                          "variant": "decimal",
+                          "value": "1"
+                        }
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "5"
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "d"
+                  },
+                  "where": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "<",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "a"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "100"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "d",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "t2_a"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t2",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "t2_ba"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t2",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "c"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "star",
+            "name": "*"
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t3"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "analyze"
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            "right": {
+              "type": "variable",
+              "format": "numbered",
+              "name": "?"
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "c"
+            },
+            "right": {
+              "type": "variable",
+              "format": "numbered",
+              "name": "?"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            "right": {
+              "type": "variable",
+              "format": "numbered",
+              "name": "?"
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "c"
+            },
+            "right": {
+              "type": "variable",
+              "format": "numbered",
+              "name": "?"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

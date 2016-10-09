@@ -1,0 +1,1068 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "element"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "code",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "name",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "60"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "elemor"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "codeor",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "code",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "constraint",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "columns": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "codeor"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "code"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "elemand"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "codeand",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "code",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "attr1",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "attr2",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "attr3",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "constraint",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "columns": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "codeand"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "code"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "element"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "Elem1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "element"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "Elem2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "element"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "Elem3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "element"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "4"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "Elem4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "element"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "5"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "Elem5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "elemor"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "elemor"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "elemand"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "a"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "b"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "c"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "elemand"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "x"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "y"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "view",
+        "name": "elemview1"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "compound",
+        "statement": {
+          "type": "statement",
+          "variant": "select",
+          "result": [
+            {
+              "type": "expression",
+              "format": "unary",
+              "variant": "cast",
+              "expression": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "element.code"
+              },
+              "as": {
+                "type": "datatype",
+                "variant": "varchar",
+                "affinity": "text",
+                "args": {
+                  "type": "expression",
+                  "variant": "list",
+                  "expression": [
+                    {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "50"
+                    }
+                  ]
+                }
+              },
+              "alias": "elemid"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "element.code",
+              "alias": "elemcode"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "element.name",
+              "alias": "elemname"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "elemand.code",
+              "alias": "innercode"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "elemand.attr1",
+              "alias": "attr1"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "elemand.attr2",
+              "alias": "attr2"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "elemand.attr3",
+              "alias": "attr3"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0",
+              "alias": "level"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0",
+              "alias": "isorelem"
+            }
+          ],
+          "from": {
+            "type": "map",
+            "variant": "join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "element"
+            },
+            "map": [
+              {
+                "type": "join",
+                "variant": "join",
+                "source": {
+                  "type": "identifier",
+                  "variant": "table",
+                  "name": "elemand"
+                },
+                "constraint": {
+                  "type": "constraint",
+                  "variant": "join",
+                  "format": "on",
+                  "on": {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "elemand.codeand"
+                    },
+                    "right": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "element.code"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "where": [
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "not in",
+              "right": {
+                "type": "statement",
+                "variant": "select",
+                "result": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "codeor"
+                  }
+                ],
+                "from": {
+                  "type": "identifier",
+                  "variant": "table",
+                  "name": "elemor"
+                }
+              },
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "elemand.codeand"
+              }
+            }
+          ]
+        },
+        "compound": [
+          {
+            "type": "compound",
+            "variant": "union all",
+            "statement": {
+              "type": "statement",
+              "variant": "select",
+              "result": [
+                {
+                  "type": "expression",
+                  "format": "unary",
+                  "variant": "cast",
+                  "expression": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "elemor.codeor"
+                  },
+                  "as": {
+                    "type": "datatype",
+                    "variant": "varchar",
+                    "affinity": "text",
+                    "args": {
+                      "type": "expression",
+                      "variant": "list",
+                      "expression": [
+                        {
+                          "type": "literal",
+                          "variant": "decimal",
+                          "value": "50"
+                        }
+                      ]
+                    }
+                  },
+                  "alias": "elemid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "element.code",
+                  "alias": "elemcode"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "element.name",
+                  "alias": "elemname"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "elemor.code",
+                  "alias": "innercode"
+                },
+                {
+                  "type": "literal",
+                  "variant": "null",
+                  "value": "null",
+                  "alias": "attr1"
+                },
+                {
+                  "type": "literal",
+                  "variant": "null",
+                  "value": "null",
+                  "alias": "attr2"
+                },
+                {
+                  "type": "literal",
+                  "variant": "null",
+                  "value": "null",
+                  "alias": "attr3"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0",
+                  "alias": "level"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1",
+                  "alias": "isorelem"
+                }
+              ],
+              "from": {
+                "type": "map",
+                "variant": "join",
+                "source": {
+                  "type": "identifier",
+                  "variant": "table",
+                  "name": "elemor"
+                },
+                "map": [
+                  {
+                    "type": "join",
+                    "variant": "join",
+                    "source": {
+                      "type": "identifier",
+                      "variant": "table",
+                      "name": "element"
+                    },
+                    "constraint": {
+                      "type": "constraint",
+                      "variant": "join",
+                      "format": "on",
+                      "on": {
+                        "type": "expression",
+                        "format": "binary",
+                        "variant": "operation",
+                        "operation": "=",
+                        "left": {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "element.code"
+                        },
+                        "right": {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "elemor.codeor"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "order": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "elemid"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "innercode"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "view"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "view",
+        "name": "elemview2"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "compound",
+        "statement": {
+          "type": "statement",
+          "variant": "select",
+          "result": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "elemid"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "elemcode"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "elemname"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "innercode"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "attr1"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "attr2"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "attr3"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "level"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "isorelem"
+            }
+          ],
+          "from": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "elemview1"
+          }
+        },
+        "compound": [
+          {
+            "type": "compound",
+            "variant": "union all",
+            "statement": {
+              "type": "statement",
+              "variant": "select",
+              "result": [
+                {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "||",
+                  "left": {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "||",
+                    "left": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "element.elemid"
+                    },
+                    "right": {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": "."
+                    }
+                  },
+                  "right": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "innerelem.elemid"
+                  },
+                  "alias": "elemid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "innerelem.elemcode"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "innerelem.elemname"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "innerelem.innercode"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "innerelem.attr1"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "innerelem.attr2"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "innerelem.attr3"
+                },
+                {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "+",
+                  "left": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "innerelem.level"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "1"
+                  }
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "innerelem.isorelem"
+                }
+              ],
+              "from": {
+                "type": "map",
+                "variant": "join",
+                "source": {
+                  "type": "identifier",
+                  "variant": "table",
+                  "name": "elemview1",
+                  "alias": "element"
+                },
+                "map": [
+                  {
+                    "type": "join",
+                    "variant": "join",
+                    "source": {
+                      "type": "identifier",
+                      "variant": "table",
+                      "name": "elemview1",
+                      "alias": "innerelem"
+                    },
+                    "constraint": {
+                      "type": "constraint",
+                      "variant": "join",
+                      "format": "on",
+                      "on": {
+                        "type": "expression",
+                        "format": "binary",
+                        "variant": "operation",
+                        "operation": "and",
+                        "left": {
+                          "type": "expression",
+                          "format": "binary",
+                          "variant": "operation",
+                          "operation": "=",
+                          "left": {
+                            "type": "identifier",
+                            "variant": "column",
+                            "name": "element.level"
+                          },
+                          "right": {
+                            "type": "literal",
+                            "variant": "decimal",
+                            "value": "0"
+                          }
+                        },
+                        "right": {
+                          "type": "expression",
+                          "format": "binary",
+                          "variant": "operation",
+                          "operation": "=",
+                          "left": {
+                            "type": "identifier",
+                            "variant": "column",
+                            "name": "element.innercode"
+                          },
+                          "right": {
+                            "type": "identifier",
+                            "variant": "column",
+                            "name": "innerelem.elemcode"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "order": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "elemid"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "innercode"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "view"
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "elemview1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "elemview2"
+      }
+    }
+  ]
+}
