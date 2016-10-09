@@ -1,0 +1,1204 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "page_size"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "1024"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "auto_vacuum"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "boolean",
+          "normalized": "0",
+          "value": "0"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "i1"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t1",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "abcdefghijklmnop"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "r"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "r"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ABCDEFGHIJK"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "r1"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "r",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "auto_vacuum"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "boolean",
+          "normalized": "0",
+          "value": "0"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "page_size"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "512"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "star",
+            "name": "*"
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "s"
+        }
+      },
+      "with": [
+        {
+          "type": "expression",
+          "format": "table",
+          "variant": "common",
+          "target": {
+            "type": "identifier",
+            "variant": "expression",
+            "format": "table",
+            "name": "s",
+            "columns": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "a"
+              },
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "b"
+              }
+            ]
+          },
+          "expression": {
+            "type": "statement",
+            "variant": "compound",
+            "statement": {
+              "type": "statement",
+              "variant": "select",
+              "result": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "2"
+                },
+                {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "abcdefghij"
+                }
+              ]
+            },
+            "compound": [
+              {
+                "type": "compound",
+                "variant": "union all",
+                "statement": {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "+",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "a"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "2"
+                      }
+                    },
+                    {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "b"
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "s"
+                  },
+                  "where": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "<",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "a"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "40"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "5"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "klmnopqrst"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "7"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "klmnopqrst"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "page_size"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "65536"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "autovacuum"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "boolean",
+          "normalized": "0",
+          "value": "0"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "expression",
+              "format": "unary",
+              "variant": "operation",
+              "expression": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "1"
+              },
+              "operator": "-"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "abcdefghij"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "abcdefghij"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "page_size"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "512"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "auto_vacuum"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "2"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tsub_i"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t100"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t100"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "page_count"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "page_size"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "512"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "auto_vacuum"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "boolean",
+          "normalized": "0",
+          "value": "0"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "function",
+              "name": {
+                "type": "identifier",
+                "variant": "function",
+                "name": "zeroblob"
+              },
+              "args": {
+                "type": "expression",
+                "variant": "list",
+                "expression": [
+                  {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "300"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "function",
+              "name": {
+                "type": "identifier",
+                "variant": "function",
+                "name": "zeroblob"
+              },
+              "args": {
+                "type": "expression",
+                "variant": "list",
+                "expression": [
+                  {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "600"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "rowid"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "2"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "auto_vacuum"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "boolean",
+          "normalized": "0",
+          "value": "0"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ]
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "y",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "a"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "A"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "b"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "A"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "c"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "A"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "name"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_master"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "writable_schema"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "boolean",
+          "normalized": "1",
+          "value": "1"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_master"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "name"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "sqlite_autoindex_t1_1"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "auto_vacuum"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "boolean",
+          "normalized": "0",
+          "value": "0"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "function",
+              "name": {
+                "type": "identifier",
+                "variant": "function",
+                "name": "zeroblob"
+              },
+              "args": {
+                "type": "expression",
+                "variant": "list",
+                "expression": [
+                  {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "300"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "function",
+              "name": {
+                "type": "identifier",
+                "variant": "function",
+                "name": "zeroblob"
+              },
+              "args": {
+                "type": "expression",
+                "variant": "list",
+                "expression": [
+                  {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "300"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "function",
+              "name": {
+                "type": "identifier",
+                "variant": "function",
+                "name": "zeroblob"
+              },
+              "args": {
+                "type": "expression",
+                "variant": "list",
+                "expression": [
+                  {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "300"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "function",
+              "name": {
+                "type": "identifier",
+                "variant": "function",
+                "name": "zeroblob"
+              },
+              "args": {
+                "type": "expression",
+                "variant": "list",
+                "expression": [
+                  {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "300"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "integrity_check"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    }
+  ]
+}

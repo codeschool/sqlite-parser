@@ -1,0 +1,1671 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "json_object"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "ex"
+              },
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "[52,3.14159]"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "json_object"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "ex"
+              },
+              {
+                "type": "function",
+                "name": {
+                  "type": "identifier",
+                  "variant": "function",
+                  "name": "json"
+                },
+                "args": {
+                  "type": "expression",
+                  "variant": "list",
+                  "expression": [
+                    {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": "[52,3.14159]"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "json_object"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "ex"
+              },
+              {
+                "type": "function",
+                "name": {
+                  "type": "identifier",
+                  "variant": "function",
+                  "name": "json_array"
+                },
+                "args": {
+                  "type": "expression",
+                  "variant": "list",
+                  "expression": [
+                    {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "52"
+                    },
+                    {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "3.14159"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "json_array"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "1"
+              },
+              {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "2"
+              },
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "3"
+              },
+              {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "4"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "json_array"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "[1,2]"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "json_array"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "function",
+                "name": {
+                  "type": "identifier",
+                  "variant": "function",
+                  "name": "json_array"
+                },
+                "args": {
+                  "type": "expression",
+                  "variant": "list",
+                  "expression": [
+                    {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "1"
+                    },
+                    {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "2"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "json_array_length"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "[1,2,3,4]"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "json_array_length"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "[1,2,3,4]"
+              },
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "$"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "json_array_length"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "[1,2,3,4]"
+              },
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "$[2]"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "json_object"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "a"
+              },
+              {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "2"
+              },
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "c"
+              },
+              {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "4"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "json_object"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "a"
+              },
+              {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "2"
+              },
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "c"
+              },
+              {
+                "type": "function",
+                "name": {
+                  "type": "identifier",
+                  "variant": "function",
+                  "name": "json_object"
+                },
+                "args": {
+                  "type": "expression",
+                  "variant": "list",
+                  "expression": [
+                    {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": "e"
+                    },
+                    {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "5"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "json_remove"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "[0,1,2,3,4]"
+              },
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "$[2]"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "json_remove"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "[0,1,2,3,4]"
+              },
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "$[2]"
+              },
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "$[0]"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "json_remove"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "[0,1,2,3,4]"
+              },
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "$[0]"
+              },
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "$[2]"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "json_valid"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "||",
+                "left": {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "||",
+                  "left": {
+                    "type": "function",
+                    "name": {
+                      "type": "identifier",
+                      "variant": "function",
+                      "name": "char"
+                    },
+                    "args": {
+                      "type": "expression",
+                      "variant": "list",
+                      "expression": [
+                        {
+                          "type": "literal",
+                          "variant": "decimal",
+                          "value": "123"
+                        }
+                      ]
+                    }
+                  },
+                  "right": {
+                    "type": "literal",
+                    "variant": "text",
+                    "value": "\"x\":35"
+                  }
+                },
+                "right": {
+                  "type": "function",
+                  "name": {
+                    "type": "identifier",
+                    "variant": "function",
+                    "name": "char"
+                  },
+                  "args": {
+                    "type": "expression",
+                    "variant": "list",
+                    "expression": [
+                      {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "125"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "json_valid"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "||",
+                "left": {
+                  "type": "function",
+                  "name": {
+                    "type": "identifier",
+                    "variant": "function",
+                    "name": "char"
+                  },
+                  "args": {
+                    "type": "expression",
+                    "variant": "list",
+                    "expression": [
+                      {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "123"
+                      }
+                    ]
+                  }
+                },
+                "right": {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "\"x\":35"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "user"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "name",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "phone",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "user",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "name"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "phone"
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "Alice"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "[\"919-555-2345\",\"804-555-3621\"]"
+            }
+          ]
+        },
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "Bob"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "[\"201-555-8872\"]"
+            }
+          ]
+        },
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "Cindy"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "[\"704-555-9983\"]"
+            }
+          ]
+        },
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "Dave"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "[\"336-555-8421\",\"704-555-4321\",\"803-911-4421\"]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "user.name"
+        }
+      ],
+      "distinct": true,
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "user"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "function",
+              "variant": "table",
+              "name": {
+                "type": "identifier",
+                "variant": "function",
+                "name": "json_each"
+              },
+              "args": {
+                "type": "expression",
+                "variant": "list",
+                "expression": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "user.phone"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "like",
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "704-%"
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "json_each.value"
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "user"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "phone"
+          },
+          "value": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "json_extract"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "phone"
+                },
+                {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "$[0]"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "<",
+          "left": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "json_array_length"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "phone"
+                }
+              ]
+            }
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "2"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "name"
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "substr"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "phone"
+              },
+              {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "1"
+              },
+              {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "5"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "user"
+      },
+      "order": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "name"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "compound",
+      "statement": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "name"
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "user"
+        },
+        "where": [
+          {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "like",
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "704-%"
+            },
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "phone"
+            }
+          }
+        ]
+      },
+      "compound": [
+        {
+          "type": "compound",
+          "variant": "union",
+          "statement": {
+            "type": "statement",
+            "variant": "select",
+            "result": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "user.name"
+              }
+            ],
+            "from": {
+              "type": "map",
+              "variant": "join",
+              "source": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "user"
+              },
+              "map": [
+                {
+                  "type": "join",
+                  "variant": "cross join",
+                  "source": {
+                    "type": "function",
+                    "variant": "table",
+                    "name": {
+                      "type": "identifier",
+                      "variant": "function",
+                      "name": "json_each"
+                    },
+                    "args": {
+                      "type": "expression",
+                      "variant": "list",
+                      "expression": [
+                        {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "user.phone"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "where": [
+              {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "and",
+                "left": {
+                  "type": "function",
+                  "name": {
+                    "type": "identifier",
+                    "variant": "function",
+                    "name": "json_valid"
+                  },
+                  "args": {
+                    "type": "expression",
+                    "variant": "list",
+                    "expression": [
+                      {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "user.phone"
+                      }
+                    ]
+                  }
+                },
+                "right": {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "like",
+                  "right": {
+                    "type": "literal",
+                    "variant": "text",
+                    "value": "704-%"
+                  },
+                  "left": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "json_each.value"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "big.rowid"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "fullkey"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "value"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "big"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "function",
+              "variant": "table",
+              "name": {
+                "type": "identifier",
+                "variant": "function",
+                "name": "json_tree"
+              },
+              "args": {
+                "type": "expression",
+                "variant": "list",
+                "expression": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "big.json"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "not in",
+          "right": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "object"
+              },
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "array"
+              }
+            ]
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "json_tree.type"
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "expression",
+          "format": "unary",
+          "variant": "operation",
+          "expression": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "big.rowid"
+          },
+          "operator": "+"
+        },
+        {
+          "type": "expression",
+          "format": "unary",
+          "variant": "operation",
+          "expression": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "json_tree.id"
+          },
+          "operator": "+"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "big.rowid"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "fullkey"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "atom"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "big"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "function",
+              "variant": "table",
+              "name": {
+                "type": "identifier",
+                "variant": "function",
+                "name": "json_tree"
+              },
+              "args": {
+                "type": "expression",
+                "variant": "list",
+                "expression": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "big.json"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "is not",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "atom"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "null",
+            "value": "null"
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "expression",
+          "format": "unary",
+          "variant": "operation",
+          "expression": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "big.rowid"
+          },
+          "operator": "+"
+        },
+        {
+          "type": "expression",
+          "format": "unary",
+          "variant": "operation",
+          "expression": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "json_tree.id"
+          },
+          "operator": "+"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "json_extract"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "big.json"
+              },
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "$.id"
+              }
+            ]
+          }
+        }
+      ],
+      "distinct": true,
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "big"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "function",
+              "variant": "table",
+              "name": {
+                "type": "identifier",
+                "variant": "function",
+                "name": "json_tree"
+              },
+              "args": {
+                "type": "expression",
+                "variant": "list",
+                "expression": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "big.json"
+                  },
+                  {
+                    "type": "literal",
+                    "variant": "text",
+                    "value": "$"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "json_tree.key"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "uuid"
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "json_tree.value"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "6fa5181e-5721-11e5-a04e-57f3d7b32808"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "json_extract"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "big.json"
+              },
+              {
+                "type": "literal",
+                "variant": "text",
+                "value": "$.id"
+              }
+            ]
+          }
+        }
+      ],
+      "distinct": true,
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "big"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "function",
+              "variant": "table",
+              "name": {
+                "type": "identifier",
+                "variant": "function",
+                "name": "json_tree"
+              },
+              "args": {
+                "type": "expression",
+                "variant": "list",
+                "expression": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "big.json"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "json_tree.key"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "uuid"
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "json_tree.value"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "6fa5181e-5721-11e5-a04e-57f3d7b32808"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "json_valid"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "||",
+                "left": {
+                  "type": "function",
+                  "name": {
+                    "type": "identifier",
+                    "variant": "function",
+                    "name": "char"
+                  },
+                  "args": {
+                    "type": "expression",
+                    "variant": "list",
+                    "expression": [
+                      {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "32"
+                      }
+                    ]
+                  }
+                },
+                "right": {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "\"xyz\""
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "json_valid"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "||",
+                "left": {
+                  "type": "function",
+                  "name": {
+                    "type": "identifier",
+                    "variant": "function",
+                    "name": "char"
+                  },
+                  "args": {
+                    "type": "expression",
+                    "variant": "list",
+                    "expression": [
+                      {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "200"
+                      }
+                    ]
+                  }
+                },
+                "right": {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "\"xyz\""
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "==",
+          "left": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "json_extract"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "function",
+                  "name": {
+                    "type": "identifier",
+                    "variant": "function",
+                    "name": "json_array"
+                  },
+                  "args": {
+                    "type": "expression",
+                    "variant": "list",
+                    "expression": [
+                      {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "sub_str"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "$[0]"
+                }
+              ]
+            }
+          },
+          "right": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "sub_str"
+          }
+        }
+      ]
+    }
+  ]
+}

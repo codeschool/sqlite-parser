@@ -1,0 +1,6638 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "rlog"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "idx",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "old_a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "old_b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "db_sum_a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "db_sum_b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "new_a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "new_b",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "clog"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "idx",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "old_a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "old_b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "db_sum_a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "db_sum_b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "new_a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "new_b",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "before_update_row"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "before",
+        "event": "update",
+        "of": null
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "rlog"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "+",
+                      "left": {
+                        "type": "function",
+                        "name": {
+                          "type": "identifier",
+                          "variant": "function",
+                          "name": "coalesce"
+                        },
+                        "args": {
+                          "type": "expression",
+                          "variant": "list",
+                          "expression": [
+                            {
+                              "type": "function",
+                              "name": {
+                                "type": "identifier",
+                                "variant": "function",
+                                "name": "max"
+                              },
+                              "args": {
+                                "type": "expression",
+                                "variant": "list",
+                                "expression": [
+                                  {
+                                    "type": "identifier",
+                                    "variant": "column",
+                                    "name": "idx"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "type": "literal",
+                              "variant": "decimal",
+                              "value": "0"
+                            }
+                          ]
+                        }
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "1"
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "rlog"
+                  }
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.a"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.b"
+                },
+                {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "function",
+                      "name": {
+                        "type": "identifier",
+                        "variant": "function",
+                        "name": "coalesce"
+                      },
+                      "args": {
+                        "type": "expression",
+                        "variant": "list",
+                        "expression": [
+                          {
+                            "type": "function",
+                            "name": {
+                              "type": "identifier",
+                              "variant": "function",
+                              "name": "sum"
+                            },
+                            "args": {
+                              "type": "expression",
+                              "variant": "list",
+                              "expression": [
+                                {
+                                  "type": "identifier",
+                                  "variant": "column",
+                                  "name": "a"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "type": "literal",
+                            "variant": "decimal",
+                            "value": "0"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "tbl"
+                  }
+                },
+                {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "function",
+                      "name": {
+                        "type": "identifier",
+                        "variant": "function",
+                        "name": "coalesce"
+                      },
+                      "args": {
+                        "type": "expression",
+                        "variant": "list",
+                        "expression": [
+                          {
+                            "type": "function",
+                            "name": {
+                              "type": "identifier",
+                              "variant": "function",
+                              "name": "sum"
+                            },
+                            "args": {
+                              "type": "expression",
+                              "variant": "list",
+                              "expression": [
+                                {
+                                  "type": "identifier",
+                                  "variant": "column",
+                                  "name": "b"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "type": "literal",
+                            "variant": "decimal",
+                            "value": "0"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "tbl"
+                  }
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.a"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.b"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "after_update_row"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "after",
+        "event": "update",
+        "of": null
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "rlog"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "+",
+                      "left": {
+                        "type": "function",
+                        "name": {
+                          "type": "identifier",
+                          "variant": "function",
+                          "name": "coalesce"
+                        },
+                        "args": {
+                          "type": "expression",
+                          "variant": "list",
+                          "expression": [
+                            {
+                              "type": "function",
+                              "name": {
+                                "type": "identifier",
+                                "variant": "function",
+                                "name": "max"
+                              },
+                              "args": {
+                                "type": "expression",
+                                "variant": "list",
+                                "expression": [
+                                  {
+                                    "type": "identifier",
+                                    "variant": "column",
+                                    "name": "idx"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "type": "literal",
+                              "variant": "decimal",
+                              "value": "0"
+                            }
+                          ]
+                        }
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "1"
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "rlog"
+                  }
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.a"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.b"
+                },
+                {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "function",
+                      "name": {
+                        "type": "identifier",
+                        "variant": "function",
+                        "name": "coalesce"
+                      },
+                      "args": {
+                        "type": "expression",
+                        "variant": "list",
+                        "expression": [
+                          {
+                            "type": "function",
+                            "name": {
+                              "type": "identifier",
+                              "variant": "function",
+                              "name": "sum"
+                            },
+                            "args": {
+                              "type": "expression",
+                              "variant": "list",
+                              "expression": [
+                                {
+                                  "type": "identifier",
+                                  "variant": "column",
+                                  "name": "a"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "type": "literal",
+                            "variant": "decimal",
+                            "value": "0"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "tbl"
+                  }
+                },
+                {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "function",
+                      "name": {
+                        "type": "identifier",
+                        "variant": "function",
+                        "name": "coalesce"
+                      },
+                      "args": {
+                        "type": "expression",
+                        "variant": "list",
+                        "expression": [
+                          {
+                            "type": "function",
+                            "name": {
+                              "type": "identifier",
+                              "variant": "function",
+                              "name": "sum"
+                            },
+                            "args": {
+                              "type": "expression",
+                              "variant": "list",
+                              "expression": [
+                                {
+                                  "type": "identifier",
+                                  "variant": "column",
+                                  "name": "b"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "type": "literal",
+                            "variant": "decimal",
+                            "value": "0"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "tbl"
+                  }
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.a"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.b"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "conditional_update_row"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "after",
+        "event": "update",
+        "of": null
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "clog"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "+",
+                      "left": {
+                        "type": "function",
+                        "name": {
+                          "type": "identifier",
+                          "variant": "function",
+                          "name": "coalesce"
+                        },
+                        "args": {
+                          "type": "expression",
+                          "variant": "list",
+                          "expression": [
+                            {
+                              "type": "function",
+                              "name": {
+                                "type": "identifier",
+                                "variant": "function",
+                                "name": "max"
+                              },
+                              "args": {
+                                "type": "expression",
+                                "variant": "list",
+                                "expression": [
+                                  {
+                                    "type": "identifier",
+                                    "variant": "column",
+                                    "name": "idx"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "type": "literal",
+                              "variant": "decimal",
+                              "value": "0"
+                            }
+                          ]
+                        }
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "1"
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "clog"
+                  }
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.a"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.b"
+                },
+                {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "function",
+                      "name": {
+                        "type": "identifier",
+                        "variant": "function",
+                        "name": "coalesce"
+                      },
+                      "args": {
+                        "type": "expression",
+                        "variant": "list",
+                        "expression": [
+                          {
+                            "type": "function",
+                            "name": {
+                              "type": "identifier",
+                              "variant": "function",
+                              "name": "sum"
+                            },
+                            "args": {
+                              "type": "expression",
+                              "variant": "list",
+                              "expression": [
+                                {
+                                  "type": "identifier",
+                                  "variant": "column",
+                                  "name": "a"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "type": "literal",
+                            "variant": "decimal",
+                            "value": "0"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "tbl"
+                  }
+                },
+                {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "function",
+                      "name": {
+                        "type": "identifier",
+                        "variant": "function",
+                        "name": "coalesce"
+                      },
+                      "args": {
+                        "type": "expression",
+                        "variant": "list",
+                        "expression": [
+                          {
+                            "type": "function",
+                            "name": {
+                              "type": "identifier",
+                              "variant": "function",
+                              "name": "sum"
+                            },
+                            "args": {
+                              "type": "expression",
+                              "variant": "list",
+                              "expression": [
+                                {
+                                  "type": "identifier",
+                                  "variant": "column",
+                                  "name": "b"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "type": "literal",
+                            "variant": "decimal",
+                            "value": "0"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "tbl"
+                  }
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.a"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.b"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger",
+      "when": {
+        "type": "expression",
+        "format": "binary",
+        "variant": "operation",
+        "operation": "=",
+        "left": {
+          "type": "identifier",
+          "variant": "column",
+          "name": "old.a"
+        },
+        "right": {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "1"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "value": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "*",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "10"
+            }
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "*",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "b"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "10"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "rlog"
+      },
+      "order": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "idx"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "clog"
+      },
+      "order": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "idx"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "rlog"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "100"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "100"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "300"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "200"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "delete_before_row"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "before",
+        "event": "delete"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "rlog"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "+",
+                      "left": {
+                        "type": "function",
+                        "name": {
+                          "type": "identifier",
+                          "variant": "function",
+                          "name": "coalesce"
+                        },
+                        "args": {
+                          "type": "expression",
+                          "variant": "list",
+                          "expression": [
+                            {
+                              "type": "function",
+                              "name": {
+                                "type": "identifier",
+                                "variant": "function",
+                                "name": "max"
+                              },
+                              "args": {
+                                "type": "expression",
+                                "variant": "list",
+                                "expression": [
+                                  {
+                                    "type": "identifier",
+                                    "variant": "column",
+                                    "name": "idx"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "type": "literal",
+                              "variant": "decimal",
+                              "value": "0"
+                            }
+                          ]
+                        }
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "1"
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "rlog"
+                  }
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.a"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.b"
+                },
+                {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "function",
+                      "name": {
+                        "type": "identifier",
+                        "variant": "function",
+                        "name": "coalesce"
+                      },
+                      "args": {
+                        "type": "expression",
+                        "variant": "list",
+                        "expression": [
+                          {
+                            "type": "function",
+                            "name": {
+                              "type": "identifier",
+                              "variant": "function",
+                              "name": "sum"
+                            },
+                            "args": {
+                              "type": "expression",
+                              "variant": "list",
+                              "expression": [
+                                {
+                                  "type": "identifier",
+                                  "variant": "column",
+                                  "name": "a"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "type": "literal",
+                            "variant": "decimal",
+                            "value": "0"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "tbl"
+                  }
+                },
+                {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "function",
+                      "name": {
+                        "type": "identifier",
+                        "variant": "function",
+                        "name": "coalesce"
+                      },
+                      "args": {
+                        "type": "expression",
+                        "variant": "list",
+                        "expression": [
+                          {
+                            "type": "function",
+                            "name": {
+                              "type": "identifier",
+                              "variant": "function",
+                              "name": "sum"
+                            },
+                            "args": {
+                              "type": "expression",
+                              "variant": "list",
+                              "expression": [
+                                {
+                                  "type": "identifier",
+                                  "variant": "column",
+                                  "name": "b"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "type": "literal",
+                            "variant": "decimal",
+                            "value": "0"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "tbl"
+                  }
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "delete_after_row"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "after",
+        "event": "delete"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "rlog"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "+",
+                      "left": {
+                        "type": "function",
+                        "name": {
+                          "type": "identifier",
+                          "variant": "function",
+                          "name": "coalesce"
+                        },
+                        "args": {
+                          "type": "expression",
+                          "variant": "list",
+                          "expression": [
+                            {
+                              "type": "function",
+                              "name": {
+                                "type": "identifier",
+                                "variant": "function",
+                                "name": "max"
+                              },
+                              "args": {
+                                "type": "expression",
+                                "variant": "list",
+                                "expression": [
+                                  {
+                                    "type": "identifier",
+                                    "variant": "column",
+                                    "name": "idx"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "type": "literal",
+                              "variant": "decimal",
+                              "value": "0"
+                            }
+                          ]
+                        }
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "1"
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "rlog"
+                  }
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.a"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.b"
+                },
+                {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "function",
+                      "name": {
+                        "type": "identifier",
+                        "variant": "function",
+                        "name": "coalesce"
+                      },
+                      "args": {
+                        "type": "expression",
+                        "variant": "list",
+                        "expression": [
+                          {
+                            "type": "function",
+                            "name": {
+                              "type": "identifier",
+                              "variant": "function",
+                              "name": "sum"
+                            },
+                            "args": {
+                              "type": "expression",
+                              "variant": "list",
+                              "expression": [
+                                {
+                                  "type": "identifier",
+                                  "variant": "column",
+                                  "name": "a"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "type": "literal",
+                            "variant": "decimal",
+                            "value": "0"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "tbl"
+                  }
+                },
+                {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "function",
+                      "name": {
+                        "type": "identifier",
+                        "variant": "function",
+                        "name": "coalesce"
+                      },
+                      "args": {
+                        "type": "expression",
+                        "variant": "list",
+                        "expression": [
+                          {
+                            "type": "function",
+                            "name": {
+                              "type": "identifier",
+                              "variant": "function",
+                              "name": "sum"
+                            },
+                            "args": {
+                              "type": "expression",
+                              "variant": "list",
+                              "expression": [
+                                {
+                                  "type": "identifier",
+                                  "variant": "column",
+                                  "name": "b"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "type": "literal",
+                            "variant": "decimal",
+                            "value": "0"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "tbl"
+                  }
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "rlog"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "rlog"
+      }
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "insert_before_row"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "before",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "rlog"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "+",
+                      "left": {
+                        "type": "function",
+                        "name": {
+                          "type": "identifier",
+                          "variant": "function",
+                          "name": "coalesce"
+                        },
+                        "args": {
+                          "type": "expression",
+                          "variant": "list",
+                          "expression": [
+                            {
+                              "type": "function",
+                              "name": {
+                                "type": "identifier",
+                                "variant": "function",
+                                "name": "max"
+                              },
+                              "args": {
+                                "type": "expression",
+                                "variant": "list",
+                                "expression": [
+                                  {
+                                    "type": "identifier",
+                                    "variant": "column",
+                                    "name": "idx"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "type": "literal",
+                              "variant": "decimal",
+                              "value": "0"
+                            }
+                          ]
+                        }
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "1"
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "rlog"
+                  }
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                },
+                {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "function",
+                      "name": {
+                        "type": "identifier",
+                        "variant": "function",
+                        "name": "coalesce"
+                      },
+                      "args": {
+                        "type": "expression",
+                        "variant": "list",
+                        "expression": [
+                          {
+                            "type": "function",
+                            "name": {
+                              "type": "identifier",
+                              "variant": "function",
+                              "name": "sum"
+                            },
+                            "args": {
+                              "type": "expression",
+                              "variant": "list",
+                              "expression": [
+                                {
+                                  "type": "identifier",
+                                  "variant": "column",
+                                  "name": "a"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "type": "literal",
+                            "variant": "decimal",
+                            "value": "0"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "tbl"
+                  }
+                },
+                {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "function",
+                      "name": {
+                        "type": "identifier",
+                        "variant": "function",
+                        "name": "coalesce"
+                      },
+                      "args": {
+                        "type": "expression",
+                        "variant": "list",
+                        "expression": [
+                          {
+                            "type": "function",
+                            "name": {
+                              "type": "identifier",
+                              "variant": "function",
+                              "name": "sum"
+                            },
+                            "args": {
+                              "type": "expression",
+                              "variant": "list",
+                              "expression": [
+                                {
+                                  "type": "identifier",
+                                  "variant": "column",
+                                  "name": "b"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "type": "literal",
+                            "variant": "decimal",
+                            "value": "0"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "tbl"
+                  }
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.a"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.b"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "insert_after_row"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "after",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "rlog"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "+",
+                      "left": {
+                        "type": "function",
+                        "name": {
+                          "type": "identifier",
+                          "variant": "function",
+                          "name": "coalesce"
+                        },
+                        "args": {
+                          "type": "expression",
+                          "variant": "list",
+                          "expression": [
+                            {
+                              "type": "function",
+                              "name": {
+                                "type": "identifier",
+                                "variant": "function",
+                                "name": "max"
+                              },
+                              "args": {
+                                "type": "expression",
+                                "variant": "list",
+                                "expression": [
+                                  {
+                                    "type": "identifier",
+                                    "variant": "column",
+                                    "name": "idx"
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "type": "literal",
+                              "variant": "decimal",
+                              "value": "0"
+                            }
+                          ]
+                        }
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "1"
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "rlog"
+                  }
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                },
+                {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "function",
+                      "name": {
+                        "type": "identifier",
+                        "variant": "function",
+                        "name": "coalesce"
+                      },
+                      "args": {
+                        "type": "expression",
+                        "variant": "list",
+                        "expression": [
+                          {
+                            "type": "function",
+                            "name": {
+                              "type": "identifier",
+                              "variant": "function",
+                              "name": "sum"
+                            },
+                            "args": {
+                              "type": "expression",
+                              "variant": "list",
+                              "expression": [
+                                {
+                                  "type": "identifier",
+                                  "variant": "column",
+                                  "name": "a"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "type": "literal",
+                            "variant": "decimal",
+                            "value": "0"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "tbl"
+                  }
+                },
+                {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "function",
+                      "name": {
+                        "type": "identifier",
+                        "variant": "function",
+                        "name": "coalesce"
+                      },
+                      "args": {
+                        "type": "expression",
+                        "variant": "list",
+                        "expression": [
+                          {
+                            "type": "function",
+                            "name": {
+                              "type": "identifier",
+                              "variant": "function",
+                              "name": "sum"
+                            },
+                            "args": {
+                              "type": "expression",
+                              "variant": "list",
+                              "expression": [
+                                {
+                                  "type": "identifier",
+                                  "variant": "column",
+                                  "name": "b"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "type": "literal",
+                            "variant": "decimal",
+                            "value": "0"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "tbl"
+                  }
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.a"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.b"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "other_tbl"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "other_tbl"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "other_tbl"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "5"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "6"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "other_tbl"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "rlog"
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ]
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c",
+          "definition": []
+        }
+      ],
+      "optimization": [
+        {
+          "type": "optimization",
+          "value": "without rowid"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      }
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "the_trigger"
+      },
+      "variant": "drop",
+      "format": "trigger",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      }
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "the_trigger"
+      },
+      "variant": "drop",
+      "format": "trigger",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "d",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "constraint",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "columns": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "b"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "c"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "d"
+            }
+          ]
+        }
+      ],
+      "optimization": [
+        {
+          "type": "optimization",
+          "value": "without rowid"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "tbl_after_update_cd"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "before",
+        "event": "update",
+        "of": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "c"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "d"
+          }
+        ]
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "update",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "log"
+          },
+          "set": [
+            {
+              "type": "assignment",
+              "target": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "a"
+              },
+              "value": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "+",
+                "left": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "a"
+                },
+                "right": {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "c"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "10"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "10"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "d"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "4"
+          }
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "0"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "4"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "10"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      }
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "d",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "0"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "0"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "200"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "0"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbla"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "constraint",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "columns": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "b"
+            }
+          ]
+        }
+      ],
+      "optimization": [
+        {
+          "type": "optimization",
+          "value": "without rowid"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tblb"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "constraint",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "columns": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "b"
+            }
+          ]
+        }
+      ],
+      "optimization": [
+        {
+          "type": "optimization",
+          "value": "without rowid"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tblc"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "constraint",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "columns": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "b"
+            }
+          ]
+        }
+      ],
+      "optimization": [
+        {
+          "type": "optimization",
+          "value": "without rowid"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "tr1"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbla"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "before",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "tblb"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.a"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.b"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "tr2"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tblb"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "before",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "tblc"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.a"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.b"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbla"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbla"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tblb"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tblc"
+      }
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbla"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tblb"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tblc"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "constraint",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "columns": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "c"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "b"
+            }
+          ]
+        }
+      ],
+      "optimization": [
+        {
+          "type": "optimization",
+          "value": "without rowid"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "tbl_trig"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "before",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "tbl"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.a"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.b"
+                },
+                {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "+",
+                  "left": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "new.c"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "1"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "constraint",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "columns": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "c"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "b"
+            }
+          ]
+        }
+      ],
+      "optimization": [
+        {
+          "type": "optimization",
+          "value": "without rowid"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "tbl_trig"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "before",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "tbl"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "2"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "3"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "tbl"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "2"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "2"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "3"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "statement",
+          "variant": "update",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "tbl"
+          },
+          "set": [
+            {
+              "type": "assignment",
+              "target": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "b"
+              },
+              "value": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "10"
+              }
+            }
+          ],
+          "where": [
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "a"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "1"
+              }
+            }
+          ]
+        },
+        {
+          "type": "statement",
+          "variant": "delete",
+          "from": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "tbl"
+          },
+          "where": [
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "a"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "1"
+              }
+            }
+          ]
+        },
+        {
+          "type": "statement",
+          "variant": "delete",
+          "from": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "tbl"
+          }
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "100"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "200"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "300"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ]
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c",
+          "definition": []
+        }
+      ],
+      "optimization": [
+        {
+          "type": "optimization",
+          "value": "without rowid"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "ai_tbl"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "after",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "or": "ignore",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "tbl"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.a"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "begin"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "or": "replace",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "4"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "6"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "au_tbl"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "after",
+        "event": "update",
+        "of": null
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "update",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "tbl"
+          },
+          "or": "ignore",
+          "set": [
+            {
+              "type": "assignment",
+              "target": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "a"
+              },
+              "value": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "new.a"
+              }
+            },
+            {
+              "type": "assignment",
+              "target": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "c"
+              },
+              "value": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "10"
+              }
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "begin"
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "4"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "or": "replace",
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "4"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "ab"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "constraint",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "columns": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "b"
+            }
+          ]
+        }
+      ],
+      "optimization": [
+        {
+          "type": "optimization",
+          "value": "without rowid"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "cd"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "d",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "constraint",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "columns": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "c"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "d"
+            }
+          ]
+        }
+      ],
+      "optimization": [
+        {
+          "type": "optimization",
+          "value": "without rowid"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "ab"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "ab"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "cd"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tlog"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "ii",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "olda",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "oldb",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "oldc",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "oldd",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "newa",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "newb",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "newc",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "newd",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "view",
+        "name": "abcd"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "c"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "d"
+          }
+        ],
+        "from": {
+          "type": "map",
+          "variant": "join",
+          "source": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "ab"
+          },
+          "map": [
+            {
+              "type": "join",
+              "variant": "cross join",
+              "source": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "cd"
+              }
+            }
+          ]
+        }
+      },
+      "variant": "create",
+      "format": "view"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "before_update"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abcd"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "instead of",
+        "event": "update",
+        "of": null
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "tlog"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "null",
+                  "value": "null"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.a"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.b"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.c"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.d"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.a"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.b"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.c"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.d"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "after_update"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abcd"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "instead of",
+        "event": "update",
+        "of": null
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "tlog"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "null",
+                  "value": "null"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.a"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.b"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.c"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.d"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.a"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.b"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.c"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.d"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "before_delete"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abcd"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "instead of",
+        "event": "delete"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "tlog"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "null",
+                  "value": "null"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.a"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.b"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.c"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.d"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "after_delete"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abcd"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "instead of",
+        "event": "delete"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "tlog"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "null",
+                  "value": "null"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.a"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.b"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.c"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.d"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "before_insert"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abcd"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "instead of",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "tlog"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "null",
+                  "value": "null"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.a"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.b"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.c"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.d"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "after_insert"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abcd"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "instead of",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "tlog"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "null",
+                  "value": "null"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.a"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.b"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.c"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.d"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abcd"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "100"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "*",
+            "left": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "5"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "5"
+            }
+          }
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abcd"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abcd"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "10"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "20"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "30"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "40"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tlog"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tlog"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abcd"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "10"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "20"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "30"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "40"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abcd"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "100"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "*",
+            "left": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "5"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "5"
+            }
+          }
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abcd"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tlog"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tlog"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abcd"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abcd"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "10"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "20"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "30"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "40"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abcd"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "100"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "*",
+            "left": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "5"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "5"
+            }
+          }
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tlog"
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "constraint",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "columns": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "b"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "c"
+            }
+          ]
+        }
+      ],
+      "optimization": [
+        {
+          "type": "optimization",
+          "value": "without rowid"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "view",
+        "name": "v1"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "+",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            "right": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "b"
+            },
+            "alias": "x"
+          },
+          {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "+",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "b"
+            },
+            "right": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "c"
+            },
+            "alias": "y"
+          },
+          {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "+",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            "right": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "c"
+            },
+            "alias": "z"
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        }
+      },
+      "variant": "create",
+      "format": "view"
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "v1"
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "v1log"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "d",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "e",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "f",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "r1"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "v1"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "instead of",
+        "event": "delete"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "v1log"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.x"
+                },
+                {
+                  "type": "literal",
+                  "variant": "null",
+                  "value": "null"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.y"
+                },
+                {
+                  "type": "literal",
+                  "variant": "null",
+                  "value": "null"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.z"
+                },
+                {
+                  "type": "literal",
+                  "variant": "null",
+                  "value": "null"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "v1"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "v1log"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "v1"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "3"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "v1log"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "4"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "5"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "6"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "v1log"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "v1"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "y"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "11"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "v1log"
+      }
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "r2"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "v1"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "instead of",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "v1log"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "null",
+                  "value": "null"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.x"
+                },
+                {
+                  "type": "literal",
+                  "variant": "null",
+                  "value": "null"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.y"
+                },
+                {
+                  "type": "literal",
+                  "variant": "null",
+                  "value": "null"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.z"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "v1log"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "v1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "v1log"
+      }
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "r3"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "v1"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "instead of",
+        "event": "update",
+        "of": null
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "v1log"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.x"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.x"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.y"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.y"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.z"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.z"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "v1log"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "v1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x"
+          },
+          "value": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "+",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "x"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "100"
+            }
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "y"
+          },
+          "value": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "+",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "y"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "200"
+            }
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "z"
+          },
+          "value": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "+",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "z"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "300"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "v1log"
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "view",
+        "name": "v3"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t3.a"
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t3"
+        }
+      },
+      "variant": "create",
+      "format": "view"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "trig1"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "v3"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "instead of",
+        "event": "delete"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "select",
+          "result": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "v3"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,293 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "foreign_keys"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "boolean",
+          "normalized": "1",
+          "value": "1"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "s1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ]
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "par"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": [
+            {
+              "variant": "foreign key",
+              "type": "constraint",
+              "references": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "s1"
+              }
+            }
+          ]
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "unique"
+            }
+          ]
+        },
+        {
+          "type": "definition",
+          "variant": "constraint",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "columns": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "c1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": [
+            {
+              "variant": "foreign key",
+              "type": "constraint",
+              "references": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "par"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "c2"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": [
+            {
+              "variant": "foreign key",
+              "type": "constraint",
+              "references": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "par"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "c3"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": [
+            {
+              "variant": "foreign key",
+              "type": "constraint",
+              "references": {
+                "type": "identifier",
+                "variant": "expression",
+                "format": "table",
+                "name": "par",
+                "columns": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "c"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "px"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "cx"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": [
+            {
+              "variant": "foreign key",
+              "type": "constraint",
+              "references": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "px"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

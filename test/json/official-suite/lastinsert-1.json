@@ -1,0 +1,190 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "y",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "after_t2"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "after",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "t3"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.x"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.y"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "5000000000"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "last_insert_rowid"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": []
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "123456789012345"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

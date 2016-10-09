@@ -1,0 +1,218 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tab4"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "col0",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "col1",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "col2",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "col3",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "col4",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "cor1.*"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "tab4",
+          "alias": "cor0"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "tab4",
+              "alias": "cor1"
+            },
+            "constraint": {
+              "type": "constraint",
+              "variant": "join",
+              "format": "using",
+              "using": {
+                "columns": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "col4"
+                  },
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "col3"
+                  },
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "col2"
+                  },
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "col1"
+                  },
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "col0"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tab1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "col0",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tab2"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "col0",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "cor0.*"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "tab1"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "natural join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "tab2",
+              "alias": "cor0"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

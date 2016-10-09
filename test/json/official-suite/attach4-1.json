@@ -1,0 +1,133 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "attach",
+      "target": {
+        "type": "identifier",
+        "variant": "database",
+        "name": "sub_name"
+      },
+      "attach": {
+        "type": "literal",
+        "variant": "text",
+        "value": "sub_f"
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sub_name.tbl"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sub_name.tbl"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "sub_f"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "x"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sub_name.tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "x"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sub_name.tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sub_name.tbl"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "text",
+            "value": "sub_f"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "x"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sub_name.tbl"
+      }
+    }
+  ]
+}

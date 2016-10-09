@@ -1,0 +1,956 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "fts"
+      },
+      "result": {
+        "type": "module",
+        "name": "fts3",
+        "args": {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "definition",
+              "variant": "column",
+              "name": "content",
+              "definition": [],
+              "datatype": {
+                "type": "datatype",
+                "variant": "text",
+                "affinity": "text"
+              }
+            }
+          ]
+        }
+      },
+      "variant": "create",
+      "format": "virtual"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "fts",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "rowid"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "content"
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "this is a test of the fts3 virtual"
+            }
+          ]
+        },
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "table used as part of a join together"
+            }
+          ]
+        },
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "with the DISTINCT keyword.  There was"
+            }
+          ]
+        },
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "4"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "a bug at one time (2013-06 through 2014-04)"
+            }
+          ]
+        },
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "5"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "that prevented this from working correctly."
+            }
+          ]
+        },
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "11"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "a row that occurs twice"
+            }
+          ]
+        },
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "12"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "a row that occurs twice"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "y",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "or": "ignore",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "content"
+          },
+          {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "+",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "rowid"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "100"
+            }
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "fts"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "fts.rowid"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "t1.y"
+        }
+      ],
+      "distinct": true,
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "fts"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t1"
+            }
+          }
+        ]
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "match",
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "and",
+            "left": {
+              "type": "literal",
+              "variant": "text",
+              "value": "that twice"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "content"
+              },
+              "right": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              }
+            }
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "fts"
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "y"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "fts.rowid"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "t1.x"
+        }
+      ],
+      "distinct": true,
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "fts"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t1"
+            }
+          }
+        ]
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "match",
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "and",
+            "left": {
+              "type": "literal",
+              "variant": "text",
+              "value": "that twice"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "content"
+              },
+              "right": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              }
+            }
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "fts"
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "t1.x"
+        }
+      ],
+      "distinct": true,
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "fts"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t1"
+            }
+          }
+        ]
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "match",
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "and",
+            "left": {
+              "type": "literal",
+              "variant": "text",
+              "value": "that twice"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "content"
+              },
+              "right": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              }
+            }
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "fts"
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "t1.x"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "fts"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t1"
+            }
+          }
+        ]
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "match",
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "and",
+            "left": {
+              "type": "literal",
+              "variant": "text",
+              "value": "that twice"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "content"
+              },
+              "right": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              }
+            }
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "fts"
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "t1.x"
+        }
+      ],
+      "distinct": true,
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "fts"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t1"
+            }
+          }
+        ]
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "match",
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "and",
+            "left": {
+              "type": "literal",
+              "variant": "text",
+              "value": "that twice"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "content"
+              },
+              "right": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              }
+            }
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "fts"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "t1.x"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "fts"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t1"
+            }
+          }
+        ]
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "match",
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "and",
+            "left": {
+              "type": "literal",
+              "variant": "text",
+              "value": "that twice"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "content"
+              },
+              "right": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              }
+            }
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "fts"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "t1.x"
+        }
+      ],
+      "distinct": true,
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "fts"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t1"
+            }
+          }
+        ]
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "fts.rowid"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "11"
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "content"
+            },
+            "right": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "x"
+            }
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "fts.rowid"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "t1.*"
+        }
+      ],
+      "distinct": true,
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "fts"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t1"
+            }
+          }
+        ]
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "fts.rowid"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "11"
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "content"
+            },
+            "right": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "x"
+            }
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "fts.rowid"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "t1.*"
+        }
+      ],
+      "distinct": true,
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "fts"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t1"
+            }
+          }
+        ]
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "fts.rowid"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "11"
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "content"
+            },
+            "right": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "x"
+            }
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "t1.y"
+        }
+      ]
+    }
+  ]
+}

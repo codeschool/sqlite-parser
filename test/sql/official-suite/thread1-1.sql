@@ -1,0 +1,13 @@
+-- original: thread1.test
+-- credit:   http://www.sqlite.org/src/tree?ci=trunk&name=test
+
+CREATE TABLE t1(a,b);
+    INSERT INTO t1 VALUES(1,'abcdefgh');
+    INSERT INTO t1 SELECT a+1, b||b FROM t1;
+    INSERT INTO t1 SELECT a+2, b||b FROM t1;
+    INSERT INTO t1 SELECT a+4, b||b FROM t1;
+    SELECT count(*), max(length(b)) FROM t1
+;SELECT name FROM sqlite_master
+;SELECT * FROM t2
+;SELECT * FROM t2
+;SELECT * FROM t2;

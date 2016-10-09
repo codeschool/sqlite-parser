@@ -1,0 +1,1760 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "y",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              }
+            ]
+          }
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "y"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "+",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "0"
+              }
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "==",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "y"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              }
+            ]
+          }
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "y"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "-",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "0"
+              }
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "==",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "y"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              }
+            ]
+          }
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "y"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "*",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "1"
+              }
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "==",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "y"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              }
+            ]
+          }
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "y"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "/",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "1"
+              }
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "==",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "y"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              }
+            ]
+          }
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "y"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "%",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "4"
+              }
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "==",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "y"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "text",
+            "value": "1xyzzy"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              }
+            ]
+          }
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "y"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "+",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "0"
+              }
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "==",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "y"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              }
+            ]
+          }
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "y"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "-",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "0"
+              }
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "==",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "y"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              }
+            ]
+          }
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "y"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "*",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "1"
+              }
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "==",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "y"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              }
+            ]
+          }
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "y"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "/",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "1"
+              }
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "==",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "y"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              }
+            ]
+          }
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "y"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "%",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "4"
+              }
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "==",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "y"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "text",
+            "value": "1.0"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              }
+            ]
+          }
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "y"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "+",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "0"
+              }
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "==",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "y"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              }
+            ]
+          }
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "y"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "-",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "0"
+              }
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "==",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "y"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              }
+            ]
+          }
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "y"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "*",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "1"
+              }
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "==",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "y"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              }
+            ]
+          }
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "y"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "/",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "1"
+              }
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "==",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "y"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              }
+            ]
+          }
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "y"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "%",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "4"
+              }
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "==",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "y"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "+",
+          "left": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1."
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "/",
+          "left": {
+            "type": "literal",
+            "variant": "text",
+            "value": "1.23e64"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "1.0000e+62"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "+",
+          "left": {
+            "type": "literal",
+            "variant": "text",
+            "value": "100x"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "-2y"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "+",
+          "left": {
+            "type": "literal",
+            "variant": "text",
+            "value": "100x"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "4.5y"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "-",
+          "left": {
+            "type": "literal",
+            "variant": "text",
+            "value": "-9223372036854775807x"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "1x"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "+",
+          "left": {
+            "type": "literal",
+            "variant": "text",
+            "value": "9223372036854775806x"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "1x"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "/",
+          "left": {
+            "type": "literal",
+            "variant": "text",
+            "value": "1234x"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "10y"
+          }
+        }
+      ]
+    }
+  ]
+}

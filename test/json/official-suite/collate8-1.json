@@ -1,0 +1,1675 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "collate",
+              "collate": {
+                "collate": [
+                  {
+                    "type": "identifier",
+                    "variant": "collation",
+                    "name": "nocase"
+                  }
+                ]
+              }
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "aaa"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "BBB"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ccc"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "DDD"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "a"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "order": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "a"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "rowid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "<",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "ccc"
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "rowid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "<",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "expression",
+            "format": "unary",
+            "variant": "operation",
+            "operator": "collate",
+            "collate": [
+              {
+                "type": "identifier",
+                "variant": "collation",
+                "name": "binary"
+              }
+            ],
+            "expression": {
+              "type": "literal",
+              "variant": "text",
+              "value": "ccc"
+            }
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "rowid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "<",
+          "left": {
+            "type": "expression",
+            "format": "unary",
+            "variant": "operation",
+            "expression": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            "operator": "+"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "ccc"
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "a"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "order": [
+        {
+          "type": "expression",
+          "format": "unary",
+          "variant": "operation",
+          "expression": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "operator": "+"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "a",
+          "alias": "x"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "order": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "x"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "a",
+          "alias": "x"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "<",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "ccc"
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "a",
+          "alias": "x"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "<",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x"
+          },
+          "right": {
+            "type": "expression",
+            "format": "unary",
+            "variant": "operation",
+            "operator": "collate",
+            "collate": [
+              {
+                "type": "identifier",
+                "variant": "collation",
+                "name": "binary"
+              }
+            ],
+            "expression": {
+              "type": "literal",
+              "variant": "text",
+              "value": "ccc"
+            }
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "x"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "a",
+          "alias": "x"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "<",
+          "left": {
+            "type": "expression",
+            "format": "unary",
+            "variant": "operation",
+            "expression": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "x"
+            },
+            "operator": "+"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "ccc"
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "a",
+          "alias": "x"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "order": [
+        {
+          "type": "expression",
+          "format": "unary",
+          "variant": "operation",
+          "expression": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x"
+          },
+          "operator": "+"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "abc"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ABC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "a",
+          "alias": "x"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "abc"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "a",
+          "alias": "x"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x"
+          },
+          "right": {
+            "type": "expression",
+            "format": "unary",
+            "variant": "operation",
+            "operator": "collate",
+            "collate": [
+              {
+                "type": "identifier",
+                "variant": "collation",
+                "name": "nocase"
+              }
+            ],
+            "expression": {
+              "type": "literal",
+              "variant": "text",
+              "value": "abc"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "a",
+          "alias": "x"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "expression",
+            "format": "unary",
+            "variant": "operation",
+            "operator": "collate",
+            "collate": [
+              {
+                "type": "identifier",
+                "variant": "collation",
+                "name": "nocase"
+              }
+            ],
+            "expression": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "x"
+            }
+          },
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "abc"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "unary",
+          "variant": "operation",
+          "operator": "collate",
+          "collate": [
+            {
+              "type": "identifier",
+              "variant": "collation",
+              "name": "nocase"
+            }
+          ],
+          "expression": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "alias": "x"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "abc"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "unary",
+          "variant": "operation",
+          "operator": "collate",
+          "collate": [
+            {
+              "type": "identifier",
+              "variant": "collation",
+              "name": "nocase"
+            }
+          ],
+          "expression": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "alias": "x"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "expression",
+            "format": "unary",
+            "variant": "operation",
+            "operator": "collate",
+            "collate": [
+              {
+                "type": "identifier",
+                "variant": "collation",
+                "name": "binary"
+              }
+            ],
+            "expression": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "x"
+            }
+          },
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "abc"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "unary",
+          "variant": "operation",
+          "operator": "collate",
+          "collate": [
+            {
+              "type": "identifier",
+              "variant": "collation",
+              "name": "nocase"
+            }
+          ],
+          "expression": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "alias": "x"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x"
+          },
+          "right": {
+            "type": "expression",
+            "format": "unary",
+            "variant": "operation",
+            "operator": "collate",
+            "collate": [
+              {
+                "type": "identifier",
+                "variant": "collation",
+                "name": "binary"
+              }
+            ],
+            "expression": {
+              "type": "literal",
+              "variant": "text",
+              "value": "abc"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "expression",
+            "format": "unary",
+            "variant": "operation",
+            "operator": "collate",
+            "collate": [
+              {
+                "type": "identifier",
+                "variant": "collation",
+                "name": "nocase"
+              }
+            ],
+            "expression": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "unary",
+            "variant": "operation",
+            "operator": "collate",
+            "collate": [
+              {
+                "type": "identifier",
+                "variant": "collation",
+                "name": "binary"
+              }
+            ],
+            "expression": {
+              "type": "literal",
+              "variant": "text",
+              "value": "abc"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "unary",
+          "variant": "operation",
+          "operator": "collate",
+          "collate": [
+            {
+              "type": "identifier",
+              "variant": "collation",
+              "name": "nocase"
+            }
+          ],
+          "expression": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "alias": "x"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "literal",
+            "variant": "text",
+            "value": "abc"
+          },
+          "right": {
+            "type": "expression",
+            "format": "unary",
+            "variant": "operation",
+            "operator": "collate",
+            "collate": [
+              {
+                "type": "identifier",
+                "variant": "collation",
+                "name": "binary"
+              }
+            ],
+            "expression": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "x"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "==",
+          "left": {
+            "type": "literal",
+            "variant": "text",
+            "value": "abc"
+          },
+          "right": {
+            "type": "expression",
+            "format": "unary",
+            "variant": "operation",
+            "operator": "collate",
+            "collate": [
+              {
+                "type": "identifier",
+                "variant": "collation",
+                "name": "nocase"
+              }
+            ],
+            "expression": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "||",
+              "left": {
+                "type": "literal",
+                "variant": "text",
+                "value": "ABC"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "text",
+                "value": ""
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "==",
+          "left": {
+            "type": "literal",
+            "variant": "text",
+            "value": "abc"
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "||",
+            "left": {
+              "type": "literal",
+              "variant": "text",
+              "value": "ABC"
+            },
+            "right": {
+              "type": "expression",
+              "format": "unary",
+              "variant": "operation",
+              "operator": "collate",
+              "collate": [
+                {
+                  "type": "identifier",
+                  "variant": "collation",
+                  "name": "nocase"
+                }
+              ],
+              "expression": {
+                "type": "literal",
+                "variant": "text",
+                "value": ""
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "==",
+          "left": {
+            "type": "literal",
+            "variant": "text",
+            "value": "abc"
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "||",
+            "left": {
+              "type": "literal",
+              "variant": "text",
+              "value": "ABC"
+            },
+            "right": {
+              "type": "expression",
+              "format": "unary",
+              "variant": "operation",
+              "operator": "collate",
+              "collate": [
+                {
+                  "type": "identifier",
+                  "variant": "collation",
+                  "name": "nocase"
+                }
+              ],
+              "expression": {
+                "type": "literal",
+                "variant": "text",
+                "value": ""
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "==",
+          "left": {
+            "type": "literal",
+            "variant": "text",
+            "value": "abc"
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "||",
+            "left": {
+              "type": "literal",
+              "variant": "text",
+              "value": "ABC"
+            },
+            "right": {
+              "type": "function",
+              "name": {
+                "type": "identifier",
+                "variant": "function",
+                "name": "upper"
+              },
+              "args": {
+                "type": "expression",
+                "variant": "list",
+                "expression": [
+                  {
+                    "type": "expression",
+                    "format": "unary",
+                    "variant": "operation",
+                    "operator": "collate",
+                    "collate": [
+                      {
+                        "type": "identifier",
+                        "variant": "collation",
+                        "name": "nocase"
+                      }
+                    ],
+                    "expression": {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": ""
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "==",
+          "left": {
+            "type": "literal",
+            "variant": "text",
+            "value": "abc"
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "||",
+            "left": {
+              "type": "literal",
+              "variant": "text",
+              "value": "ABC"
+            },
+            "right": {
+              "type": "function",
+              "name": {
+                "type": "identifier",
+                "variant": "function",
+                "name": "max"
+              },
+              "args": {
+                "type": "expression",
+                "variant": "list",
+                "expression": [
+                  {
+                    "type": "expression",
+                    "format": "unary",
+                    "variant": "operation",
+                    "operator": "collate",
+                    "collate": [
+                      {
+                        "type": "identifier",
+                        "variant": "collation",
+                        "name": "nocase"
+                      }
+                    ],
+                    "expression": {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": ""
+                    }
+                  },
+                  {
+                    "type": "expression",
+                    "format": "unary",
+                    "variant": "operation",
+                    "operator": "collate",
+                    "collate": [
+                      {
+                        "type": "identifier",
+                        "variant": "collation",
+                        "name": "binary"
+                      }
+                    ],
+                    "expression": {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": ""
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "==",
+          "left": {
+            "type": "literal",
+            "variant": "text",
+            "value": "abc"
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "||",
+            "left": {
+              "type": "literal",
+              "variant": "text",
+              "value": "ABC"
+            },
+            "right": {
+              "type": "function",
+              "name": {
+                "type": "identifier",
+                "variant": "function",
+                "name": "max"
+              },
+              "args": {
+                "type": "expression",
+                "variant": "list",
+                "expression": [
+                  {
+                    "type": "expression",
+                    "format": "unary",
+                    "variant": "operation",
+                    "operator": "collate",
+                    "collate": [
+                      {
+                        "type": "identifier",
+                        "variant": "collation",
+                        "name": "binary"
+                      }
+                    ],
+                    "expression": {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": ""
+                    }
+                  },
+                  {
+                    "type": "expression",
+                    "format": "unary",
+                    "variant": "operation",
+                    "operator": "collate",
+                    "collate": [
+                      {
+                        "type": "identifier",
+                        "variant": "collation",
+                        "name": "nocase"
+                      }
+                    ],
+                    "expression": {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": ""
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "==",
+          "left": {
+            "type": "literal",
+            "variant": "text",
+            "value": "abc"
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "||",
+            "left": {
+              "type": "literal",
+              "variant": "text",
+              "value": "ABC"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "case",
+              "condition": [
+                {
+                  "type": "condition",
+                  "format": "when",
+                  "when": {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "-",
+                      "left": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "1"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "1"
+                      }
+                    },
+                    "right": {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "2"
+                    }
+                  },
+                  "then": {
+                    "type": "expression",
+                    "format": "unary",
+                    "variant": "operation",
+                    "operator": "collate",
+                    "collate": [
+                      {
+                        "type": "identifier",
+                        "variant": "collation",
+                        "name": "nocase"
+                      }
+                    ],
+                    "expression": {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": ""
+                    }
+                  }
+                },
+                {
+                  "type": "condition",
+                  "format": "else",
+                  "else": {
+                    "type": "expression",
+                    "format": "unary",
+                    "variant": "operation",
+                    "operator": "collate",
+                    "collate": [
+                      {
+                        "type": "identifier",
+                        "variant": "collation",
+                        "name": "binary"
+                      }
+                    ],
+                    "expression": {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": ""
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "==",
+          "left": {
+            "type": "literal",
+            "variant": "text",
+            "value": "abc"
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "||",
+            "left": {
+              "type": "literal",
+              "variant": "text",
+              "value": "ABC"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "case",
+              "condition": [
+                {
+                  "type": "condition",
+                  "format": "when",
+                  "when": {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "+",
+                      "left": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "1"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "1"
+                      }
+                    },
+                    "right": {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "2"
+                    }
+                  },
+                  "then": {
+                    "type": "expression",
+                    "format": "unary",
+                    "variant": "operation",
+                    "operator": "collate",
+                    "collate": [
+                      {
+                        "type": "identifier",
+                        "variant": "collation",
+                        "name": "nocase"
+                      }
+                    ],
+                    "expression": {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": ""
+                    }
+                  }
+                },
+                {
+                  "type": "condition",
+                  "format": "else",
+                  "else": {
+                    "type": "expression",
+                    "format": "unary",
+                    "variant": "operation",
+                    "operator": "collate",
+                    "collate": [
+                      {
+                        "type": "identifier",
+                        "variant": "collation",
+                        "name": "binary"
+                      }
+                    ],
+                    "expression": {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": ""
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "==",
+          "left": {
+            "type": "literal",
+            "variant": "text",
+            "value": "abc"
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "||",
+            "left": {
+              "type": "literal",
+              "variant": "text",
+              "value": "ABC"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "case",
+              "condition": [
+                {
+                  "type": "condition",
+                  "format": "when",
+                  "when": {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "1"
+                    },
+                    "right": {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "2"
+                    }
+                  },
+                  "then": {
+                    "type": "expression",
+                    "format": "unary",
+                    "variant": "operation",
+                    "operator": "collate",
+                    "collate": [
+                      {
+                        "type": "identifier",
+                        "variant": "collation",
+                        "name": "binary"
+                      }
+                    ],
+                    "expression": {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": ""
+                    }
+                  }
+                },
+                {
+                  "type": "condition",
+                  "format": "else",
+                  "else": {
+                    "type": "expression",
+                    "format": "unary",
+                    "variant": "operation",
+                    "operator": "collate",
+                    "collate": [
+                      {
+                        "type": "identifier",
+                        "variant": "collation",
+                        "name": "nocase"
+                      }
+                    ],
+                    "expression": {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": ""
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

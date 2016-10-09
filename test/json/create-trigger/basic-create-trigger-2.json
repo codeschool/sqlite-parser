@@ -1,13 +1,19 @@
 {
+  "type": "statement",
+  "variant": "list",
   "statement": [
     {
-      "type": "expression",
+      "type": "statement",
       "target": {
         "type": "identifier",
         "variant": "trigger",
         "name": "happy_bee_time"
       },
-      "on": "bees",
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "bees"
+      },
       "event": {
         "type": "event",
         "occurs": "before",
@@ -39,9 +45,9 @@
           },
           "result": [
             {
-              "type": "values",
+              "type": "expression",
               "variant": "list",
-              "values": [
+              "expression": [
                 {
                   "type": "literal",
                   "variant": "decimal",
@@ -49,7 +55,7 @@
                 },
                 {
                   "type": "literal",
-                  "variant": "string",
+                  "variant": "text",
                   "value": "A Better Hive"
                 }
               ]
@@ -85,17 +91,17 @@
           },
           "result": [
             {
-              "type": "values",
+              "type": "expression",
               "variant": "list",
-              "values": [
+              "expression": [
                 {
                   "type": "literal",
-                  "variant": "string",
+                  "variant": "text",
                   "value": "New Nick"
                 },
                 {
                   "type": "literal",
-                  "variant": "string",
+                  "variant": "text",
                   "value": "purple"
                 },
                 {
@@ -108,8 +114,8 @@
           ]
         }
       ],
-      "variant": "operation",
-      "format": "binary",
+      "variant": "create",
+      "format": "trigger",
       "temporary": true,
       "condition": [
         {
@@ -117,16 +123,21 @@
           "condition": "if not exists"
         }
       ],
-      "operation": "==",
-      "left": {
-        "type": "identifier",
-        "variant": "column",
-        "name": "name"
-      },
-      "right": {
-        "type": "literal",
-        "variant": "string",
-        "value": "Nick"
+      "when": {
+        "type": "expression",
+        "format": "binary",
+        "variant": "operation",
+        "operation": "==",
+        "left": {
+          "type": "identifier",
+          "variant": "column",
+          "name": "name"
+        },
+        "right": {
+          "type": "literal",
+          "variant": "text",
+          "value": "Nick"
+        }
       }
     }
   ]

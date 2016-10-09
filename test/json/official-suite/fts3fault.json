@@ -1,0 +1,1302 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": {
+        "type": "module",
+        "name": "fts3"
+      },
+      "variant": "create",
+      "format": "virtual"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "test renaming the table"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "after it has been written"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "begin"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "registers the FTS3 module"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "various support functions"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "alter table",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "action": "rename",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      }
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "result": {
+        "type": "module",
+        "name": "fts4"
+      },
+      "variant": "create",
+      "format": "virtual"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t3",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t3"
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "nodesize=50"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "begin"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "||",
+              "left": {
+                "type": "literal",
+                "variant": "text",
+                "value": "aaa"
+              },
+              "right": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "sub_i"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "commit"
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "match",
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "x"
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t3"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "count"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "rowid"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "match",
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "aa*"
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t3"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t4"
+      },
+      "result": {
+        "type": "module",
+        "name": "fts4"
+      },
+      "variant": "create",
+      "format": "virtual"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "The British Government called on"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "as pesetas then became much"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "content"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t4"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "optimize"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "t4"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t4"
+      },
+      "limit": {
+        "type": "expression",
+        "variant": "limit",
+        "start": {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "1"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t5"
+      },
+      "result": {
+        "type": "module",
+        "name": "fts4"
+      },
+      "variant": "create",
+      "format": "virtual"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t5"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "The British Government called on"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t5"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "as pesetas then became much"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "begin"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t5"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "influential in shaping his future outlook"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t5"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "might be acceptable to the British electorate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "rowid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t5"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "match",
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "british"
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t5"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t6"
+      },
+      "result": {
+        "type": "module",
+        "name": "fts4"
+      },
+      "variant": "create",
+      "format": "virtual"
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "rowid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t6"
+      }
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t6"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": {
+        "type": "module",
+        "name": "fts4",
+        "args": {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "b"
+            },
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "matchinfo"
+              },
+              "right": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "fts3"
+              }
+            }
+          ]
+        }
+      },
+      "variant": "create",
+      "format": "virtual"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": {
+        "type": "module",
+        "name": "fts4",
+        "args": {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "b"
+            },
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "matchinfo"
+              },
+              "right": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "fs3"
+              }
+            }
+          ]
+        }
+      },
+      "variant": "create",
+      "format": "virtual"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": {
+        "type": "module",
+        "name": "fts4",
+        "args": {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "b"
+            },
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "matchnfo"
+              },
+              "right": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "fts3"
+              }
+            }
+          ]
+        }
+      },
+      "variant": "create",
+      "format": "virtual"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t8"
+      },
+      "result": {
+        "type": "module",
+        "name": "fts4"
+      },
+      "variant": "create",
+      "format": "virtual"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t8"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "a b c"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t8"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "b b b"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t8"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "d d d"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t8"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "e e e"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t8",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t8"
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "optimize"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "mit"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "function",
+                "name": {
+                  "type": "identifier",
+                  "variant": "function",
+                  "name": "matchinfo"
+                },
+                "args": {
+                  "type": "expression",
+                  "variant": "list",
+                  "expression": [
+                    {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "t8"
+                    },
+                    {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": "x"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t8"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "match",
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "a b c"
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t8"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "mit"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "function",
+                "name": {
+                  "type": "identifier",
+                  "variant": "function",
+                  "name": "matchinfo"
+                },
+                "args": {
+                  "type": "expression",
+                  "variant": "list",
+                  "expression": [
+                    {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "t8"
+                    },
+                    {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": "s"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t8"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "match",
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "a b c"
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t8"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "mit"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "function",
+                "name": {
+                  "type": "identifier",
+                  "variant": "function",
+                  "name": "matchinfo"
+                },
+                "args": {
+                  "type": "expression",
+                  "variant": "list",
+                  "expression": [
+                    {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "t8"
+                    },
+                    {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": "a"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t8"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "match",
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "a b c"
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t8"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "mit"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "function",
+                "name": {
+                  "type": "identifier",
+                  "variant": "function",
+                  "name": "matchinfo"
+                },
+                "args": {
+                  "type": "expression",
+                  "variant": "list",
+                  "expression": [
+                    {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "t8"
+                    },
+                    {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": "l"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t8"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "match",
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "a b c"
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t8"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t9"
+      },
+      "result": {
+        "type": "module",
+        "name": "fts4",
+        "args": {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "tokenize"
+              },
+              "right": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "porter"
+              }
+            }
+          ]
+        }
+      },
+      "variant": "create",
+      "format": "virtual"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t9"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "this record is used toooooooooooooooooooooooooooooooooooooo try to"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "offsets"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "t9"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t9"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "match",
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "to*"
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t9"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "offsets"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "t9"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t9"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "match",
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "to*"
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t9"
+          }
+        }
+      ]
+    }
+  ]
+}

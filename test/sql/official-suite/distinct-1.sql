@@ -1,0 +1,70 @@
+-- original: distinct.test
+-- credit:   http://www.sqlite.org/src/tree?ci=trunk&name=test
+
+CREATE TABLE t1(a, b, c, d);
+  CREATE UNIQUE INDEX i1 ON t1(b, c);
+  CREATE UNIQUE INDEX i2 ON t1(d COLLATE nocase);
+
+  CREATE TABLE t2(x INTEGER PRIMARY KEY, y);
+
+  CREATE TABLE t3(c1 PRIMARY KEY NOT NULL, c2 NOT NULL);
+  CREATE INDEX i3 ON t3(c2);
+
+  CREATE TABLE t4(a, b NOT NULL, c NOT NULL, d NOT NULL);
+  CREATE UNIQUE INDEX t4i1 ON t4(b, c);
+  CREATE UNIQUE INDEX t4i2 ON t4(d COLLATE nocase)
+;CREATE TABLE t1(a, b, c);
+
+  CREATE INDEX i1 ON t1(a, b);
+  CREATE INDEX i2 ON t1(b COLLATE nocase, c COLLATE nocase);
+
+  INSERT INTO t1 VALUES('a', 'b', 'c');
+  INSERT INTO t1 VALUES('A', 'B', 'C');
+  INSERT INTO t1 VALUES('a', 'b', 'c');
+  INSERT INTO t1 VALUES('A', 'B', 'C')
+;SELECT (SELECT DISTINCT o.a FROM t1 AS i) FROM t1 AS o ORDER BY rowid
+;CREATE TABLE t3(a INTEGER, b INTEGER, c, UNIQUE(a,b));
+    INSERT INTO t3 VALUES
+        (null, null, 1),
+        (null, null, 2),
+        (null, 3, 4),
+        (null, 3, 5),
+        (6, null, 7),
+        (6, null, 8);
+    SELECT DISTINCT a, b FROM t3 ORDER BY +a, +b
+;EXPLAIN SELECT DISTINCT a, b FROM t3 ORDER BY +a, +b
+;DROP TABLE IF EXISTS t1;
+  DROP TABLE IF EXISTS t2;
+  CREATE TABLE t1(a INTEGER);
+  INSERT INTO t1 VALUES(3);
+  INSERT INTO t1 VALUES(2);
+  INSERT INTO t1 VALUES(1);
+  INSERT INTO t1 VALUES(2);
+  INSERT INTO t1 VALUES(3);
+  INSERT INTO t1 VALUES(1);
+  CREATE TABLE t2(x);
+  INSERT INTO t2
+    SELECT DISTINCT
+      CASE a WHEN 1 THEN x'0000000000'
+             WHEN 2 THEN zeroblob(5)
+             ELSE 'xyzzy' END
+      FROM t1;
+  SELECT quote(x) FROM t2 ORDER BY 1
+;DROP TABLE IF EXISTS t1;
+  CREATE TABLE t1(x);
+  INSERT INTO t1(x) VALUES(3),(1),(5),(2),(6),(4),(5),(1),(3);
+  CREATE INDEX t1x ON t1(x DESC);
+  SELECT DISTINCT x FROM t1 ORDER BY x ASC
+;SELECT DISTINCT x FROM t1 ORDER BY x DESC
+;SELECT DISTINCT x FROM t1 ORDER BY x
+;DROP INDEX t1x;
+  CREATE INDEX t1x ON t1(x ASC);
+  SELECT DISTINCT x FROM t1 ORDER BY x ASC
+;SELECT DISTINCT x FROM t1 ORDER BY x DESC
+;SELECT DISTINCT x FROM t1 ORDER BY x
+;CREATE TABLE jjj(x);
+  SELECT (SELECT 'mmm' UNION SELECT DISTINCT max(name) ORDER BY 1) 
+    FROM sqlite_master
+;CREATE TABLE nnn(x);
+  SELECT (SELECT 'mmm' UNION SELECT DISTINCT max(name) ORDER BY 1) 
+    FROM sqlite_master;

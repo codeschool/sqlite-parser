@@ -1,0 +1,1223 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": {
+        "type": "module",
+        "name": "fts3",
+        "args": {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "x"
+            }
+          ]
+        }
+      },
+      "variant": "create",
+      "format": "virtual"
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "begin"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "The source code for SQLite is in the public"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "commit"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "zoink"
+      },
+      "result": {
+        "type": "module",
+        "name": "fts3"
+      },
+      "variant": "create",
+      "format": "virtual"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "zoink"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "The apple falls far from the tree"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "docid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "zoink"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "match",
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "(apple oranges) AND apple"
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "zoink"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "docid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "zoink"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "match",
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "apple AND (oranges apple)"
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "zoink"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "foobar"
+      },
+      "result": {
+        "type": "module",
+        "name": "fts3",
+        "args": {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "description"
+            },
+            {
+              "type": "definition",
+              "variant": "column",
+              "name": "tokenize",
+              "definition": [],
+              "datatype": {
+                "type": "datatype",
+                "variant": "porter",
+                "affinity": "numeric"
+              }
+            }
+          ]
+        }
+      },
+      "variant": "create",
+      "format": "virtual"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "foobar",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "description"
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "Filed under: Emerging Technologies, EV/Plug-in, Hybrid, Chevrolet, GM, \n      ZENN 2011 Chevy Volt - Click above for high-res image gallery There are \n      16 days left in the month of December. Besides being time for most \n      Americans to kick their Christmas shopping sessions into high gear and\n      start planning their resolutions for 2010, it also means that there's\n      precious little time for EEStor to \"deliver functional technology\" to\n      Zenn Motors as promised. Still, the promises held out by the secretive\n      company are too great for us to forget about entirely. We'd love for\n      EEStor's claims to be independently verified and proven accurate, as\n      would just about anyone else looking to break free of petroleum in fav\n    "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "docid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "foobar"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "match",
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "\"high sp d\""
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "description"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "mit"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "function",
+                "name": {
+                  "type": "identifier",
+                  "variant": "function",
+                  "name": "matchinfo"
+                },
+                "args": {
+                  "type": "expression",
+                  "variant": "list",
+                  "expression": [
+                    {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "foobar"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "foobar"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "match",
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "the"
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "foobar"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": [
+        {
+          "type": "condition",
+          "condition": "if exists"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "number",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "date",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "i1"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t1",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "date"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "ft"
+      },
+      "result": {
+        "type": "module",
+        "name": "fts3",
+        "args": {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "title"
+            }
+          ]
+        }
+      },
+      "variant": "create",
+      "format": "virtual"
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "bt"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "title",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "t1.number"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "ft"
+            }
+          }
+        ]
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t1.number"
+          },
+          "right": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "ft.rowid"
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "t1.date"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "t1.number"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "ft"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t1"
+            }
+          }
+        ]
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t1.number"
+          },
+          "right": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "ft.rowid"
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "t1.date"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "t1.number"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "bt"
+            }
+          }
+        ]
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t1.number"
+          },
+          "right": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "bt.rowid"
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "t1.date"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "t1.number"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "bt"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t1"
+            }
+          }
+        ]
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t1.number"
+          },
+          "right": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "bt.rowid"
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "t1.date"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "result": {
+        "type": "module",
+        "name": "fts4"
+      },
+      "variant": "create",
+      "format": "virtual"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "it was the first time in history"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2_content"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "c0content"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "blob",
+            "value": "1234"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "result": {
+        "type": "module",
+        "name": "fts4",
+        "args": {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "b"
+            }
+          ]
+        }
+      },
+      "variant": "create",
+      "format": "virtual"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "no gestures"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "another intriguing discovery by observing the hand gestures (called beats) people make while speaking. Research has shown that such gestures do more than add visual emphasis to our words (many people gesture while they're on the telephone, for example); it seems they actually help our brains find words"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "ft4"
+      },
+      "result": {
+        "type": "module",
+        "name": "fts4",
+        "args": {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "x"
+            }
+          ]
+        }
+      },
+      "variant": "create",
+      "format": "virtual"
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t4"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "ft4",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "rowid"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x"
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "sub_irowid"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "x y z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t4",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "rowid"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x"
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "sub_irowid"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "x y z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "rowid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t4"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "between",
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "and",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "sub_ifirst"
+            },
+            "right": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "sub_ilast"
+            }
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "rowid"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "rowid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t4"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "between",
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "and",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "sub_ifirst"
+            },
+            "right": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "sub_ilast"
+            }
+          },
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "rowid"
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "expression",
+          "variant": "order",
+          "expression": {
+            "type": "expression",
+            "format": "unary",
+            "variant": "operation",
+            "expression": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "rowid"
+            },
+            "operator": "+"
+          },
+          "direction": "desc"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "rowid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t4"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "rowid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t4"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": ">",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "rowid"
+          },
+          "right": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "sub_ii"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "rowid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t4"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "<",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "rowid"
+          },
+          "right": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "sub_ii"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "rowid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t4"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": ">",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "rowid"
+          },
+          "right": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "sub_ii"
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "expression",
+          "variant": "order",
+          "expression": {
+            "type": "expression",
+            "format": "unary",
+            "variant": "operation",
+            "expression": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "rowid"
+            },
+            "operator": "+"
+          },
+          "direction": "desc"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "rowid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t4"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "<",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "rowid"
+          },
+          "right": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "sub_ii"
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "expression",
+          "variant": "order",
+          "expression": {
+            "type": "expression",
+            "format": "unary",
+            "variant": "operation",
+            "expression": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "rowid"
+            },
+            "operator": "+"
+          },
+          "direction": "desc"
+        }
+      ]
+    }
+  ]
+}

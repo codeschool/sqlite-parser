@@ -1,0 +1,72 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "threads"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "5"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "threads"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": [
+        {
+          "type": "condition",
+          "condition": "if exists"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "page_size"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "4096"
+        }
+      }
+    }
+  ]
+}

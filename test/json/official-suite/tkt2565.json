@@ -1,0 +1,146 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "page_size"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "512"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "auto_vacuum"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "2"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "cache_size"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "16"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "a"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "id",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "name",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "locking_mode"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "identifier",
+          "variant": "name",
+          "name": "exclusive"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "begin",
+      "defer": "exclusive"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "a"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ABCDEFGHIJKLMNOP"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

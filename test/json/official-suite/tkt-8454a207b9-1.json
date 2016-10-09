@@ -1,0 +1,489 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "alter table",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "action": "add",
+      "definition": {
+        "type": "definition",
+        "variant": "column",
+        "name": "b",
+        "definition": [
+          {
+            "type": "constraint",
+            "variant": "default",
+            "value": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "-123.0"
+            }
+          }
+        ],
+        "datatype": {
+          "type": "datatype",
+          "variant": "text",
+          "affinity": "text"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "b"
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "b"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "alter table",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "action": "add",
+      "definition": {
+        "type": "definition",
+        "variant": "column",
+        "name": "c",
+        "definition": [
+          {
+            "type": "constraint",
+            "variant": "default",
+            "value": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "-123.5"
+            }
+          }
+        ],
+        "datatype": {
+          "type": "datatype",
+          "variant": "text",
+          "affinity": "text"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "c"
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "c"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "alter table",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "action": "add",
+      "definition": {
+        "type": "definition",
+        "variant": "column",
+        "name": "d",
+        "definition": [
+          {
+            "type": "constraint",
+            "variant": "default",
+            "value": {
+              "type": "literal",
+              "variant": "text",
+              "value": "hello"
+            }
+          }
+        ],
+        "datatype": {
+          "type": "datatype",
+          "variant": "text",
+          "affinity": "text"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "d"
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "d"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "alter table",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "action": "add",
+      "definition": {
+        "type": "definition",
+        "variant": "column",
+        "name": "e",
+        "definition": [
+          {
+            "type": "constraint",
+            "variant": "default",
+            "value": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "-123.0"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "e"
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "e"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "alter table",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "action": "add",
+      "definition": {
+        "type": "definition",
+        "variant": "column",
+        "name": "f",
+        "definition": [
+          {
+            "type": "constraint",
+            "variant": "default",
+            "value": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "-123.5"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "f"
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "f"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "alter table",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "action": "add",
+      "definition": {
+        "type": "definition",
+        "variant": "column",
+        "name": "g",
+        "definition": [
+          {
+            "type": "constraint",
+            "variant": "default",
+            "value": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "-9223372036854775808"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "g"
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "g"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "alter table",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "action": "add",
+      "definition": {
+        "type": "definition",
+        "variant": "column",
+        "name": "h",
+        "definition": [
+          {
+            "type": "constraint",
+            "variant": "default",
+            "value": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "9223372036854775807"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "h"
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "typeof"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "h"
+              }
+            ]
+          }
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tx"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "y",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "z",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "begin"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tx"
+      },
+      "result": {
+        "type": "values",
+        "variant": "default"
+      }
+    }
+  ]
+}

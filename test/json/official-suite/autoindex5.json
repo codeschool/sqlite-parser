@@ -1,0 +1,1468 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "source_package_status"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "bug_name",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "package",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "vulnerable",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "urgency",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "constraint",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "columns": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "bug_name"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "package"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "source_package_status_package"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "source_package_status",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "package"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "source_packages"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "name",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "release",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "subrelease",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "archive",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "version",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "version_id",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            },
+            {
+              "type": "constraint",
+              "variant": "default",
+              "value": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "0"
+              }
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "constraint",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "columns": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "name"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "release"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "subrelease"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "archive"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "bugs"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "name",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            },
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "cve_status",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            },
+            {
+              "type": "constraint",
+              "variant": "check",
+              "expression": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "in",
+                "right": {
+                  "type": "expression",
+                  "variant": "list",
+                  "expression": [
+                    {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": ""
+                    },
+                    {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": "CANDIDATE"
+                    },
+                    {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": "ASSIGNED"
+                    },
+                    {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": "RESERVED"
+                    },
+                    {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": "REJECTED"
+                    }
+                  ]
+                },
+                "left": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "cve_status"
+                }
+              }
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "not_for_us",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            },
+            {
+              "type": "constraint",
+              "variant": "check",
+              "expression": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "in",
+                "right": {
+                  "type": "expression",
+                  "variant": "list",
+                  "expression": [
+                    {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "0"
+                    },
+                    {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "1"
+                    }
+                  ]
+                },
+                "left": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "not_for_us"
+                }
+              }
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "description",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "release_date",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "source_file",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "source_line",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "package_notes"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "id",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            },
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "bug_name",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "package",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "fixed_version",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "check",
+              "expression": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "or",
+                "left": {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "is",
+                  "left": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "fixed_version"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "variant": "null",
+                    "value": "null"
+                  }
+                },
+                "right": {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "<>",
+                  "left": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "fixed_version"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "variant": "text",
+                    "value": ""
+                  }
+                }
+              }
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "fixed_version_id",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            },
+            {
+              "type": "constraint",
+              "variant": "default",
+              "value": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "0"
+              }
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "release",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "package_kind",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            },
+            {
+              "type": "constraint",
+              "variant": "default",
+              "value": {
+                "type": "literal",
+                "variant": "text",
+                "value": "unknown"
+              }
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "urgency",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "bug_origin",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            },
+            {
+              "type": "constraint",
+              "variant": "default",
+              "value": {
+                "type": "literal",
+                "variant": "text",
+                "value": ""
+              }
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "text",
+            "affinity": "text"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "package_notes_package"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "package_notes",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "package"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "package_notes_bug"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "package_notes",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "bug_name"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "package"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "release"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index",
+      "unique": true
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "debian_bugs"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "bug",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "note",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "constraint",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "columns": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "bug"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "note"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "view",
+        "name": "debian_cve"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "debian_bugs.bug"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "st.bug_name"
+          }
+        ],
+        "distinct": true,
+        "from": {
+          "type": "map",
+          "variant": "join",
+          "source": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "package_notes"
+          },
+          "map": [
+            {
+              "type": "join",
+              "variant": "cross join",
+              "source": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "debian_bugs"
+              }
+            },
+            {
+              "type": "join",
+              "variant": "cross join",
+              "source": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "source_package_status",
+                "alias": "st"
+              }
+            }
+          ]
+        },
+        "where": [
+          {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "and",
+            "left": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "package_notes.bug_name"
+              },
+              "right": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "st.bug_name"
+              }
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "debian_bugs.note"
+              },
+              "right": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "package_notes.id"
+              }
+            }
+          }
+        ],
+        "order": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "debian_bugs.bug"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "view"
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "st.bug_name"
+        },
+        {
+          "type": "statement",
+          "variant": "select",
+          "result": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "debian_cve.bug"
+            }
+          ],
+          "from": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "debian_cve"
+          },
+          "where": [
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "debian_cve.bug_name"
+              },
+              "right": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "st.bug_name"
+              }
+            }
+          ],
+          "order": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "debian_cve.bug"
+            }
+          ]
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "sp.release"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "source_package_status",
+          "alias": "st"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "source_packages",
+              "alias": "sp"
+            }
+          },
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "bugs"
+            }
+          }
+        ]
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "and",
+            "left": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "and",
+              "left": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "=",
+                "left": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "sp.rowid"
+                },
+                "right": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "st.package"
+                }
+              },
+              "right": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "=",
+                "left": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "st.bug_name"
+                },
+                "right": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "bugs.name"
+                }
+              }
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "like",
+              "right": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "or",
+                "left": {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "CVE-%"
+                },
+                "right": {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "like",
+                  "right": {
+                    "type": "literal",
+                    "variant": "text",
+                    "value": "TEMP-%"
+                  },
+                  "left": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "st.bug_name"
+                  }
+                }
+              },
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "st.bug_name"
+              }
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "or",
+            "left": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "or",
+              "left": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "or",
+                "left": {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "or",
+                  "left": {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "sp.release"
+                    },
+                    "right": {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": "sid"
+                    }
+                  },
+                  "right": {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "sp.release"
+                    },
+                    "right": {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": "stretch"
+                    }
+                  }
+                },
+                "right": {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "=",
+                  "left": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "sp.release"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "variant": "text",
+                    "value": "jessie"
+                  }
+                }
+              },
+              "right": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "=",
+                "left": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "sp.release"
+                },
+                "right": {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "wheezy"
+                }
+              }
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "sp.release"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "text",
+                "value": "squeeze"
+              }
+            }
+          }
+        }
+      ],
+      "order": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "sp.name"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "st.bug_name"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "sp.release"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "sp.subrelease"
+        }
+      ],
+      "explain": true
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "one"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "o",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "one"
+      },
+      "result": {
+        "type": "values",
+        "variant": "default"
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "z",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "aaa"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "4.0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "aaa"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "4.0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "view",
+        "name": "vvv"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "compound",
+        "statement": {
+          "type": "statement",
+          "variant": "select",
+          "result": [
+            {
+              "type": "identifier",
+              "variant": "star",
+              "name": "*"
+            }
+          ],
+          "from": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "t1"
+          }
+        },
+        "compound": [
+          {
+            "type": "compound",
+            "variant": "union all",
+            "statement": {
+              "type": "statement",
+              "variant": "select",
+              "result": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                }
+              ],
+              "where": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "0"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "view"
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "statement",
+          "variant": "select",
+          "result": [
+            {
+              "type": "function",
+              "name": {
+                "type": "identifier",
+                "variant": "function",
+                "name": "sum"
+              },
+              "args": {
+                "type": "expression",
+                "variant": "list",
+                "expression": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "z"
+                  }
+                ]
+              }
+            }
+          ],
+          "from": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "vvv"
+          },
+          "where": [
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "x"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "text",
+                "value": "aaa"
+              }
+            }
+          ]
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "one"
+      }
+    }
+  ]
+}

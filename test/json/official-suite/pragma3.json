@@ -1,0 +1,1365 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "temp.data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "main.data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "1234"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "main.data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "begin",
+      "defer": "immediate"
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "100"
+            }
+          ]
+        },
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "200"
+            }
+          ]
+        },
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "300"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "commit"
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "begin",
+      "defer": "immediate"
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "400"
+            }
+          ]
+        },
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "500"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "commit"
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "shrink_memory"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "begin",
+      "defer": "immediate"
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "value": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "+",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "commit"
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "begin"
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "555"
+          }
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "501"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "order": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "a"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "commit"
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": ">",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "300"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "begin"
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t4"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "y",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "z",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t4"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "123"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "456"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "789"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "commit"
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "begin"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t3",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "c"
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "abc"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "def"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ghi"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t4"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "commit"
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t4"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t4"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "journal_mode"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "text",
+          "value": "wal"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "journal_mode"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "journal_mode"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "value": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "*",
+            "left": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "111"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "/",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "a"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "100"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "data_version"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    }
+  ]
+}

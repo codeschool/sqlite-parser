@@ -1,0 +1,901 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "page_size"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "1024"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "begin"
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abc"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abc"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "commit"
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "integrity_check"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abc"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "begin"
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abc"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ]
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "def"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "d",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ]
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "e",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "f",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "default_cache_size"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "10"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abc"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "function",
+              "name": {
+                "type": "identifier",
+                "variant": "function",
+                "name": "randstr"
+              },
+              "args": {
+                "type": "expression",
+                "variant": "list",
+                "expression": [
+                  {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "10"
+                  },
+                  {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "1000"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "function",
+              "name": {
+                "type": "identifier",
+                "variant": "function",
+                "name": "randstr"
+              },
+              "args": {
+                "type": "expression",
+                "variant": "list",
+                "expression": [
+                  {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "10"
+                  },
+                  {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "1000"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "function",
+              "name": {
+                "type": "identifier",
+                "variant": "function",
+                "name": "randstr"
+              },
+              "args": {
+                "type": "expression",
+                "variant": "list",
+                "expression": [
+                  {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "10"
+                  },
+                  {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "1000"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abc"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "randstr"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "randstr"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "randstr"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1000"
+                }
+              ]
+            }
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "abc"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abc"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "randstr"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "randstr"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "randstr"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1000"
+                }
+              ]
+            }
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "abc"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abc"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "randstr"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "randstr"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "randstr"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1000"
+                }
+              ]
+            }
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "abc"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abc"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "randstr"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "randstr"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "randstr"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1000"
+                }
+              ]
+            }
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "abc"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abc"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "randstr"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "randstr"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "randstr"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1000"
+                }
+              ]
+            }
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "abc"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abc"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "randstr"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "randstr"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1000"
+                }
+              ]
+            }
+          },
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "randstr"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1000"
+                }
+              ]
+            }
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "abc"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "commit"
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "integrity_check"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "integrity_check"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    }
+  ]
+}

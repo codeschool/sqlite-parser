@@ -1,3 +1,5 @@
+import * as tree from '../misc/helpers';
+
 describe('expressions', function() {
 
   it('expression unary 1', function(done) {
@@ -69,6 +71,10 @@ describe('expressions', function() {
   });
 
   it('binary grouping 1', function(done) {
+    tree.equals(this, done);
+  });
+
+  it('binary between', function(done) {
     tree.equals(this, done);
   });
 

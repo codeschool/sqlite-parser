@@ -1,0 +1,603 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "legacy_file_format"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "boolean",
+          "normalized": "0",
+          "value": "off"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x0",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x1",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x2",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x3",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x4",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x5",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x6",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x7",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x8",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x9",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "star",
+            "name": "*"
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "star",
+            "name": "*"
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "star",
+            "name": "*"
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "star",
+            "name": "*"
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "star",
+            "name": "*"
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "star",
+            "name": "*"
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x0"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x1"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x2"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x3"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x4"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x5"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x6"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x7"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x8"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x9"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x0"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "2"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x1"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "2"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x2"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "2"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x3"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "2"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x4"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "2"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x5"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "2"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x6"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "2"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x7"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "2"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x8"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "2"
+          }
+        },
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x9"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "2"
+          }
+        }
+      ]
+    }
+  ]
+}

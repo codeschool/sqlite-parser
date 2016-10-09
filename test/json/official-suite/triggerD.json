@@ -1,0 +1,1906 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "rowid",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "oid",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "_rowid_",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "d",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "e",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "r1"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "before",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "log"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "r1"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.rowid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.oid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new._rowid_"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.x"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "r2"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "after",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "log"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "r2"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.rowid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.oid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new._rowid_"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.x"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "r3"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "before",
+        "event": "update",
+        "of": null
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "log"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "r3.old"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.rowid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.oid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old._rowid_"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.x"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "log"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "r3.new"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.rowid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.oid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new._rowid_"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.x"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "r4"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "after",
+        "event": "update",
+        "of": null
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "log"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "r4.old"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.rowid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.oid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old._rowid_"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.x"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "log"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "r4.new"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.rowid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.oid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new._rowid_"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.x"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "r5"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "before",
+        "event": "delete"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "log"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "r5"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.rowid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.oid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old._rowid_"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.x"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "r6"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "after",
+        "event": "delete"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "log"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "r6"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.rowid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.oid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old._rowid_"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.x"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "100"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "200"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "300"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "400"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "rowid"
+          },
+          "value": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "+",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "rowid"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      }
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "w",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "y",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "z",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "r1"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "before",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "log"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "r1"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.rowid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.oid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new._rowid_"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.x"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "r2"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "after",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "log"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "r2"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.rowid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.oid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new._rowid_"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.x"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "r3"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "before",
+        "event": "update",
+        "of": null
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "log"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "r3.old"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.rowid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.oid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old._rowid_"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.x"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "log"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "r3.new"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.rowid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.oid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new._rowid_"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.x"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "r4"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "after",
+        "event": "update",
+        "of": null
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "log"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "r4.old"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.rowid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.oid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old._rowid_"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.x"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "log"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "r4.new"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.rowid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.oid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new._rowid_"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.x"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "r5"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "before",
+        "event": "delete"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "log"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "r5"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.rowid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.oid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old._rowid_"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.x"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "r6"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "after",
+        "event": "delete"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "log"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "r6"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.rowid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.oid"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old._rowid_"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "old.x"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "100"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "200"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "300"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "400"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "x"
+          },
+          "value": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "+",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "x"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t300"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t300"
+      },
+      "variant": "create",
+      "format": "table",
+      "temporary": true,
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t301"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "y",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "main.r300"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t300"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "after",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "t301"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "+",
+                  "left": {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "10000"
+                  },
+                  "right": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "new.x"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "main.t300"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "temp.t300"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t301"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t301"
+      }
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "temp.r301"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t300"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "after",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "t301"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "+",
+                  "left": {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "20000"
+                  },
+                  "right": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "new.x"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "main.t300"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "temp.t300"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t301"
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "attach",
+      "target": {
+        "type": "identifier",
+        "variant": "database",
+        "name": "db2"
+      },
+      "attach": {
+        "type": "literal",
+        "variant": "text",
+        "value": "test2.db"
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "db2.t2"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "y",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "db2.log"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "z",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "db2.trig"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "db2.t2"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "after",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "expression",
+            "format": "table",
+            "name": "log",
+            "columns": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "z"
+              }
+            ]
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.y"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "123"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "234"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "log"
+      }
+    }
+  ]
+}

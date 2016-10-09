@@ -1,0 +1,2353 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "page_size"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "65536"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "blob",
+            "affinity": "none"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t1",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          }
+        ]
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "i"
+          },
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "6500"
+                }
+              ]
+            }
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "c"
+        }
+      },
+      "with": [
+        {
+          "type": "expression",
+          "format": "table",
+          "variant": "recursive",
+          "target": {
+            "type": "identifier",
+            "variant": "expression",
+            "format": "table",
+            "name": "c",
+            "columns": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "i"
+              }
+            ]
+          },
+          "expression": {
+            "type": "statement",
+            "variant": "compound",
+            "statement": {
+              "type": "statement",
+              "variant": "select",
+              "result": [
+                {
+                  "type": "expression",
+                  "variant": "list",
+                  "expression": [
+                    {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "1"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compound": [
+              {
+                "type": "compound",
+                "variant": "union all",
+                "statement": {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "+",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "i"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "1"
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "c"
+                  },
+                  "where": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "<",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "i"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "30"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "3000"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "64000"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "2"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "integrity_check"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t1",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          }
+        ]
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "i"
+          },
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "6500"
+                }
+              ]
+            }
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "c"
+        }
+      },
+      "with": [
+        {
+          "type": "expression",
+          "format": "table",
+          "variant": "recursive",
+          "target": {
+            "type": "identifier",
+            "variant": "expression",
+            "format": "table",
+            "name": "c",
+            "columns": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "i"
+              }
+            ]
+          },
+          "expression": {
+            "type": "statement",
+            "variant": "compound",
+            "statement": {
+              "type": "statement",
+              "variant": "select",
+              "result": [
+                {
+                  "type": "expression",
+                  "variant": "list",
+                  "expression": [
+                    {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "1"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compound": [
+              {
+                "type": "compound",
+                "variant": "union all",
+                "statement": {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "+",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "i"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "1"
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "c"
+                  },
+                  "where": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "<",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "i"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "30"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "3000"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "64000"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "sub_i"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "integrity_check"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t1",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          }
+        ]
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "i"
+          },
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "6500"
+                }
+              ]
+            }
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "c"
+        }
+      },
+      "with": [
+        {
+          "type": "expression",
+          "format": "table",
+          "variant": "recursive",
+          "target": {
+            "type": "identifier",
+            "variant": "expression",
+            "format": "table",
+            "name": "c",
+            "columns": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "i"
+              }
+            ]
+          },
+          "expression": {
+            "type": "statement",
+            "variant": "compound",
+            "statement": {
+              "type": "statement",
+              "variant": "select",
+              "result": [
+                {
+                  "type": "expression",
+                  "variant": "list",
+                  "expression": [
+                    {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "1"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compound": [
+              {
+                "type": "compound",
+                "variant": "union all",
+                "statement": {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "+",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "i"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "1"
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "c"
+                  },
+                  "where": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "<",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "i"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "30"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "2000"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "64000"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "sub_i"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "integrity_check"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t1",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          }
+        ]
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "i"
+          },
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "6500"
+                }
+              ]
+            }
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "c"
+        }
+      },
+      "with": [
+        {
+          "type": "expression",
+          "format": "table",
+          "variant": "recursive",
+          "target": {
+            "type": "identifier",
+            "variant": "expression",
+            "format": "table",
+            "name": "c",
+            "columns": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "i"
+              }
+            ]
+          },
+          "expression": {
+            "type": "statement",
+            "variant": "compound",
+            "statement": {
+              "type": "statement",
+              "variant": "select",
+              "result": [
+                {
+                  "type": "expression",
+                  "variant": "list",
+                  "expression": [
+                    {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "1"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compound": [
+              {
+                "type": "compound",
+                "variant": "union all",
+                "statement": {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "+",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "i"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "1"
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "c"
+                  },
+                  "where": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "<",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "i"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "30"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "6499"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "==",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "%",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            }
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "0"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "6499"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "==",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "%",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            }
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "6499"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "==",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "%",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            }
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "2"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "64000"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "sub_i"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "integrity_check"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t1",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          }
+        ]
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "i"
+          },
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "6542"
+                }
+              ]
+            }
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "c"
+        }
+      },
+      "with": [
+        {
+          "type": "expression",
+          "format": "table",
+          "variant": "recursive",
+          "target": {
+            "type": "identifier",
+            "variant": "expression",
+            "format": "table",
+            "name": "c",
+            "columns": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "i"
+              }
+            ]
+          },
+          "expression": {
+            "type": "statement",
+            "variant": "compound",
+            "statement": {
+              "type": "statement",
+              "variant": "select",
+              "result": [
+                {
+                  "type": "expression",
+                  "variant": "list",
+                  "expression": [
+                    {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "1"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compound": [
+              {
+                "type": "compound",
+                "variant": "union all",
+                "statement": {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "+",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "i"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "1"
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "c"
+                  },
+                  "where": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "<",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "i"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "30"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "2331"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "65496"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "sub_i"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "integrity_check"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t1",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          }
+        ]
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "i"
+          },
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "6542"
+                }
+              ]
+            }
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "c"
+        }
+      },
+      "with": [
+        {
+          "type": "expression",
+          "format": "table",
+          "variant": "recursive",
+          "target": {
+            "type": "identifier",
+            "variant": "expression",
+            "format": "table",
+            "name": "c",
+            "columns": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "i"
+              }
+            ]
+          },
+          "expression": {
+            "type": "statement",
+            "variant": "compound",
+            "statement": {
+              "type": "statement",
+              "variant": "select",
+              "result": [
+                {
+                  "type": "expression",
+                  "variant": "list",
+                  "expression": [
+                    {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "1"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compound": [
+              {
+                "type": "compound",
+                "variant": "union all",
+                "statement": {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "+",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "i"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "1"
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "c"
+                  },
+                  "where": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "<",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "i"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "30"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "2332"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "65496"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "sub_i"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "integrity_check"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t1",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          }
+        ]
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "i"
+          },
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "6500"
+                }
+              ]
+            }
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "c"
+        }
+      },
+      "with": [
+        {
+          "type": "expression",
+          "format": "table",
+          "variant": "recursive",
+          "target": {
+            "type": "identifier",
+            "variant": "expression",
+            "format": "table",
+            "name": "c",
+            "columns": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "i"
+              }
+            ]
+          },
+          "expression": {
+            "type": "statement",
+            "variant": "compound",
+            "statement": {
+              "type": "statement",
+              "variant": "select",
+              "result": [
+                {
+                  "type": "expression",
+                  "variant": "list",
+                  "expression": [
+                    {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "1"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compound": [
+              {
+                "type": "compound",
+                "variant": "union all",
+                "statement": {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "+",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "i"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "1"
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "c"
+                  },
+                  "where": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "<",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "i"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "30"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "65000"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "sub_i"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "integrity_check"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t1",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          }
+        ]
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "i"
+          },
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "6500"
+                }
+              ]
+            }
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "c"
+        }
+      },
+      "with": [
+        {
+          "type": "expression",
+          "format": "table",
+          "variant": "recursive",
+          "target": {
+            "type": "identifier",
+            "variant": "expression",
+            "format": "table",
+            "name": "c",
+            "columns": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "i"
+              }
+            ]
+          },
+          "expression": {
+            "type": "statement",
+            "variant": "compound",
+            "statement": {
+              "type": "statement",
+              "variant": "select",
+              "result": [
+                {
+                  "type": "expression",
+                  "variant": "list",
+                  "expression": [
+                    {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "1"
+                    }
+                  ]
+                }
+              ]
+            },
+            "compound": [
+              {
+                "type": "compound",
+                "variant": "union all",
+                "statement": {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "+",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "i"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "1"
+                      }
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "c"
+                  },
+                  "where": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "<",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "i"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "31"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "4000"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          "value": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "zeroblob"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "65000"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "sub_i"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "integrity_check"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    }
+  ]
+}

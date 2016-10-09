@@ -1,4 +1,6 @@
 {
+  "type": "statement",
+  "variant": "list",
   "statement": [
     {
       "type": "statement",
@@ -10,13 +12,11 @@
           "name": "*"
         }
       ],
-      "from": [
-        {
-          "type": "identifier",
-          "variant": "table",
-          "name": "t"
-        }
-      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t"
+      },
       "where": [
         {
           "type": "expression",
@@ -63,13 +63,11 @@
           "name": "*"
         }
       ],
-      "from": [
-        {
-          "type": "identifier",
-          "variant": "table",
-          "name": "t"
-        }
-      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t"
+      },
       "where": [
         {
           "type": "expression",
@@ -121,13 +119,11 @@
           "name": "*"
         }
       ],
-      "from": [
-        {
-          "type": "identifier",
-          "variant": "table",
-          "name": "t"
-        }
-      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t"
+      },
       "where": [
         {
           "type": "expression",

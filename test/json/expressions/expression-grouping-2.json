@@ -1,4 +1,6 @@
 {
+  "type": "statement",
+  "variant": "list",
   "statement": [
     {
       "type": "statement",
@@ -8,20 +10,29 @@
         "name": "bees.hive_state"
       },
       "on": {
-        "target": "hive",
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "hive",
         "columns": [
           {
-            "type": "identifier",
-            "variant": "column",
-            "format": "indexed",
-            "name": "happiness",
+            "type": "expression",
+            "variant": "order",
+            "expression": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "happiness"
+            },
             "direction": "asc"
           },
           {
-            "type": "identifier",
-            "variant": "column",
-            "format": "indexed",
-            "name": "anger",
+            "type": "expression",
+            "variant": "order",
+            "expression": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "anger"
+            },
             "direction": "desc"
           }
         ]

@@ -1,0 +1,139 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abc"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "abc"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "1"
+        },
+        {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "2"
+        },
+        {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "3"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "1"
+        },
+        {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "2"
+        },
+        {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "3"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "1"
+        },
+        {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "2"
+        },
+        {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "3"
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "1"
+        },
+        {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "2"
+        },
+        {
+          "type": "literal",
+          "variant": "decimal",
+          "value": "3"
+        }
+      ]
+    }
+  ]
+}

@@ -1,3 +1,5 @@
+import * as tree from '../misc/helpers';
+
 describe('create table', function() {
 
   it('basic create table', function(done) {

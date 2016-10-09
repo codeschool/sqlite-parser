@@ -1,0 +1,3528 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "nation"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "n_nationkey",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "n_name",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "char",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "25"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "n_regionkey",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "n_comment",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "152"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "region"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "r_regionkey",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "r_name",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "char",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "25"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "r_comment",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "152"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "part"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "p_partkey",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "p_name",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "55"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "p_mfgr",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "char",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "25"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "p_brand",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "char",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "p_type",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "25"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "p_size",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "p_container",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "char",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "p_retailprice",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "decimal",
+            "affinity": "numeric",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "15"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "2"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "p_comment",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "23"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "supplier"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "s_suppkey",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "s_name",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "char",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "25"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "s_address",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "40"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "s_nationkey",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "s_phone",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "char",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "15"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "s_acctbal",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "decimal",
+            "affinity": "numeric",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "15"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "2"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "s_comment",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "101"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "partsupp"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "ps_partkey",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "ps_suppkey",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "ps_availqty",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "ps_supplycost",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "decimal",
+            "affinity": "numeric",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "15"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "2"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "ps_comment",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "199"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "customer"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c_custkey",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c_name",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "25"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c_address",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "40"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c_nationkey",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c_phone",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "char",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "15"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c_acctbal",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "decimal",
+            "affinity": "numeric",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "15"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "2"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c_mktsegment",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "char",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c_comment",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "117"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "orders"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "o_orderkey",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "o_custkey",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "o_orderstatus",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "char",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "o_totalprice",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "decimal",
+            "affinity": "numeric",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "15"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "2"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "o_orderdate",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "date",
+            "affinity": "numeric"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "o_orderpriority",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "char",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "15"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "o_clerk",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "char",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "15"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "o_shippriority",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "o_comment",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "79"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "lineitem"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "l_orderkey",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "l_partkey",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "l_suppkey",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "l_linenumber",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "l_quantity",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "decimal",
+            "affinity": "numeric",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "15"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "2"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "l_extendedprice",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "decimal",
+            "affinity": "numeric",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "15"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "2"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "l_discount",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "decimal",
+            "affinity": "numeric",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "15"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "2"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "l_tax",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "decimal",
+            "affinity": "numeric",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "15"
+                },
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "2"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "l_returnflag",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "char",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "l_linestatus",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "char",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "l_shipdate",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "date",
+            "affinity": "numeric"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "l_commitdate",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "date",
+            "affinity": "numeric"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "l_receiptdate",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "date",
+            "affinity": "numeric"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "l_shipinstruct",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "char",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "25"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "l_shipmode",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "char",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "l_comment",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "44"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "npki"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "nation",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "n_nationkey"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "rpki"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "region",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "r_regionkey"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "ppki"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "part",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "p_partkey"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "spki"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "supplier",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "s_suppkey"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "pspki"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "partsupp",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "ps_partkey"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "ps_suppkey"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "cpki"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "customer",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "c_custkey"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "opki"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "orders",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "o_orderkey"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "lpki"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "lineitem",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "l_orderkey"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "l_linenumber"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "nrki"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "nation",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "n_regionkey"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "snki"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "supplier",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "s_nationkey"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "cnki"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "customer",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "c_nationkey"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "ocki"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "orders",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "o_custkey"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "odi"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "orders",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "o_orderdate"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "lpki2"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "lineitem",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "l_partkey"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "lski"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "lineitem",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "l_suppkey"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "lsdi"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "lineitem",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "l_shipdate"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "lcdi"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "lineitem",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "l_commitdate"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "lrdi"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "lineitem",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "l_receiptdate"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "bootleg_nni"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "nation",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "n_name"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "bootleg_psi"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "part",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "p_size"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "index",
+        "name": "bootleg_pti"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "part",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "p_type"
+          }
+        ]
+      },
+      "variant": "create",
+      "format": "index"
+    },
+    {
+      "type": "statement",
+      "variant": "analyze",
+      "target": "sqlite_master"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "LINEITEM"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "lrdi"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "600572 236"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "LINEITEM"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "lcdi"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "600572 244"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "LINEITEM"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "lsdi"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "600572 238"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "LINEITEM"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "lski"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "600572 601"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "LINEITEM"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "lpki2"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "600572 31"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "LINEITEM"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "lpki"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "600572 5 1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ORDERS"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "odi"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "150000 63"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ORDERS"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ocki"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "150000 15"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ORDERS"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "opki"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "150000 1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "CUSTOMER"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "cnki"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "15000 600"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "CUSTOMER"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "cpki"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "15000 1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "PARTSUPP"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "pspki"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "80000 4 1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "SUPPLIER"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "snki"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "1000 40"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "SUPPLIER"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "spki"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "1000 1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "PART"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bootleg_pti"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "20000 134"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "PART"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bootleg_psi"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "20000 400"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "PART"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "ppki"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "20000 1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "REGION"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "rpki"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "5 1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "NATION"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "bootleg_nni"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "25 1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "NATION"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "nrki"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "25 5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "sqlite_stat1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "NATION"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "npki"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "25 1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "analyze",
+      "target": "sqlite_master"
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "o_year"
+        },
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "/",
+          "left": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "sum"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "case",
+                  "condition": [
+                    {
+                      "type": "condition",
+                      "format": "when",
+                      "when": {
+                        "type": "expression",
+                        "format": "binary",
+                        "variant": "operation",
+                        "operation": "=",
+                        "left": {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "nation"
+                        },
+                        "right": {
+                          "type": "literal",
+                          "variant": "text",
+                          "value": "EGYPT"
+                        }
+                      },
+                      "then": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "volume"
+                      }
+                    },
+                    {
+                      "type": "condition",
+                      "format": "else",
+                      "else": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "0"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "right": {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "sum"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "volume"
+                }
+              ]
+            }
+          },
+          "alias": "mkt_share"
+        }
+      ],
+      "from": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "function",
+            "name": {
+              "type": "identifier",
+              "variant": "function",
+              "name": "strftime"
+            },
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "text",
+                  "value": "%Y"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "o_orderdate"
+                }
+              ]
+            },
+            "alias": "o_year"
+          },
+          {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "*",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "l_extendedprice"
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "-",
+              "left": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "1"
+              },
+              "right": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "l_discount"
+              }
+            },
+            "alias": "volume"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "n2.n_name",
+            "alias": "nation"
+          }
+        ],
+        "from": {
+          "type": "map",
+          "variant": "join",
+          "source": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "part"
+          },
+          "map": [
+            {
+              "type": "join",
+              "variant": "cross join",
+              "source": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "supplier"
+              }
+            },
+            {
+              "type": "join",
+              "variant": "cross join",
+              "source": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "lineitem"
+              }
+            },
+            {
+              "type": "join",
+              "variant": "cross join",
+              "source": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "orders"
+              }
+            },
+            {
+              "type": "join",
+              "variant": "cross join",
+              "source": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "customer"
+              }
+            },
+            {
+              "type": "join",
+              "variant": "cross join",
+              "source": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "nation",
+                "alias": "n1"
+              }
+            },
+            {
+              "type": "join",
+              "variant": "cross join",
+              "source": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "nation",
+                "alias": "n2"
+              }
+            },
+            {
+              "type": "join",
+              "variant": "cross join",
+              "source": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "region"
+              }
+            }
+          ]
+        },
+        "where": [
+          {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "and",
+            "left": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "and",
+              "left": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "and",
+                "left": {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "and",
+                  "left": {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "and",
+                    "left": {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "and",
+                      "left": {
+                        "type": "expression",
+                        "format": "binary",
+                        "variant": "operation",
+                        "operation": "and",
+                        "left": {
+                          "type": "expression",
+                          "format": "binary",
+                          "variant": "operation",
+                          "operation": "and",
+                          "left": {
+                            "type": "expression",
+                            "format": "binary",
+                            "variant": "operation",
+                            "operation": "and",
+                            "left": {
+                              "type": "expression",
+                              "format": "binary",
+                              "variant": "operation",
+                              "operation": "=",
+                              "left": {
+                                "type": "identifier",
+                                "variant": "column",
+                                "name": "p_partkey"
+                              },
+                              "right": {
+                                "type": "identifier",
+                                "variant": "column",
+                                "name": "l_partkey"
+                              }
+                            },
+                            "right": {
+                              "type": "expression",
+                              "format": "binary",
+                              "variant": "operation",
+                              "operation": "=",
+                              "left": {
+                                "type": "identifier",
+                                "variant": "column",
+                                "name": "s_suppkey"
+                              },
+                              "right": {
+                                "type": "identifier",
+                                "variant": "column",
+                                "name": "l_suppkey"
+                              }
+                            }
+                          },
+                          "right": {
+                            "type": "expression",
+                            "format": "binary",
+                            "variant": "operation",
+                            "operation": "=",
+                            "left": {
+                              "type": "identifier",
+                              "variant": "column",
+                              "name": "l_orderkey"
+                            },
+                            "right": {
+                              "type": "identifier",
+                              "variant": "column",
+                              "name": "o_orderkey"
+                            }
+                          }
+                        },
+                        "right": {
+                          "type": "expression",
+                          "format": "binary",
+                          "variant": "operation",
+                          "operation": "=",
+                          "left": {
+                            "type": "identifier",
+                            "variant": "column",
+                            "name": "o_custkey"
+                          },
+                          "right": {
+                            "type": "identifier",
+                            "variant": "column",
+                            "name": "c_custkey"
+                          }
+                        }
+                      },
+                      "right": {
+                        "type": "expression",
+                        "format": "binary",
+                        "variant": "operation",
+                        "operation": "=",
+                        "left": {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "c_nationkey"
+                        },
+                        "right": {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "n1.n_nationkey"
+                        }
+                      }
+                    },
+                    "right": {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "=",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "n1.n_regionkey"
+                      },
+                      "right": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "r_regionkey"
+                      }
+                    }
+                  },
+                  "right": {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "r_name"
+                    },
+                    "right": {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": "MIDDLE EAST"
+                    }
+                  }
+                },
+                "right": {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "=",
+                  "left": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "s_nationkey"
+                  },
+                  "right": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "n2.n_nationkey"
+                  }
+                }
+              },
+              "right": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "between",
+                "right": {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "and",
+                  "left": {
+                    "type": "literal",
+                    "variant": "text",
+                    "value": "1995-01-01"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "variant": "text",
+                    "value": "1996-12-31"
+                  }
+                },
+                "left": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "o_orderdate"
+                }
+              }
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "p_type"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "text",
+                "value": "LARGE PLATED STEEL"
+              }
+            }
+          }
+        ],
+        "alias": "all_nations"
+      },
+      "group": {
+        "type": "expression",
+        "variant": "list",
+        "expression": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "o_year"
+          }
+        ]
+      },
+      "order": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "o_year"
+        }
+      ],
+      "explain": true
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "c_custkey"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "c_name"
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "sum"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "*",
+                "left": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "l_extendedprice"
+                },
+                "right": {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "-",
+                  "left": {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "1"
+                  },
+                  "right": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "l_discount"
+                  }
+                }
+              }
+            ]
+          },
+          "alias": "revenue"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "c_acctbal"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "n_name"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "c_address"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "c_phone"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "c_comment"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "customer"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "orders"
+            }
+          },
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "lineitem"
+            }
+          },
+          {
+            "type": "join",
+            "variant": "cross join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "nation"
+            }
+          }
+        ]
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "and",
+            "left": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "and",
+              "left": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "and",
+                "left": {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "and",
+                  "left": {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "c_custkey"
+                    },
+                    "right": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "o_custkey"
+                    }
+                  },
+                  "right": {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "l_orderkey"
+                    },
+                    "right": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "o_orderkey"
+                    }
+                  }
+                },
+                "right": {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": ">=",
+                  "left": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "o_orderdate"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "variant": "text",
+                    "value": "1994-08-01"
+                  }
+                }
+              },
+              "right": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "<",
+                "left": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "o_orderdate"
+                },
+                "right": {
+                  "type": "function",
+                  "name": {
+                    "type": "identifier",
+                    "variant": "function",
+                    "name": "date"
+                  },
+                  "args": {
+                    "type": "expression",
+                    "variant": "list",
+                    "expression": [
+                      {
+                        "type": "literal",
+                        "variant": "text",
+                        "value": "1994-08-01"
+                      },
+                      {
+                        "type": "literal",
+                        "variant": "text",
+                        "value": "+3 month"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "l_returnflag"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "text",
+                "value": "R"
+              }
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "c_nationkey"
+            },
+            "right": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "n_nationkey"
+            }
+          }
+        }
+      ],
+      "group": {
+        "type": "expression",
+        "variant": "list",
+        "expression": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "c_custkey"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "c_name"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "c_acctbal"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "c_phone"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "n_name"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "c_address"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "c_comment"
+          }
+        ]
+      },
+      "order": [
+        {
+          "type": "expression",
+          "variant": "order",
+          "expression": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "revenue"
+          },
+          "direction": "desc"
+        }
+      ]
+    }
+  ]
+}

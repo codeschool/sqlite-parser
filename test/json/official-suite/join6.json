@@ -1,0 +1,1632 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "left join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t2"
+            },
+            "constraint": {
+              "type": "constraint",
+              "variant": "join",
+              "format": "using",
+              "using": {
+                "columns": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "a"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "join",
+            "variant": "left join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t3"
+            },
+            "constraint": {
+              "type": "constraint",
+              "variant": "join",
+              "format": "using",
+              "using": {
+                "columns": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "a"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "t1.a"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "t3.b"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "left join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t2"
+            },
+            "constraint": {
+              "type": "constraint",
+              "variant": "join",
+              "format": "on",
+              "on": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "=",
+                "left": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "t1.a"
+                },
+                "right": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "t2.a"
+                }
+              }
+            }
+          },
+          {
+            "type": "join",
+            "variant": "left join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t3"
+            },
+            "constraint": {
+              "type": "constraint",
+              "variant": "join",
+              "format": "on",
+              "on": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "=",
+                "left": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "t2.a"
+                },
+                "right": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "t3.a"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "t1.a"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "t3.b"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "left join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t2"
+            },
+            "constraint": {
+              "type": "constraint",
+              "variant": "join",
+              "format": "on",
+              "on": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "=",
+                "left": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "t1.a"
+                },
+                "right": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "t2.a"
+                }
+              }
+            }
+          },
+          {
+            "type": "join",
+            "variant": "left join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t3"
+            },
+            "constraint": {
+              "type": "constraint",
+              "variant": "join",
+              "format": "on",
+              "on": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "=",
+                "left": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "t1.a"
+                },
+                "right": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "t3.a"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "y",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "y",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "z",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "z",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "4"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t2"
+            },
+            "constraint": {
+              "type": "constraint",
+              "variant": "join",
+              "format": "using",
+              "using": {
+                "columns": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "y"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "join",
+            "variant": "join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t3"
+            },
+            "constraint": {
+              "type": "constraint",
+              "variant": "join",
+              "format": "using",
+              "using": {
+                "columns": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "x"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "natural join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t2"
+            }
+          },
+          {
+            "type": "join",
+            "variant": "natural join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t3"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "y",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "91"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "92"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "93"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "94"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "y",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "z",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "92"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "93"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "4"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "94"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "95"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "x",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "z",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "5"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "91"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "93"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "6"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "99"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "95"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "natural join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t2"
+            }
+          },
+          {
+            "type": "join",
+            "variant": "natural join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t3"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t2"
+            }
+          },
+          {
+            "type": "join",
+            "variant": "natural join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t3"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t2"
+            },
+            "constraint": {
+              "type": "constraint",
+              "variant": "join",
+              "format": "using",
+              "using": {
+                "columns": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "y"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "join",
+            "variant": "natural join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t3"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "natural join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t2"
+            }
+          },
+          {
+            "type": "join",
+            "variant": "join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t3"
+            },
+            "constraint": {
+              "type": "constraint",
+              "variant": "join",
+              "format": "using",
+              "using": {
+                "columns": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "x"
+                  },
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "z"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "natural join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t2"
+            }
+          },
+          {
+            "type": "join",
+            "variant": "join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t3"
+            },
+            "constraint": {
+              "type": "constraint",
+              "variant": "join",
+              "format": "using",
+              "using": {
+                "columns": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "x"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "natural join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t2"
+            }
+          },
+          {
+            "type": "join",
+            "variant": "join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t3"
+            },
+            "constraint": {
+              "type": "constraint",
+              "variant": "join",
+              "format": "using",
+              "using": {
+                "columns": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "z"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "statement",
+          "variant": "compound",
+          "statement": {
+            "type": "statement",
+            "variant": "select",
+            "result": [
+              {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "1",
+                "alias": "a"
+              },
+              {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "91",
+                "alias": "x"
+              },
+              {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "92",
+                "alias": "y"
+              }
+            ]
+          },
+          "compound": [
+            {
+              "type": "compound",
+              "variant": "union",
+              "statement": {
+                "type": "statement",
+                "variant": "select",
+                "result": [
+                  {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "2"
+                  },
+                  {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "93"
+                  },
+                  {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "94"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "natural join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t2"
+            }
+          },
+          {
+            "type": "join",
+            "variant": "natural join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t3"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "natural join",
+            "source": {
+              "type": "statement",
+              "variant": "compound",
+              "statement": {
+                "type": "statement",
+                "variant": "select",
+                "result": [
+                  {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "3",
+                    "alias": "b"
+                  },
+                  {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "92",
+                    "alias": "y"
+                  },
+                  {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "93",
+                    "alias": "z"
+                  }
+                ]
+              },
+              "compound": [
+                {
+                  "type": "compound",
+                  "variant": "union",
+                  "statement": {
+                    "type": "statement",
+                    "variant": "select",
+                    "result": [
+                      {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "4"
+                      },
+                      {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "94"
+                      },
+                      {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "95"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "join",
+            "variant": "natural join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t3"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "map",
+        "variant": "join",
+        "source": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        },
+        "map": [
+          {
+            "type": "join",
+            "variant": "natural join",
+            "source": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t2"
+            }
+          },
+          {
+            "type": "join",
+            "variant": "natural join",
+            "source": {
+              "type": "statement",
+              "variant": "compound",
+              "statement": {
+                "type": "statement",
+                "variant": "select",
+                "result": [
+                  {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "5",
+                    "alias": "c"
+                  },
+                  {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "91",
+                    "alias": "x"
+                  },
+                  {
+                    "type": "literal",
+                    "variant": "decimal",
+                    "value": "93",
+                    "alias": "z"
+                  }
+                ]
+              },
+              "compound": [
+                {
+                  "type": "compound",
+                  "variant": "union",
+                  "statement": {
+                    "type": "statement",
+                    "variant": "select",
+                    "result": [
+                      {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "6"
+                      },
+                      {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "99"
+                      },
+                      {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "95"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

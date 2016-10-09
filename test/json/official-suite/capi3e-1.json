@@ -1,0 +1,29 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "attach",
+      "target": {
+        "type": "identifier",
+        "variant": "database",
+        "name": "dbsub_i"
+      },
+      "attach": {
+        "type": "literal",
+        "variant": "text",
+        "value": "sub_name"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "detach",
+      "target": {
+        "type": "identifier",
+        "variant": "database",
+        "name": "dbsub_i"
+      }
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+-- original: tclsqlite.test
+-- credit:   http://www.sqlite.org/src/tree?ci=trunk&name=test
+
+CREATE TABLE t1(a int, b int)
+;INSERT INTO t1 VALUES(10,20)
+;CREATE TABLE tu0123x(a int, bu1235 float)
+;PRAGMA table_info(tu0123x)
+;INSERT INTO tu0123x VALUES(1,2.3)
+;SELECT * FROM tu0123x
+;INSERT INTO t1 SELECT a*2, b*2 FROM t1;
+    INSERT INTO t1 SELECT a*2+1, b*2+1 FROM t1;
+    INSERT INTO t1 SELECT a*2+3, b*2+3 FROM t1
+;INSERT INTO t1 VALUES(99,510)
+;CREATE TABLE t3(a,b,c)
+;INSERT INTO t3 VALUES(sub_x(1),sub_x(2),sub_x(3));
+      SELECT * FROM t3
+;SELECT typeof(a), typeof(b), typeof(c) FROM t3
+;UPDATE t3 SET a=sub_x
+;SELECT a FROM t3
+;SELECT typeof(a), typeof(b), typeof(c) FROM t3
+;SELECT * FROM t1
+;SELECT * FROM t1
+;SELECT * FROM t1
+;SELECT * FROM t1
+;INSERT INTO t1 VALUES(30,NULL)
+;SELECT * FROM t1 WHERE b IS NULL
+;SELECT concat('a', b, 'z') FROM t1 WHERE b is NULL
+;SELECT * FROM t1 WHERE b IS NULL
+;SELECT concat('a', b, 'z') FROM t1 WHERE b is NULL
+;SELECT typeof(ret_str())
+;SELECT typeof(ret_dbl())
+;SELECT typeof(ret_int())
+;SELECT r1(sub_nm1)
+;SELECT r1(10)
+;SELECT r1(100)
+;CREATE TABLE t4(x)
+;INSERT INTO t4 VALUES(1)
+;SELECT * FROM t4
+;INSERT INTO t4 VALUES(2)
+;INSERT INTO t4 VALUES(3)
+;INSERT INTO t4 VALUES(4)
+;SELECT * FROM t4
+;INSERT INTO t4 VALUES(2)
+;INSERT INTO t4 VALUES(3)
+;INSERT INTO t4 VALUES(4)
+;SELECT * FROM t4
+;INSERT INTO t4 VALUES(5)
+;SELECT * FROM t4
+;INSERT INTO t4 VALUES(6)
+;SELECT * FROM t4
+;SELECT * FROM t4
+;DELETE FROM t4;
+      INSERT INTO t4 VALUES('one')
+;INSERT INTO t4 VALUES('two')
+;INSERT INTO t4 VALUES('three')
+;SELECT * FROM t4
+;BEGIN ; COMMIT
+;INSERT INTO t4 VALUES('two')
+;INSERT INTO t4 VALUES('three')
+;INSERT INTO t4 VALUES('four')
+;SELECT * FROM t4
+;INSERT INTO t4 VALUES('A')
+;INSERT INTO t4 VALUES('B')
+;INSERT INTO t4 VALUES('C')
+;SELECT * FROM t4
+;BEGIN ; COMMIT
+;BEGIN;
+    SELECT * FROM sqlite_master
+;BEGIN ; COMMIT
+;COMMIT;
+    BEGIN EXCLUSIVE
+;BEGIN ; COMMIT
+;SELECT * FROM sqlite_master
+;INSERT INTO t4 VALUES(6)
+;CREATE TABLE t5(x BLOB)
+;INSERT INTO t5 VALUES(sub_x)
+;SELECT typeof(x) FROM t5
+;DELETE FROM t5;
+      INSERT INTO t5 VALUES(sub_x);
+      SELECT typeof(x) FROM t5
+;DELETE FROM t5;
+      INSERT INTO t5 VALUES(@x);
+      SELECT typeof(x) FROM t5
+;DELETE FROM t5;
+      INSERT INTO t5 VALUES(@y);
+      SELECT hex(x), typeof(x) FROM t5
+;CREATE TABLE t6(x);
+  INSERT INTO t6 VALUES(1);

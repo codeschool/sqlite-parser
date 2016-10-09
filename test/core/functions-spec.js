@@ -1,3 +1,5 @@
+import * as tree from '../misc/helpers';
+
 describe('functions', function() {
 
   it('basic function', function(done) {

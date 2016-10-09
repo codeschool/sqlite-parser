@@ -1,4 +1,6 @@
 {
+  "type": "statement",
+  "variant": "list",
   "statement": [
     {
       "type": "statement",
@@ -18,7 +20,7 @@
           },
           "value": {
             "type": "literal",
-            "variant": "string",
+            "variant": "text",
             "value": "drone"
           }
         },
@@ -52,13 +54,11 @@
                 "name": "name"
               }
             ],
-            "from": [
-              {
-                "type": "identifier",
-                "variant": "table",
-                "name": "bee_names"
-              }
-            ],
+            "from": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "bee_names"
+            },
             "where": [
               {
                 "type": "expression",

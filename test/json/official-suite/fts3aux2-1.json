@@ -1,0 +1,1221 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": {
+        "type": "module",
+        "name": "fts4",
+        "args": {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "b"
+            },
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "languageid"
+              },
+              "right": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "l"
+              }
+            }
+          ]
+        }
+      },
+      "variant": "create",
+      "format": "virtual"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t1",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "b"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "l"
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "zero zero"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "zero zero"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "one two"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "three four"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            }
+          ]
+        },
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "five six"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "seven eight"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "terms"
+      },
+      "result": {
+        "type": "module",
+        "name": "fts4aux",
+        "args": {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "t1"
+            }
+          ]
+        }
+      },
+      "variant": "create",
+      "format": "virtual"
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "term"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "documents"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "occurrences"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "languageid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "terms"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "col"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": "*"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "terms"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "terms"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "languageid"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "text",
+            "value": ""
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "terms"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "languageid"
+          },
+          "right": {
+            "type": "expression",
+            "format": "unary",
+            "variant": "operation",
+            "expression": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            "operator": "-"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "terms"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "languageid"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "9223372036854775807"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "terms"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "languageid"
+          },
+          "right": {
+            "type": "expression",
+            "format": "unary",
+            "variant": "operation",
+            "expression": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "9223372036854775808"
+            },
+            "operator": "-"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "terms"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "languageid"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "null",
+            "value": "null"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "term"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "documents"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "occurrences"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "languageid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "terms"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "col"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "*"
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "languageid"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "term"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "col"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "documents"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "occurrences"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "languageid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "terms"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "languageid"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "term"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "col"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "documents"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "occurrences"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "languageid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "terms"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "languageid"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "term"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "zero"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "term"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "col"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "documents"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "occurrences"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "languageid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "terms"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "languageid"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "1"
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "term"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "two"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "term"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "col"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "documents"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "occurrences"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "languageid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "terms"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "languageid"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "+1"
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": ">",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "term"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "four"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "term"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "documents"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "occurrences"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "languageid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "terms"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "col"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "*"
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "languageid"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "term"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "col"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "documents"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "occurrences"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "languageid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "terms"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "languageid"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "2"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "term"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "col"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "documents"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "occurrences"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "languageid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "terms"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "languageid"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "term"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "five"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "term"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "col"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "documents"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "occurrences"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "languageid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "terms"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "term"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "five"
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "languageid"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "term"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "col"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "documents"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "occurrences"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "languageid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "terms"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": ">=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "term"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "text",
+              "value": "seven"
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "languageid"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "term"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "col"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "documents"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "occurrences"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "languageid"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "terms"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "and",
+          "left": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "and",
+            "left": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": ">=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "term"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "text",
+                "value": "e"
+              }
+            },
+            "right": {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "<",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "term"
+              },
+              "right": {
+                "type": "literal",
+                "variant": "text",
+                "value": "seven"
+              }
+            }
+          },
+          "right": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": "=",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "languageid"
+            },
+            "right": {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

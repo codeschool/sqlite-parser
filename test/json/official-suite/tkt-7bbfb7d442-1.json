@@ -1,0 +1,1797 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "one"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "two"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t1"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "three"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "d",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "one"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "I"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "two"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "II"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t2"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "three"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "III"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "t3_a",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ]
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "t3_d",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "t3t"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "after",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "update",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "t3"
+          },
+          "set": [
+            {
+              "type": "assignment",
+              "target": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "t3_d"
+              },
+              "value": {
+                "type": "statement",
+                "variant": "select",
+                "result": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "d"
+                  }
+                ],
+                "from": {
+                  "type": "map",
+                  "variant": "join",
+                  "source": {
+                    "type": "statement",
+                    "variant": "select",
+                    "result": [
+                      {
+                        "type": "identifier",
+                        "variant": "star",
+                        "name": "*"
+                      }
+                    ],
+                    "from": {
+                      "type": "identifier",
+                      "variant": "table",
+                      "name": "t2"
+                    },
+                    "where": [
+                      {
+                        "type": "expression",
+                        "format": "binary",
+                        "variant": "operation",
+                        "operation": "=",
+                        "left": {
+                          "type": "expression",
+                          "format": "binary",
+                          "variant": "operation",
+                          "operation": "%",
+                          "left": {
+                            "type": "identifier",
+                            "variant": "column",
+                            "name": "new.t3_a"
+                          },
+                          "right": {
+                            "type": "literal",
+                            "variant": "decimal",
+                            "value": "2"
+                          }
+                        },
+                        "right": {
+                          "type": "expression",
+                          "format": "binary",
+                          "variant": "operation",
+                          "operation": "%",
+                          "left": {
+                            "type": "identifier",
+                            "variant": "column",
+                            "name": "rowid"
+                          },
+                          "right": {
+                            "type": "literal",
+                            "variant": "decimal",
+                            "value": "2"
+                          }
+                        }
+                      }
+                    ],
+                    "limit": {
+                      "type": "expression",
+                      "variant": "limit",
+                      "start": {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "10"
+                      }
+                    }
+                  },
+                  "map": [
+                    {
+                      "type": "join",
+                      "variant": "cross join",
+                      "source": {
+                        "type": "statement",
+                        "variant": "select",
+                        "result": [
+                          {
+                            "type": "identifier",
+                            "variant": "star",
+                            "name": "*"
+                          }
+                        ],
+                        "from": {
+                          "type": "identifier",
+                          "variant": "table",
+                          "name": "t1"
+                        },
+                        "where": [
+                          {
+                            "type": "expression",
+                            "format": "binary",
+                            "variant": "operation",
+                            "operation": "=",
+                            "left": {
+                              "type": "expression",
+                              "format": "binary",
+                              "variant": "operation",
+                              "operation": "%",
+                              "left": {
+                                "type": "identifier",
+                                "variant": "column",
+                                "name": "new.t3_a"
+                              },
+                              "right": {
+                                "type": "literal",
+                                "variant": "decimal",
+                                "value": "2"
+                              }
+                            },
+                            "right": {
+                              "type": "expression",
+                              "format": "binary",
+                              "variant": "operation",
+                              "operation": "%",
+                              "left": {
+                                "type": "identifier",
+                                "variant": "column",
+                                "name": "rowid"
+                              },
+                              "right": {
+                                "type": "literal",
+                                "variant": "decimal",
+                                "value": "2"
+                              }
+                            }
+                          }
+                        ],
+                        "limit": {
+                          "type": "expression",
+                          "variant": "limit",
+                          "start": {
+                            "type": "literal",
+                            "variant": "decimal",
+                            "value": "10"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "where": [
+                  {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "and",
+                    "left": {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "=",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "a"
+                      },
+                      "right": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "new.t3_a"
+                      }
+                    },
+                    "right": {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "=",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "b"
+                      },
+                      "right": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "c"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "where": [
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "t3_a"
+              },
+              "right": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "new.t3_a"
+              }
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger",
+      "when": {
+        "type": "expression",
+        "format": "binary",
+        "variant": "operation",
+        "operation": "is",
+        "left": {
+          "type": "identifier",
+          "variant": "column",
+          "name": "new.t3_d"
+        },
+        "right": {
+          "type": "literal",
+          "variant": "null",
+          "value": "null"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t3",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t3_a"
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t3",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t3_a"
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t3",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t3_a"
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "t3",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t3_a"
+          }
+        ]
+      },
+      "result": {
+        "type": "statement",
+        "variant": "compound",
+        "statement": {
+          "type": "statement",
+          "variant": "select",
+          "result": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            }
+          ]
+        },
+        "compound": [
+          {
+            "type": "compound",
+            "variant": "union",
+            "statement": {
+              "type": "statement",
+              "variant": "select",
+              "result": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          {
+            "type": "compound",
+            "variant": "union",
+            "statement": {
+              "type": "statement",
+              "variant": "select",
+              "result": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "3"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t3"
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "inventorycontrol"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "inventorycontrolid",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key",
+              "autoIncrement": true
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "sku",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "variant",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            },
+            {
+              "type": "constraint",
+              "variant": "default",
+              "value": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "0"
+              }
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "controldate",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "date",
+            "affinity": "numeric"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "controlstate",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            },
+            {
+              "type": "constraint",
+              "variant": "default",
+              "value": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "-1"
+              }
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "deliveredqty",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "30"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "tgr_inventorycontrol_afterinsert"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "inventorycontrol"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "after",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "or": "replace",
+          "into": {
+            "type": "identifier",
+            "variant": "expression",
+            "format": "table",
+            "name": "inventorycontrol",
+            "columns": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "inventorycontrolid"
+              },
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "sku"
+              },
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "variant"
+              },
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "controldate"
+              },
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "controlstate"
+              },
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "deliveredqty"
+              }
+            ]
+          },
+          "result": {
+            "type": "statement",
+            "variant": "select",
+            "result": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "t1.inventorycontrolid",
+                "alias": "inventorycontrolid"
+              },
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "t1.sku",
+                "alias": "sku"
+              },
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "t1.variant",
+                "alias": "variant"
+              },
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "t1.controldate",
+                "alias": "controldate"
+              },
+              {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "1",
+                "alias": "controlstate"
+              },
+              {
+                "type": "function",
+                "name": {
+                  "type": "identifier",
+                  "variant": "function",
+                  "name": "coalesce"
+                },
+                "args": {
+                  "type": "expression",
+                  "variant": "list",
+                  "expression": [
+                    {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "t2.deliveredqty"
+                    },
+                    {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "0"
+                    }
+                  ]
+                },
+                "alias": "deliveredqty"
+              }
+            ],
+            "from": {
+              "type": "map",
+              "variant": "join",
+              "source": {
+                "type": "statement",
+                "variant": "select",
+                "result": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "new.inventorycontrolid",
+                    "alias": "inventorycontrolid"
+                  },
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "ii.sku",
+                    "alias": "sku"
+                  },
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "ii.variant",
+                    "alias": "variant"
+                  },
+                  {
+                    "type": "function",
+                    "name": {
+                      "type": "identifier",
+                      "variant": "function",
+                      "name": "coalesce"
+                    },
+                    "args": {
+                      "type": "expression",
+                      "variant": "list",
+                      "expression": [
+                        {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "lastclosedic.controldate"
+                        },
+                        {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "new.controldate"
+                        }
+                      ]
+                    },
+                    "alias": "controldate"
+                  }
+                ],
+                "from": {
+                  "type": "map",
+                  "variant": "join",
+                  "source": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "inventoryitem",
+                    "alias": "ii"
+                  },
+                  "map": [
+                    {
+                      "type": "join",
+                      "variant": "left join",
+                      "source": {
+                        "type": "identifier",
+                        "variant": "table",
+                        "name": "inventorycontrol",
+                        "alias": "lastclosedic"
+                      },
+                      "constraint": {
+                        "type": "constraint",
+                        "variant": "join",
+                        "format": "on",
+                        "on": {
+                          "type": "expression",
+                          "format": "binary",
+                          "variant": "operation",
+                          "operation": "in",
+                          "right": {
+                            "type": "statement",
+                            "variant": "select",
+                            "result": [
+                              {
+                                "type": "literal",
+                                "variant": "decimal",
+                                "value": "99999"
+                              }
+                            ]
+                          },
+                          "left": {
+                            "type": "identifier",
+                            "variant": "column",
+                            "name": "lastclosedic.inventorycontrolid"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "where": [
+                  {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "and",
+                    "left": {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "=",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "ii.sku"
+                      },
+                      "right": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "new.sku"
+                      }
+                    },
+                    "right": {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "=",
+                      "left": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "ii.variant"
+                      },
+                      "right": {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "new.variant"
+                      }
+                    }
+                  }
+                ],
+                "alias": "t1"
+              },
+              "map": [
+                {
+                  "type": "join",
+                  "variant": "left join",
+                  "source": {
+                    "type": "statement",
+                    "variant": "select",
+                    "result": [
+                      {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "td.sku",
+                        "alias": "sku"
+                      },
+                      {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "td.variant",
+                        "alias": "variant"
+                      },
+                      {
+                        "type": "literal",
+                        "variant": "decimal",
+                        "value": "10",
+                        "alias": "deliveredqty"
+                      }
+                    ],
+                    "from": {
+                      "type": "identifier",
+                      "variant": "table",
+                      "name": "transactiondetail",
+                      "alias": "td"
+                    },
+                    "where": [
+                      {
+                        "type": "expression",
+                        "format": "binary",
+                        "variant": "operation",
+                        "operation": "and",
+                        "left": {
+                          "type": "expression",
+                          "format": "binary",
+                          "variant": "operation",
+                          "operation": "=",
+                          "left": {
+                            "type": "identifier",
+                            "variant": "column",
+                            "name": "td.sku"
+                          },
+                          "right": {
+                            "type": "identifier",
+                            "variant": "column",
+                            "name": "new.sku"
+                          }
+                        },
+                        "right": {
+                          "type": "expression",
+                          "format": "binary",
+                          "variant": "operation",
+                          "operation": "=",
+                          "left": {
+                            "type": "identifier",
+                            "variant": "column",
+                            "name": "td.variant"
+                          },
+                          "right": {
+                            "type": "identifier",
+                            "variant": "column",
+                            "name": "new.variant"
+                          }
+                        }
+                      }
+                    ],
+                    "alias": "t2"
+                  },
+                  "constraint": {
+                    "type": "constraint",
+                    "variant": "join",
+                    "format": "on",
+                    "on": {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "and",
+                      "left": {
+                        "type": "expression",
+                        "format": "binary",
+                        "variant": "operation",
+                        "operation": "=",
+                        "left": {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "t2.sku"
+                        },
+                        "right": {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "t1.sku"
+                        }
+                      },
+                      "right": {
+                        "type": "expression",
+                        "format": "binary",
+                        "variant": "operation",
+                        "operation": "=",
+                        "left": {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "t2.variant"
+                        },
+                        "right": {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "t1.variant"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "variant": "create",
+      "format": "trigger",
+      "when": {
+        "type": "expression",
+        "format": "binary",
+        "variant": "operation",
+        "operation": "=",
+        "left": {
+          "type": "identifier",
+          "variant": "column",
+          "name": "new.controlstate"
+        },
+        "right": {
+          "type": "expression",
+          "format": "unary",
+          "variant": "operation",
+          "expression": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          },
+          "operator": "-"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "inventoryitem"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "sku",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "variant",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            },
+            {
+              "type": "constraint",
+              "variant": "default",
+              "value": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "0"
+              }
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "deptcode",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "groupcode",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "itemdescription",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "varchar",
+            "affinity": "text",
+            "args": {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "120"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "constraint",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "columns": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "sku"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "variant"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "inventoryitem"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "220"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "170"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "Scoth Tampon Recurer"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "inventoryitem"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "31"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "110"
+            },
+            {
+              "type": "literal",
+              "variant": "text",
+              "value": "Fromage"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "transactiondetail"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "transactionid",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "sku",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "variant",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "not null"
+            },
+            {
+              "type": "constraint",
+              "variant": "default",
+              "value": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "0"
+              }
+            }
+          ],
+          "datatype": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        },
+        {
+          "type": "definition",
+          "variant": "constraint",
+          "definition": [
+            {
+              "type": "constraint",
+              "variant": "primary key"
+            }
+          ],
+          "columns": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "transactionid"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "sku"
+            },
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "variant"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "transactiondetail",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "transactionid"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "sku"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "variant"
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "44"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "31"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "expression",
+        "format": "table",
+        "name": "inventorycontrol",
+        "columns": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "sku"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "variant"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "controldate"
+          }
+        ]
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "ii.sku",
+            "alias": "sku"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "ii.variant",
+            "alias": "variant"
+          },
+          {
+            "type": "literal",
+            "variant": "text",
+            "value": "2011-08-30",
+            "alias": "controldate"
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "inventoryitem",
+          "alias": "ii"
+        }
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "sku"
+        },
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "deliveredqty"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "inventorycontrol"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "sku"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "31"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "case",
+          "condition": [
+            {
+              "type": "condition",
+              "format": "when",
+              "when": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "=",
+                "left": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "deliveredqty"
+                },
+                "right": {
+                  "type": "literal",
+                  "variant": "decimal",
+                  "value": "10"
+                }
+              },
+              "then": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "TEST PASSED!"
+              }
+            },
+            {
+              "type": "condition",
+              "format": "else",
+              "else": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "TEST FAILED!"
+              }
+            }
+          ]
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "inventorycontrol"
+      },
+      "where": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "sku"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "31"
+          }
+        }
+      ]
+    }
+  ]
+}

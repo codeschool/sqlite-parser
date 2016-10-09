@@ -1,0 +1,31 @@
+-- original: progress.test
+-- credit:   http://www.sqlite.org/src/tree?ci=trunk&name=test
+
+BEGIN;
+  CREATE TABLE t1(a);
+  INSERT INTO t1 VALUES(1);
+  INSERT INTO t1 VALUES(2);
+  INSERT INTO t1 VALUES(3);
+  INSERT INTO t1 VALUES(4);
+  INSERT INTO t1 VALUES(5);
+  INSERT INTO t1 VALUES(6);
+  INSERT INTO t1 VALUES(7);
+  INSERT INTO t1 VALUES(8);
+  INSERT INTO t1 VALUES(9);
+  INSERT INTO t1 VALUES(10);
+  COMMIT
+;SELECT * FROM t1
+;INSERT INTO t1 SELECT a+10 FROM t1 WHERE a < 6
+;DELETE FROM t1 WHERE a > 10
+;SELECT count(*) FROM t1
+;INSERT INTO t1 VALUES(11)
+;SELECT count(*) FROM t1
+;SELECT * FROM t1
+;SELECT count(*) FROM t1
+;SELECT sum(a) FROM t1
+;CREATE TABLE abc(a, b, c);
+    INSERT INTO abc VALUES(1, 2, 3);
+    INSERT INTO abc VALUES(4, 5, 6);
+    INSERT INTO abc VALUES(7, 8, 9)
+;SELECT a, b, c FROM abc
+;SELECT a, b, c FROM abc;

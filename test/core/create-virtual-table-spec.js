@@ -1,3 +1,5 @@
+import * as tree from '../misc/helpers';
+
 describe('create virtual table', function() {
 
   it('basic create virtual table', function(done) {

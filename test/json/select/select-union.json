@@ -1,4 +1,6 @@
 {
+  "type": "statement",
+  "variant": "list",
   "statement": [
     {
       "type": "statement",
@@ -13,13 +15,11 @@
             "name": "*"
           }
         ],
-        "from": [
-          {
-            "type": "identifier",
-            "variant": "table",
-            "name": "a"
-          }
-        ]
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "a"
+        }
       },
       "compound": [
         {
@@ -35,13 +35,11 @@
                 "name": "*"
               }
             ],
-            "from": [
-              {
-                "type": "identifier",
-                "variant": "table",
-                "name": "b"
-              }
-            ]
+            "from": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "b"
+            }
           }
         }
       ]

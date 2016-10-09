@@ -89,9 +89,10 @@ start
   }
 
 stmt_list
-  = f:( stmt ) o b:( stmt_list_tail )*
-  {
+  = f:( stmt ) o b:( stmt_list_tail )* {
     return {
+      'type': 'statement',
+      'variant': 'list',
       'statement': flattenAll([ f, b ])
     };
   }
@@ -104,8 +105,8 @@ semi_required
 
 /**
  * @note
- *  You need semicolon between multiple statements, otherwise can omit last
- *  semicolon in a group of statements.
+ *   You need semicolon between multiple statements, otherwise can omit last
+ *   semicolon in a group of statements.
  */
 stmt_list_tail
   = semi_required s:( stmt ) o
@@ -115,21 +116,68 @@ stmt_list_tail
  * Type definitions
  */
 type_definition "Type Definition"
-  = n:( datatype_types ) o a:( type_definition_args )?
-  {
-    return Object.assign({
+  = t:( type_definition_types / datatype_custom ) o a:( type_definition_args )? {
+    return Object.assign(t, a);
+  }
+
+type_definition_types
+  = n:( datatype_types ) {
+    return {
       'type': 'datatype',
       'variant': n[0],
-      'affinity': n[1],
-      'args': [] // datatype definition arguments
-    }, a);
+      'affinity': n[1]
+    };
+  }
+
+/**
+ * @note
+ *   SQLite allows you to enter basically anything you want for a datatype
+ *   because it doesn't enforce types you provide. The rules are as follows:
+ *   1) If the declared type contains the string "INT" then it is assigned
+ *   INTEGER affinity.
+ *   2) If the declared type of the column contains any of the strings "CHAR",
+ *   "CLOB", or "TEXT" then that column has TEXT affinity. Notice that the type
+ *   VARCHAR contains the string "CHAR" and is thus assigned TEXT affinity.
+ *   3) If the declared type for a column contains the string "BLOB" or if no
+ *   type is specified then the column has affinity BLOB.
+ *   4) If the declared type for a column contains any of the strings "REAL",
+ *   "FLOA", or "DOUB" then the column has REAL affinity.
+ *   5) Otherwise, the affinity is NUMERIC.
+ *   See:  {@link http://stackoverflow.com/a/8417411}
+ */
+datatype_custom "Custom Datatype Name"
+  = t:( name ) r:( datatype_word_tail )* {
+    const variant = foldString([ t, r ]);
+    let affinity = 'numeric';
+    if (/int/i.test(variant)) {
+      affinity = 'integer';
+    } else if (/char|clob|text/i.test(variant)) {
+      affinity = 'text';
+    } else if (/blob/i.test(variant)) {
+      affinity = 'blob';
+    } else if (/real|floa|doub/i.test(variant)) {
+      affinity = 'real';
+    }
+    return {
+      'type': 'datatype',
+      'variant': variant,
+      'affinity': affinity
+    };
+  }
+datatype_word_tail
+  = [\t ] w:( name_unquoted ) {
+    return w;
   }
 
 type_definition_args "Type Definition Arguments"
   = sym_popen a1:( literal_number_signed ) o a2:( definition_args_loop )? sym_pclose
   {
     return {
-      'args': flattenAll([ a1, a2 ])
+      'args': {
+        'type': 'expression',
+        'variant': 'list',
+        'expression': flattenAll([ a1, a2 ])
+      }
     };
   }
 
@@ -142,11 +190,12 @@ definition_args_loop
  * {@link https://www.sqlite.org/syntax/literal-value.html}
  */
 literal_value
-  = literal_number
-  / literal_string
+  = literal_number_signed
+  / literal_number
   / literal_blob
   / literal_null
   / literal_date
+  / literal_string
 
 literal_null "Null Literal"
   = n:( NULL ) o
@@ -169,17 +218,18 @@ literal_date "Date Literal"
   }
 
 /**
- * Notes:
- *    1) [ENFORCED] SQL uses single quotes for string literals.
- *    2) [NOT IMPLEMENTED] Value is an identier or a string literal based on context.
- * {@link https://www.sqlite.org/lang_keywords.html}
+ * @note
+ *   1) [ENFORCED] SQL uses single quotes for string literals.
+ *   2) [NOT IMPLEMENTED] Value is an identier or a string literal based on context.
+ *   3) [IMPLEMENTED] SQLite allows a negative default value on an added text column.
+ *   {@link https://www.sqlite.org/lang_keywords.html}
  */
 literal_string "String Literal"
-  = s:( literal_string_single )
+  = n:( number_sign )? s:( literal_string_single )
   {
     return {
       'type': 'literal',
-      'variant': 'string',
+      'variant': 'text',
       'value': s
     };
   }
@@ -188,9 +238,11 @@ literal_string_single "Single-quoted String Literal"
   = sym_sglquote s:( literal_string_schar )* sym_sglquote
   {
     /**
-      * @note Unescaped the pairs of literal single quotation marks
-      * @note Not sure if the BLOB type should be un-escaped
-      */
+     * @note Unescaped the pairs of literal single quotation marks
+     */
+    /**
+     * @note Not sure if the BLOB type should be un-escaped
+     */
     return unescape(s, "'");
   }
 
@@ -208,9 +260,23 @@ literal_blob "Blob Literal"
     };
   }
 
+/**
+ * @note
+ *   This is an undocumented SQLite feature that allows you to specify a
+ *   default column value as an _unquoted_ (e.g., DEFAULT foo) or a
+ *   double-quoted string value (e.g., DEFAULT "foo").
+ */
+literal_text
+  = n:( name_unquoted / name_dblquoted ) {
+    return {
+      'type': 'literal',
+      'variant': 'text',
+      'value': n
+    };
+  }
+
 number_sign "Number Sign"
-  = s:( sym_plus / sym_minus )
-  { return s; }
+  = s:( sym_plus / sym_minus ) { return s; }
 
 literal_number_signed
   = s:( number_sign )? n:( literal_number )
@@ -244,7 +310,7 @@ number_decimal_full
   { return foldStringWord([ f, b ]); }
 
 number_decimal_fraction
-  = t:( sym_dot ) d:( number_digit )+
+  = t:( sym_dot ) d:( number_digit )*
   { return foldStringWord([ t, d ]); }
 
 number_decimal_exponent "Decimal Literal Exponent"
@@ -285,12 +351,17 @@ bind_parameter "Bind Parameter"
  * Bind parameters start at index 1 instead of 0.
  */
 bind_parameter_numbered "Numbered Bind Parameter"
-  = q:( sym_quest ) id:( [1-9] [0-9]* )? o
+  = q:( sym_quest ) id:( bind_number_id )? o
   {
     return {
       'format': 'numbered',
       'name': foldStringWord([ q, id ])
     };
+  }
+
+bind_number_id
+  = f:( [1-9] ) r:( number_digit* ) {
+    return foldStringWord([ f, r ]);
   }
 
 bind_parameter_named "Named Bind Parameter"
@@ -378,24 +449,40 @@ raise_args_message
     };
   }
 
+expression_root
+  = bind_parameter
+  / function_call
+  / literal_value
+  / id_column
+
 expression_wrapped
-  = sym_popen n:( expression ) o sym_pclose {
+  = sym_popen o n:( expression ) o sym_pclose {
     return n;
   }
 
-expression_root
+expression_recur
   = expression_wrapped
   / expression_cast
   / expression_case
   / expression_raise
   / expression_exists
-  / bind_parameter
-  / function_call
-  / literal_value
-  / id_column
+  / expression_root
 
+expression_unary_collate
+  = e:( expression_recur ) o c:( expression_collate ) {
+    return Object.assign(c, {
+      'expression': e
+    });
+  }
+  / expression_recur
+
+/**
+ * @note
+ *   Bind to expression_root before expression to bind the unary
+ *   operator to the closest expression first.
+ */
 expression_unary
-  = op:( expression_unary_op ) o e:( expression_root ) {
+  = op:( expression_unary_op ) o e:( expression_unary_collate / expression ) {
     return {
       'type': 'expression',
       'format': 'unary',
@@ -404,12 +491,22 @@ expression_unary
       'operator': keyNode(op)
     };
   }
-  / expression_root
+  / expression_unary_collate
 expression_unary_op
   = sym_tilde
   / sym_minus
   / sym_plus
   / expression_is_not
+
+expression_collate "COLLATE Expression"
+  = c:( column_collate ) {
+    return Object.assign({
+      'type': 'expression',
+      'format': 'unary',
+      'variant': 'operation',
+      'operator': 'collate'
+    }, c);
+  }
 
 expression_concat
   = f:( expression_unary ) rest:( o expression_concat_op o expression_unary )*
@@ -488,15 +585,20 @@ type_alias "Type Alias"
   { return d; }
 
 expression_case "CASE Expression"
-  = t:( CASE ) o e:( expression )? o w:( expression_case_when )+ o
+  = t:( CASE ) o e:( case_expression  )? o w:( expression_case_when )+ o
     s:( expression_case_else )? o END o
   {
-    return {
+    return Object.assign({
       'type': 'expression',
       'format': 'binary',
       'variant': keyNode(t),
-      'expression': e,
       'condition': flattenAll([ w, s ])
+    }, e);
+  }
+case_expression
+  = !WHEN e:( expression ) {
+    return {
+      'expression': e
     };
   }
 expression_case_when "WHEN Clause"
@@ -520,30 +622,16 @@ expression_case_else "ELSE Clause"
   }
 
 expression_postfix
-  = v:( expression_equiv ) o postfix:( expression_postfix_tail ) {
-    if (postfix['format'] === 'binary') {
-      postfix['left'] = v;
-    } else if (postfix['format'] === 'unary') {
-      postfix['expression'] = v;
-    }
-    return postfix;
+  = v:( expression_equiv ) o p:( expression_postfix_tail ) {
+    return Object.assign(p, {
+      'left': v
+    });
   }
   / expression_equiv
 expression_postfix_tail
-  = expression_collate
-  / expression_in
+  = expression_in
   / expression_between
   / expression_like
-
-expression_collate "COLLATE Expression"
-  = c:( column_collate ) {
-    return Object.assign({
-      'type': 'expression',
-      'format': 'unary',
-      'variant': 'operation',
-      'operator': 'collate'
-    }, c);
-  }
 
 expression_like "Comparison Expression"
   = n:( expression_is_not )?
@@ -558,7 +646,7 @@ expression_like "Comparison Expression"
     }, x);
   }
 expression_escape "ESCAPE Expression"
-  = s:( ESCAPE ) o e:( expression )
+  = s:( ESCAPE ) o e:( expression ) o
   {
     return {
       'escape': e
@@ -566,23 +654,19 @@ expression_escape "ESCAPE Expression"
   }
 
 expression_between "BETWEEN Expression"
-  = n:( expression_is_not )? b:( BETWEEN ) o e1:( expression ) o s:( AND ) o e2:( expression )
+  = n:( expression_is_not )? b:( BETWEEN ) o tail:( expression_between_tail )
   {
     return {
       'type': 'expression',
       'format': 'binary',
       'variant': 'operation',
       'operation': foldStringKey([ n, b ]),
-      'right': {
-        'type': 'expression',
-        'format': 'binary',
-        'variant': 'operation',
-        'operation': keyNode(s),
-        'left': e1,
-        'right': e2
-      }
+      'right': tail
     };
   }
+expression_between_tail
+  = f:( expression_postfix ) rest:( o AND o expression_postfix )
+  { return composeBinary(f, [ rest ]); }
 expression_is_not
   = n:( NOT ) o
   { return textNode(n); }
@@ -602,7 +686,7 @@ expression_in_target
   = expression_list_or_select
   / id_table
 expression_list_or_select
-  = sym_popen e:( stmt_select / expression_list ) o sym_pclose
+  = sym_popen e:( stmt_select_full / expression_list ) o sym_pclose
   { return e; }
 
 expression
@@ -615,43 +699,52 @@ expression_and_op
 /* END: Unary and Binary Expression */
 
 expression_list "Expression List"
-  = f:( expression ) o rest:( expression_list_rest )*
-  {
+  = l:( expression_list_loop )? o {
+    return {
+      'type': 'expression',
+      'variant': 'list',
+      'expression': isOkay(l) ? l : []
+    };
+  }
+expression_list_loop
+  = f:( expression ) o rest:( expression_list_rest )* {
     return flattenAll([ f, rest ]);
   }
-
 expression_list_rest
   = sym_comma e:( expression ) o
   { return e; }
 
+/**
+ * @note
+ *  Allow functions to have datatype names: date(arg), time(now), etc...
+ */
 function_call "Function Call"
-  = n:( name_unquoted ) o sym_popen a:( function_call_args )? o sym_pclose
+  = n:( id_function ) o sym_popen a:( function_call_args )? o sym_pclose
   {
     return Object.assign({
       'type': 'function',
-      'name': n,
-      'args': []
+      'name': n
     }, a);
   }
 
 function_call_args "Function Call Arguments"
   = s:( select_star ) {
     return {
-      'args': [{
+      'args': {
         'type': 'identifier',
         'variant': 'star',
         'name': s
-      }]
+      }
     };
   }
   / d:( args_list_distinct )? e:( expression_list ) {
-    return Object.assign({
-      'args': e
-    }, d);
+    return {
+      'args': Object.assign(e, d)
+    };
   }
 
 args_list_distinct
-  = s:( DISTINCT ) o
+  = s:( DISTINCT / ALL ) o
   {
     return {
       'filter': keyNode(s)
@@ -684,7 +777,8 @@ stmt_nodes
   = stmt_crud
   / stmt_create
   / stmt_drop
-  / stmt_transaction
+  / stmt_begin
+  / stmt_commit
   / stmt_alter
   / stmt_rollback
   / stmt_savepoint
@@ -693,29 +787,28 @@ stmt_nodes
 
 /**
  * @note
- *  Transaction statement rules do not follow the transaction nesting rules
- *  for the BEGIN, COMMIT, and ROLLBACK statements.
- *  {@link https://www.sqlite.org/lang_savepoint.html}
+ *   Transaction statement rules do not follow the transaction nesting rules
+ *   for the BEGIN, COMMIT, and ROLLBACK statements.
+ *   {@link https://www.sqlite.org/lang_savepoint.html}
  */
-stmt_transaction "Transaction"
-  = b:( stmt_begin ) s:( stmt_list )? e:( stmt_commit )
-  {
-    return Object.assign({
-      'type': 'statement',
-      'variant': 'transaction'
-    }, b, s);
-  }
-
 stmt_commit "END Transaction Statement"
   = s:( COMMIT / END ) o t:( commit_transaction )?
   {
-    return foldStringKey([ s, t ]);
+    return {
+      'type': 'statement',
+      'variant': 'transaction',
+      'action': 'commit'
+    };
   }
 
 stmt_begin "BEGIN Transaction Statement"
-  = s:( BEGIN ) o m:( stmt_begin_modifier )? t:( commit_transaction )?
+  = s:( BEGIN ) o m:( stmt_begin_modifier )? t:( commit_transaction )? n:( savepoint_name )?
   {
-    return Object.assign({}, m);
+    return Object.assign({
+      'type': 'statement',
+      'variant': 'transaction',
+      'action': 'begin'
+    }, m, n);
   }
 
 commit_transaction
@@ -733,23 +826,31 @@ stmt_begin_modifier
 stmt_rollback "ROLLBACK Statement"
   = s:( ROLLBACK ) o ( commit_transaction )? n:( rollback_savepoint )?
   {
-    return {
+    return Object.assign({
       'type': 'statement',
-      'variant': keyNode(s),
-      'to': n
-    };
+      'variant': 'transaction',
+      'action': 'rollback'
+    }, n);
   }
 
 rollback_savepoint "TO Clause"
-  = TO o ( savepoint_alt )? n:( id_savepoint ) o
-  { return n; }
+  = ( TO o )? ( savepoint_alt )? n:( savepoint_name ) {
+    return n;
+  }
+
+savepoint_name
+  = n:( id_savepoint ) o {
+    return {
+      'savepoint': n
+    }
+  }
 
 savepoint_alt
   = s:( SAVEPOINT ) o
   { return keyNode(s); }
 
 stmt_savepoint "SAVEPOINT Statement"
-  = s:( savepoint_alt ) n:( id_savepoint ) o
+  = s:( savepoint_alt ) n:( savepoint_name )
   {
     return {
       'type': 'statement',
@@ -759,7 +860,7 @@ stmt_savepoint "SAVEPOINT Statement"
   }
 
 stmt_release "RELEASE Statement"
-  = s:( RELEASE ) o a:( savepoint_alt )? n:( id_savepoint ) o
+  = s:( RELEASE ) o a:( savepoint_alt )? n:( savepoint_name )
   {
     return {
       'type': 'statement',
@@ -771,10 +872,11 @@ stmt_release "RELEASE Statement"
 stmt_alter "ALTER TABLE Statement"
   = s:( alter_start ) n:( id_table ) o e:( alter_action ) o
   {
-    return {
+    return Object.assign({
       'type': 'statement',
-      'variant': keyNode(s)
-    };
+      'variant': keyNode(s),
+      'target': n
+    }, e);
   }
 
 alter_start "ALTER TABLE Keyword"
@@ -866,21 +968,42 @@ select_alias
   }
 
 select_wrapped
-  = sym_popen s:( stmt_select ) o sym_pclose
-  { return s; }
+  = sym_popen s:( stmt_select_full ) o sym_pclose {
+    return s;
+  }
+
+stmt_select_full
+  = w:( stmt_core_with ) s:( stmt_select ) {
+    return Object.assign(s, w);
+  }
 
 /**
  * @note Uncommon or SQLite-specific statement types
  */
 stmt_sqlite
-  = stmt_detach
+  = stmt_attach
+  / stmt_detach
   / stmt_vacuum
   / stmt_analyze
   / stmt_reindex
   / stmt_pragma
 
+stmt_attach "ATTACH Statement"
+  = a:( ATTACH ) o b:( DATABASE o )? e:( expression ) o AS o n:( attach_arg ) o
+  {
+    return {
+      'type': 'statement',
+      'variant': keyNode(a),
+      'target': n,
+      'attach': e
+    };
+  }
+
+attach_arg
+  = id_database / literal_null / bind_parameter
+
 stmt_detach "DETACH Statement"
-  = d:( DETACH ) o b:( DATABASE o )? n:( id_database ) o
+  = d:( DETACH ) o b:( DATABASE o )? n:( attach_arg ) o
   {
     return {
       'type': 'statement',
@@ -889,19 +1012,30 @@ stmt_detach "DETACH Statement"
     };
   }
 
+/**
+ * @note
+ *   Specifying a target after the VACUUM statement appears to be an
+ *   undocumented feature.
+ */
 stmt_vacuum "VACUUM Statement"
-  = v:( VACUUM ) o
+  = v:( VACUUM ) o t:( vacuum_target )?
   {
-    return {
+    return Object.assign({
       'type': 'statement',
       'variant': 'vacuum'
+    }, t);
+  }
+vacuum_target
+  = t:( id_database ) o {
+    return {
+      'target': t
     };
   }
 
 /**
  * @note
- *  The argument from this statement cannot be categorized as a
- *  table or index based on context, so only the name is included.
+ *   The argument from this statement cannot be categorized as a
+ *   table or index based on context, so only the name is included.
  */
 stmt_analyze "ANALYZE Statement"
   = s:( ANALYZE ) o a:( analyze_arg )?
@@ -922,8 +1056,8 @@ analyze_arg
 
 /**
  * @note
- *  The argument from this statement cannot be categorized as a
- *  table or index based on context, so only the name is included.
+ *   The argument from this statement cannot be categorized as a
+ *   table or index based on context, so only the name is included.
  */
 stmt_reindex "REINDEX Statement"
   = s:( REINDEX ) o a:( reindex_arg )? o
@@ -949,47 +1083,60 @@ stmt_pragma "PRAGMA Statement"
       'type': 'statement',
       'variant': keyNode(s),
       'target': n,
-      'args': (isOkay(v) ? makeArray(v) : [])
+      'args': {
+        'type': 'expression',
+        'variant': 'list',
+        'expression': v
+      }
     };
   }
 
 pragma_expression
-  = sym_equal v:( pragma_value ) o { return v; }
-  / sym_popen v:( pragma_value ) o sym_pclose { return v; }
+  = sym_popen v:( pragma_value ) o sym_pclose { return v; }
+  / sym_equal v:( pragma_value ) o { return v; }
 
 pragma_value
   = pragma_value_bool
   / pragma_value_literal
   / pragma_value_name
 
+/**
+ * @note
+ *   Allow double quoted string literals as pragma values but do not treat
+ *   them as an identifier because it is impossible from the surrounding
+ *   context to determine whether it is a column, table, or database
+ *   identifier.
+ */
 pragma_value_literal
   = literal_number_signed
   / literal_string
+  / literal_text
 
 /**
  * @note
- *  This method allows all possible values EXCEPT an unquoted 'no',
- *  because that is a reserved word.
- * @note
- *  There is no such thing as a boolean literal in SQLite
- *  {@link http://www.sqlite.org/datatype3.html}. However, the
- *  documentation for PRAGMA mentions the ability to use
- *  literal boolean values in this one specific instance.
- *  See: {@link https://www.sqlite.org/pragma.html}
+ *   There is no such thing as a boolean literal in SQLite
+ *   {@link http://www.sqlite.org/datatype3.html}. However, the
+ *   documentation for PRAGMA mentions the ability to use
+ *   literal boolean values in this one specific instance.
+ *   See: {@link https://www.sqlite.org/pragma.html}
  */
 pragma_value_bool
-  = v:( name ) & { return /^(yes|no|false|true|0|1)$/i.test(v) }
+  = v:( pragma_bool_id ) & { return /^(yes|no|on|off|false|true|0|1)$/i.test(v) }
   {
     return {
       'type': 'literal',
       'variant': 'boolean',
-      'normalized': (/^(yes|true|1)$/i.test(v) ? '1' : '0'),
+      'normalized': (/^(yes|on|true|1)$/i.test(v) ? '1' : '0'),
       'value': v
     };
   }
+pragma_bool_id
+  = n:( name_char )+ {
+    return keyNode(n);
+  }
 
 pragma_value_name
-  = n:( name )
+  = n:( pragma_bool_id )
   {
     return {
       'type': 'identifier',
@@ -1140,7 +1287,7 @@ select_core_group "GROUP BY Clause"
   = f:( GROUP ) o BY o e:( expression_list ) o h:( select_core_having )?
   {
     return Object.assign({
-      'group': makeArray(e)
+      'group': e
     }, h);
   }
 
@@ -1177,21 +1324,59 @@ select_node_aliased
   }
 
 select_source
-  = select_join_loop
-  / select_source_loop
-
-select_source_loop
   = f:( table_or_sub ) o t:( source_loop_tail )*
-  { return flattenAll([ f, t ]); }
+  {
+    if (isArrayOkay(t)) {
+      return {
+        'type': 'map',
+        'variant': 'join',
+        'source': f,
+        'map': t
+      };
+    }
+    return f;
+  }
 
 source_loop_tail
-  = sym_comma t:( table_or_sub ) o
-  { return t; }
+  = cl:( select_cross_clause / select_join_clause ) c:( join_condition )? {
+    return Object.assign(cl, c);
+  }
+
+select_cross_clause "CROSS JOIN Operation"
+  = sym_comma n:( table_or_sub ) o {
+    return {
+      'type': 'join',
+      'variant': 'cross join',
+      'source': n
+    };
+  }
+
+select_join_clause "JOIN Operation"
+  = o:( join_operator ) o n:( table_or_sub ) o
+  {
+    return {
+      'type': 'join',
+      'variant': keyNode(o),
+      'source': n
+    };
+  }
 
 table_or_sub
   = table_or_sub_sub
+  / bind_parameter
+  / table_or_sub_func
   / table_qualified
   / table_or_sub_select
+
+table_or_sub_func
+  = n:( id_function ) o l:( expression_list_wrapped ) o a:( alias )? {
+    return Object.assign({
+      'type': 'function',
+      'variant': 'table',
+      'name': n,
+      'args': l
+    }, a);
+  }
 
 table_qualified "Qualified Table"
   = d:( table_qualified_id ) o i:( table_or_sub_index_node )?
@@ -1211,7 +1396,7 @@ table_or_sub_index_node "Qualfied Table Index"
   / index_node_none
 
 index_node_indexed
-  = s:( INDEXED ) o BY o n:( name ) o
+  = s:( INDEXED ) o BY o n:( id_index ) o
   {
     return {
       'index': n
@@ -1228,8 +1413,8 @@ index_node_none
   }
 
 table_or_sub_sub "SELECT Source"
-  = sym_popen l:( select_source ) o sym_pclose
-  { return l; }
+  = sym_popen l:( select_source ) o sym_pclose a:( alias )?
+  { return Object.assign(l, a); }
 
 table_or_sub_select "Subquery"
   = s:( select_wrapped ) a:( alias )?
@@ -1238,32 +1423,10 @@ table_or_sub_select "Subquery"
   }
 
 alias "Alias"
-  = a:( AS ( !name_char o ) )? n:( name ) o
+  = a:( AS ( !( name_char / reserved_critical_list ) o ) )? n:( name ) o
   {
     return {
       'alias': n
-    };
-  }
-
-select_join_loop
-  = t:( table_or_sub ) o j:( select_join_clause )+
-  {
-    return {
-      'type': 'map',
-      'variant': 'join',
-      'source': t,
-      'map': j
-    };
-  }
-
-select_join_clause "JOIN Operation"
-  = o:( join_operator ) o n:( table_or_sub ) o c:( join_condition )?
-  {
-    return {
-      'type': 'join',
-      'variant': keyNode(o),
-      'source': n,
-      'constraint': c
     };
   }
 
@@ -1280,9 +1443,10 @@ join_operator_types
   / operator_types_misc
 
 /**
- * @note FULL (OUTER)? JOIN included from PostgreSQL although it is not a
- *  join operarator allowed in SQLite.
- *  See: {@link https://www.sqlite.org/syntax/join-operator.html}
+ * @note
+ *   FULL (OUTER)? JOIN included from PostgreSQL although it is not a
+ *   join operarator allowed in SQLite.
+ *   See: {@link https://www.sqlite.org/syntax/join-operator.html}
  */
 operator_types_hand
   = t:( LEFT / RIGHT / FULL ) o o:( types_hand_outer )?
@@ -1297,12 +1461,14 @@ operator_types_misc
   { return textNode(t); }
 
 join_condition "JOIN Constraint"
-  = c:( join_condition_on / join_condition_using )
+  = c:( join_condition_on / join_condition_using ) o
   {
-    return Object.assign({
-      'type': 'constraint',
-      'variant': 'join'
-    }, c);
+    return {
+      'constraint': Object.assign({
+        'type': 'constraint',
+        'variant': 'join'
+      }, c)
+    }
   }
 
 join_condition_on "Join ON Clause"
@@ -1347,21 +1513,29 @@ stmt_core_order_list_loop
   { return i; }
 
 stmt_core_order_list_item "Ordering Expression"
-  = e:( expression ) o c:( column_collate )? o d:( primary_column_dir )?
+  = e:( expression ) o d:( primary_column_dir )?
   {
-    return Object.assign({
-      'type': 'expression',
-      'variant': 'order',
-      'expression': e
-    }, c, d);
+    // Only convert this into an ordering expression if it contains
+    // more than just the expression.
+    if (isOkay(d)) {
+      return Object.assign({
+        'type': 'expression',
+        'variant': 'order',
+        'expression': e
+      }, d);
+    }
+    return e;
   }
 
 select_star "Star"
   = sym_star
 
 stmt_fallback_types "Fallback Type"
-  = k:( REPLACE / ROLLBACK / ABORT / FAIL / IGNORE )
-  { return k; }
+  = REPLACE
+  / ROLLBACK
+  / ABORT
+  / FAIL
+  / IGNORE
 
 /** {@link https://www.sqlite.org/lang_insert.html} */
 stmt_insert "INSERT Statement"
@@ -1419,7 +1593,7 @@ insert_into_start "INTO Keyword"
   = s:( INTO ) o
 
 insert_results "VALUES Clause"
-  = r:( insert_value / insert_select / insert_default ) o
+  = r:( insert_value / stmt_select_full / insert_default ) o
   {
     return {
       'result': r
@@ -1439,7 +1613,7 @@ loop_column_tail
   { return c; }
 
 loop_name "Column Name"
-  = n:( name )
+  = n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -1457,25 +1631,17 @@ insert_value_start "VALUES Keyword"
   { return keyNode(s); }
 
 insert_values_list
-  = f:( insert_values ) o b:( insert_values_loop )*
+  = f:( expression_list_wrapped ) o b:( insert_values_loop )*
   { return flattenAll([ f, b ]); }
 
 insert_values_loop
-  = sym_comma e:( insert_values ) o
+  = sym_comma e:( expression_list_wrapped ) o
   { return e; }
 
-insert_values "Insert Values List"
-  = sym_popen e:( expression_list ) o sym_pclose
-  {
-    return {
-      'type': 'values',
-      'variant': 'list',
-      'values': e
-    };
+expression_list_wrapped "Wrapped Expression List"
+  = sym_popen e:( expression_list ) o sym_pclose {
+    return e;
   }
-
-insert_select "SELECT Results Clause"
-  = stmt_select
 
 insert_default "DEFAULT VALUES Clause"
   = d:( DEFAULT ) o v:( VALUES )
@@ -1501,7 +1667,9 @@ compound_union_all
   { return a; }
 
 /**
- * @note Includes limited update syntax {@link https://www.sqlite.org/syntax/update-stmt-limited.html}
+ * @note
+ *   Includes limited update syntax
+ *   {@link https://www.sqlite.org/syntax/update-stmt-limited.html}
  */
 stmt_update "UPDATE Statement"
   = s:( update_start ) f:( update_fallback )?
@@ -1554,10 +1722,10 @@ update_column "Column Assignment"
   }
 
 /**
- * @note Includes limited update syntax {@link https://www.sqlite.org/syntax/delete-stmt-limited.html}
+ * @note
+ *   Includes limited update syntax
+ *   {@link https://www.sqlite.org/syntax/delete-stmt-limited.html}
  */
-
-
 stmt_delete "DELETE Statement"
   = s:( delete_start ) t:( table_qualified ) o w:( stmt_core_where )?
     o:( stmt_core_order )? l:( stmt_core_limit )?
@@ -1575,8 +1743,8 @@ delete_start "DELETE Keyword"
 
 /**
  * @note
- *  The "only" rules were created to help the tracer to not traverse
- *  the wrong path.
+ *   The "only" rules were created to help the tracer to not traverse
+ *   the wrong path.
  */
 stmt_create "CREATE Statement"
   = create_table_only
@@ -1678,13 +1846,18 @@ source_def_tail
   = sym_comma t:( source_def_column ) o
   { return t; }
 
+/**
+ * @note
+ *  Table constraints should be separated by commas, but they do not have
+ *  to be according to SQLite.
+ */
 source_tbl_loop
-  = sym_comma f:( table_constraint )
+  = sym_comma? f:( table_constraint )
   { return f; }
 
 /** {@link https://www.sqlite.org/syntaxdiagrams.html#column-def} */
 source_def_column "Column Definition"
-  = n:( name ) ( !( name_char ) o ) t:( column_type )? o c:( column_constraints )?
+  = n:( source_def_name ) o t:( column_type )? c:( column_constraints )?
   {
     return Object.assign({
       'type': 'definition',
@@ -1693,9 +1866,16 @@ source_def_column "Column Definition"
       'definition': (isOkay(c) ? c : []),
     }, t);
   }
+source_def_name
+  = n:( name ) &( o ) {
+    return n;
+  }
+  / !( column_type / column_constraint / table_constraint ) o n:( name_reserved ) {
+    return n;
+  }
 
 column_type "Column Datatype"
-  = t:( type_definition )
+  = t:( type_definition ) o
   {
     return {
       'datatype': t
@@ -1710,16 +1890,29 @@ column_constraint_tail
   = o c:( column_constraint )
   { return c; }
 
-/** {@link https://www.sqlite.org/syntax/column-constraint.html} */
+/**
+ * @note
+ *   From SQLite official tests:
+ *     Undocumented behavior:  The CONSTRAINT name clause can follow a constraint.
+ *     Such a clause is ignored.  But the parser must accept it for backwards
+ *     compatibility.
+ */
+ /** {@link https://www.sqlite.org/syntax/column-constraint.html} */
 column_constraint "Column Constraint"
-  = n:( column_constraint_name )? c:( column_constraint_types )
+  = n:( constraint_name )? c:( column_constraint_types ) ln:( constraint_name )?
   {
     return Object.assign(c, n);
   }
 
-column_constraint_name "Column Constraint Name"
-  = CONSTRAINT o n:( name ) o
-  {
+// Note: Allow an arbitrary number of CONSTRAINT names but take the last
+//       one specified in the sequence
+constraint_name
+  = cl:( constraint_name_loop )+ {
+    return cl[cl.length - 1];
+  }
+
+constraint_name_loop "CONSTRAINT Name"
+  = CONSTRAINT o n:( name ) o {
     return {
       'name': n
     };
@@ -1748,8 +1941,13 @@ column_constraint_primary "PRIMARY KEY Column Constraint"
     return Object.assign(p, c, d, a);
   }
 
+/**
+ * @note
+ *    PRAGMA KEY appears to be another undocumented feature
+ *    that is accepted by the SQLite parser but is not documented.
+ */
 col_primary_start "PRIMARY KEY Keyword"
-  = s:( PRIMARY ) o k:( KEY ) o
+  = s:( PRIMARY / PRAGMA ) o k:( KEY ) o
   {
     return {
       'type': 'constraint',
@@ -1775,7 +1973,7 @@ column_constraint_null
   }
 
 constraint_null_types "UNIQUE Column Constraint"
-  = t:( constraint_null_value / UNIQUE )
+  = t:( constraint_null_value / UNIQUE ) o
   { return keyNode(t); }
 
 constraint_null_value "NULL Column Constraint"
@@ -1786,7 +1984,7 @@ column_constraint_check "CHECK Column Constraint"
   = constraint_check
 
 column_constraint_default "DEFAULT Column Constraint"
-  = s:( DEFAULT ) o v:( expression_wrapped / literal_number_signed / literal_value )
+  = s:( DEFAULT ) o v:( column_default_values ) o
   {
     return {
       'type': 'constraint',
@@ -1794,6 +1992,11 @@ column_constraint_default "DEFAULT Column Constraint"
       'value': v
     };
   }
+column_default_values
+  = expression_wrapped
+  / literal_number_signed
+  / literal_value
+  / literal_text
 
 column_constraint_collate "COLLATE Column Constraint"
   = c:( column_collate )
@@ -1806,21 +2009,18 @@ column_constraint_collate "COLLATE Column Constraint"
   }
 
 /** {@link https://www.sqlite.org/syntax/table-constraint.html} */
+/* Note from SQLite official tests:
+ * Undocumented behavior:  The CONSTRAINT name clause can follow a constraint.
+ * Such a clause is ignored.  But the parser must accept it for backwards
+ * compatibility.
+ */
 table_constraint "Table Constraint"
-  = n:( table_constraint_name )? o c:( table_constraint_types ) o
+  = n:( constraint_name )? c:( table_constraint_types ) o nl:( constraint_name )?
   {
     return Object.assign({
       'type': 'definition',
       'variant': 'constraint'
     }, c, n);
-  }
-
-table_constraint_name "Table Constraint Name"
-  = CONSTRAINT o n:( name )
-  {
-    return {
-      'name': n
-    };
   }
 
 table_constraint_types
@@ -1837,11 +2037,11 @@ table_constraint_check "CHECK Table Constraint"
   }
 
 table_constraint_primary "PRIMARY KEY Table Constraint"
-  = k:( primary_start ) o c:( primary_columns ) t:( primary_conflict )?
+  = k:( primary_start ) o c:( primary_columns_table ) t:( primary_conflict )?
   {
     return {
-      'definition': makeArray(Object.assign(k, t)),
-      'columns': c
+      'definition': makeArray(Object.assign(k, t, c[1])),
+      'columns': c[0]
     };
   }
 
@@ -1862,27 +2062,59 @@ primary_start_unique "UNIQUE Keyword"
   = u:( UNIQUE )
   { return textNode(u); }
 
-primary_columns "PRIMARY KEY Columns"
-  = sym_popen f:( primary_column ) o b:( primary_column_tail )* sym_pclose
-  { return flattenAll([ f, b ]); }
-
-primary_column "Indexed Column"
-  = e:( name ) o c:( column_collate )? d:( primary_column_dir )?
-  {
-    return Object.assign({
-      'type': 'identifier',
-      'variant': 'column',
-      'format': 'indexed',
-      'name': e
-    }, c, d);
+primary_columns
+  = sym_popen f:( primary_column ) o b:( primary_column_tail )* sym_pclose {
+    return [f].concat(b);
+  }
+primary_columns_index
+  = c:( primary_columns ) {
+    return c.map(([ res ]) => res);
+  }
+primary_columns_table
+  = c:( primary_columns ) {
+    const auto = c.find(([ res, a ]) => isOkay(a));
+    return [
+      c.map(([ res, a ]) => res),
+      auto ? auto[1] : null
+    ];
   }
 
+primary_column_tail
+  = sym_comma c:( primary_column ) o
+  { return c; }
+
+primary_column "Indexed Column"
+  = e:( primary_column_types ) o d:( primary_column_dir )? a:( col_primary_auto )?
+  {
+    // Only convert this into an ordering expression if it contains
+    // more than just the expression.
+    let res = e;
+    if (isOkay(d)) {
+      res = Object.assign({
+        'type': 'expression',
+        'variant': 'order',
+        'expression': e
+      }, d);
+    }
+    return [ res, a ];
+  }
+primary_column_types
+  = n:( loop_name ) &( o ( sym_semi / sym_pclose / primary_column_dir ) ) {
+    return n;
+  }
+  / expression
+
 column_collate "Collation"
+  = c: ( column_collate_loop )+ {
+    return {
+      'collate': makeArray(c)
+    };
+  }
+
+column_collate_loop
   = COLLATE o n:( id_collation ) o
   {
-    return {
-      'collate': n
-    };
+    return n;
   }
 
 primary_column_dir "Column Direction"
@@ -1893,12 +2125,8 @@ primary_column_dir "Column Direction"
     };
   }
 
-primary_column_tail
-  = sym_comma c:( primary_column ) o
-  { return c; }
-
 primary_conflict
-  = s:( primary_conflict_start ) o t:( stmt_fallback_types ) o
+  = s:( primary_conflict_start ) t:( stmt_fallback_types ) o
   {
     return {
       'conflict': keyNode(t)
@@ -1906,7 +2134,7 @@ primary_conflict
   }
 
 primary_conflict_start "ON CONFLICT Keyword"
-  = o:( ON ) o c:( CONFLICT )
+  = o:( ON ) o c:( CONFLICT ) o
   { return foldStringKey([ o, c ]); }
 
 constraint_check
@@ -1941,25 +2169,24 @@ foreign_clause
   = r:( foreign_references ) a:( foreign_actions )? d:( foreign_deferrable )?
   {
     return Object.assign({
-      'type': 'constraint',
-      'action': a,
-      'defer': d
-    }, r);
+      'type': 'constraint'
+    }, r, a, d);
   }
 
 foreign_references "REFERENCES Clause"
-  = s:( REFERENCES ) o t:( id_cte )
+  = s:( REFERENCES ) o t:( id_cte ) o
   {
     return {
       'references': t
     };
   }
 
-
-
 foreign_actions
-  = f:( foreign_action ) o b:( foreign_actions_tail )*
-  { return collect([f, b], []); }
+  = f:( foreign_action ) o b:( foreign_actions_tail )* {
+    return {
+      'action': flattenAll([ f, b ])
+    };
+  }
 
 foreign_actions_tail
   = a:( foreign_action ) o
@@ -1985,22 +2212,22 @@ action_on_action "FOREIGN KEY Action"
   / on_action_none
 
 on_action_set
-  = s:( SET ) o v:( NULL / DEFAULT )
+  = s:( SET ) o v:( NULL / DEFAULT ) o
   { return foldString([ s, v ]); }
 
 on_action_cascade
-  = c:( CASCADE / RESTRICT )
+  = c:( CASCADE / RESTRICT ) o
   { return textNode(c); }
 
 on_action_none
-  = n:( NO ) o a:( ACTION )
+  = n:( NO ) o a:( ACTION ) o
   { return foldString([ n, a ]); }
 
 /**
  * @note Not sure what kind of name this should be.
  */
 foreign_action_match
-  = m:( MATCH ) o n:( name )
+  = m:( MATCH ) o n:( name ) o
   {
     return {
       'type': 'action',
@@ -2010,8 +2237,11 @@ foreign_action_match
   }
 
 foreign_deferrable "DEFERRABLE Clause"
-  = n:( expression_is_not )? d:( DEFERRABLE ) o i:( deferrable_initially )?
-  { return foldStringKey([ n, d, i ]); }
+  = n:( expression_is_not )? d:( DEFERRABLE ) o i:( deferrable_initially )? {
+    return {
+      'defer': foldStringKey([ n, d, i ])
+    };
+  }
 
 deferrable_initially
   = i:( INITIALLY ) o d:( DEFERRED / IMMEDIATE ) o
@@ -2054,23 +2284,31 @@ index_unique
   }
 
 index_on "ON Clause"
-  = o:( ON ) o t:( name ) o c:( primary_columns )
+  = o:( ON ) o t:( id_table ) o c:( primary_columns_index )
   {
     return {
-      'target': t,
+      'type': 'identifier',
+      'variant': 'expression',
+      'format': 'table',
+      'name': t['name'],
       'columns': c
     };
   }
 
 /**
  * @note
- *  This statement type has missing syntax restrictions that need to be
- *  enforced on UPDATE, DELETE, and INSERT statements in the trigger_action.
- *  See {@link https://www.sqlite.org/lang_createtrigger.html}.
+ *   This statement type has missing syntax restrictions that need to be
+ *   enforced on UPDATE, DELETE, and INSERT statements in the trigger_action.
+ *   See {@link https://www.sqlite.org/lang_createtrigger.html}.
  */
+ /**
+  * @note
+  *   Omitting the trigger name in a CREATE TRIGGER is another undocumented
+  *   feature of the SQLite parser.
+  */
 create_trigger "CREATE TRIGGER Statement"
-  = s:( create_trigger_start ) ne:( create_core_ine )? n:( id_trigger ) o
-    cd:( trigger_conditions ) ( ON ) o o:( name ) o
+  = s:( create_trigger_start ) ne:( create_core_ine )? n:( id_trigger )? o
+    cd:( trigger_conditions ) ( ON ) o o:( id_table ) o
     me:( trigger_foreach )? wh:( trigger_when )? a:( trigger_action )
   {
     return Object.assign({
@@ -2151,8 +2389,11 @@ trigger_foreach
   { return keyNode(r); }
 
 trigger_when "WHEN Clause"
-  = w:( WHEN ) o e:( expression ) o
-  { return e; }
+  = w:( WHEN ) o e:( expression ) o {
+    return {
+      'when': e
+    };
+  }
 
 trigger_action "Actions Clause"
   = s:( BEGIN ) o a:( action_loop ) o e:( END ) o
@@ -2163,11 +2404,11 @@ action_loop
   { return l; }
 
 action_loop_stmt
-  = s:( stmt ) o semi_required
+  = s:( stmt_crud ) o semi_required
   { return s; }
 
 create_view "CREATE VIEW Statement"
-  = s:( create_view_start ) ne:( create_core_ine )? n:( id_view ) o
+  = s:( create_view_start ) ne:( create_core_ine )? n:( id_view_expression ) o
     r:( create_as_select )
   {
     return Object.assign({
@@ -2176,6 +2417,18 @@ create_view "CREATE VIEW Statement"
       'result': r
     }, s, ne);
   }
+
+id_view_expression
+  = n:( id_view ) o a:( loop_columns ) {
+    return Object.assign({
+      'type': 'identifier',
+      'variant': 'expression',
+      'format': 'view',
+      'name': n['name'],
+      'columns': []
+    }, a);
+  }
+  / id_view
 
 create_view_start
   = s:( create_start ) tmp:( create_core_tmp )? v:( VIEW ) o
@@ -2215,30 +2468,56 @@ virtual_module
   {
     return Object.assign({
       'type': 'module',
-      'name': m,
-      'args': []
+      'name': m
     }, a);
   }
 
 virtual_args "Module Arguments"
-  = sym_popen f:( virtual_arg_types ) o sym_pclose
+  = sym_popen o l:( virtual_args_loop )? o sym_pclose o
   {
     return {
-      'args': f
+      'args': {
+        'type': 'expression',
+        'variant': 'list',
+        'expression': isOkay(l) ? l : []
+      }
     };
+  }
+/**
+ * @note
+ *   The offical SQLite parser allows trailing commas in VIRTUAL TABLE
+ *   definitions.
+ */
+virtual_args_loop
+  = f:( virtual_arg_types ) b:( virtual_args_tail )* {
+    return flattenAll([ f, b ]).filter((arg) => isOkay(arg));
+  }
+virtual_args_tail
+  = o sym_comma o a:( virtual_arg_types )? {
+    return a;
   }
 
 virtual_arg_types
-  = virtual_arg_list
-  / virtual_arg_def
+  = !( name o ( type_definition / column_constraint ) ) e:( expression ) o {
+    return e;
+  }
+  / n:( virtual_column_name ) ( !( name_char ) o ) t:( column_type )? c:( column_constraints )? {
+    return Object.assign({
+      'type': 'definition',
+      'variant': 'column',
+      'name': n,
+      'definition': (isOkay(c) ? c : []),
+    }, t);
+  }
 
-virtual_arg_list
-  = !( name o ( type_definition / column_constraint ) ) l:( expression_list )
-  { return l; }
-
-virtual_arg_def
-  = l:( source_def_loop )
-  { return l; }
+/**
+ * @note
+ *   SQLite allows reserved words in the a VIRTUAL TABLE statement USING
+ *   clause CTE columns (e.g., from, to).
+ */
+virtual_column_name
+  = name
+  / name_reserved
 
 stmt_drop "DROP Statement"
   = s:( drop_start ) q:( id_table ) o
@@ -2338,20 +2617,19 @@ binary_notequal_b "Not Equal"
 
 binary_lang
   = binary_lang_isnt
-  / binary_lang_misc
 
 binary_lang_isnt "IS"
   = i:( IS ) o n:( expression_is_not )?
   { return foldStringKey([ i, n ]); }
 
-binary_lang_misc
-  = m:( IN / LIKE / GLOB / MATCH / REGEXP )
-  { return keyNode(m); }
-
 /* Database, Table and Column IDs */
 
+id_name "Identifier"
+  = name
+  / name_reserved
+
 id_database "Database Identifier"
-  = n:( name )
+  = n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -2360,8 +2638,18 @@ id_database "Database Identifier"
     };
   }
 
+id_function
+  = d:( id_table_qualified )? n:( id_name ) {
+    return {
+      'type': 'identifier',
+      // TODO: Should this be `table function` since it is table-function name
+      'variant': 'function',
+      'name': foldStringWord([ d, n ])
+    };
+  }
+
 id_table "Table Identifier"
-  = d:( id_table_qualified )? n:( name )
+  = d:( id_table_qualified )? n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -2371,11 +2659,11 @@ id_table "Table Identifier"
   }
 
 id_table_qualified
-  = n:( name ) d:( sym_dot )
+  = n:( id_name ) d:( sym_dot )
   { return foldStringWord([ n, d ]); }
 
 id_column "Column Identifier"
-  = q:( column_qualifiers / id_column_qualified / column_unqualified ) n:( name )
+  = q:( column_qualifiers / id_column_qualified / column_unqualified ) n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -2385,19 +2673,23 @@ id_column "Column Identifier"
   }
 
 column_unqualified
-  = o
-  { return ''; }
+  = o { return ''; }
 
 column_qualifiers
   = d:( id_table_qualified ) t:( id_column_qualified )
   { return foldStringWord([ d, t ]); }
 
 id_column_qualified
-  = t:( name ) d:( sym_dot )
+  = t:( id_name ) d:( sym_dot )
   { return foldStringWord([ t, d ]); }
 
+/**
+ * @note
+ *   Datatype names are accepted as collation identifier in the
+ *   reference implementation of SQLite.
+ */
 id_collation "Collation Identifier"
-  = n:( name_unquoted )
+  = n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -2407,7 +2699,7 @@ id_collation "Collation Identifier"
   }
 
 id_savepoint "Savepoint Indentifier"
-  = n:( name )
+  = n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -2417,7 +2709,7 @@ id_savepoint "Savepoint Indentifier"
   }
 
 id_index "Index Identifier"
-  = d:( id_table_qualified )? n:( name )
+  = d:( id_table_qualified )? n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -2427,7 +2719,7 @@ id_index "Index Identifier"
   }
 
 id_trigger "Trigger Identifier"
-  = d:( id_table_qualified )? n:( name )
+  = d:( id_table_qualified )? n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -2437,7 +2729,7 @@ id_trigger "Trigger Identifier"
   }
 
 id_view "View Identifier"
-  = d:( id_table_qualified )? n:( name )
+  = d:( id_table_qualified )? n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -2447,7 +2739,7 @@ id_view "View Identifier"
   }
 
 id_pragma "Pragma Identifier"
-  = d:( id_table_qualified )? n:( name )
+  = d:( id_table_qualified )? n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -2457,23 +2749,23 @@ id_pragma "Pragma Identifier"
   }
 
 id_cte "CTE Identifier"
-  = d:( id_table_expression / id_table ) o
-  { return d; }
+  = d:( id_table_expression / id_table ) o {
+    return d;
+  }
 
 id_table_expression
-  = n:( name ) o a:( loop_columns )
-  {
+  = n:( id_table ) o a:( loop_columns ) {
     return Object.assign({
       'type': 'identifier',
       'variant': 'expression',
       'format': 'table',
-      'name': n,
+      'name': n['name'],
       'columns': []
     }, a);
   }
 
 id_constraint_table "Table Constraint Identifier"
-  = n:( name )
+  = n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -2484,7 +2776,7 @@ id_constraint_table "Table Constraint Identifier"
   }
 
 id_constraint_column "Column Constraint Identifier"
-  = n:( name )
+  = n:( id_name )
   {
     return {
       'type': 'identifier',
@@ -2522,13 +2814,19 @@ datatype_numeric "NUMERIC Datatype Name"
   / "DECIMAL"i
   / "BOOLEAN"i
   / ( "DATE"i ( "TIME"i )? )
-  / ( "TIME"i ( "STAMP"i )? ) )
+  / ( "TIME"i ( "STAMP"i )? )
+  / "STRING"i )
   { return keyNode(t); }
 
 datatype_integer "INTEGER Datatype Name"
   = t:( ( "INT"i ( "2" / "4" / "8" / "EGER"i ) )
-  / ( ( "BIG"i / "MEDIUM"i / "SMALL"i / "TINY"i )? "INT"i ) )
+  / ( ( "BIG"i / "MEDIUM"i / "SMALL"i / "TINY"i )? "INT"i )
+  / datatype_integer_fp )
   { return keyNode(t); }
+datatype_integer_fp
+  = f:( "FLOATING"i ) p:( [\t ]+ "POINT"i ) {
+    return foldStringWord([ f, p ]);
+  }
 
 datatype_none "BLOB Datatype Name"
   = t:( "BLOB"i )
@@ -2544,39 +2842,61 @@ datatype_none "BLOB Datatype Name"
 name_char
   = [a-z0-9\$\_]i
 
+unicode_char
+  = u:( "\\u" ) s:( [a-f0-9]{4} ) {
+  return foldStringKey([ u, s ]);
+}
+
 /**
 * @note
 *  Since SQLite is tolerant of this behavior, although it is non-standard,
 *  parser allows single-quoted string literals to be interpreted as aliases.
 */
 name
+  = name_quoted
+  / name_unquoted
+
+name_quoted
   = name_bracketed
   / name_backticked
   / name_dblquoted
   / name_sglquoted
-  / name_unquoted
 
 name_unquoted
-  = !( datatype_types / reserved_words / number_digit ) n:( name_char )+
-  { return keyNode(n); }
+  = !( reserved_words / number_digit ) n:( unicode_char / name_char )+ {
+    return keyNode(n);
+  }
+
+/**
+ * @note
+ *   This is for places where reserved words can be used as unquoted
+ *   identifiers to mimic the native SQLite parser behavior.
+ */
+name_reserved
+  = !( reserved_critical_list / number_digit ) n:( unicode_char / name_char )+ {
+   return keyNode(n);
+  }
 
 /** @note Non-standard legacy format */
 name_bracketed
-  = sym_bopen n:$( !( [ \t]* "]" ) [^\]] )+ o sym_bclose
-  { return textNode(n); }
+  = sym_bopen o n:$( !bracket_terminator . )* bracket_terminator {
+    return textNode(n);
+  }
+bracket_terminator
+  = [ \t]* sym_bclose o
 
 name_dblquoted
-  = '"' n:( '""' / [^\"] )+ '"'
+  = '"' n:( '""' / [^\"] )* '"'
   { return unescape(n, '"'); }
 
 /** @note Non-standard format */
 name_sglquoted
-  = "'" n:( "''" / [^\'] )+ "'"
+  = "'" n:( "''" / [^\'] )* "'"
   { return unescape(n, "'"); }
 
 /** @note Non-standard legacy format */
 name_backticked
-  = '`' n:( '``' / [^\`] )+ '`'
+  = '`' n:( '``' / [^\`] )* '`'
   { return unescape(n, '`'); }
 
 /* Symbols */
@@ -2889,6 +3209,11 @@ reserved_words
   = r:( reserved_word_list )
   { return keyNode(r); }
 
+/**
+ * @note
+ *   CROSS, RELEASE, ROWID, and TEMP removed here to be used as table
+ *   and column names.
+ */
 reserved_word_list
   = ABORT / ACTION / ADD / AFTER / ALL / ALTER / ANALYZE / AND / AS /
     ASC / ATTACH / AUTOINCREMENT / BEFORE / BEGIN / BETWEEN / BY /
@@ -2904,10 +3229,27 @@ reserved_word_list
     NO / NOT / NOTNULL / NULL / OF / OFFSET / ON / OR / ORDER /
     OUTER / PLAN / PRAGMA / PRIMARY / QUERY / RAISE / RECURSIVE /
     REFERENCES / REGEXP / REINDEX / RELEASE / RENAME / REPLACE /
-    RESTRICT / RIGHT / ROLLBACK / ROW / ROWID / SAVEPOINT / SELECT /
-    SET / TABLE / TEMP / TEMPORARY / THEN / TO / TRANSACTION /
+    RESTRICT / RIGHT / ROLLBACK / ROW / SAVEPOINT / SELECT /
+    SET / TABLE / TEMPORARY / THEN / TO / TRANSACTION /
     TRIGGER / UNION / UNIQUE / UPDATE / USING / VACUUM / VALUES /
     VIEW / VIRTUAL / WHEN / WHERE / WITH / WITHOUT
+
+/**
+ * @note
+ *   Not all reserved words are created equal in SQLite as these are
+ *   words that cannot be used as an unquoted column identifer while
+ *   the words on the master list (reserved_word_list) that do not
+ *   also appear here _can_ be used as column or table names.
+ */
+reserved_critical_list
+  = ADD / ALL / ALTER / AND / AS / AUTOINCREMENT / BETWEEN / CASE /
+    CHECK / COLLATE / COMMIT / CONSTRAINT / CREATE / DEFAULT /
+    DEFERRABLE / DELETE / DISTINCT / DROP / ELSE / ESCAPE / EXCEPT /
+    EXISTS / FOREIGN / FROM / GROUP / HAVING / IN / INDEX / INSERT /
+    INTERSECT / INTO / IS / ISNULL / JOIN / LIMIT / NOT / NOTNULL /
+    NULL / ON / OR / ORDER / PRIMARY / REFERENCES / SELECT / SET /
+    TABLE / THEN / TO / TRANSACTION / UNION / UNIQUE / UPDATE /
+    USING / VALUES / WHEN / WHERE
 
 /* Generic rules */
 

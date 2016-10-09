@@ -1,0 +1,52 @@
+-- original: capi3c.test
+-- credit:   http://www.sqlite.org/src/tree?ci=trunk&name=test
+
+CREATE TABLE tablename(x)
+;CREATE TABLE t1(a VARINT, b BLOB, c VARCHAR(16));
+    INSERT INTO t1 VALUES(1, 2, 3);
+    INSERT INTO t1 VALUES('one', 'two', NULL);
+    INSERT INTO t1 VALUES(1.2, 1.3, 1.4)
+;pragma encoding
+;CREATE TABLE t1(a)
+;PRAGMA writable_schema=ON;
+      INSERT INTO sqlite_master VALUES(NULL,NULL,NULL,NULL,NULL)
+;CREATE TABLE t1(a);
+      PRAGMA writable_schema=ON;
+      INSERT INTO sqlite_master VALUES('table',NULL,NULL,NULL,NULL)
+;BEGIN;
+    CREATE TABLE t1(a, b);
+    INSERT INTO t1 VALUES(1, 'int');
+    INSERT INTO t1 VALUES(2, 'notatype')
+;PRAGMA lock_status
+;CREATE TABLE t2(a);
+    INSERT INTO t2 VALUES(1);
+    INSERT INTO t2 VALUES(2);
+    BEGIN;
+    INSERT INTO t2 VALUES(3)
+;SELECT a FROM t2
+;SELECT a FROM t2
+;BEGIN
+;COMMIT;
+    SELECT a FROM t1
+;DELETE FROM t1
+;SELECT * FROM t1
+;CREATE INDEX i2 ON t2(a)
+;DROP INDEX i2
+;DELETE FROM t1;
+    INSERT INTO t1 VALUES(1,'one');
+    INSERT INTO t1 VALUES(2,'two');
+    INSERT INTO t1 VALUES(3,'three');
+    INSERT INTO t1 VALUES(4,'four')
+;CREATE INDEX i1 ON t1(a)
+;DROP INDEX i1
+;BEGIN EXCLUSIVE
+;COMMIT
+;CREATE TABLE t3(x,y);
+     INSERT INTO t3 VALUES(1,2)
+;DROP TABLE t3
+;CREATE TABLE t3(x,y);
+     INSERT INTO t3 VALUES(1,2)
+;CREATE TABLE t4(x)
+;CREATE TABLE t5(a INTEGER, b STRING, c DATETIME)
+;CREATE TABLE t11(a VARCHAR(10), b INTEGER);
+  CREATE TABLE t12(a VARCHAR(15), b FLOAT);

@@ -1,4 +1,6 @@
 {
+  "type": "statement",
+  "variant": "list",
   "statement": [
     {
       "type": "statement",
@@ -35,13 +37,11 @@
               "name": "id"
             }
           ],
-          "from": [
-            {
-              "type": "identifier",
-              "variant": "table",
-              "name": "old_bees"
-            }
-          ],
+          "from": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "old_bees"
+          },
           "where": [
             {
               "type": "expression",

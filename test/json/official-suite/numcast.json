@@ -1,0 +1,62 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "encoding"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "unary",
+          "variant": "cast",
+          "expression": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "sub_str"
+          },
+          "as": {
+            "type": "datatype",
+            "variant": "real",
+            "affinity": "real"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "unary",
+          "variant": "cast",
+          "expression": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "sub_str"
+          },
+          "as": {
+            "type": "datatype",
+            "variant": "integer",
+            "affinity": "integer"
+          }
+        }
+      ]
+    }
+  ]
+}

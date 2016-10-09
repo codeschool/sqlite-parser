@@ -1,4 +1,6 @@
 {
+  "type": "statement",
+  "variant": "list",
   "statement": [
     {
       "type": "statement",
@@ -71,13 +73,11 @@
                 "name": "type"
               }
             ],
-            "from": [
-              {
-                "type": "identifier",
-                "variant": "table",
-                "name": "hams"
-              }
-            ]
+            "from": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "hams"
+            }
           }
         }
       ]

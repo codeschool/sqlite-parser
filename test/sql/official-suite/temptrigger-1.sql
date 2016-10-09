@@ -1,0 +1,57 @@
+-- original: temptrigger.test
+-- credit:   http://www.sqlite.org/src/tree?ci=trunk&name=test
+
+CREATE TABLE t1(a, b);
+    CREATE TEMP TABLE tt1(a, b);
+    CREATE TEMP TRIGGER tr1 AFTER INSERT ON t1 BEGIN
+      INSERT INTO tt1 VALUES(new.a, new.b);
+    END
+;INSERT INTO t1 VALUES(1, 2)
+;SELECT * FROM t1
+;SELECT * FROM tt1
+;INSERT INTO t1 VALUES(3, 4)
+;SELECT * FROM t1
+;SELECT * FROM tt1
+;BEGIN; CREATE TABLE t3(a, b); ROLLBACK
+;INSERT INTO t1 VALUES(5, 6)
+;SELECT * FROM tt1
+;DELETE FROM t1;
+    CREATE TEMP TABLE tt1(a, b);
+    CREATE TEMP TRIGGER tr1 AFTER INSERT ON t1 BEGIN
+      INSERT INTO tt1 VALUES(new.a, new.b);
+    END
+;INSERT INTO t1 VALUES(10, 20);
+    SELECT * FROM tt1
+;INSERT INTO t1 VALUES(30, 40);
+    SELECT * FROM tt1
+;CREATE TABLE t2(a, b)
+;ATTACH 'test2.db' AS aux;
+    CREATE TEMP TABLE tt2(a, b);
+    CREATE TEMP TRIGGER tr2 AFTER INSERT ON aux.t2 BEGIN
+      INSERT INTO tt2 VALUES(new.a, new.b);
+    END
+;INSERT INTO aux.t2 VALUES(1, 2);
+    SELECT * FROM aux.t2
+;SELECT * FROM tt2
+;CREATE TABLE t3(a, b)
+;INSERT INTO aux.t2 VALUES(3, 4);
+    SELECT * FROM aux.t2
+;SELECT * FROM tt2
+;CREATE TABLE t1(x);
+  CREATE TEMP TRIGGER tr1 BEFORE INSERT ON t1 BEGIN
+    SELECT 1,2,3;
+  END
+;CREATE TEMP TABLE t1(x)
+;CREATE TABLE t1(x);
+  CREATE TEMP TRIGGER tr1 BEFORE INSERT ON t1 BEGIN SELECT 1,2,3; END
+;DROP TABLE t1
+;SELECT * FROM sqlite_master;
+  SELECT * FROM sqlite_temp_master
+;CREATE TABLE t1(x);
+  CREATE TEMP TRIGGER tr1 BEFORE INSERT ON t1 BEGIN 
+    SELECT raise(ABORT, 'error'); 
+  END;
+  ATTACH 'test.db2' AS aux
+;CREATE TABLE t1(a, b, c)
+;SELECT type,name,tbl_name,sql FROM aux.sqlite_master;
+  INSERT INTO aux.t1 VALUES(1,2,3);

@@ -1,3 +1,5 @@
+import * as tree from '../misc/helpers';
+
 describe('datatypes', function() {
 
   it('basic datatypes', function(done) {

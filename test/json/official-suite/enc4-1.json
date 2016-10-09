@@ -1,0 +1,42 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "variant": "pragma",
+      "target": {
+        "type": "identifier",
+        "variant": "pragma",
+        "name": "encoding"
+      },
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "+",
+          "left": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1."
+          }
+        }
+      ]
+    }
+  ]
+}

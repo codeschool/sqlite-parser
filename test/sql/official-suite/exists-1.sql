@@ -1,0 +1,82 @@
+-- original: exists.test
+-- credit:   http://www.sqlite.org/src/tree?ci=trunk&name=test
+
+PRAGMA journal_mode = WAL
+;CREATE TABLE t1(x)
+;CREATE TABLE IF NOT EXISTS t1(a, b)
+;DROP TABLE t1
+;CREATE TABLE IF NOT EXISTS t1(a, b)
+;SELECT name FROM sqlite_master WHERE type = 'table'
+;CREATE TABLE t2(x)
+;CREATE TABLE IF NOT EXISTS t2 AS SELECT * FROM t1
+;DROP TABLE t2
+;CREATE TABLE IF NOT EXISTS t2 AS SELECT * FROM t1
+;SELECT name FROM sqlite_master WHERE type = 'table'
+;CREATE INDEX i1 ON t1(a)
+;CREATE INDEX IF NOT EXISTS i1 ON t1(a, b)
+;DROP INDEX i1
+;CREATE INDEX IF NOT EXISTS i1 ON t1(a, b)
+;SELECT name FROM sqlite_master WHERE type = 'index'
+;CREATE VIEW v1 AS SELECT * FROM t1
+;CREATE VIEW IF NOT EXISTS v1 AS SELECT * FROM t1
+;DROP VIEW v1
+;CREATE VIEW IF NOT EXISTS v1 AS SELECT * FROM t1
+;SELECT name FROM sqlite_master WHERE type = 'view'
+;CREATE TRIGGER tr1 AFTER INSERT ON t1 BEGIN SELECT 1; END
+;CREATE TRIGGER IF NOT EXISTS tr1 AFTER INSERT ON t1 BEGIN SELECT 1; END
+;DROP TRIGGER tr1
+;CREATE TRIGGER IF NOT EXISTS tr1 AFTER INSERT ON t1 BEGIN SELECT 1; END
+;SELECT name FROM sqlite_master WHERE type = 'trigger'
+;PRAGMA journal_mode = WAL
+;DROP TABLE IF EXISTS t1
+;CREATE TABLE t1(x)
+;DROP TABLE IF EXISTS t1
+;SELECT name FROM sqlite_master WHERE type = 'table'
+;CREATE TABLE t2(x)
+;DROP INDEX IF EXISTS i2
+;CREATE INDEX i2 ON t2(x)
+;DROP INDEX IF EXISTS i2
+;SELECT name FROM sqlite_master WHERE type = 'index'
+;DROP VIEW IF EXISTS v1
+;CREATE VIEW v1 AS SELECT * FROM t2
+;DROP VIEW IF EXISTS v1
+;SELECT name FROM sqlite_master WHERE type = 'view'
+;DROP TRIGGER IF EXISTS tr1
+;CREATE TRIGGER tr1 AFTER INSERT ON t2 BEGIN SELECT 1; END
+;DROP TRIGGER IF EXISTS tr1
+;SELECT name FROM sqlite_master WHERE type = 'trigger'
+;ATTACH 'test.db2' AS aux
+;ATTACH 'test.db2' AS aux
+;DROP TABLE IF EXISTS aux.t1
+;CREATE TABLE aux.t1(x)
+;DROP TABLE IF EXISTS aux.t1
+;SELECT name FROM aux.sqlite_master WHERE type = 'table'
+;DROP TABLE IF EXISTS t1
+;CREATE TABLE aux.t1(x)
+;DROP TABLE IF EXISTS t1
+;SELECT name FROM aux.sqlite_master WHERE type = 'table'
+;CREATE TABLE aux.t2(x)
+;DROP INDEX IF EXISTS aux.i2
+;CREATE INDEX aux.i2 ON t2(x)
+;DROP INDEX IF EXISTS aux.i2
+;SELECT name FROM aux.sqlite_master WHERE type = 'index'
+;DROP INDEX IF EXISTS i2
+;CREATE INDEX aux.i2 ON t2(x)
+;DROP INDEX IF EXISTS i2
+;SELECT * FROM aux.sqlite_master WHERE type = 'index'
+;DROP VIEW IF EXISTS aux.v1
+;CREATE VIEW aux.v1 AS SELECT * FROM t2
+;DROP VIEW IF EXISTS aux.v1
+;SELECT name FROM aux.sqlite_master WHERE type = 'view'
+;DROP VIEW IF EXISTS v1
+;CREATE VIEW aux.v1 AS SELECT * FROM t2
+;DROP VIEW IF EXISTS v1
+;SELECT name FROM aux.sqlite_master WHERE type = 'view'
+;DROP TRIGGER IF EXISTS aux.tr1
+;CREATE TRIGGER aux.tr1 AFTER INSERT ON t2 BEGIN SELECT 1; END
+;DROP TRIGGER IF EXISTS aux.tr1
+;SELECT name FROM aux.sqlite_master WHERE type = 'trigger'
+;DROP TRIGGER IF EXISTS tr1
+;CREATE TRIGGER aux.tr1 AFTER INSERT ON t2 BEGIN SELECT 1; END
+;DROP TRIGGER IF EXISTS tr1
+;SELECT name FROM aux.sqlite_master WHERE type = 'trigger';

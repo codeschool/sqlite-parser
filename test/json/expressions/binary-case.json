@@ -1,4 +1,6 @@
 {
+  "type": "statement",
+  "variant": "list",
   "statement": [
     {
       "type": "statement",
@@ -8,7 +10,6 @@
           "type": "expression",
           "format": "binary",
           "variant": "case",
-          "expression": null,
           "condition": [
             {
               "type": "condition",
@@ -25,13 +26,13 @@
                 },
                 "right": {
                   "type": "literal",
-                  "variant": "string",
+                  "variant": "text",
                   "value": "red"
                 }
               },
               "then": {
                 "type": "literal",
-                "variant": "string",
+                "variant": "text",
                 "value": "ANGRY"
               }
             },
@@ -50,13 +51,13 @@
                 },
                 "right": {
                   "type": "literal",
-                  "variant": "string",
+                  "variant": "text",
                   "value": "green"
                 }
               },
               "then": {
                 "type": "literal",
-                "variant": "string",
+                "variant": "text",
                 "value": "HAPPY"
               }
             },
@@ -65,7 +66,7 @@
               "format": "else",
               "else": {
                 "type": "literal",
-                "variant": "string",
+                "variant": "text",
                 "value": "NEUTRAL"
               }
             }
@@ -73,13 +74,11 @@
           "alias": "beestate"
         }
       ],
-      "from": [
-        {
-          "type": "identifier",
-          "variant": "table",
-          "name": "bees"
-        }
-      ]
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "bees"
+      }
     }
   ]
 }

@@ -1,0 +1,55 @@
+-- original: vtab_shared.test
+-- credit:   http://www.sqlite.org/src/tree?ci=trunk&name=test
+
+CREATE TABLE t0(a, b, c);
+    INSERT INTO t0 VALUES(1, 2, 3);
+    CREATE VIRTUAL TABLE t1 USING echo(t0)
+;SELECT * FROM t1
+;SELECT * FROM t0
+;SELECT * FROM t1
+;SELECT * FROM t1
+;BEGIN;
+    INSERT INTO t1 VALUES(4, 5, 6);
+    SELECT * FROM t1
+;SELECT * FROM t0
+;COMMIT
+;SELECT *  FROM t1
+;SELECT * FROM t1
+;SELECT * FROM t1
+;CREATE VIRTUAL TABLE t2 USING echo(t0);
+    CREATE VIRTUAL TABLE t3 USING echo(t0)
+;SELECT * FROM t3
+;SELECT * FROM t1 UNION ALL
+      SELECT * FROM t2 UNION ALL
+      SELECT * FROM t3
+;SELECT * FROM t1 UNION ALL
+      SELECT * FROM t2 UNION ALL
+      SELECT * FROM t3
+;ALTER TABLE t1 RENAME TO t4
+;SELECT * FROM t4
+;SELECT * FROM t4
+;ALTER TABLE t2 RENAME TO t5
+;SELECT * FROM t4
+;SELECT * FROM t3
+;UPDATE t3 SET c = 'six' WHERE c = 6;
+    SELECT * FROM t3
+;SELECT * FROM t3
+;DELETE FROM t3 WHERE c = 'six';
+    SELECT * FROM t3
+;SELECT * FROM t3
+;INSERT INTO t3 VALUES(4, 5, 6);
+    SELECT * FROM t3
+;UPDATE t3 SET c = 'six' WHERE c = 6;
+    SELECT * FROM t3
+;DELETE FROM t3 WHERE c = 'six';
+    SELECT * FROM t3
+;INSERT INTO t3 VALUES(4, 5, 6);
+    SELECT * FROM t3
+;CREATE VIRTUAL TABLE rt USING rtree(id, x1, x2);
+      INSERT INTO rt VALUES(1, 2 ,3);
+      SELECT * FROM rt
+;DROP TABLE rt
+;CREATE VIRTUAL TABLE ft USING fts3;
+      INSERT INTO ft VALUES('hello world');
+      SELECT * FROM ft
+;DROP TABLE ft;

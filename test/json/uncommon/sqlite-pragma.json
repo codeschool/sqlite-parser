@@ -1,4 +1,6 @@
 {
+  "type": "statement",
+  "variant": "list",
   "statement": [
     {
       "type": "statement",
@@ -8,13 +10,15 @@
         "variant": "pragma",
         "name": "hat.pants"
       },
-      "args": [
-        {
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
           "type": "literal",
-          "variant": "string",
+          "variant": "text",
           "value": "some string"
         }
-      ]
+      }
     },
     {
       "type": "statement",
@@ -24,13 +28,15 @@
         "variant": "pragma",
         "name": "pants.pants"
       },
-      "args": [
-        {
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
           "type": "literal",
           "variant": "decimal",
           "value": "+200.00"
         }
-      ]
+      }
     },
     {
       "type": "statement",
@@ -40,7 +46,11 @@
         "variant": "pragma",
         "name": "nap.times"
       },
-      "args": []
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": null
+      }
     },
     {
       "type": "statement",
@@ -50,14 +60,16 @@
         "variant": "pragma",
         "name": "suit"
       },
-      "args": [
-        {
+      "args": {
+        "type": "expression",
+        "variant": "list",
+        "expression": {
           "type": "literal",
           "variant": "boolean",
           "normalized": "0",
           "value": "no"
         }
-      ]
+      }
     }
   ]
 }

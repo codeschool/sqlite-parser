@@ -1,3 +1,5 @@
+import * as tree from '../misc/helpers';
+
 describe('drop', function() {
 
   it('basic drop table', function(done) {

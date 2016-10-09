@@ -3,8 +3,105 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
-## [v0.15.0] - 2016-10-03
+## [v1.0.0-beta] - 2016-10-07
+### Added
+- The root node of the AST now has `type` and `variant` properties:
+
+  ``` json
+  {
+    "type": "statement",
+    "variant": "list",
+    "statement": [{
+      "type": "statement",
+      "variant": "select",
+      "statement": {}
+    }]
+  }
+  ```
+
+- Added missing `ATTACH DATABASE` statement. It will pair nicely with the existing `DETACH DATABASE` statement.
+
+  ``` sql
+  ATTACH DATABASE 'bees2.db' AS more_bees
+  ```
+
+- SQLite allows you to enter basically anything you want for a datatype, such as the datatype for a column in a `CREATE TABLE` statement, because it doesn't enforce types you provide. So, the parser will accept almost any unquoted string in place of a datatype, and there is now a new affinity named `unknown` to classify any datatype that does not correspond to a known affinity. [ref1](http://stackoverflow.com/a/8417411) [ref2](http://www.sqlite.org/datatype3.html)
+
+  ``` sql
+  CREATE TABLE t1(x DINOSAUR, y BIRD_PERSON);
+  ```
+
+- Run parser against entire SQLite test corpus using `grunt testall` command.
+  - **Warning**: This command will parse ~49,000 of queries, across almost 900 different files, representing the entire SQLite test corpus at the time it was processed.
+
+- Allow multi-byte UTF-8 characters (e.g., `\u1234`) in identifier names.
+
+- Add support for table functions in the `FROM` clause of a `SELECT` statement.
+
+  ``` sql
+  SELECT
+    j2.rowid, jx.rowid
+  FROM
+    j2, json_tree(j2.json) AS jx
+  ```
+
 ### Changed
+- **BREAKING CHANGE** The `on` property of a `CREATE INDEX` statement is now treated as a table expression identifier, and has the corresponding `type` and `variant`:
+
+  ``` json
+  {
+    "type": "statement",
+    "variant": "create",
+    "format": "index",
+    "target": {
+      "type": "identifier",
+      "variant": "index",
+      "name": "bees.hive_state"
+    },
+    "on": {
+      "type": "identifier",
+      "variant": "expression",
+      "format": "table",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "hive"
+      },
+      "columns": []
+    }
+  }
+  ```
+
+- **BREAKING CHANGE** Indexed columns (e.g., the column list in the `ON` part of a `CREATE INDEX` statement) and ordering expressions (e.g., the `ORDER BY` part of a `SELECT` statement) now have the following format:
+  - When they are proceeded by an ordering term (e.g., `ASC`, `DESC`) and/or `COLLATE`, such as `ORDER BY nick ASC`
+
+  ``` json
+  {
+    "order": [{
+      "type": "expression",
+      "variant": "order",
+      "expression": {
+        "type": "identifier",
+        "variant": "column",
+        "name": "nick"
+      },
+      "direction": "asc"
+    }]
+  }
+  ```
+
+  - But, when it is only an expression or column name without any ordering term or `COLLATE` then it will only be the expression itself, and the implicit `"direction": "asc"` will not be added to the AST, such as `ORDER BY nick`:
+
+  ``` sql
+  {
+    "order": [{
+      "type": "identifier",
+      "variant": "column",
+      "name": "nick"
+    }]
+  }
+  ```
+
 - **BREAKING CHANGE** Because of changes to how binary expressions are parsed, the order that expressions are composed may be different then the previous release. For example, ASTs may change such as those for queries that contain multiple binary expressions:
 
   ``` sql
@@ -15,6 +112,177 @@ All notable changes to this project will be documented in this file.
 
 - **BREAKING CHANGE** Expressions such as  `x NOT NULL` were previously treated as a unary expressions but are now considered binary expressions.
 
+  ``` sql
+  {
+    "type": "expression",
+    "format": "binary",
+    "variant": "operation",
+    "operation": "not",
+    "left": {
+      "type": "identifier",
+      "variant": "column",
+      "name": "x"
+    },
+    "right": {
+      "type": "literal",
+      "variant": "null",
+      "value": "null"
+    }
+  }
+  ```
+- **BREAKING CHANGE** Now, instead of transaction statements being parsed as a single statement of type `transaction` to be considered valid, each statement that makes up a the transaction (e.g., `BEGIN`, `END`) is considered its own distinct statement that can exist independent of the others. Because a single transaction can be spread across multiple input strings given to the parser, it is no longer treated as a single, large, _transaction_ statement.
+
+  ``` sql
+  BEGIN;
+  DROP TABLE t1;
+  END;
+  ```
+
+  ``` json
+  {
+    "type": "statement",
+    "variant": "list",
+    "statement": [
+      {
+        "type": "statement",
+        "variant": "transaction",
+        "action": "begin"
+      },
+      {
+        "type": "statement",
+        "target": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "t1"
+        },
+        "variant": "drop",
+        "format": "table",
+        "condition": []
+      },
+      {
+        "type": "statement",
+        "variant": "transaction",
+        "action": "commit"
+      }
+    ]
+  }
+  ```
+
+- **BREAKING CHANGE** `COLLATE` can now appear multiple times in a row wherever it would previously be allowed to appear, and as a result, the `collate` property of the AST will contain an array.
+
+  ``` sql
+  SELECT 'cats'
+  ORDER BY 1 COLLATE nocase COLLATE nocase
+  ```
+
+- **BREAKING CHANGE** `CONSTRAINT` names can now appear multiple times before or after a column or table constraint in a `CREATE TABLE` statement. Having a `CONSTRAINT` name *after* the constraint is an undocumented SQLite feature. However, while it will not give an error, any constraint name appearing after the constraint is ignored.
+
+  ``` sql
+  CREATE TABLE t2c(
+    -- Two leading and two trailing CONSTRAINT clauses
+    -- Name used: x_two
+    x INTEGER CONSTRAINT x_one CONSTRAINT x_two
+      CHECK( typeof( coalesce(x,0) ) == 'integer' )
+      CONSTRAINT x_two CONSTRAINT x_three,
+    y INTEGER,
+    z INTEGER,
+    -- Two trailing CONSTRAINT clauses
+    -- Name used: (none)
+    UNIQUE(x, y, z) CONSTRAINT u_one CONSTRAINT u_two
+  )
+  ```
+
+- **BREAKING CHANGE** `JOIN` clauses and table lists can now occur in the same `FROM` clause of a single `SELECT` statement. Tables separated by a comma will be included in the `JOIN` map as a cross join.
+
+  ``` sql
+  SELECT *
+  FROM aa LEFT JOIN bb, cc
+  WHERE cc.c = aa.a;
+  ```
+
+- **BREAKING CHANGE** A comma-separated list of table or subquery names in the `FROM` clause of a `SELECT` statement are now treated as a join map of cross joins. Also, each pair of comma-separated tables or subqueries can include a join constraint expression (e.g., `ON t.col1 = b.col2`).
+
+  ``` sql
+  SELECT t1.rowid, t2.rowid
+  FROM t1, t2 ON t1.a = t2.b;
+  ```
+
+  ``` json
+  {
+    "type": "statement",
+    "variant": "list",
+    "statement": [
+      {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t1.rowid"
+          },
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "t2.rowid"
+          }
+        ],
+        "from": {
+          "type": "map",
+          "variant": "join",
+          "source": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "t1"
+          },
+          "map": [
+            {
+              "type": "join",
+              "variant": "cross join",
+              "source": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "t2"
+              },
+              "constraint": {
+                "type": "constraint",
+                "variant": "join",
+                "format": "on",
+                "on": {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "=",
+                  "left": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "t1.a"
+                  },
+                  "right": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "t2.b"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+  ```
+
+- **BREAKING CHANGE** Instead of an array, for the `args` property of an AST node, it will now contain an expression list node containing the arguments on the `expression` property.
+
+  ``` json
+  {
+    "type": "expression",
+    "variant": "list",
+    "expression": []
+  }
+  ```
+
 ### Fixed
 - Fixed binary expression parsing logic so that it can handle expressions such as:
 
@@ -22,6 +290,135 @@ All notable changes to this project will be documented in this file.
   SELECT * FROM t where -1 * (2 + 3);
   SELECT * FROM t where 3 + 4 * 5 > 20;
   SELECT * FROM t where v1 = ((v2 * 5) - v3);
+  ```
+
+- Allow qualified table name in `ON` clause of `CREATE TRIGGER` statement (e.g., `ON dbName.tableName`).
+
+- Allow _literal boolean values_ `on` and `off` in `PRAGMA` statements:
+
+  ``` sql
+  PRAGMA legacy_file_format = ON;
+  ```
+
+- Do not treat `TEMP` or `ROWID` as reserved words, since the official parser allows `temp` or `rowid`, when used as an identifier (e.g., a table named `temp` or the `rowid` column of a table).
+
+  ``` sql
+  CREATE TABLE temp.t1(a, b);
+  SELECT rowid AS "Internal Row ID" FROM bees;
+  ```
+
+- Require semicolons to delineate `BEGIN` and `END` statements for transactions while also allowing unnecessary semicolons to be omitted:
+
+  ``` sql
+  BEGIN;CREATE TABLE nick(a, b);END
+  ```
+
+- Only allow CRUD operations inside of the body of a `CREATE TRIGGER` statement.
+
+- Allow empty strings or `NULL` to be used as aliases, to match behavior of the native SQLite parser, such as in an `ATTACH DATABASE` statement:
+
+  ``` sql
+  ATTACH DATABASE '' AS ''
+  ```
+
+- Allow datatype names to be provided to `COLLATE` to match the behavior of the official SQLite parser:
+
+  ``` sql
+  SELECT c1
+  FROM t
+  ORDER BY 1 COLLATE numeric
+  ```
+
+- Some `CREATE TRIGGER` statements were previously parsed as a binary expressions instead of create trigger statements.
+
+- Allow indexed columns to be parsed when they include a `COLLATE` and/or a ordering direction (e.g., `ASC`, `DESC`) when part of a table constraint in a `CREATE TABLE` statement or a `ON` part of a `CREATE INDEX` statement:
+
+  ``` sql
+  CREATE TABLE t1(id int, PRIMARY KEY(x COLLATE binary ASC, y COLLATE hex, z DESC))
+  ```
+
+- Allow `UNIQUE` column constraint type to be correctly parsed.
+
+  ``` sql
+  CREATE TABLE bees(
+    a INTEGER UNIQUE ON CONFLICT IGNORE
+  )
+  ```
+
+- Allow nested unary expressions while preserving also the correct order of precedence.
+
+  ``` sql
+  SELECT not not foo
+  FROM bees
+  ```
+
+- The action (e.g., `ADD COLUMN`) and target (e.g., the table name) of a `ALTER TABLE` statement was not being added to the AST.
+
+- Allow `AUTOINCREMENT` in the column list of a `PRIMARY KEY` **table** constraint.
+
+  ``` sql
+  CREATE TABLE t7(
+    x INTEGER,
+    y REAL,
+    PRIMARY KEY(x AUTOINCREMENT)
+  );
+  ```
+
+- Now supporting custom datatypes with affinity inference where possible. See [this page](https://www.sqlite.org/datatype3.html) for explanation for choosing type affinity for custom types.
+
+  ``` sql
+  CREATE TABLE t3(
+    -- Affinity: NUMERIC
+    d STRING,
+    -- Affinity: INTEGER
+    e FLOATING POINT(5,10),
+    -- Affinity: TEXT
+    f NATIONAL CHARACTER(15) COLLATE RTRIM,
+    -- Affinity: INTEGER
+    g LONG INTEGER DEFAULT( 3600*12 )
+  );
+  ```
+
+- Allow trailing `.` in decimal value (e.g., `SELECT 1. + 1`).
+
+- Allow functions to have datatype names such as `date(arg)` or `time(now)`.
+
+- Allow reserved words in the a `VIRTUAL TABLE` statement `USING` clause CTE columns (e.g., `from`, `to`).
+
+- Better nested expression parsing when unnecessary parenthesis are used within a complex expression.
+
+  ``` sql
+  SELECT
+    SUM(
+      CASE
+        WHEN ( t.color != 'yellow' ) THEN 1
+        ELSE 0
+      END
+    ) AS imposter_bee_count
+  FROM
+    bees t;
+  ```
+
+- Allow a reserved word to be used as a column name in a `CREATE TABLE` statement as long as it can be safely implied that it is meant to be a column name.
+
+  ``` sql
+  CREATE TABLE changelog(
+    desc TEXT
+  );
+  ```
+
+- Allow `WITH` clause before a `SELECT` statement wherever a `SELECT` statement can be found in a complex query, such as in a _insert into select_ query.
+
+  ``` sql
+  INSERT INTO t6
+  WITH s(x) AS ( VALUES (2) UNION ALL SELECT x + 2 FROM s WHERE x < 49 )
+  SELECT * FROM s;
+  ```
+
+- A view expression can now be used in a `CREATE VIEW` statement.
+
+  ``` sql
+  CREATE VIEW v1(a, b) AS VALUES(1, 2), (3, 4);
   ```
 
 ## [v0.14.5] - 2016-07-11
@@ -582,8 +979,8 @@ part of table names, column names, aliases, etc... This also addresses issues th
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.15.0-beta...HEAD
-[v0.15.0-beta]: https://github.com/codeschool/sqlite-parser/compare/v0.14.5...v0.15.0-beta
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v1.0.0-beta...HEAD
+[v1.0.0-beta]: https://github.com/codeschool/sqlite-parser/compare/v0.14.5...v1.0.0-beta
 [v0.14.5]: https://github.com/codeschool/sqlite-parser/compare/v0.14.4...v0.14.5
 [v0.14.4]: https://github.com/codeschool/sqlite-parser/compare/v0.14.3...v0.14.4
 [v0.14.3]: https://github.com/codeschool/sqlite-parser/compare/v0.14.2...v0.14.3

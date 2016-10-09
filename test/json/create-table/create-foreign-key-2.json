@@ -1,4 +1,6 @@
 {
+  "type": "statement",
+  "variant": "list",
   "statement": [
     {
       "type": "statement",
@@ -23,8 +25,7 @@
           "datatype": {
             "type": "datatype",
             "variant": "int",
-            "affinity": "integer",
-            "args": []
+            "affinity": "integer"
           }
         },
         {
@@ -35,8 +36,7 @@
           "datatype": {
             "type": "datatype",
             "variant": "int",
-            "affinity": "integer",
-            "args": []
+            "affinity": "integer"
           }
         },
         {
@@ -51,8 +51,6 @@
             {
               "variant": "foreign key",
               "type": "constraint",
-              "action": null,
-              "defer": null,
               "references": {
                 "type": "identifier",
                 "variant": "expression",
@@ -71,8 +69,7 @@
           "datatype": {
             "type": "datatype",
             "variant": "int",
-            "affinity": "integer",
-            "args": []
+            "affinity": "integer"
           }
         }
       ]

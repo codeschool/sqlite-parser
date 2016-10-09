@@ -1,0 +1,991 @@
+{
+  "type": "statement",
+  "variant": "list",
+  "statement": [
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "before_tbl_insert"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "before",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "select",
+          "result": [
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "case",
+              "condition": [
+                {
+                  "type": "condition",
+                  "format": "when",
+                  "when": {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "new.a"
+                    },
+                    "right": {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "4"
+                    }
+                  },
+                  "then": {
+                    "type": "error",
+                    "format": "unary",
+                    "variant": "raise",
+                    "expression": {
+                      "type": "error",
+                      "action": "ignore"
+                    },
+                    "action": "ignore"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "after_tbl_insert"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "after",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "select",
+          "result": [
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "case",
+              "condition": [
+                {
+                  "type": "condition",
+                  "format": "when",
+                  "when": {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "new.a"
+                    },
+                    "right": {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "1"
+                    }
+                  },
+                  "then": {
+                    "type": "error",
+                    "format": "unary",
+                    "variant": "raise",
+                    "expression": {
+                      "type": "error",
+                      "action": "abort",
+                      "message": {
+                        "type": "literal",
+                        "variant": "text",
+                        "value": "Trigger abort"
+                      }
+                    },
+                    "action": "abort",
+                    "message": {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": "Trigger abort"
+                    }
+                  }
+                },
+                {
+                  "type": "condition",
+                  "format": "when",
+                  "when": {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "new.a"
+                    },
+                    "right": {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "2"
+                    }
+                  },
+                  "then": {
+                    "type": "error",
+                    "format": "unary",
+                    "variant": "raise",
+                    "expression": {
+                      "type": "error",
+                      "action": "fail",
+                      "message": {
+                        "type": "literal",
+                        "variant": "text",
+                        "value": "Trigger fail"
+                      }
+                    },
+                    "action": "fail",
+                    "message": {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": "Trigger fail"
+                    }
+                  }
+                },
+                {
+                  "type": "condition",
+                  "format": "when",
+                  "when": {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "new.a"
+                    },
+                    "right": {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "3"
+                    }
+                  },
+                  "then": {
+                    "type": "error",
+                    "format": "unary",
+                    "variant": "raise",
+                    "expression": {
+                      "type": "error",
+                      "action": "rollback",
+                      "message": {
+                        "type": "literal",
+                        "variant": "text",
+                        "value": "Trigger rollback"
+                      }
+                    },
+                    "action": "rollback",
+                    "message": {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": "Trigger rollback"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "rollback"
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "rollback"
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "transaction",
+      "action": "rollback"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": []
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "4"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "5"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "6"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "before_tbl_update"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "before",
+        "event": "update",
+        "of": null
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "select",
+          "result": [
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "case",
+              "condition": [
+                {
+                  "type": "condition",
+                  "format": "when",
+                  "when": {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "old.a"
+                    },
+                    "right": {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "1"
+                    }
+                  },
+                  "then": {
+                    "type": "error",
+                    "format": "unary",
+                    "variant": "raise",
+                    "expression": {
+                      "type": "error",
+                      "action": "ignore"
+                    },
+                    "action": "ignore"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "before_tbl_delete"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "before",
+        "event": "delete"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "select",
+          "result": [
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "case",
+              "condition": [
+                {
+                  "type": "condition",
+                  "format": "when",
+                  "when": {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "old.a"
+                    },
+                    "right": {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "1"
+                    }
+                  },
+                  "then": {
+                    "type": "error",
+                    "format": "unary",
+                    "variant": "raise",
+                    "expression": {
+                      "type": "error",
+                      "action": "ignore"
+                    },
+                    "action": "ignore"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "variant": "update",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      },
+      "set": [
+        {
+          "type": "assignment",
+          "target": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "c"
+          },
+          "value": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "10"
+          }
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "delete",
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl2"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "a",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "b",
+          "definition": []
+        },
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "c",
+          "definition": []
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "after_tbl2_insert"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl2"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "after",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "update",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "tbl"
+          },
+          "set": [
+            {
+              "type": "assignment",
+              "target": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "c"
+              },
+              "value": {
+                "type": "literal",
+                "variant": "decimal",
+                "value": "10"
+              }
+            }
+          ]
+        },
+        {
+          "type": "statement",
+          "variant": "insert",
+          "action": "insert",
+          "into": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "tbl2"
+          },
+          "result": [
+            {
+              "type": "expression",
+              "variant": "list",
+              "expression": [
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.a"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.b"
+                },
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "new.c"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    },
+    {
+      "type": "statement",
+      "variant": "insert",
+      "action": "insert",
+      "into": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl2"
+      },
+      "result": [
+        {
+          "type": "expression",
+          "variant": "list",
+          "expression": [
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "1"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "2"
+            },
+            {
+              "type": "literal",
+              "variant": "decimal",
+              "value": "3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl2"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "star",
+          "name": "*"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl"
+      }
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "view",
+        "name": "tbl_view"
+      },
+      "result": {
+        "type": "statement",
+        "variant": "select",
+        "result": [
+          {
+            "type": "identifier",
+            "variant": "star",
+            "name": "*"
+          }
+        ],
+        "from": {
+          "type": "identifier",
+          "variant": "table",
+          "name": "tbl"
+        }
+      },
+      "variant": "create",
+      "format": "view"
+    },
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "trigger",
+        "name": "tbl_view_insert"
+      },
+      "on": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "tbl_view"
+      },
+      "event": {
+        "type": "event",
+        "occurs": "instead of",
+        "event": "insert"
+      },
+      "by": "row",
+      "action": [
+        {
+          "type": "statement",
+          "variant": "select",
+          "result": [
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "case",
+              "condition": [
+                {
+                  "type": "condition",
+                  "format": "when",
+                  "when": {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "new.a"
+                    },
+                    "right": {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "1"
+                    }
+                  },
+                  "then": {
+                    "type": "error",
+                    "format": "unary",
+                    "variant": "raise",
+                    "expression": {
+                      "type": "error",
+                      "action": "rollback",
+                      "message": {
+                        "type": "literal",
+                        "variant": "text",
+                        "value": "View rollback"
+                      }
+                    },
+                    "action": "rollback",
+                    "message": {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": "View rollback"
+                    }
+                  }
+                },
+                {
+                  "type": "condition",
+                  "format": "when",
+                  "when": {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "new.a"
+                    },
+                    "right": {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "2"
+                    }
+                  },
+                  "then": {
+                    "type": "error",
+                    "format": "unary",
+                    "variant": "raise",
+                    "expression": {
+                      "type": "error",
+                      "action": "ignore"
+                    },
+                    "action": "ignore"
+                  }
+                },
+                {
+                  "type": "condition",
+                  "format": "when",
+                  "when": {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "new.a"
+                    },
+                    "right": {
+                      "type": "literal",
+                      "variant": "decimal",
+                      "value": "3"
+                    }
+                  },
+                  "then": {
+                    "type": "error",
+                    "format": "unary",
+                    "variant": "raise",
+                    "expression": {
+                      "type": "error",
+                      "action": "abort",
+                      "message": {
+                        "type": "literal",
+                        "variant": "text",
+                        "value": "View abort"
+                      }
+                    },
+                    "action": "abort",
+                    "message": {
+                      "type": "literal",
+                      "variant": "text",
+                      "value": "View abort"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "variant": "create",
+      "format": "trigger"
+    }
+  ]
+}
