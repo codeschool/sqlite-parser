@@ -1423,7 +1423,7 @@ table_or_sub_select "Subquery"
   }
 
 alias "Alias"
-  = a:( AS ( !name_char o ) )? n:( name ) o
+  = a:( AS ( !( name_char / reserved_critical_list ) o ) )? n:( name ) o
   {
     return {
       'alias': n
