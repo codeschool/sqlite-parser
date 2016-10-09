@@ -272,6 +272,16 @@ All notable changes to this project will be documented in this file.
   }
   ```
 
+- **BREAKING CHANGE** Instead of an array, for the `args` property of an AST node, it will now contain an expression list node containing the arguments on the `expression` property.
+
+  ``` json
+  {
+    "type": "expression",
+    "variant": "list",
+    "expression": []
+  }
+  ```
+
 ### Fixed
 - Fixed binary expression parsing logic so that it can handle expressions such as:
 

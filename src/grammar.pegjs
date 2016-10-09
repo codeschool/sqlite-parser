@@ -125,7 +125,6 @@ type_definition_types
     return {
       'type': 'datatype',
       'variant': n[0],
-      'args': [] // datatype definition arguments
       'affinity': n[1]
     };
   }
@@ -174,7 +173,11 @@ type_definition_args "Type Definition Arguments"
   = sym_popen a1:( literal_number_signed ) o a2:( definition_args_loop )? sym_pclose
   {
     return {
-      'args': flattenAll([ a1, a2 ])
+      'args': {
+        'type': 'expression',
+        'variant': 'list',
+        'expression': flattenAll([ a1, a2 ])
+      }
     };
   }
 
@@ -696,11 +699,17 @@ expression_and_op
 /* END: Unary and Binary Expression */
 
 expression_list "Expression List"
-  = f:( expression ) o rest:( expression_list_rest )*
-  {
+  = l:( expression_list_loop )? o {
+    return {
+      'type': 'expression',
+      'variant': 'list',
+      'expression': isOkay(l) ? l : []
+    };
+  }
+expression_list_loop
+  = f:( expression ) o rest:( expression_list_rest )* {
     return flattenAll([ f, rest ]);
   }
-
 expression_list_rest
   = sym_comma e:( expression ) o
   { return e; }
@@ -714,25 +723,24 @@ function_call "Function Call"
   {
     return Object.assign({
       'type': 'function',
-      'name': n,
-      'args': []
+      'name': n
     }, a);
   }
 
 function_call_args "Function Call Arguments"
   = s:( select_star ) {
     return {
-      'args': [{
+      'args': {
         'type': 'identifier',
         'variant': 'star',
         'name': s
-      }]
+      }
     };
   }
   / d:( args_list_distinct )? e:( expression_list ) {
-    return Object.assign({
-      'args': e
-    }, d);
+    return {
+      'args': Object.assign(e, d)
+    };
   }
 
 args_list_distinct
@@ -1064,7 +1072,11 @@ stmt_pragma "PRAGMA Statement"
       'type': 'statement',
       'variant': keyNode(s),
       'target': n,
-      'args': (isOkay(v) ? makeArray(v) : [])
+      'args': {
+        'type': 'expression',
+        'variant': 'list',
+        'expression': v
+      }
     };
   }
 
@@ -1256,7 +1268,7 @@ select_core_group "GROUP BY Clause"
   = f:( GROUP ) o BY o e:( expression_list ) o h:( select_core_having )?
   {
     return Object.assign({
-      'group': makeArray(e)
+      'group': e
     }, h);
   }
 
@@ -1598,26 +1610,13 @@ insert_value_start "VALUES Keyword"
   { return keyNode(s); }
 
 insert_values_list
-  = f:( insert_values ) o b:( insert_values_loop )*
+  = f:( expression_list_wrapped ) o b:( insert_values_loop )*
   { return flattenAll([ f, b ]); }
 
 insert_values_loop
-  = sym_comma e:( insert_values ) o
+  = sym_comma e:( expression_list_wrapped ) o
   { return e; }
 
-insert_values "Insert Values List"
-  = sym_popen e:( expression_list ) o sym_pclose
-  {
-    return {
-      'type': 'values',
-      'variant': 'list',
-      'values': e
-    };
-  }
-
-insert_select "SELECT Results Clause"
-  = stmt_select
-  
 expression_list_wrapped "Wrapped Expression List"
   = sym_popen e:( expression_list ) o sym_pclose {
     return e;
@@ -2420,8 +2419,7 @@ virtual_module
   {
     return Object.assign({
       'type': 'module',
-      'name': m,
-      'args': []
+      'name': m
     }, a);
   }
 
