@@ -1012,12 +1012,23 @@ stmt_detach "DETACH Statement"
     };
   }
 
+/**
+ * @note
+ *   Specifying a target after the VACUUM statement appears to be an
+ *   undocumented feature.
+ */
 stmt_vacuum "VACUUM Statement"
-  = v:( VACUUM ) o
+  = v:( VACUUM ) o t:( vacuum_target )?
   {
-    return {
+    return Object.assign({
       'type': 'statement',
       'variant': 'vacuum'
+    }, t);
+  }
+vacuum_target
+  = t:( id_database ) o {
+    return {
+      'target': t
     };
   }
 
@@ -1316,6 +1327,7 @@ select_source
       };
     }
     return f;
+  }
 
 source_loop_tail
   = cl:( select_cross_clause / select_join_clause ) c:( join_condition )? {
