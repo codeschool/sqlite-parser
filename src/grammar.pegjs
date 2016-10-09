@@ -1100,9 +1100,17 @@ pragma_value
   / pragma_value_literal
   / pragma_value_name
 
+/**
+ * @note
+ *   Allow double quoted string literals as pragma values but do not treat
+ *   them as an identifier because it is impossible from the surrounding
+ *   context to determine whether it is a column, table, or database
+ *   identifier.
+ */
 pragma_value_literal
   = literal_number_signed
   / literal_string
+  / literal_text
 
 /**
  * @note
