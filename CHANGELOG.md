@@ -414,6 +414,12 @@ All notable changes to this project will be documented in this file.
   SELECT * FROM s;
   ```
 
+- A view expression can now be used in a `CREATE VIEW` statement.
+
+  ``` sql
+  CREATE VIEW v1(a, b) AS VALUES(1, 2), (3, 4);
+  ```
+
 ## [v0.14.5] - 2016-07-11
 ### Fixed
 - Fix alternate not equal operator `<>`

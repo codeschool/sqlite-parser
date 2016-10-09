@@ -2408,7 +2408,7 @@ action_loop_stmt
   { return s; }
 
 create_view "CREATE VIEW Statement"
-  = s:( create_view_start ) ne:( create_core_ine )? n:( id_view ) o
+  = s:( create_view_start ) ne:( create_core_ine )? n:( id_view_expression ) o
     r:( create_as_select )
   {
     return Object.assign({
@@ -2417,6 +2417,18 @@ create_view "CREATE VIEW Statement"
       'result': r
     }, s, ne);
   }
+
+id_view_expression
+  = n:( id_view ) o a:( loop_columns ) {
+    return Object.assign({
+      'type': 'identifier',
+      'variant': 'expression',
+      'format': 'view',
+      'name': n['name'],
+      'columns': []
+    }, a);
+  }
+  / id_view
 
 create_view_start
   = s:( create_start ) tmp:( create_core_tmp )? v:( VIEW ) o
