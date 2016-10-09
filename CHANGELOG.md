@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
+
+## [v1.0.0-beta] - 2016-10-07
 ### Added
 - The root node of the AST now has `type` and `variant` properties:
 
@@ -17,7 +19,6 @@ All notable changes to this project will be documented in this file.
   }
   ```
 
-## [v0.15.0-beta] - 2016-10-03
 - Added missing `ATTACH DATABASE` statement. It will pair nicely with the existing `DETACH DATABASE` statement.
 
   ``` sql
@@ -978,8 +979,8 @@ part of table names, column names, aliases, etc... This also addresses issues th
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v0.15.0-beta...HEAD
-[v0.15.0-beta]: https://github.com/codeschool/sqlite-parser/compare/v0.14.5...v0.15.0-beta
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v1.0.0-beta...HEAD
+[v1.0.0-beta]: https://github.com/codeschool/sqlite-parser/compare/v0.14.5...v1.0.0-beta
 [v0.14.5]: https://github.com/codeschool/sqlite-parser/compare/v0.14.4...v0.14.5
 [v0.14.4]: https://github.com/codeschool/sqlite-parser/compare/v0.14.3...v0.14.4
 [v0.14.3]: https://github.com/codeschool/sqlite-parser/compare/v0.14.2...v0.14.3
