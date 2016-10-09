@@ -1413,8 +1413,8 @@ index_node_none
   }
 
 table_or_sub_sub "SELECT Source"
-  = sym_popen l:( select_source ) o sym_pclose
-  { return l; }
+  = sym_popen l:( select_source ) o sym_pclose a:( alias )?
+  { return Object.assign(l, a); }
 
 table_or_sub_select "Subquery"
   = s:( select_wrapped ) a:( alias )?
