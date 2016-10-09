@@ -2600,15 +2600,10 @@ binary_notequal_b "Not Equal"
 
 binary_lang
   = binary_lang_isnt
-  / binary_lang_misc
 
 binary_lang_isnt "IS"
   = i:( IS ) o n:( expression_is_not )?
   { return foldStringKey([ i, n ]); }
-
-binary_lang_misc
-  = m:( IN / LIKE / GLOB / MATCH / REGEXP )
-  { return keyNode(m); }
 
 /* Database, Table and Column IDs */
 
