@@ -1890,12 +1890,14 @@ column_constraint_tail
   = o c:( column_constraint )
   { return c; }
 
-/** {@link https://www.sqlite.org/syntax/column-constraint.html} */
-/* Note from SQLite official tests:
- * Undocumented behavior:  The CONSTRAINT name clause can follow a constraint.
- * Such a clause is ignored.  But the parser must accept it for backwards
- * compatibility.
+/**
+ * @note
+ *   From SQLite official tests:
+ *     Undocumented behavior:  The CONSTRAINT name clause can follow a constraint.
+ *     Such a clause is ignored.  But the parser must accept it for backwards
+ *     compatibility.
  */
+ /** {@link https://www.sqlite.org/syntax/column-constraint.html} */
 column_constraint "Column Constraint"
   = n:( constraint_name )? c:( column_constraint_types ) ln:( constraint_name )?
   {
@@ -2007,21 +2009,18 @@ column_constraint_collate "COLLATE Column Constraint"
   }
 
 /** {@link https://www.sqlite.org/syntax/table-constraint.html} */
+/* Note from SQLite official tests:
+ * Undocumented behavior:  The CONSTRAINT name clause can follow a constraint.
+ * Such a clause is ignored.  But the parser must accept it for backwards
+ * compatibility.
+ */
 table_constraint "Table Constraint"
-  = n:( table_constraint_name )? o c:( table_constraint_types ) o
+  = n:( constraint_name )? c:( table_constraint_types ) o nl:( constraint_name )?
   {
     return Object.assign({
       'type': 'definition',
       'variant': 'constraint'
     }, c, n);
-  }
-
-table_constraint_name "Table Constraint Name"
-  = CONSTRAINT o n:( name )
-  {
-    return {
-      'name': n
-    };
   }
 
 table_constraint_types
