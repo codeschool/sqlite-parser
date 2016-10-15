@@ -25,13 +25,40 @@ module.exports = function(grunt) {
   }
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    browserify: {
+
+    babel: {
       options: {
-        transform: [require('babelify').configure({
-          compact: true,
-          sourceMaps: true
-        })]
+        compact: true,
+        comments: false,
+        presets: ['es2015'],
+        plugins: ['add-module-exports']
       },
+      build: {
+        options: {
+          sourceMaps: 'inline'
+        },
+        files: [{
+          src: ['*.js'],
+          expand: true,
+          cwd: 'src/',
+          dest: '.tmp/'
+        }]
+      },
+      demo: {
+        options: {
+          sourceMaps: false
+        },
+        files: [{
+          src: ['*.js'],
+          expand: true,
+          cwd: 'src/',
+          dest: '.tmp/'
+        }]
+      },
+    },
+
+
+    browserify: {
       dist: {
         options: {
           browserifyOptions: {
@@ -51,7 +78,8 @@ module.exports = function(grunt) {
             'brace-fold': './node_modules/codemirror/addon/fold/brace-fold',
             'panel': './node_modules/codemirror/addon/display/panel',
             'mode-javascript': './node_modules/codemirror/mode/javascript/javascript',
-            'mode-sql': './node_modules/codemirror/mode/sql/sql'
+            'mode-sql': './node_modules/codemirror/mode/sql/sql',
+            'sqlite-parser': './.tmp/index.js',
           },
         },
         require: [
@@ -64,16 +92,17 @@ module.exports = function(grunt) {
           'node_modules/codemirror/mode/sql/sql'
         ],
         src: ['src/demo/demo.js'],
-        dest: '.tmp/js/sqlite-parser-demo.js'
+        dest: '.tmp/sqlite-parser-demo.js'
       }
     },
+
     copy: {
-      build: {
+      release: {
         files: [{
           filter: 'isFile',
           expand: true,
-          cwd: 'src/',
           src: ['*.js'],
+          cwd: '.tmp/',
           dest: 'lib/'
         }]
       },
@@ -83,27 +112,24 @@ module.exports = function(grunt) {
           expand: true,
           cwd: 'src/demo/',
           dest: '.tmp/'
-        }, {
-          src: ['sqlite-parser.js'],
-          expand: true,
-          cwd: 'dist/',
-          dest: '.tmp/js/'
         }],
       },
       demo: {
-        src: ['**/*.{html,css}'],
+        src: ['*.{html,css}'],
         expand: true,
         cwd: '.tmp/',
         dest: 'demo/'
       }
     },
+
     clean: {
-      build: ['.tmp/*.js', 'lib/*.js'],
-      dist: ['dist/*.js'],
-      interactive: ['.tmp/**/*'],
+      build: ['.tmp/*.js', 'lib/**/*', 'src/parser.js'],
+      interactive: ['.tmp/*.css'],
       demo: ['demo/**/*'],
+      bin: ['bin/**/*'],
       testProcess: ['test/sql/official-suite/**/*.sql']
     },
+
     shell: {
       build: {
         options: {
@@ -147,6 +173,7 @@ module.exports = function(grunt) {
         command: `sh process-tests.sh`
       }
     },
+
     connect: {
       server: {
         options: {
@@ -156,6 +183,7 @@ module.exports = function(grunt) {
         }
       }
     },
+
     watch: {
       test: {
         options: {
@@ -163,10 +191,10 @@ module.exports = function(grunt) {
           livereload: false
         },
         files: [
-          'index.js', 'test/**/*.js', 'src/*.js', 'src/*.pegjs',
+          'test/**/*.js', 'src/*.js', 'src/*.pegjs',
           'test/sql/**/*.sql', 'test/json/**/*.json', 'Gruntfile.js'
         ],
-        tasks: ['build', 'shell:test']
+        tasks: [ 'test' ]
       },
       debug: {
         options: {
@@ -174,7 +202,7 @@ module.exports = function(grunt) {
           livereload: false
         },
         files: [
-          'index.js', 'test/**/*.js', 'src/*.js', 'src/*.pegjs',
+          'test/**/*.js', 'src/*.js', 'src/*.pegjs',
           'test/sql/**/*.sql', 'test/json/**/*.json', 'Gruntfile.js'
         ],
         tasks: ['build', 'shell:debug']
@@ -188,11 +216,12 @@ module.exports = function(grunt) {
           },
         },
         files: [
-          'index.js', 'src/**/*.{js,css,html,pegjs}', 'Gruntfile.js'
+          'src/**/*.{js,css,html,pegjs}', 'Gruntfile.js'
         ],
         tasks: ['interactive']
       }
     },
+
     uglify: {
       options: {
         screwIE8: true,
@@ -200,9 +229,9 @@ module.exports = function(grunt) {
           except: ['sqliteParser']
         },
       },
-      dist: {
+      demo: {
         files: {
-          'dist/sqlite-parser-min.js': ['dist/sqlite-parser.js']
+          'demo/sqlite-parser-demo.js': ['.tmp/sqlite-parser-demo.js']
         }
       },
       demo: {
@@ -212,13 +241,14 @@ module.exports = function(grunt) {
         }
       }
     },
+
     cssmin: {
       interactive: {
         options: {
           processImport: true
         },
         files: {
-          '.tmp/css/sqlite-parser-demo.css': [
+          '.tmp/sqlite-parser-demo.css': [
             'node_modules/codemirror/lib/codemirror.css',
             'node_modules/codemirror/addon/fold/foldgutter.css',
             'node_modules/codemirror/theme/monokai.css',
@@ -227,29 +257,32 @@ module.exports = function(grunt) {
         }
       }
     },
+
     usebanner: {
       options: {
         position: 'top',
         linebreak: true
       },
-      dist: {
+      release: {
         options: {
           banner: getBanner(false)
         },
-        files: {
-          src: [
-            'dist/sqlite-parser-min.js',
-            'dist/sqlite-parser.js'
-          ]
-        }
+        files: [{
+          filter: 'isFile',
+          expand: true,
+          cwd: 'lib/',
+          src: ['*.js'],
+          dest: 'lib/'
+        }]
       },
-      demolib: {
+      demo: {
         options: {
-          banner: getBanner(false)
+          banner: getBanner(true)
         },
         files: {
           src: [
-            'demo/js/sqlite-parser.js'
+            'demo/sqlite-parser-demo.js',
+            'demo/sqlite-parser-demo.css'
           ]
         }
       },
@@ -265,6 +298,7 @@ module.exports = function(grunt) {
         }
       }
     },
+
     replace: {
       options: {
         patterns: [
@@ -274,14 +308,42 @@ module.exports = function(grunt) {
           }
         ]
       },
-      dist: {
+      interactive: {
         files: [{
           expand: true,
-          cwd: 'dist/',
-          src: 'sqlite-parser*.js',
-          dest: 'dist/'
+          cwd: '.tmp/',
+          src: 'index.js',
+          dest: '.tmp/'
+        }]
+      },
+      bin: {
+        files: [{
+          src: 'bin/sqlite-parser',
+          dest: 'bin/sqlite-parser'
         }]
       }
+    },
+
+    concurrent: {
+      interactive: [
+        'copy:interactive',
+        'browserify:interactive'
+      ],
+      live: [
+        'interactive',
+        [ 'clean:interactive', 'cssmin:interactive' ]
+      ],
+      demo1: [
+        'cssmin:interactive',
+        [ 'demobuild', 'replace:interactive', 'shell:test', 'concurrent:interactive' ]
+      ],
+      demo2: [
+        'uglify:demo',
+        'copy:demo'
+      ],
+      release: [
+        [ 'demo', 'copy:release', 'usebanner:release' ],
+      ]
     }
   });
 
@@ -291,8 +353,12 @@ module.exports = function(grunt) {
     'build'
   ]);
   grunt.registerTask('build', [
-    'clean:build', 'shell:build', 'copy:build'
+    'clean:build',
+    'shell:build',
+    'babel:build'
   ]);
+  ]);
+
   grunt.registerTask('test', [
     'build', 'shell:test'
   ]);
@@ -302,6 +368,7 @@ module.exports = function(grunt) {
   grunt.registerTask('testprocess', [
     'clean:testProcess', 'shell:testProcess'
   ]);
+
   grunt.registerTask('testwatch', [
     'test', 'watch:test'
   ]);
@@ -311,24 +378,31 @@ module.exports = function(grunt) {
   grunt.registerTask('rewrite-json', [
     'build', 'shell:rewrite'
   ]);
+
   grunt.registerTask('interactive', [
-    'clean:interactive', 'minidist', 'copy:interactive',
-    'cssmin:interactive', 'browserify:interactive'
+    'build',
+    'concurrent:interactive'
   ]);
   grunt.registerTask('live', [
-    'interactive', 'connect:server', 'watch:interactive'
+    'concurrent:live',
+    'connect:server',
+    'watch:interactive'
   ]);
+
   grunt.registerTask('demo', [
-    'interactive', 'clean:demo', 'copy:demo', 'uglify:demo',
-    'usebanner:demo', 'usebanner:demolib'
+    'clean:demo',
+    'concurrent:demo1',
+    'concurrent:demo2',
+    'usebanner:demo'
   ]);
-  grunt.registerTask('minidist', [
-    'default', 'clean:dist', 'browserify:dist', 'replace:dist'
+  grunt.registerTask('demobuild', [
+    'clean:build',
+    'shell:build',
+    'babel:demo'
   ]);
-  grunt.registerTask('dist', [
-    'minidist', 'uglify:dist', 'usebanner:dist'
-  ]);
+
+
   grunt.registerTask('release', [
-    'test', 'demo', 'dist', 'clean:interactive'
+    'concurrent:release'
   ]);
 };

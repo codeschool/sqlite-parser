@@ -4,7 +4,7 @@ import _glob from 'glob';
 import {all, each, promisify} from 'bluebird';
 import { basename, relative, dirname } from 'path';
 import _ from 'lodash';
-import parser from '../../index';
+import parser from '../../.tmp/index';
 import prettyjson from 'prettyjson';
 
 const read = promisify(readFile);

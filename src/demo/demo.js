@@ -1,7 +1,8 @@
 /**
 * sqlite-parser demo
 */
-import CodeMirror from 'codemirror';
+var CodeMirror = require('codemirror');
+var sqliteParser = require('sqlite-parser');
 
 require('foldgutter');
 require('brace-fold');
