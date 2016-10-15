@@ -14,6 +14,9 @@
     "ast"
   ],
   "main": "lib/index.js",
+  "bin": {
+    "sqlite-parser": "bin/sqlite-parser"
+  },
   "map": {
     "./lib/streaming.js": {
       "browser": "./lib/streaming-shim.js"
@@ -25,6 +28,7 @@
   },
   "license": "MIT",
   "files": [
+    "bin/",
     "lib/",
     "LICENSE",
     "CHANGELOG.md",

@@ -2,12 +2,13 @@ var path = require('path');
 var fs = require('fs');
 
 module.exports = function(grunt) {
-  function getBanner(isDemo) {
-    return '/*!\n' +
-     ' * <%= pkg.name %>' + (isDemo ? '-demo' : '') + ' - v<%= pkg.version %>\n' +
-     ' * @copyright 2015-<%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
-     ' * @author Nick Wronski <nick@javascript.com>\n' +
-     ' */';
+  function getBanner(isDemo, isBin) {
+    return (isBin ? '#!/usr/bin/env node\n' : '') +
+      '/*!\n' +
+      ' * <%= pkg.name %>' + (isDemo ? '-demo' : '') + ' - v<%= pkg.version %>\n' +
+      ' * @copyright 2015-<%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
+      ' * @author Nick Wronski <nick@javascript.com>\n' +
+      ' */';
   }
   function getCmdString(cmd, args) {
     if (!args) args = '';
@@ -55,6 +56,12 @@ module.exports = function(grunt) {
           dest: '.tmp/'
         }]
       },
+
+      bin: {
+        files: {
+          'bin/sqlite-parser': 'src/bin/sqlite-parser.js'
+        }
+      }
     },
 
 
@@ -237,10 +244,9 @@ module.exports = function(grunt) {
           'demo/sqlite-parser-demo.js': ['.tmp/sqlite-parser-demo.js']
         }
       },
-      demo: {
+      bin: {
         files: {
-          'demo/js/sqlite-parser-demo.js': ['.tmp/js/sqlite-parser-demo.js'],
-          'demo/js/sqlite-parser.js': ['.tmp/js/sqlite-parser.js']
+          'bin/sqlite-parser': ['bin/sqlite-parser']
         }
       }
     },
@@ -289,14 +295,13 @@ module.exports = function(grunt) {
           ]
         }
       },
-      demo: {
+      bin: {
         options: {
-          banner: getBanner(true)
+          banner: getBanner(false, true)
         },
         files: {
           src: [
-            'demo/js/sqlite-parser-demo.js',
-            'demo/css/sqlite-parser-demo.css'
+            'bin/sqlite-parser'
           ]
         }
       }
@@ -346,6 +351,7 @@ module.exports = function(grunt) {
       ],
       release: [
         [ 'demo', 'copy:release', 'usebanner:release' ],
+        [ 'bin', 'replace:bin', 'usebanner:bin' ]
       ]
     }
   });
@@ -360,6 +366,10 @@ module.exports = function(grunt) {
     'shell:build',
     'babel:build'
   ]);
+
+  grunt.registerTask('bin', [
+    'clean:bin',
+    'babel:bin'
   ]);
 
   grunt.registerTask('test', [
