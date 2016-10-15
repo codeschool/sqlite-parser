@@ -1,13 +1,24 @@
 /**
  * sqlite-parser
  */
-import { parse, SyntaxError as PegSyntaxError } from './lib/parser';
-import { Tracer } from './lib/tracer';
+import { parse, SyntaxError as PegSyntaxError } from './parser';
+import { Tracer } from './tracer';
+import { SqliteParserTransform } from './streaming';
 
-export default function sqliteParser(source, callback) {
+export default function sqliteParser(source, options, callback) {
   const t = Tracer();
+
+  if (arguments.length === 2) {
+    if (typeof options === 'function') {
+      callback = options;
+      options = {};
+    }
+  }
   const isAsync = typeof callback === 'function';
-  const opts = { 'tracer': t };
+  const opts = { 'tracer': t, 'startRule': 'start' };
+  if (options.streaming) {
+    opts['startRule'] = 'start_streaming';
+  }
   if (isAsync) {
     // Async
     setTimeout(function () {
@@ -29,6 +40,7 @@ export default function sqliteParser(source, callback) {
   }
 };
 
+sqliteParser['SqliteParserTransform'] = SqliteParserTransform;
 
 sqliteParser['NAME'] = 'sqlite-parser';
 sqliteParser['VERSION'] = '@@VERSION';

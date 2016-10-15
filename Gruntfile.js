@@ -16,7 +16,7 @@ module.exports = function(grunt) {
   }
   const customArgs = {
     mocha: 'test/**/*-spec.js --colors --bail --compilers=js:babel-core/register',
-    pegjs: `--trace --cache --optimize size --output lib/parser.js src/grammar.pegjs`
+    pegjs: `--trace --cache --optimize size --allowed-start-rules 'start,start_streaming' --output src/parser.js src/grammar.pegjs`
   };
 
   const tmpDir = './.tmp/';
@@ -80,6 +80,7 @@ module.exports = function(grunt) {
             'mode-javascript': './node_modules/codemirror/mode/javascript/javascript',
             'mode-sql': './node_modules/codemirror/mode/sql/sql',
             'sqlite-parser': './.tmp/index.js',
+            './streaming': './.tmp/streaming-shim.js'
           },
         },
         require: [
@@ -101,8 +102,10 @@ module.exports = function(grunt) {
         files: [{
           filter: 'isFile',
           expand: true,
-          src: ['*.js'],
           cwd: '.tmp/',
+          src: [
+            'index.js', 'parser.js', 'streaming.js', 'streaming-shim.js', 'tracer.js'
+          ],
           dest: 'lib/'
         }]
       },

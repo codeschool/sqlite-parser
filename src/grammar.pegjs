@@ -83,9 +83,13 @@
 
 /* Start Grammar */
 start
-  = o semi_optional s:( stmt_list )? semi_optional
-  {
-    return Object.assign({}, s);
+  = o semi_optional s:( stmt_list )? semi_optional {
+    return s;
+  }
+
+start_streaming
+  = o semi_optional s:( stmt ) semi_optional  {
+    return s;
   }
 
 stmt_list
