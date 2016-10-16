@@ -31,6 +31,7 @@ module.exports = function(grunt) {
       options: {
         compact: true,
         comments: false,
+        sourceMaps: false,
         presets: ['es2015'],
         plugins: ['add-module-exports']
       },
@@ -46,9 +47,6 @@ module.exports = function(grunt) {
         }]
       },
       demo: {
-        options: {
-          sourceMaps: false
-        },
         files: [{
           src: ['*.js'],
           expand: true,
@@ -362,68 +360,82 @@ module.exports = function(grunt) {
   grunt.registerTask('default', [
     'dist'
   ]);
+  // Create new build in .tmp/ folder
   grunt.registerTask('build', [
     'clean:build',
     'shell:build',
     'babel:build'
   ]);
-
+  // Create new lib folder
   grunt.registerTask('dist', [
     'demobuild',
     'clean:release',
     'copy:release',
     'usebanner:release'
   ]);
+  // Create new version of command line utility at bin/sqlite-parser
   grunt.registerTask('bin', [
     'clean:bin',
     'babel:bin',
     'replace:bin',
     'usebanner:bin'
   ]);
-
+  // Build parser to .tmp/ and run tests
   grunt.registerTask('test', [
     'build', 'shell:test'
   ]);
+  // Build parser to .tmp/ and run extended test suite
   grunt.registerTask('testall', [
     'build', 'shell:testAll'
   ]);
+  // Re-process every .test file in test/raw/ to .sql files in
+  // test/sql/official-suite
   grunt.registerTask('testprocess', [
     'clean:testProcess', 'shell:testProcess'
   ]);
-
+  // Watch the parser and then build to .tmp/ and run tests on changes
   grunt.registerTask('testwatch', [
     'test', 'watch:test'
   ]);
+  // Is testwatch but also logs the generated ASTs as formatted JSON
+  // objects in the test output
   grunt.registerTask('debug', [
     'build', 'shell:debug', 'watch:debug'
   ]);
+  // Build the parser to .tmp/ and run tests, but take the output from the
+  // parser use it to overwrite the existing test JSON files in test/json/
   grunt.registerTask('rewrite-json', [
     'build', 'shell:rewrite'
   ]);
-
+  // Rebuild the interactive demo site to .tmp/
   grunt.registerTask('interactive', [
     'build',
     'concurrent:interactive'
   ]);
+  // Watch the parser and demo files and then build parser and interactive
+  // demo to .tmp/ on changes
   grunt.registerTask('live', [
     'concurrent:live',
     'connect:server',
     'watch:interactive'
   ]);
-
+  // Build the interactive demo as a index.html and one minified CSS and
+  // one minified JS bundle to the demo/ folder
   grunt.registerTask('demo', [
     'clean:demo',
     'concurrent:demo1',
     'concurrent:demo2',
     'usebanner:demo'
   ]);
+  // Build the parser to .tmp/ but do not include the inline sourcemaps
   grunt.registerTask('demobuild', [
     'clean:build',
     'shell:build',
     'babel:demo'
   ]);
-
-
+  // Create new command line parser at bin/sqlite-parser, create release
+  // version of the parser in lib/ and then create a new copy of the
+  // release version of the interactive demo in demo/
   grunt.registerTask('release', [
     'concurrent:release'
   ]);
