@@ -351,8 +351,8 @@ module.exports = function(grunt) {
         'copy:demo'
       ],
       release: [
-        [ 'demo', 'clean:release', 'copy:release', 'usebanner:release' ],
-        [ 'bin', 'replace:bin', 'usebanner:bin' ]
+        'releaseall',
+        'bin'
       ]
     }
   });
@@ -370,7 +370,9 @@ module.exports = function(grunt) {
 
   grunt.registerTask('bin', [
     'clean:bin',
-    'babel:bin'
+    'babel:bin',
+    'replace:bin',
+    'usebanner:bin'
   ]);
 
   grunt.registerTask('test', [
@@ -418,5 +420,11 @@ module.exports = function(grunt) {
 
   grunt.registerTask('release', [
     'concurrent:release'
+  ]);
+  grunt.registerTask('releaseall', [
+    'demo',
+    'clean:release',
+    'copy:release',
+    'usebanner:release'
   ]);
 };
