@@ -3,7 +3,7 @@
  */
 import { parse, SyntaxError as PegSyntaxError } from './parser';
 import { Tracer } from './tracer';
-import { SqliteParserTransform } from './streaming';
+import { SqliteParserTransform, SingleNodeTransform } from './streaming';
 
 export default function sqliteParser(source, options, callback) {
   const t = Tracer();
@@ -42,6 +42,10 @@ export default function sqliteParser(source, options, callback) {
 
 sqliteParser['createParser'] = function () {
   return new SqliteParserTransform();
+};
+
+sqliteParser['createStitcher'] = function () {
+  return new SingleNodeTransform();
 };
 
 sqliteParser['NAME'] = 'sqlite-parser';

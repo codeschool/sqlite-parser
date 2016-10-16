@@ -34,7 +34,7 @@ export class SqliteParserTransform extends Transform {
       if (nextAst != null) {
         let serialized;
         try {
-          serialized = JSON.stringify(nextAst);
+          serialized = JSON.stringify(nextAst, null, 2);
         } catch (e) {
           // Serialize error
           return callback(e);
@@ -53,6 +53,29 @@ export class SqliteParserTransform extends Transform {
     if (this.carryover.trim() !== '') {
       callback(this.lastError);
     }
+    callback();
+  }
+}
+
+export class SingleNodeTransform extends Transform {
+  constructor(options) {
+    super(options);
+    this.push(`{\n  "type": "statement",\n  "variant": "list",\n  "statement": [\n    `);
+    this.queries = 0;
+  }
+
+  _transform(data, encoding, callback) {
+    data = data.toString();
+    if (this.queries !== 0) {
+      data = `,\n${data}`;
+    }
+    this.queries += 1;
+    this.push(data.replace(/\n/g, '\n    '));
+    callback();
+  }
+
+  _flush(callback) {
+    this.push(`\n  ]\n}`);
     callback();
   }
 }
