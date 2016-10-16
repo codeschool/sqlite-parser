@@ -32,8 +32,9 @@ export class SqliteParserTransform extends Transform {
         this.lastError = e;
       }
       if (nextAst != null) {
+        let serialized;
         try {
-          const serialized = JSON.stringify(nextAst);
+          serialized = JSON.stringify(nextAst);
         } catch (e) {
           // Serialize error
           return callback(e);
