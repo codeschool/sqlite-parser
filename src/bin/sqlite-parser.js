@@ -1,51 +1,58 @@
-var parser = require('../lib/index');
-var argv = process.argv.slice(2);
-var fs = require('fs');
-var path = require('path');
+import parser from '../lib/index';
+import {
+  stat,
+  writeFile,
+  mkdir,
+  readFile
+} from 'fs';
+import {
+  normalize,
+  dirname
+} from 'path';
 
-var args = { _: [] };
-var last = null;
-argv.forEach(function (arg, i) {
-  if (arg.indexOf('-') === 0) {
-    if (last) {
-      args[last] = true;
-    }
-    const cur = arg.slice(2);
-    if (i === argv.length - 1) {
-      args[cur] = true;
-    } else {
-      last = cur;
-    }
-  } else if (last) {
-    args[last] = arg;
-    last = null;
-  } else {
-    args._.push(arg);
-  }
-});
-
-if (args['help']) {
-  console.log(`Usage: sqlite-parser infile [--output outfile]`);
-  process.exit(0);
-}
+const args = resolveArgs(process.argv.slice(2));
 
 if (args['version']) {
   console.log(`sqlite-parser v@@VERSION`);
   process.exit(0);
 }
 
-if (args._.length === 0) {
-  throw new Error('No input filename specified.');
+if (args['help'] || args._.length === 0) {
+  console.log(`Usage: sqlite-parser infile [--output outfile]`);
+  process.exit(0);
 }
 
-var input = path.normalize(args._[0]);
-var output = args['o'] || args['output'];
+const input = normalize(args._[0]);
+let output = args['o'] || args['output'];
 
 if (output) {
-  output = path.normalize(output);
+  output = normalize(output);
 }
 
-fs.stat(input, startCallback);
+stat(input, function startCallback(err) {
+  if (err) { return error(err); }
+  readFile(input, 'utf8', readCallback);
+});
+
+function resolveArgs(argv) {
+  const args = { _: [] };
+  let last = null;
+  const isNewArg = (arg) => !arg || arg.indexOf('-') === 0;
+  const aliases = { o: 'output', v: 'version', h: 'help' };
+  for (let i = 0; i < argv.length; i += 1) {
+    const arg = argv[i];
+    if (isNewArg(arg)) {
+      const cur = arg.indexOf('--') !== -1 ? arg.slice(2) : aliases[arg.slice(1)];
+      const peek = argv.length - 1 !== i ? argv[i + 1] : null;
+      const peekNew = isNewArg(peek);
+      args[cur] = peekNew ? true : peek;
+      if (!peekNew) { i += 1; }
+    } else {
+      args._.push(arg);
+    }
+  }
+  return args;
+}
 
 function error(err) {
   console.error(err.message);
@@ -53,33 +60,37 @@ function error(err) {
 }
 
 function writeOut(result, outPath) {
-  var outDir = path.dirname(outPath);
+  const outDir = dirname(outPath);
 
   function writeCallback(err) {
     if (err) { return error(err) }
-    // done
-    console.log(`Wrote ${outPath}`);
     process.exit(0);
   }
 
   function mkdirCallback(err) {
     if (err) { return error(err) }
-    fs.writeFile(outPath, result, writeCallback);
+    writeFile(outPath, result, writeCallback);
   }
 
   function statCallback(err) {
     if (err) {
-      return fs.mkdir(outDir, mkdirCallback);
+      return mkdir(outDir, mkdirCallback);
     }
     mkdirCallback();
   }
 
-  fs.stat(outDir, statCallback);
+  stat(outDir, statCallback);
 }
 
 function parserCallback(err, ast) {
   if (err) { return error(err) }
-  var result = JSON.stringify(ast, null, 2);
+  let result;
+
+  try {
+    result = JSON.stringify(ast, null, 2);
+  } catch (e) {
+    return error(e);
+  }
 
   if (output) {
     writeOut(result, output);
@@ -92,9 +103,4 @@ function parserCallback(err, ast) {
 function readCallback(err, data) {
   if (err) { return error(err) }
   parser(data, parserCallback);
-}
-
-function startCallback(err) {
-  if (err) { return error(err); }
-  fs.readFile(input, 'utf8', readCallback);
 }
