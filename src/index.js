@@ -40,7 +40,9 @@ export default function sqliteParser(source, options, callback) {
   }
 };
 
-sqliteParser['SqliteParserTransform'] = SqliteParserTransform;
+sqliteParser['createParser'] = function () {
+  return new SqliteParserTransform();
+};
 
 sqliteParser['NAME'] = 'sqlite-parser';
 sqliteParser['VERSION'] = '@@VERSION';
