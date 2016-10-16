@@ -57,6 +57,60 @@ sqliteParser(query, function (err, ast) {
 });
 ```
 
+### Use parser on Node streams *experimental*
+
+This library also includes *experimental* support as a
+[stream transform](https://nodejs.org/api/stream.html) that can accept a
+_readable_ stream of SQL statements and produce a JSON string, representing
+the AST of each statement, as it is read and transformed. Using this method,
+the parser can handle files containing hundreds or thousands of queries at
+once without running into memory limitations. The AST for each statement is
+pushed down the stream as soon as it is read and parsed instead of reading the
+entire file into memory before parsing begins.
+
+``` javascript
+var parserTransform = require('sqlite-parser').createParser();
+var readStream = require('fs').createReadStream('./large-input-file.sql');
+
+readStream.pipe(parserTransform);
+parserTransform.pipe(process.stdout);
+
+parser.on('error', function (err) {
+  console.log(err);
+  process.exit(1);
+});
+
+parser.on('finish', function () {
+  process.exit(0);
+});
+```
+
+_Note:_ To pipe the output into a file that contains a single valid JSON
+structure, the output of the parser steam transform needs to be wrapped in
+statement list node where every statement is separated by a comma.
+
+``` javascript
+var fs = require('fs');
+var sqliteParser = require('sqlite-parser');
+var parserTransform = sqliteParser.createParser();
+var singleNodeTransform = sqliteParser.createStitcher();
+var readStream = fs.createReadStream('./large-input-file.sql');
+var writeStream = fs.createWriteStream('./large-output-file.json');
+
+readStream.pipe(parserTransform);
+parserTransform.pipe(singleNodeTransform);
+singleNodeTransform.pipe(writeStream);
+
+parserTransform.on('error', function (err) {
+  console.log(err);
+  process.exit(1);
+});
+
+writeStream.on('finish', function () {
+  process.exit(0);
+});
+```
+
 ## Syntax Errors
 
 This parser will try to create _smart_ error messages when it cannot parse
