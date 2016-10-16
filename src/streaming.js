@@ -75,7 +75,7 @@ export class SingleNodeTransform extends Transform {
   }
 
   _flush(callback) {
-    this.push(`\n  ]\n}`);
+    this.push(`\n  ]\n}\n`);
     callback();
   }
 }

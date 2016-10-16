@@ -75,12 +75,12 @@ var readStream = require('fs').createReadStream('./large-input-file.sql');
 readStream.pipe(parserTransform);
 parserTransform.pipe(process.stdout);
 
-parser.on('error', function (err) {
+parserTransform.on('error', function (err) {
   console.log(err);
   process.exit(1);
 });
 
-parser.on('finish', function () {
+parserTransform.on('finish', function () {
   process.exit(0);
 });
 ```
