@@ -133,9 +133,10 @@ module.exports = function(grunt) {
     },
 
     clean: {
-      build: ['.tmp/*.js', 'lib/**/*', 'src/parser.js'],
+      build: ['.tmp/*.js', 'src/parser.js'],
       interactive: ['.tmp/*.css'],
       demo: ['demo/**/*'],
+      release: ['lib/**/*'],
       bin: ['bin/**/*'],
       testProcess: ['test/sql/official-suite/**/*.sql']
     },
@@ -350,7 +351,7 @@ module.exports = function(grunt) {
         'copy:demo'
       ],
       release: [
-        [ 'demo', 'copy:release', 'usebanner:release' ],
+        [ 'demo', 'clean:release', 'copy:release', 'usebanner:release' ],
         [ 'bin', 'replace:bin', 'usebanner:bin' ]
       ]
     }
