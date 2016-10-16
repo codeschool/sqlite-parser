@@ -158,7 +158,7 @@ module.exports = function(grunt) {
         options: {
           failOnError: true
         },
-        command: `ALL_TESTS=true ${getCmdString('mocha', '--reporter=list --timeout=90000')}`
+        command: `ALL_TESTS=true ${getCmdString('mocha', '--reporter=list --timeout=45000')}`
       },
       debug: {
         options: {
