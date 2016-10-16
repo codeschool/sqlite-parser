@@ -16,7 +16,7 @@ export default function sqliteParser(source, options, callback) {
   }
   const isAsync = typeof callback === 'function';
   const opts = { 'tracer': t, 'startRule': 'start' };
-  if (options.streaming) {
+  if (options && options.streaming) {
     opts['startRule'] = 'start_streaming';
   }
   if (isAsync) {
