@@ -18,7 +18,10 @@ if (args['version']) {
 }
 
 if (args['help'] || args._.length === 0) {
-  console.log(`Usage: sqlite-parser infile [--output outfile]`);
+  console.log(`Usage:\tsqlite-parser [infile]\n`);
+  console.log(`Option\t\t\tAlias\tDescription`);
+  console.log(`--output [outfile]\t-o\tWrite output to a file instead of stdout`);
+  console.log(`--version\t\t-v\tGet current parser version`);
   process.exit(0);
 }
 
