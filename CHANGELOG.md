@@ -45,6 +45,30 @@ All notable changes to this project will be documented in this file.
     });
     ```
 
+  - To pipe the output into a file that contains a single valid JSON structure, the output of the parser steam transform needs to be wrapped in statement list node where every statement is separated by a comma.
+
+    ``` javascript
+    var fs = require('fs');
+    var sqliteParser = require('sqlite-parser');
+    var parserTransform = sqliteParser.createParser();
+    var singleNodeTransform = sqliteParser.createStitcher();
+    var readStream = fs.createReadStream('./large-input-file.sql');
+    var writeStream = fs.createWriteStream('./large-output-file.json');
+
+    readStream.pipe(parserTransform);
+    parserTransform.pipe(singleNodeTransform);
+    singleNodeTransform.pipe(writeStream);
+
+    parserTransform.on('error', function (err) {
+      console.error(err);
+      process.exit(1);
+    });
+
+    writeStream.on('finish', function () {
+      process.exit(0);
+    });
+    ```
+
 - Added missing `ATTACH DATABASE` statement. It will pair nicely with the existing `DETACH DATABASE` statement.
 
   ``` sql
