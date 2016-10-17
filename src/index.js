@@ -22,13 +22,13 @@ export default function sqliteParser(source, options, callback) {
   if (isAsync) {
     // Async
     setTimeout(function () {
-      let result;
+      let result, err;
       try {
         result = parse(source, opts);
       } catch (e) {
-        callback(e instanceof PegSyntaxError ? t.smartError(e) : e);
+        err = e instanceof PegSyntaxError ? t.smartError(e) : e;
       }
-      callback(null, result);
+      callback(err, result);
     }, 0);
   } else {
     // Sync
