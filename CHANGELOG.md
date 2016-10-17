@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
-## [v1.0.0-beta] - 2016-10-07
+## [v1.0.0-rc1] - 2016-10-16
 ### Added
 - The root node of the AST now has `type` and `variant` properties:
 
@@ -19,13 +19,63 @@ All notable changes to this project will be documented in this file.
   }
   ```
 
+- There is now a command line version of the parser when it is installed as a global module (e.g., `npm i -g sqlite-parser`). The `sqlite-parser` command is then available to use to parse input SQL files and write the results to stdout or a JSON file. Additional usage instructions and options available through `sqlite-parser --help`.
+
+  ```
+  sqlite-parser input.sql --output foo.json
+  ```
+
+- To allow users to parse arbitrarily long SQL files or other readable stream sources, there is now a stream transform that can accept a readable stream and then push (write) out JSON strings of the ASTs for individual statements.
+  - The AST for each statement is pushed down the stream as soon as it is read and parsed instead of reading the entire file into memory before parsing begins.
+
+    ``` javascript
+    var parserTransform = require('sqlite-parser').createParser();
+    var readStream = require('fs').createReadStream('./large-input-file.sql');
+
+    readStream.pipe(parserTransform);
+    parserTransform.pipe(process.stdout);
+
+    parserTransform.on('error', function (err) {
+      console.error(err);
+      process.exit(1);
+    });
+
+    parserTransform.on('finish', function () {
+      process.exit(0);
+    });
+    ```
+
+  - To pipe the output into a file that contains a single valid JSON structure, the output of the parser steam transform needs to be wrapped in statement list node where every statement is separated by a comma.
+
+    ``` javascript
+    var fs = require('fs');
+    var sqliteParser = require('sqlite-parser');
+    var parserTransform = sqliteParser.createParser();
+    var singleNodeTransform = sqliteParser.createStitcher();
+    var readStream = fs.createReadStream('./large-input-file.sql');
+    var writeStream = fs.createWriteStream('./large-output-file.json');
+
+    readStream.pipe(parserTransform);
+    parserTransform.pipe(singleNodeTransform);
+    singleNodeTransform.pipe(writeStream);
+
+    parserTransform.on('error', function (err) {
+      console.error(err);
+      process.exit(1);
+    });
+
+    writeStream.on('finish', function () {
+      process.exit(0);
+    });
+    ```
+
 - Added missing `ATTACH DATABASE` statement. It will pair nicely with the existing `DETACH DATABASE` statement.
 
   ``` sql
   ATTACH DATABASE 'bees2.db' AS more_bees
   ```
 
-- SQLite allows you to enter basically anything you want for a datatype, such as the datatype for a column in a `CREATE TABLE` statement, because it doesn't enforce types you provide. So, the parser will accept almost any unquoted string in place of a datatype, and there is now a new affinity named `unknown` to classify any datatype that does not correspond to a known affinity. [ref1](http://stackoverflow.com/a/8417411) [ref2](http://www.sqlite.org/datatype3.html)
+- SQLite allows you to enter basically anything you want for a datatype, such as the datatype for a column in a `CREATE TABLE` statement, because it doesn't enforce types you provide. So, the parser will accept almost any unquoted string in place of a datatype. [ref1](http://stackoverflow.com/a/8417411) [ref2](http://www.sqlite.org/datatype3.html)
 
   ``` sql
   CREATE TABLE t1(x DINOSAUR, y BIRD_PERSON);
@@ -46,6 +96,9 @@ All notable changes to this project will be documented in this file.
   ```
 
 ### Changed
+- **BREAKING CHANGE** Instead of publishing this module on npm as a browserified and minified bundle, The transpiled ES2015 code in `lib/` is now published and I have left it up to the end user to decide if they want to browserify or minify the library. The combined unminified file sizes for the published version of the parser is now ~127kB.
+  - There is still a `dist/` folder containing the minified browserified bundle that comes in at ~81kB (7% reduction from `v0.14.5`). This is defined in the `package.json` as the browser version of the module, which is recognized by tools such as [jspm](http://jspm.io/) and [browserify](http://browserify.org/).
+
 - **BREAKING CHANGE** The `on` property of a `CREATE INDEX` statement is now treated as a table expression identifier, and has the corresponding `type` and `variant`:
 
   ``` json
@@ -979,8 +1032,8 @@ part of table names, column names, aliases, etc... This also addresses issues th
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v1.0.0-beta...HEAD
-[v1.0.0-beta]: https://github.com/codeschool/sqlite-parser/compare/v0.14.5...v1.0.0-beta
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v1.0.0-rc1...HEAD
+[v1.0.0-rc1]: https://github.com/codeschool/sqlite-parser/compare/v0.14.5...v1.0.0-rc1
 [v0.14.5]: https://github.com/codeschool/sqlite-parser/compare/v0.14.4...v0.14.5
 [v0.14.4]: https://github.com/codeschool/sqlite-parser/compare/v0.14.3...v0.14.4
 [v0.14.3]: https://github.com/codeschool/sqlite-parser/compare/v0.14.2...v0.14.3

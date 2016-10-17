@@ -1,12 +1,11 @@
 # Milestones for sqlite-parser
 
 ## **[1.0.0]** In progress
-- [ ] **[In Progress]** Finish standardizing AST format across all types of statements
-  - [ ] `ORDER BY`
-  - [ ] `LIMIT`
-  - [ ] `name` property across node types
-  - [ ] `type` and `variant` combine into single `type` property
-- [ ] **[In Progress]** Organize tests and SQL test queries by type and split out into different files/directories.
+- [x] **[In Progress]** Finish standardizing AST format across all types of statements
+  - [x] `ORDER BY`
+  - [x] `LIMIT`
+  - [x] `name` property across node types
+- [x] **[In Progress]** Organize tests and SQL test queries by type and split out into different files/directories.
 
 ## **[0.10.0]** Finished
 
@@ -158,21 +157,21 @@
         JOIN inventory AS i USING i.name, i.type
       ```
 
-      - [ ] *Has spec*
+      - [x] *Has spec*
 
   - [x] Query modifiers `WHERE`, `GROUP BY`, `HAVING`
     - [x] `WHERE`
-      - [ ] *Has spec*
+      - [x] *Has spec*
     - [x] `FROM`
-      - [ ] *Has spec*
+      - [x] *Has spec*
     - [x] `ORDER BY`
-      - [ ] *Has spec*
+      - [x] *Has spec*
     - [x] `GROUP BY`
-      - [ ] *Has spec*
+      - [x] *Has spec*
     - [x] `HAVING`  
-      - [ ] *Has spec*
+      - [x] *Has spec*
     - [x] `LIMIT`
-      - [ ] *Has spec*
+      - [x] *Has spec*
 - [x] `INSERT`
   - [x] Basic
 
@@ -229,15 +228,15 @@
         - [x] `CHECK`
           - [x] *Has spec*  
         - [x] `DEFAULT`
-          - [ ] *Has spec*  
+          - [x] *Has spec*  
         - [x] `COLLATE`
-          - [ ] *Has spec*  
+          - [x] *Has spec*  
         - [x] `FOREIGN KEY`
           - [x] *Has spec*  
   - [x] Create table `AS SELECT`
     - [x] *Has spec*
 - [x] `ALTER TABLE`
-  - [ ] *Has spec*
+  - [x] *Has spec*
 - [x] Transaction statement types
 
   ``` sql
@@ -264,7 +263,7 @@
   - [x] `ROLLBACK`
     - [x] *Has spec*
 - [x] Query plan `EXPLAIN QUERY PLAN stmt`
-  - [ ] *Has spec*
+  - [x] *Has spec*
 - [x] Multiple queries in batch
 
   ``` sql
@@ -340,7 +339,7 @@
     FROM dinosaurs
     ```
 
-- [ ] Expressions  
+- [x] Expressions  
   - [x] `CAST banana AS INT`
     - [x] *Has spec*
   - [x] `CASE`
@@ -374,14 +373,14 @@
     RAISE (ROLLBACK, 'hey there!')
     ```
 
-    - [ ] *Has spec*
+    - [x] *Has spec*
   - [x] `COLLATE`
 
     ``` sql
     bees COLLATE bees_collation
     ```
 
-    - [ ] *Has spec*
+    - [x] *Has spec*
   - [x] `LIKE`
 
     ``` sql
@@ -398,7 +397,7 @@
     FROM hats
     ```
 
-    - [ ] *Has spec*
+    - [x] *Has spec*
   - [x] Binary `IS`, `IS NOT`
 
     ``` sql
@@ -416,7 +415,7 @@
     WHERE x BETWEEN 2 AND 3
     ```
 
-    - [ ] *Has spec*
+    - [x] *Has spec*
   - [x] Expression lists
 
     ``` sql
@@ -479,20 +478,13 @@
       - **FIXED: now grouping correctly when using binary AND / OR**
 - [x] Literals
   - [x] `'string'`
-      - [ ] *Has spec*
   - [x] Decimal, Hex, Exponent `12`, `1.2`, `1E-9`, `0xe1e3`
-      - [ ] *Has spec*
   - [x] Signed number `-2.001`
-      - [ ] *Has spec*
 - [x] Bind parameters
   - [x] Numbered `?`, `?12`
-      - [ ] *Has spec*
   - [x] Named `@bees`
-      - [ ] *Has spec*
   - [x] TCL `$hey "Hey There"`
-      - [ ] *Has spec*
 - [x] BLOB `X'stuff'`
-    - [ ] *Has spec*
 - AST
   - [x] Initial AST Format
 
@@ -511,11 +503,11 @@
     }
     ```
 
-  - [ ] **BUG: AST should output normalized (lowercased) values for case-insentive data (e.g.: datatypes, keywords, etc...)**
-  - [ ] **ISSUE:** Need to normalize format across all statement types (e.g.: `CREATE TABLE`, `SELECT`)
-    - [ ] Normalize `CREATE`, `SELECT`, `INSERT`, `UPDATE`, `DROP`, `DELETE`
+  - [x] **BUG: AST should output normalized (lowercased) values for case-insentive data (e.g.: datatypes, keywords, etc...)**
+  - [x] **ISSUE:** Need to normalize format across all statement types (e.g.: `CREATE TABLE`, `SELECT`)
+    - [x] Normalize `CREATE`, `SELECT`, `INSERT`, `UPDATE`, `DROP`, `DELETE`
     - [x] Constraint versus Clause versus Condition (Table Constraint, Column Constraint, etc...)
-- [ ] Datatypes
+- [x] Datatypes
   - [x] SQLite
 
     | Expression                  | Resulting Affinity |
