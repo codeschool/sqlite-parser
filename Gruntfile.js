@@ -360,13 +360,13 @@ module.exports = function(grunt) {
   grunt.registerTask('default', [
     'dist'
   ]);
-  // Create new build in .tmp/ folder
+  // Create new build of the parser in .tmp/ folder
   grunt.registerTask('build', [
     'clean:build',
     'shell:build',
     'babel:build'
   ]);
-  // Create new lib folder
+  // Create new lib/ folder containing the release version of the parser
   grunt.registerTask('dist', [
     'demobuild',
     'clean:release',
@@ -404,7 +404,7 @@ module.exports = function(grunt) {
   ]);
   // Build the parser to .tmp/ and run tests, but take the output from the
   // parser use it to overwrite the existing test JSON files in test/json/
-  grunt.registerTask('rewrite-json', [
+  grunt.registerTask('rewritejson', [
     'build', 'shell:rewrite'
   ]);
   // Rebuild the interactive demo site to .tmp/
