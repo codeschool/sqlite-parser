@@ -64,16 +64,6 @@ module.exports = function(grunt) {
 
 
     browserify: {
-      dist: {
-        options: {
-          browserifyOptions: {
-            debug: true,
-            standalone: 'sqliteParser'
-          }
-        },
-        src: ['index.js'],
-        dest: 'dist/sqlite-parser.js'
-      },
       interactive: {
         options: {
           alias: {
@@ -99,6 +89,19 @@ module.exports = function(grunt) {
         ],
         src: ['src/demo/demo.js'],
         dest: '.tmp/sqlite-parser-demo.js'
+      },
+      browser: {
+        options: {
+          browserifyOptions: {
+            debug: false,
+            standalone: 'sqliteParser'
+          },
+          alias: {
+            './streaming': './.tmp/streaming-shim.js'
+          }
+        },
+        src: ['.tmp/index.js'],
+        dest: '.tmp/sqlite-parser.js'
       }
     },
 
@@ -134,6 +137,7 @@ module.exports = function(grunt) {
       build: ['.tmp/*.js', 'src/parser.js'],
       interactive: ['.tmp/*.css'],
       demo: ['demo/**/*'],
+      browser: ['dist/**/*'],
       release: ['lib/**/*'],
       bin: ['bin/**/*'],
       testProcess: ['test/sql/official-suite/**/*.sql']
@@ -243,9 +247,9 @@ module.exports = function(grunt) {
           'demo/sqlite-parser-demo.js': ['.tmp/sqlite-parser-demo.js']
         }
       },
-      bin: {
+      browser: {
         files: {
-          'bin/sqlite-parser': ['bin/sqlite-parser']
+          'dist/sqlite-parser.js': '.tmp/sqlite-parser.js'
         }
       }
     },
@@ -282,6 +286,14 @@ module.exports = function(grunt) {
           src: ['*.js'],
           dest: 'lib/'
         }]
+      },
+      browser: {
+        options: {
+          banner: getBanner(false)
+        },
+        files: {
+          src: ['dist/sqlite-parser.js']
+        }
       },
       demo: {
         options: {
@@ -323,6 +335,12 @@ module.exports = function(grunt) {
           dest: '.tmp/'
         }]
       },
+      browser: {
+        files: [{
+          src: 'dist/sqlite-parser.js',
+          dest: 'dist/sqlite-parser.js'
+        }]
+      },
       bin: {
         files: [{
           src: 'bin/sqlite-parser',
@@ -351,6 +369,10 @@ module.exports = function(grunt) {
       release: [
         'releaseall',
         'bin'
+      ],
+      releaseall: [
+        [ 'clean:release', 'copy:release', 'usebanner:release' ],
+        [ 'clean:browser', 'browserify:browser', 'uglify:browser', 'usebanner:browser' ],
       ]
     }
   });
@@ -372,6 +394,15 @@ module.exports = function(grunt) {
     'clean:release',
     'copy:release',
     'usebanner:release'
+  ]);
+  // Create minified browser bundle of parser at dist/sqlite-parser.js
+  grunt.registerTask('browser', [
+    'demobuild',
+    'clean:browser',
+    'browserify:browser',
+    'replace:browser',
+    'uglify:browser',
+    'usebanner:browser'
   ]);
   // Create new version of command line utility at bin/sqlite-parser
   grunt.registerTask('bin', [
@@ -441,8 +472,6 @@ module.exports = function(grunt) {
   ]);
   grunt.registerTask('releaseall', [
     'demo',
-    'clean:release',
-    'copy:release',
-    'usebanner:release'
+    'concurrent:releaseall'
   ]);
 };

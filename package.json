@@ -22,12 +22,17 @@
       "browser": "./lib/streaming-shim.js"
     }
   },
+  "browser": "dist/sqlite-parser.js",
   "scripts": {
     "test": "grunt test",
     "build": "grunt release"
   },
+  "engines": {
+    "node": ">=4"
+  },
   "license": "MIT",
   "files": [
+    "dist/",
     "bin/",
     "lib/",
     "LICENSE",

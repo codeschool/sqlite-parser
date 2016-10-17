@@ -46,6 +46,9 @@ All notable changes to this project will be documented in this file.
   ```
 
 ### Changed
+- **BREAKING CHANGE** Instead of publishing this module on npm as a browserified and minified bundle, The transpiled ES2015 code in `lib/` is now published and I have left it up to the end user to decide if they want to browserify or minify the library. The combined unminified file sizes for the published version of the parser is now ~127kB.
+  - There is still a `dist/` folder containing the minified browserified bundle that comes in at ~81kB (7% reduction from `v0.14.5`). This is defined in the `package.json` as the browser version of the module, which is recognized by tools such as [jspm](http://jspm.io/) and [browserify](http://browserify.org/).
+
 - **BREAKING CHANGE** The `on` property of a `CREATE INDEX` statement is now treated as a table expression identifier, and has the corresponding `type` and `variant`:
 
   ``` json
