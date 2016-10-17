@@ -19,6 +19,32 @@ All notable changes to this project will be documented in this file.
   }
   ```
 
+- There is now a command line version of the parser when it is installed as a global module (e.g., `npm i -g sqlite-parser`). The `sqlite-parser` command is then available to use to parse input SQL files and write the results to stdout or a JSON file. Additional usage instructions and options available through `sqlite-parser --help`.
+
+  ```
+  sqlite-parser input.sql --output foo.json
+  ```
+
+- To allow users to parse arbitrarily long SQL files or other readable stream sources, there is now a stream transform that can accept a readable stream and then push (write) out JSON strings of the ASTs for individual statements.
+  - The AST for each statement is pushed down the stream as soon as it is read and parsed instead of reading the entire file into memory before parsing begins.
+
+    ``` javascript
+    var parserTransform = require('sqlite-parser').createParser();
+    var readStream = require('fs').createReadStream('./large-input-file.sql');
+
+    readStream.pipe(parserTransform);
+    parserTransform.pipe(process.stdout);
+
+    parserTransform.on('error', function (err) {
+      console.error(err);
+      process.exit(1);
+    });
+
+    parserTransform.on('finish', function () {
+      process.exit(0);
+    });
+    ```
+
 - Added missing `ATTACH DATABASE` statement. It will pair nicely with the existing `DETACH DATABASE` statement.
 
   ``` sql
