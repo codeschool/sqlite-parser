@@ -9,7 +9,7 @@ This JavaScript library parses SQLite queries to generate
 _abstract syntax tree_ (AST) representations of the parsed statements.
 
 Try out the
-[interactive demo]((http://codeschool.github.io/sqlite-parser/demo/))
+[interactive demo](http://codeschool.github.io/sqlite-parser/demo/)
 to see it in action.
 
 **This parser is written against the [SQLite 3 spec](https://www.sqlite.org/lang.html).**
