@@ -741,7 +741,9 @@ function_call_args "Function Call Arguments"
       }
     };
   }
-  / d:( args_list_distinct )? e:( expression_list ) {
+  / d:( args_list_distinct )? e:( expression_list ) & {
+    return !isOkay(d) || e['expression'].length > 0;
+  } {
     return {
       'args': Object.assign(e, d)
     };
@@ -2642,7 +2644,7 @@ id_database "Database Identifier"
     };
   }
 
-id_function
+id_function "Function Identifier"
   = d:( id_table_qualified )? n:( id_name ) {
     return {
       'type': 'identifier',
@@ -2702,7 +2704,7 @@ id_collation "Collation Identifier"
     };
   }
 
-id_savepoint "Savepoint Indentifier"
+id_savepoint "Savepoint Identifier"
   = n:( id_name )
   {
     return {
