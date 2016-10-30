@@ -466,10 +466,10 @@ expression_wrapped
 
 expression_recur
   = expression_wrapped
+  / expression_exists
   / expression_cast
   / expression_case
   / expression_raise
-  / expression_exists
   / expression_root
 
 expression_unary_collate
@@ -500,7 +500,7 @@ expression_unary_op
   = sym_tilde
   / sym_minus
   / sym_plus
-  / expression_is_not
+  / $( expression_is_not !EXISTS )
 
 expression_collate "COLLATE Expression"
   = c:( column_collate ) {
@@ -1815,7 +1815,12 @@ create_core_ine "IF NOT EXISTS Modifier"
     return {
       'condition': makeArray({
         'type': 'condition',
-        'condition': foldStringKey([ i, n, e ])
+        'variant': keyNode(i),
+        'condition': {
+          'type': 'expression',
+          'variant': keyNode(e),
+          'operator': foldString([ n, e ])
+        }
       })
     };
   }
@@ -2539,7 +2544,7 @@ stmt_drop "DROP Statement"
   }
 
 drop_start "DROP Keyword"
-  = s:( DROP ) o t:( drop_types ) i:( drop_conditions )?
+  = s:( DROP ) o t:( drop_types ) i:( drop_ie )?
   {
      return Object.assign({
        'variant': keyNode(s),
@@ -2552,20 +2557,19 @@ drop_types "DROP Type"
   = t:( TABLE / INDEX / TRIGGER / VIEW ) o
   { return keyNode(t); }
 
-drop_conditions
-  = c:( drop_ie )
-  {
-    return {
-      'condition': makeArray(c)
-    };
-  }
-
 drop_ie "IF EXISTS Keyword"
   = i:( IF ) o e:( EXISTS ) o
   {
     return {
-      'type': 'condition',
-      'condition': foldStringKey([ i, e ])
+      'condition': [{
+        'type': 'condition',
+        'variant': keyNode(i),
+        'condition': {
+          'type': 'expression',
+          'variant': keyNode(e),
+          'operator': keyNode(e)
+        }
+      }]
     };
   }
 
