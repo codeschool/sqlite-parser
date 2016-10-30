@@ -594,15 +594,14 @@ expression_case "CASE Expression"
   {
     return Object.assign({
       'type': 'expression',
-      'format': 'binary',
       'variant': keyNode(t),
-      'condition': flattenAll([ w, s ])
+      'expression': flattenAll([ w, s ])
     }, e);
   }
 case_expression
   = !WHEN e:( expression ) {
     return {
-      'expression': e
+      'discriminant': e
     };
   }
 expression_case_when "WHEN Clause"
@@ -610,9 +609,9 @@ expression_case_when "WHEN Clause"
   {
     return {
       'type': 'condition',
-      'format': keyNode(s),
-      'when': w,
-      'then': t
+      'variant': keyNode(s),
+      'condition': w,
+      'consequent': t
     };
   }
 expression_case_else "ELSE Clause"
@@ -620,8 +619,8 @@ expression_case_else "ELSE Clause"
   {
     return {
       'type': 'condition',
-      'format': keyNode(s),
-      'else': e
+      'variant': keyNode(s),
+      'consequent': e
     };
   }
 

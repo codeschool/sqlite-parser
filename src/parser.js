@@ -476,31 +476,30 @@ function peg$parse(input, options) {
     function(t, e, w, s) {
         return Object.assign({
           'type': 'expression',
-          'format': 'binary',
           'variant': keyNode(t),
-          'condition': flattenAll([ w, s ])
+          'expression': flattenAll([ w, s ])
         }, e);
       },
     function(e) {
         return {
-          'expression': e
+          'discriminant': e
         };
       },
     peg$otherExpectation("WHEN Clause"),
     function(s, w, t) {
         return {
           'type': 'condition',
-          'format': keyNode(s),
-          'when': w,
-          'then': t
+          'variant': keyNode(s),
+          'condition': w,
+          'consequent': t
         };
       },
     peg$otherExpectation("ELSE Clause"),
     function(s, e) {
         return {
           'type': 'condition',
-          'format': keyNode(s),
-          'else': e
+          'variant': keyNode(s),
+          'consequent': e
         };
       },
     function(v, p) {
