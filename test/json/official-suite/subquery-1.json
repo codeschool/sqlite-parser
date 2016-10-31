@@ -509,48 +509,42 @@
         {
           "type": "expression",
           "format": "unary",
-          "variant": "operation",
+          "variant": "exists",
           "expression": {
-            "type": "expression",
-            "format": "unary",
-            "variant": "exists",
-            "expression": {
-              "type": "statement",
-              "variant": "select",
-              "result": [
-                {
-                  "type": "identifier",
-                  "variant": "star",
-                  "name": "*"
-                }
-              ],
-              "from": {
+            "type": "statement",
+            "variant": "select",
+            "result": [
+              {
                 "type": "identifier",
-                "variant": "table",
-                "name": "t2"
-              },
-              "where": [
-                {
-                  "type": "expression",
-                  "format": "binary",
-                  "variant": "operation",
-                  "operation": "=",
-                  "left": {
-                    "type": "identifier",
-                    "variant": "column",
-                    "name": "y"
-                  },
-                  "right": {
-                    "type": "identifier",
-                    "variant": "column",
-                    "name": "a"
-                  }
-                }
-              ]
+                "variant": "star",
+                "name": "*"
+              }
+            ],
+            "from": {
+              "type": "identifier",
+              "variant": "table",
+              "name": "t2"
             },
-            "operator": "exists"
+            "where": [
+              {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "=",
+                "left": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "y"
+                },
+                "right": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "a"
+                }
+              }
+            ]
           },
-          "operator": "not"
+          "operator": "not exists"
         }
       ]
     },
@@ -3228,8 +3222,248 @@
       "having": {
         "type": "expression",
         "format": "unary",
-        "variant": "operation",
+        "variant": "exists",
         "expression": {
+          "type": "statement",
+          "variant": "select",
+          "result": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "b.x"
+            },
+            {
+              "type": "function",
+              "name": {
+                "type": "identifier",
+                "variant": "function",
+                "name": "avg"
+              },
+              "args": {
+                "type": "expression",
+                "variant": "list",
+                "expression": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "b.y"
+                  }
+                ]
+              }
+            }
+          ],
+          "from": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "t34",
+            "alias": "b"
+          },
+          "group": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "b.x"
+              }
+            ]
+          },
+          "having": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": ">",
+            "left": {
+              "type": "function",
+              "name": {
+                "type": "identifier",
+                "variant": "function",
+                "name": "avg"
+              },
+              "args": {
+                "type": "expression",
+                "variant": "list",
+                "expression": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "a.y"
+                  }
+                ]
+              }
+            },
+            "right": {
+              "type": "function",
+              "name": {
+                "type": "identifier",
+                "variant": "function",
+                "name": "avg"
+              },
+              "args": {
+                "type": "expression",
+                "variant": "list",
+                "expression": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "b.y"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "operator": "not exists"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "a.x"
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "avg"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "a.y"
+              }
+            ]
+          },
+          "alias": "avg1"
+        }
+      ],
+      "from": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "t34",
+        "alias": "a"
+      },
+      "group": {
+        "type": "expression",
+        "variant": "list",
+        "expression": [
+          {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a.x"
+          }
+        ]
+      },
+      "having": {
+        "type": "expression",
+        "format": "unary",
+        "variant": "exists",
+        "expression": {
+          "type": "statement",
+          "variant": "select",
+          "result": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "b.x"
+            },
+            {
+              "type": "function",
+              "name": {
+                "type": "identifier",
+                "variant": "function",
+                "name": "avg"
+              },
+              "args": {
+                "type": "expression",
+                "variant": "list",
+                "expression": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "b.y"
+                  }
+                ]
+              },
+              "alias": "avg2"
+            }
+          ],
+          "from": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "t34",
+            "alias": "b"
+          },
+          "group": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "b.x"
+              }
+            ]
+          },
+          "having": {
+            "type": "expression",
+            "format": "binary",
+            "variant": "operation",
+            "operation": ">",
+            "left": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "avg1"
+            },
+            "right": {
+              "type": "identifier",
+              "variant": "column",
+              "name": "avg2"
+            }
+          }
+        },
+        "operator": "not exists"
+      }
+    },
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "a.x"
+        },
+        {
+          "type": "function",
+          "name": {
+            "type": "identifier",
+            "variant": "function",
+            "name": "avg"
+          },
+          "args": {
+            "type": "expression",
+            "variant": "list",
+            "expression": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "a.y"
+              }
+            ]
+          }
+        },
+        {
           "type": "expression",
           "format": "unary",
           "variant": "exists",
@@ -3324,265 +3558,7 @@
               }
             }
           },
-          "operator": "exists"
-        },
-        "operator": "not"
-      }
-    },
-    {
-      "type": "statement",
-      "variant": "select",
-      "result": [
-        {
-          "type": "identifier",
-          "variant": "column",
-          "name": "a.x"
-        },
-        {
-          "type": "function",
-          "name": {
-            "type": "identifier",
-            "variant": "function",
-            "name": "avg"
-          },
-          "args": {
-            "type": "expression",
-            "variant": "list",
-            "expression": [
-              {
-                "type": "identifier",
-                "variant": "column",
-                "name": "a.y"
-              }
-            ]
-          },
-          "alias": "avg1"
-        }
-      ],
-      "from": {
-        "type": "identifier",
-        "variant": "table",
-        "name": "t34",
-        "alias": "a"
-      },
-      "group": {
-        "type": "expression",
-        "variant": "list",
-        "expression": [
-          {
-            "type": "identifier",
-            "variant": "column",
-            "name": "a.x"
-          }
-        ]
-      },
-      "having": {
-        "type": "expression",
-        "format": "unary",
-        "variant": "operation",
-        "expression": {
-          "type": "expression",
-          "format": "unary",
-          "variant": "exists",
-          "expression": {
-            "type": "statement",
-            "variant": "select",
-            "result": [
-              {
-                "type": "identifier",
-                "variant": "column",
-                "name": "b.x"
-              },
-              {
-                "type": "function",
-                "name": {
-                  "type": "identifier",
-                  "variant": "function",
-                  "name": "avg"
-                },
-                "args": {
-                  "type": "expression",
-                  "variant": "list",
-                  "expression": [
-                    {
-                      "type": "identifier",
-                      "variant": "column",
-                      "name": "b.y"
-                    }
-                  ]
-                },
-                "alias": "avg2"
-              }
-            ],
-            "from": {
-              "type": "identifier",
-              "variant": "table",
-              "name": "t34",
-              "alias": "b"
-            },
-            "group": {
-              "type": "expression",
-              "variant": "list",
-              "expression": [
-                {
-                  "type": "identifier",
-                  "variant": "column",
-                  "name": "b.x"
-                }
-              ]
-            },
-            "having": {
-              "type": "expression",
-              "format": "binary",
-              "variant": "operation",
-              "operation": ">",
-              "left": {
-                "type": "identifier",
-                "variant": "column",
-                "name": "avg1"
-              },
-              "right": {
-                "type": "identifier",
-                "variant": "column",
-                "name": "avg2"
-              }
-            }
-          },
-          "operator": "exists"
-        },
-        "operator": "not"
-      }
-    },
-    {
-      "type": "statement",
-      "variant": "select",
-      "result": [
-        {
-          "type": "identifier",
-          "variant": "column",
-          "name": "a.x"
-        },
-        {
-          "type": "function",
-          "name": {
-            "type": "identifier",
-            "variant": "function",
-            "name": "avg"
-          },
-          "args": {
-            "type": "expression",
-            "variant": "list",
-            "expression": [
-              {
-                "type": "identifier",
-                "variant": "column",
-                "name": "a.y"
-              }
-            ]
-          }
-        },
-        {
-          "type": "expression",
-          "format": "unary",
-          "variant": "operation",
-          "expression": {
-            "type": "expression",
-            "format": "unary",
-            "variant": "exists",
-            "expression": {
-              "type": "statement",
-              "variant": "select",
-              "result": [
-                {
-                  "type": "identifier",
-                  "variant": "column",
-                  "name": "b.x"
-                },
-                {
-                  "type": "function",
-                  "name": {
-                    "type": "identifier",
-                    "variant": "function",
-                    "name": "avg"
-                  },
-                  "args": {
-                    "type": "expression",
-                    "variant": "list",
-                    "expression": [
-                      {
-                        "type": "identifier",
-                        "variant": "column",
-                        "name": "b.y"
-                      }
-                    ]
-                  }
-                }
-              ],
-              "from": {
-                "type": "identifier",
-                "variant": "table",
-                "name": "t34",
-                "alias": "b"
-              },
-              "group": {
-                "type": "expression",
-                "variant": "list",
-                "expression": [
-                  {
-                    "type": "identifier",
-                    "variant": "column",
-                    "name": "b.x"
-                  }
-                ]
-              },
-              "having": {
-                "type": "expression",
-                "format": "binary",
-                "variant": "operation",
-                "operation": ">",
-                "left": {
-                  "type": "function",
-                  "name": {
-                    "type": "identifier",
-                    "variant": "function",
-                    "name": "avg"
-                  },
-                  "args": {
-                    "type": "expression",
-                    "variant": "list",
-                    "expression": [
-                      {
-                        "type": "identifier",
-                        "variant": "column",
-                        "name": "a.y"
-                      }
-                    ]
-                  }
-                },
-                "right": {
-                  "type": "function",
-                  "name": {
-                    "type": "identifier",
-                    "variant": "function",
-                    "name": "avg"
-                  },
-                  "args": {
-                    "type": "expression",
-                    "variant": "list",
-                    "expression": [
-                      {
-                        "type": "identifier",
-                        "variant": "column",
-                        "name": "b.y"
-                      }
-                    ]
-                  }
-                }
-              }
-            },
-            "operator": "exists"
-          },
-          "operator": "not"
+          "operator": "not exists"
         },
         {
           "type": "expression",

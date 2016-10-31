@@ -3045,18 +3045,17 @@
             "expression": [
               {
                 "type": "expression",
-                "format": "binary",
                 "variant": "case",
-                "condition": [
+                "expression": [
                   {
                     "type": "condition",
-                    "format": "when",
-                    "when": {
+                    "variant": "when",
+                    "condition": {
                       "type": "literal",
                       "variant": "text",
                       "value": "this"
                     },
-                    "then": {
+                    "consequent": {
                       "type": "literal",
                       "variant": "text",
                       "value": ""
@@ -3064,15 +3063,15 @@
                   },
                   {
                     "type": "condition",
-                    "format": "else",
-                    "else": {
+                    "variant": "else",
+                    "consequent": {
                       "type": "identifier",
                       "variant": "column",
                       "name": "t1"
                     }
                   }
                 ],
-                "expression": {
+                "discriminant": {
                   "type": "identifier",
                   "variant": "column",
                   "name": "t1"
@@ -3105,13 +3104,12 @@
             "expression": [
               {
                 "type": "expression",
-                "format": "binary",
                 "variant": "case",
-                "condition": [
+                "expression": [
                   {
                     "type": "condition",
-                    "format": "when",
-                    "when": {
+                    "variant": "when",
+                    "condition": {
                       "type": "expression",
                       "format": "binary",
                       "variant": "operation",
@@ -3127,7 +3125,7 @@
                         "value": "software"
                       }
                     },
-                    "then": {
+                    "consequent": {
                       "type": "literal",
                       "variant": "text",
                       "value": ""
@@ -3135,8 +3133,8 @@
                   },
                   {
                     "type": "condition",
-                    "format": "else",
-                    "else": {
+                    "variant": "else",
+                    "consequent": {
                       "type": "identifier",
                       "variant": "column",
                       "name": "t1"
@@ -3171,18 +3169,17 @@
             "expression": [
               {
                 "type": "expression",
-                "format": "binary",
                 "variant": "case",
-                "condition": [
+                "expression": [
                   {
                     "type": "condition",
-                    "format": "when",
-                    "when": {
+                    "variant": "when",
+                    "condition": {
                       "type": "literal",
                       "variant": "text",
                       "value": "this"
                     },
-                    "then": {
+                    "consequent": {
                       "type": "literal",
                       "variant": "null",
                       "value": "null"
@@ -3190,15 +3187,15 @@
                   },
                   {
                     "type": "condition",
-                    "format": "else",
-                    "else": {
+                    "variant": "else",
+                    "consequent": {
                       "type": "identifier",
                       "variant": "column",
                       "name": "t1"
                     }
                   }
                 ],
-                "expression": {
+                "discriminant": {
                   "type": "identifier",
                   "variant": "column",
                   "name": "t1"
@@ -3231,13 +3228,12 @@
             "expression": [
               {
                 "type": "expression",
-                "format": "binary",
                 "variant": "case",
-                "condition": [
+                "expression": [
                   {
                     "type": "condition",
-                    "format": "when",
-                    "when": {
+                    "variant": "when",
+                    "condition": {
                       "type": "expression",
                       "format": "binary",
                       "variant": "operation",
@@ -3253,7 +3249,7 @@
                         "value": "software"
                       }
                     },
-                    "then": {
+                    "consequent": {
                       "type": "literal",
                       "variant": "null",
                       "value": "null"
@@ -3261,8 +3257,8 @@
                   },
                   {
                     "type": "condition",
-                    "format": "else",
-                    "else": {
+                    "variant": "else",
+                    "consequent": {
                       "type": "identifier",
                       "variant": "column",
                       "name": "t1"
@@ -3297,18 +3293,17 @@
             "expression": [
               {
                 "type": "expression",
-                "format": "binary",
                 "variant": "case",
-                "condition": [
+                "expression": [
                   {
                     "type": "condition",
-                    "format": "when",
-                    "when": {
+                    "variant": "when",
+                    "condition": {
                       "type": "literal",
                       "variant": "text",
                       "value": "this"
                     },
-                    "then": {
+                    "consequent": {
                       "type": "literal",
                       "variant": "text",
                       "value": ""
@@ -3316,13 +3311,13 @@
                   },
                   {
                     "type": "condition",
-                    "format": "when",
-                    "when": {
+                    "variant": "when",
+                    "condition": {
                       "type": "literal",
                       "variant": "text",
                       "value": "program"
                     },
-                    "then": {
+                    "consequent": {
                       "type": "literal",
                       "variant": "null",
                       "value": "null"
@@ -3330,15 +3325,15 @@
                   },
                   {
                     "type": "condition",
-                    "format": "else",
-                    "else": {
+                    "variant": "else",
+                    "consequent": {
                       "type": "identifier",
                       "variant": "column",
                       "name": "t1"
                     }
                   }
                 ],
-                "expression": {
+                "discriminant": {
                   "type": "identifier",
                   "variant": "column",
                   "name": "t1"

@@ -375,76 +375,70 @@
           "right": {
             "type": "expression",
             "format": "unary",
-            "variant": "operation",
+            "variant": "exists",
             "expression": {
-              "type": "expression",
-              "format": "unary",
-              "variant": "exists",
-              "expression": {
+              "type": "statement",
+              "variant": "compound",
+              "statement": {
                 "type": "statement",
-                "variant": "compound",
-                "statement": {
-                  "type": "statement",
-                  "variant": "select",
-                  "result": [
-                    {
+                "variant": "select",
+                "result": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "person_id"
+                  }
+                ],
+                "from": {
+                  "type": "identifier",
+                  "variant": "table",
+                  "name": "directors",
+                  "alias": "d1"
+                },
+                "where": [
+                  {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
                       "type": "identifier",
                       "variant": "column",
-                      "name": "person_id"
-                    }
-                  ],
-                  "from": {
-                    "type": "identifier",
-                    "variant": "table",
-                    "name": "directors",
-                    "alias": "d1"
-                  },
-                  "where": [
-                    {
-                      "type": "expression",
-                      "format": "binary",
-                      "variant": "operation",
-                      "operation": "=",
-                      "left": {
-                        "type": "identifier",
-                        "variant": "column",
-                        "name": "d1.person_id"
-                      },
-                      "right": {
-                        "type": "identifier",
-                        "variant": "column",
-                        "name": "p.person_id"
-                      }
-                    }
-                  ]
-                },
-                "compound": [
-                  {
-                    "type": "compound",
-                    "variant": "except",
-                    "statement": {
-                      "type": "statement",
-                      "variant": "select",
-                      "result": [
-                        {
-                          "type": "identifier",
-                          "variant": "column",
-                          "name": "person_id"
-                        }
-                      ],
-                      "from": {
-                        "type": "identifier",
-                        "variant": "table",
-                        "name": "writers",
-                        "alias": "w"
-                      }
+                      "name": "d1.person_id"
+                    },
+                    "right": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "p.person_id"
                     }
                   }
                 ]
               },
-              "operator": "exists"
+              "compound": [
+                {
+                  "type": "compound",
+                  "variant": "except",
+                  "statement": {
+                    "type": "statement",
+                    "variant": "select",
+                    "result": [
+                      {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "person_id"
+                      }
+                    ],
+                    "from": {
+                      "type": "identifier",
+                      "variant": "table",
+                      "name": "writers",
+                      "alias": "w"
+                    }
+                  }
+                }
+              ]
             },
-            "operator": "not"
+            "operator": "not exists"
           }
         }
       ]
@@ -507,76 +501,70 @@
           "right": {
             "type": "expression",
             "format": "unary",
-            "variant": "operation",
+            "variant": "exists",
             "expression": {
-              "type": "expression",
-              "format": "unary",
-              "variant": "exists",
-              "expression": {
+              "type": "statement",
+              "variant": "compound",
+              "statement": {
                 "type": "statement",
-                "variant": "compound",
-                "statement": {
-                  "type": "statement",
-                  "variant": "select",
-                  "result": [
-                    {
+                "variant": "select",
+                "result": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "person_id"
+                  }
+                ],
+                "from": {
+                  "type": "identifier",
+                  "variant": "table",
+                  "name": "directors",
+                  "alias": "d1"
+                },
+                "where": [
+                  {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
                       "type": "identifier",
                       "variant": "column",
-                      "name": "person_id"
-                    }
-                  ],
-                  "from": {
-                    "type": "identifier",
-                    "variant": "table",
-                    "name": "directors",
-                    "alias": "d1"
-                  },
-                  "where": [
-                    {
-                      "type": "expression",
-                      "format": "binary",
-                      "variant": "operation",
-                      "operation": "=",
-                      "left": {
-                        "type": "identifier",
-                        "variant": "column",
-                        "name": "d1.person_id"
-                      },
-                      "right": {
-                        "type": "identifier",
-                        "variant": "column",
-                        "name": "p.person_id"
-                      }
-                    }
-                  ]
-                },
-                "compound": [
-                  {
-                    "type": "compound",
-                    "variant": "except",
-                    "statement": {
-                      "type": "statement",
-                      "variant": "select",
-                      "result": [
-                        {
-                          "type": "identifier",
-                          "variant": "column",
-                          "name": "person_id"
-                        }
-                      ],
-                      "from": {
-                        "type": "identifier",
-                        "variant": "table",
-                        "name": "writers",
-                        "alias": "w"
-                      }
+                      "name": "d1.person_id"
+                    },
+                    "right": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "p.person_id"
                     }
                   }
                 ]
               },
-              "operator": "exists"
+              "compound": [
+                {
+                  "type": "compound",
+                  "variant": "except",
+                  "statement": {
+                    "type": "statement",
+                    "variant": "select",
+                    "result": [
+                      {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "person_id"
+                      }
+                    ],
+                    "from": {
+                      "type": "identifier",
+                      "variant": "table",
+                      "name": "writers",
+                      "alias": "w"
+                    }
+                  }
+                }
+              ]
             },
-            "operator": "not"
+            "operator": "not exists"
           }
         }
       ]
@@ -639,76 +627,70 @@
           "right": {
             "type": "expression",
             "format": "unary",
-            "variant": "operation",
+            "variant": "exists",
             "expression": {
-              "type": "expression",
-              "format": "unary",
-              "variant": "exists",
-              "expression": {
+              "type": "statement",
+              "variant": "compound",
+              "statement": {
                 "type": "statement",
-                "variant": "compound",
-                "statement": {
-                  "type": "statement",
-                  "variant": "select",
-                  "result": [
-                    {
+                "variant": "select",
+                "result": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "person_id"
+                  }
+                ],
+                "from": {
+                  "type": "identifier",
+                  "variant": "table",
+                  "name": "directors",
+                  "alias": "d1"
+                },
+                "where": [
+                  {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
                       "type": "identifier",
                       "variant": "column",
-                      "name": "person_id"
-                    }
-                  ],
-                  "from": {
-                    "type": "identifier",
-                    "variant": "table",
-                    "name": "directors",
-                    "alias": "d1"
-                  },
-                  "where": [
-                    {
-                      "type": "expression",
-                      "format": "binary",
-                      "variant": "operation",
-                      "operation": "=",
-                      "left": {
-                        "type": "identifier",
-                        "variant": "column",
-                        "name": "d1.person_id"
-                      },
-                      "right": {
-                        "type": "identifier",
-                        "variant": "column",
-                        "name": "p.person_id"
-                      }
-                    }
-                  ]
-                },
-                "compound": [
-                  {
-                    "type": "compound",
-                    "variant": "except",
-                    "statement": {
-                      "type": "statement",
-                      "variant": "select",
-                      "result": [
-                        {
-                          "type": "identifier",
-                          "variant": "column",
-                          "name": "person_id"
-                        }
-                      ],
-                      "from": {
-                        "type": "identifier",
-                        "variant": "table",
-                        "name": "writers",
-                        "alias": "w"
-                      }
+                      "name": "d1.person_id"
+                    },
+                    "right": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "p.person_id"
                     }
                   }
                 ]
               },
-              "operator": "exists"
+              "compound": [
+                {
+                  "type": "compound",
+                  "variant": "except",
+                  "statement": {
+                    "type": "statement",
+                    "variant": "select",
+                    "result": [
+                      {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "person_id"
+                      }
+                    ],
+                    "from": {
+                      "type": "identifier",
+                      "variant": "table",
+                      "name": "writers",
+                      "alias": "w"
+                    }
+                  }
+                }
+              ]
             },
-            "operator": "not"
+            "operator": "not exists"
           }
         }
       ]
@@ -771,76 +753,70 @@
           "right": {
             "type": "expression",
             "format": "unary",
-            "variant": "operation",
+            "variant": "exists",
             "expression": {
-              "type": "expression",
-              "format": "unary",
-              "variant": "exists",
-              "expression": {
+              "type": "statement",
+              "variant": "compound",
+              "statement": {
                 "type": "statement",
-                "variant": "compound",
-                "statement": {
-                  "type": "statement",
-                  "variant": "select",
-                  "result": [
-                    {
+                "variant": "select",
+                "result": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "person_id"
+                  }
+                ],
+                "from": {
+                  "type": "identifier",
+                  "variant": "table",
+                  "name": "directors",
+                  "alias": "d1"
+                },
+                "where": [
+                  {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
                       "type": "identifier",
                       "variant": "column",
-                      "name": "person_id"
-                    }
-                  ],
-                  "from": {
-                    "type": "identifier",
-                    "variant": "table",
-                    "name": "directors",
-                    "alias": "d1"
-                  },
-                  "where": [
-                    {
-                      "type": "expression",
-                      "format": "binary",
-                      "variant": "operation",
-                      "operation": "=",
-                      "left": {
-                        "type": "identifier",
-                        "variant": "column",
-                        "name": "d1.person_id"
-                      },
-                      "right": {
-                        "type": "identifier",
-                        "variant": "column",
-                        "name": "d.person_id"
-                      }
-                    }
-                  ]
-                },
-                "compound": [
-                  {
-                    "type": "compound",
-                    "variant": "except",
-                    "statement": {
-                      "type": "statement",
-                      "variant": "select",
-                      "result": [
-                        {
-                          "type": "identifier",
-                          "variant": "column",
-                          "name": "person_id"
-                        }
-                      ],
-                      "from": {
-                        "type": "identifier",
-                        "variant": "table",
-                        "name": "writers",
-                        "alias": "w"
-                      }
+                      "name": "d1.person_id"
+                    },
+                    "right": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "d.person_id"
                     }
                   }
                 ]
               },
-              "operator": "exists"
+              "compound": [
+                {
+                  "type": "compound",
+                  "variant": "except",
+                  "statement": {
+                    "type": "statement",
+                    "variant": "select",
+                    "result": [
+                      {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "person_id"
+                      }
+                    ],
+                    "from": {
+                      "type": "identifier",
+                      "variant": "table",
+                      "name": "writers",
+                      "alias": "w"
+                    }
+                  }
+                }
+              ]
             },
-            "operator": "not"
+            "operator": "not exists"
           }
         }
       ]
@@ -903,76 +879,70 @@
           "right": {
             "type": "expression",
             "format": "unary",
-            "variant": "operation",
+            "variant": "exists",
             "expression": {
-              "type": "expression",
-              "format": "unary",
-              "variant": "exists",
-              "expression": {
+              "type": "statement",
+              "variant": "compound",
+              "statement": {
                 "type": "statement",
-                "variant": "compound",
-                "statement": {
-                  "type": "statement",
-                  "variant": "select",
-                  "result": [
-                    {
+                "variant": "select",
+                "result": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "person_id"
+                  }
+                ],
+                "from": {
+                  "type": "identifier",
+                  "variant": "table",
+                  "name": "directors",
+                  "alias": "d1"
+                },
+                "where": [
+                  {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
                       "type": "identifier",
                       "variant": "column",
-                      "name": "person_id"
-                    }
-                  ],
-                  "from": {
-                    "type": "identifier",
-                    "variant": "table",
-                    "name": "directors",
-                    "alias": "d1"
-                  },
-                  "where": [
-                    {
-                      "type": "expression",
-                      "format": "binary",
-                      "variant": "operation",
-                      "operation": "=",
-                      "left": {
-                        "type": "identifier",
-                        "variant": "column",
-                        "name": "d1.person_id"
-                      },
-                      "right": {
-                        "type": "identifier",
-                        "variant": "column",
-                        "name": "d.person_id"
-                      }
-                    }
-                  ]
-                },
-                "compound": [
-                  {
-                    "type": "compound",
-                    "variant": "except",
-                    "statement": {
-                      "type": "statement",
-                      "variant": "select",
-                      "result": [
-                        {
-                          "type": "identifier",
-                          "variant": "column",
-                          "name": "person_id"
-                        }
-                      ],
-                      "from": {
-                        "type": "identifier",
-                        "variant": "table",
-                        "name": "writers",
-                        "alias": "w"
-                      }
+                      "name": "d1.person_id"
+                    },
+                    "right": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "d.person_id"
                     }
                   }
                 ]
               },
-              "operator": "exists"
+              "compound": [
+                {
+                  "type": "compound",
+                  "variant": "except",
+                  "statement": {
+                    "type": "statement",
+                    "variant": "select",
+                    "result": [
+                      {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "person_id"
+                      }
+                    ],
+                    "from": {
+                      "type": "identifier",
+                      "variant": "table",
+                      "name": "writers",
+                      "alias": "w"
+                    }
+                  }
+                }
+              ]
             },
-            "operator": "not"
+            "operator": "not exists"
           }
         }
       ]
@@ -1035,76 +1005,70 @@
           "right": {
             "type": "expression",
             "format": "unary",
-            "variant": "operation",
+            "variant": "exists",
             "expression": {
-              "type": "expression",
-              "format": "unary",
-              "variant": "exists",
-              "expression": {
+              "type": "statement",
+              "variant": "compound",
+              "statement": {
                 "type": "statement",
-                "variant": "compound",
-                "statement": {
-                  "type": "statement",
-                  "variant": "select",
-                  "result": [
-                    {
+                "variant": "select",
+                "result": [
+                  {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "person_id"
+                  }
+                ],
+                "from": {
+                  "type": "identifier",
+                  "variant": "table",
+                  "name": "directors",
+                  "alias": "d1"
+                },
+                "where": [
+                  {
+                    "type": "expression",
+                    "format": "binary",
+                    "variant": "operation",
+                    "operation": "=",
+                    "left": {
                       "type": "identifier",
                       "variant": "column",
-                      "name": "person_id"
-                    }
-                  ],
-                  "from": {
-                    "type": "identifier",
-                    "variant": "table",
-                    "name": "directors",
-                    "alias": "d1"
-                  },
-                  "where": [
-                    {
-                      "type": "expression",
-                      "format": "binary",
-                      "variant": "operation",
-                      "operation": "=",
-                      "left": {
-                        "type": "identifier",
-                        "variant": "column",
-                        "name": "d1.person_id"
-                      },
-                      "right": {
-                        "type": "identifier",
-                        "variant": "column",
-                        "name": "d.person_id"
-                      }
-                    }
-                  ]
-                },
-                "compound": [
-                  {
-                    "type": "compound",
-                    "variant": "except",
-                    "statement": {
-                      "type": "statement",
-                      "variant": "select",
-                      "result": [
-                        {
-                          "type": "identifier",
-                          "variant": "column",
-                          "name": "person_id"
-                        }
-                      ],
-                      "from": {
-                        "type": "identifier",
-                        "variant": "table",
-                        "name": "writers",
-                        "alias": "w"
-                      }
+                      "name": "d1.person_id"
+                    },
+                    "right": {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "d.person_id"
                     }
                   }
                 ]
               },
-              "operator": "exists"
+              "compound": [
+                {
+                  "type": "compound",
+                  "variant": "except",
+                  "statement": {
+                    "type": "statement",
+                    "variant": "select",
+                    "result": [
+                      {
+                        "type": "identifier",
+                        "variant": "column",
+                        "name": "person_id"
+                      }
+                    ],
+                    "from": {
+                      "type": "identifier",
+                      "variant": "table",
+                      "name": "writers",
+                      "alias": "w"
+                    }
+                  }
+                }
+              ]
             },
-            "operator": "not"
+            "operator": "not exists"
           }
         }
       ]

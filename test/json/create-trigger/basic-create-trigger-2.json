@@ -120,7 +120,12 @@
       "condition": [
         {
           "type": "condition",
-          "condition": "if not exists"
+          "variant": "if",
+          "condition": {
+            "type": "expression",
+            "variant": "exists",
+            "operator": "not exists"
+          }
         }
       ],
       "when": {

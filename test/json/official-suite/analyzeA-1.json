@@ -492,18 +492,17 @@
           },
           "value": {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "literal",
                   "variant": "text",
                   "value": "t1b"
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "t1c"
@@ -511,15 +510,15 @@
               },
               {
                 "type": "condition",
-                "format": "else",
-                "else": {
+                "variant": "else",
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "t1b"
                 }
               }
             ],
-            "expression": {
+            "discriminant": {
               "type": "identifier",
               "variant": "column",
               "name": "idx"

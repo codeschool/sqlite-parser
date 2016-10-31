@@ -2659,29 +2659,30 @@
                 {
                   "type": "expression",
                   "format": "unary",
-                  "variant": "operation",
+                  "variant": "exists",
                   "expression": {
-                    "type": "expression",
-                    "format": "unary",
-                    "variant": "exists",
-                    "expression": {
-                      "type": "statement",
-                      "variant": "select",
-                      "result": [
-                        {
-                          "type": "literal",
-                          "variant": "text",
-                          "value": "x"
-                        }
-                      ],
-                      "from": {
-                        "type": "identifier",
-                        "variant": "table",
-                        "name": "flock_owner",
-                        "alias": "later"
-                      },
-                      "where": [
-                        {
+                    "type": "statement",
+                    "variant": "select",
+                    "result": [
+                      {
+                        "type": "literal",
+                        "variant": "text",
+                        "value": "x"
+                      }
+                    ],
+                    "from": {
+                      "type": "identifier",
+                      "variant": "table",
+                      "name": "flock_owner",
+                      "alias": "later"
+                    },
+                    "where": [
+                      {
+                        "type": "expression",
+                        "format": "binary",
+                        "variant": "operation",
+                        "operation": "and",
+                        "left": {
                           "type": "expression",
                           "format": "binary",
                           "variant": "operation",
@@ -2690,73 +2691,66 @@
                             "type": "expression",
                             "format": "binary",
                             "variant": "operation",
-                            "operation": "and",
+                            "operation": "=",
                             "left": {
-                              "type": "expression",
-                              "format": "binary",
-                              "variant": "operation",
-                              "operation": "=",
-                              "left": {
-                                "type": "identifier",
-                                "variant": "column",
-                                "name": "prev.flock_no"
-                              },
-                              "right": {
-                                "type": "identifier",
-                                "variant": "column",
-                                "name": "later.flock_no"
-                              }
+                              "type": "identifier",
+                              "variant": "column",
+                              "name": "prev.flock_no"
                             },
                             "right": {
-                              "type": "expression",
-                              "format": "binary",
-                              "variant": "operation",
-                              "operation": ">",
-                              "left": {
-                                "type": "identifier",
-                                "variant": "column",
-                                "name": "later.owner_change_date"
-                              },
-                              "right": {
-                                "type": "identifier",
-                                "variant": "column",
-                                "name": "prev.owner_change_date"
-                              }
+                              "type": "identifier",
+                              "variant": "column",
+                              "name": "later.flock_no"
                             }
                           },
                           "right": {
                             "type": "expression",
                             "format": "binary",
                             "variant": "operation",
-                            "operation": "<=",
+                            "operation": ">",
                             "left": {
                               "type": "identifier",
                               "variant": "column",
                               "name": "later.owner_change_date"
                             },
                             "right": {
-                              "type": "expression",
-                              "format": "binary",
-                              "variant": "operation",
-                              "operation": "||",
-                              "left": {
-                                "type": "identifier",
-                                "variant": "column",
-                                "name": "s.date_of_registration"
-                              },
-                              "right": {
-                                "type": "literal",
-                                "variant": "text",
-                                "value": "00:00:00"
-                              }
+                              "type": "identifier",
+                              "variant": "column",
+                              "name": "prev.owner_change_date"
+                            }
+                          }
+                        },
+                        "right": {
+                          "type": "expression",
+                          "format": "binary",
+                          "variant": "operation",
+                          "operation": "<=",
+                          "left": {
+                            "type": "identifier",
+                            "variant": "column",
+                            "name": "later.owner_change_date"
+                          },
+                          "right": {
+                            "type": "expression",
+                            "format": "binary",
+                            "variant": "operation",
+                            "operation": "||",
+                            "left": {
+                              "type": "identifier",
+                              "variant": "column",
+                              "name": "s.date_of_registration"
+                            },
+                            "right": {
+                              "type": "literal",
+                              "variant": "text",
+                              "value": "00:00:00"
                             }
                           }
                         }
-                      ]
-                    },
-                    "operator": "exists"
+                      }
+                    ]
                   },
-                  "operator": "not"
+                  "operator": "not exists"
                 }
               ],
               "alias": "y"
@@ -4561,7 +4555,12 @@
       "condition": [
         {
           "type": "condition",
-          "condition": "if exists"
+          "variant": "if",
+          "condition": {
+            "type": "expression",
+            "variant": "exists",
+            "operator": "exists"
+          }
         }
       ]
     },

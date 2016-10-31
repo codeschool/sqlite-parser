@@ -6925,13 +6925,12 @@
               },
               "value": {
                 "type": "expression",
-                "format": "binary",
                 "variant": "case",
-                "condition": [
+                "expression": [
                   {
                     "type": "condition",
-                    "format": "when",
-                    "when": {
+                    "variant": "when",
+                    "condition": {
                       "type": "expression",
                       "format": "binary",
                       "variant": "operation",
@@ -6991,7 +6990,7 @@
                         }
                       }
                     },
-                    "then": {
+                    "consequent": {
                       "type": "identifier",
                       "variant": "column",
                       "name": "new.t_name"
@@ -6999,8 +6998,8 @@
                   },
                   {
                     "type": "condition",
-                    "format": "else",
-                    "else": {
+                    "variant": "else",
+                    "consequent": {
                       "type": "expression",
                       "format": "binary",
                       "variant": "operation",
@@ -7134,13 +7133,12 @@
               },
               "value": {
                 "type": "expression",
-                "format": "binary",
                 "variant": "case",
-                "condition": [
+                "expression": [
                   {
                     "type": "condition",
-                    "format": "when",
-                    "when": {
+                    "variant": "when",
+                    "condition": {
                       "type": "expression",
                       "format": "binary",
                       "variant": "operation",
@@ -7200,7 +7198,7 @@
                         }
                       }
                     },
-                    "then": {
+                    "consequent": {
                       "type": "identifier",
                       "variant": "column",
                       "name": "new.t_name"
@@ -7208,8 +7206,8 @@
                   },
                   {
                     "type": "condition",
-                    "format": "else",
-                    "else": {
+                    "variant": "else",
+                    "consequent": {
                       "type": "expression",
                       "format": "binary",
                       "variant": "operation",
@@ -14488,13 +14486,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -14510,7 +14507,7 @@
                     "value": "0"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": ""
@@ -14518,20 +14515,19 @@
               },
               {
                 "type": "condition",
-                "format": "else",
-                "else": {
+                "variant": "else",
+                "consequent": {
                   "type": "statement",
                   "variant": "select",
                   "result": [
                     {
                       "type": "expression",
-                      "format": "binary",
                       "variant": "case",
-                      "condition": [
+                      "expression": [
                         {
                           "type": "condition",
-                          "format": "when",
-                          "when": {
+                          "variant": "when",
+                          "condition": {
                             "type": "expression",
                             "format": "binary",
                             "variant": "operation",
@@ -14547,7 +14543,7 @@
                               "value": ""
                             }
                           },
-                          "then": {
+                          "consequent": {
                             "type": "identifier",
                             "variant": "column",
                             "name": "s.t_symbol"
@@ -14555,8 +14551,8 @@
                         },
                         {
                           "type": "condition",
-                          "format": "else",
-                          "else": {
+                          "variant": "else",
+                          "consequent": {
                             "type": "identifier",
                             "variant": "column",
                             "name": "s.t_name"
@@ -14596,18 +14592,17 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "literal",
                   "variant": "text",
                   "value": "1"
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Monnaie principale"
@@ -14615,13 +14610,13 @@
               },
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "literal",
                   "variant": "text",
                   "value": "2"
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Monnaie secondaire"
@@ -14629,13 +14624,13 @@
               },
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "literal",
                   "variant": "text",
                   "value": "C"
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Monnaie"
@@ -14643,13 +14638,13 @@
               },
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "literal",
                   "variant": "text",
                   "value": "S"
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Action"
@@ -14657,13 +14652,13 @@
               },
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "literal",
                   "variant": "text",
                   "value": "I"
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Indice"
@@ -14671,15 +14666,15 @@
               },
               {
                 "type": "condition",
-                "format": "else",
-                "else": {
+                "variant": "else",
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Objet"
                 }
               }
             ],
-            "expression": {
+            "discriminant": {
               "type": "identifier",
               "variant": "column",
               "name": "unit.t_type"
@@ -14814,13 +14809,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -14836,7 +14830,7 @@
                     "value": "1"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "decimal",
                   "value": "1"
@@ -14844,8 +14838,8 @@
               },
               {
                 "type": "condition",
-                "format": "else",
-                "else": {
+                "variant": "else",
+                "consequent": {
                   "type": "function",
                   "name": {
                     "type": "identifier",
@@ -15720,13 +15714,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -15968,7 +15961,7 @@
                     "operator": "exists"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Y"
@@ -15976,8 +15969,8 @@
               },
               {
                 "type": "condition",
-                "format": "else",
-                "else": {
+                "variant": "else",
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "N"
@@ -16121,13 +16114,12 @@
               "result": [
                 {
                   "type": "expression",
-                  "format": "binary",
                   "variant": "case",
-                  "condition": [
+                  "expression": [
                     {
                       "type": "condition",
-                      "format": "when",
-                      "when": {
+                      "variant": "when",
+                      "condition": {
                         "type": "expression",
                         "format": "binary",
                         "variant": "operation",
@@ -16143,7 +16135,7 @@
                           "value": ""
                         }
                       },
-                      "then": {
+                      "consequent": {
                         "type": "identifier",
                         "variant": "column",
                         "name": "s.t_symbol"
@@ -16151,8 +16143,8 @@
                     },
                     {
                       "type": "condition",
-                      "format": "else",
-                      "else": {
+                      "variant": "else",
+                      "consequent": {
                         "type": "identifier",
                         "variant": "column",
                         "name": "s.t_name"
@@ -16216,13 +16208,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -16238,7 +16229,7 @@
                     "value": "Y"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Vous n'êtes pas autorisé à détruire cette opération car en état « rapproché »"
@@ -16423,13 +16414,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "unary",
                   "variant": "exists",
@@ -16535,7 +16525,7 @@
                   },
                   "operator": "exists"
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Vous n'êtes pas autorisé à détruire ce compte car il contient des opérations rapprochées"
@@ -16842,18 +16832,17 @@
             },
             "right": {
               "type": "expression",
-              "format": "binary",
               "variant": "case",
-              "condition": [
+              "expression": [
                 {
                   "type": "condition",
-                  "format": "when",
-                  "when": {
+                  "variant": "when",
+                  "condition": {
                     "type": "literal",
                     "variant": "text",
                     "value": "Y"
                   },
-                  "then": {
+                  "consequent": {
                     "type": "literal",
                     "variant": "text",
                     "value": "année(s)"
@@ -16861,13 +16850,13 @@
                 },
                 {
                   "type": "condition",
-                  "format": "when",
-                  "when": {
+                  "variant": "when",
+                  "condition": {
                     "type": "literal",
                     "variant": "text",
                     "value": "M"
                   },
-                  "then": {
+                  "consequent": {
                     "type": "literal",
                     "variant": "text",
                     "value": "mois"
@@ -16875,13 +16864,13 @@
                 },
                 {
                   "type": "condition",
-                  "format": "when",
-                  "when": {
+                  "variant": "when",
+                  "condition": {
                     "type": "literal",
                     "variant": "text",
                     "value": "W"
                   },
-                  "then": {
+                  "consequent": {
                     "type": "literal",
                     "variant": "text",
                     "value": "semaine(s)"
@@ -16889,15 +16878,15 @@
                 },
                 {
                   "type": "condition",
-                  "format": "else",
-                  "else": {
+                  "variant": "else",
+                  "consequent": {
                     "type": "literal",
                     "variant": "text",
                     "value": "jour(s)"
                   }
                 }
               ],
-              "expression": {
+              "discriminant": {
                 "type": "identifier",
                 "variant": "column",
                 "name": "t_period_unit"
@@ -17069,13 +17058,12 @@
                   "result": [
                     {
                       "type": "expression",
-                      "format": "binary",
                       "variant": "case",
-                      "condition": [
+                      "expression": [
                         {
                           "type": "condition",
-                          "format": "when",
-                          "when": {
+                          "variant": "when",
+                          "condition": {
                             "type": "expression",
                             "format": "binary",
                             "variant": "operation",
@@ -17091,7 +17079,7 @@
                               "value": ""
                             }
                           },
-                          "then": {
+                          "consequent": {
                             "type": "identifier",
                             "variant": "column",
                             "name": "s.t_symbol"
@@ -17099,8 +17087,8 @@
                         },
                         {
                           "type": "condition",
-                          "format": "else",
-                          "else": {
+                          "variant": "else",
+                          "consequent": {
                             "type": "identifier",
                             "variant": "column",
                             "name": "s.t_name"
@@ -17361,13 +17349,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -17383,7 +17370,7 @@
                     "value": "0"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "identifier",
                   "variant": "column",
                   "name": "v_suboperation.f_value"
@@ -17391,8 +17378,8 @@
               },
               {
                 "type": "condition",
-                "format": "else",
-                "else": {
+                "variant": "else",
+                "consequent": {
                   "type": "literal",
                   "variant": "decimal",
                   "value": "0"
@@ -17403,13 +17390,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -17425,7 +17411,7 @@
                     "value": "0"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "identifier",
                   "variant": "column",
                   "name": "v_suboperation.f_value"
@@ -17433,8 +17419,8 @@
               },
               {
                 "type": "condition",
-                "format": "else",
-                "else": {
+                "variant": "else",
+                "consequent": {
                   "type": "literal",
                   "variant": "decimal",
                   "value": "0"
@@ -17565,13 +17551,12 @@
             "result": [
               {
                 "type": "expression",
-                "format": "binary",
                 "variant": "case",
-                "condition": [
+                "expression": [
                   {
                     "type": "condition",
-                    "format": "when",
-                    "when": {
+                    "variant": "when",
+                    "condition": {
                       "type": "expression",
                       "format": "binary",
                       "variant": "operation",
@@ -17587,7 +17572,7 @@
                         "value": ""
                       }
                     },
-                    "then": {
+                    "consequent": {
                       "type": "identifier",
                       "variant": "column",
                       "name": "s.t_symbol"
@@ -17595,8 +17580,8 @@
                   },
                   {
                     "type": "condition",
-                    "format": "else",
-                    "else": {
+                    "variant": "else",
+                    "consequent": {
                       "type": "identifier",
                       "variant": "column",
                       "name": "s.t_name"
@@ -17705,13 +17690,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -17727,7 +17711,7 @@
                     "value": "0"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "-"
@@ -17735,8 +17719,8 @@
               },
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -17752,7 +17736,7 @@
                     "value": "0"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": ""
@@ -17760,8 +17744,8 @@
               },
               {
                 "type": "condition",
-                "format": "else",
-                "else": {
+                "variant": "else",
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "+"
@@ -17772,13 +17756,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -17794,7 +17777,7 @@
                     "value": "0"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Dépense"
@@ -17802,8 +17785,8 @@
               },
               {
                 "type": "condition",
-                "format": "else",
-                "else": {
+                "variant": "else",
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Revenu"
@@ -17904,13 +17887,12 @@
             },
             "right": {
               "type": "expression",
-              "format": "binary",
               "variant": "case",
-              "condition": [
+              "expression": [
                 {
                   "type": "condition",
-                  "format": "when",
-                  "when": {
+                  "variant": "when",
+                  "condition": {
                     "type": "expression",
                     "format": "binary",
                     "variant": "operation",
@@ -17945,7 +17927,7 @@
                       "value": "03"
                     }
                   },
-                  "then": {
+                  "consequent": {
                     "type": "literal",
                     "variant": "text",
                     "value": "1"
@@ -17953,8 +17935,8 @@
                 },
                 {
                   "type": "condition",
-                  "format": "when",
-                  "when": {
+                  "variant": "when",
+                  "condition": {
                     "type": "expression",
                     "format": "binary",
                     "variant": "operation",
@@ -17989,7 +17971,7 @@
                       "value": "06"
                     }
                   },
-                  "then": {
+                  "consequent": {
                     "type": "literal",
                     "variant": "text",
                     "value": "2"
@@ -17997,8 +17979,8 @@
                 },
                 {
                   "type": "condition",
-                  "format": "when",
-                  "when": {
+                  "variant": "when",
+                  "condition": {
                     "type": "expression",
                     "format": "binary",
                     "variant": "operation",
@@ -18033,7 +18015,7 @@
                       "value": "09"
                     }
                   },
-                  "then": {
+                  "consequent": {
                     "type": "literal",
                     "variant": "text",
                     "value": "3"
@@ -18041,8 +18023,8 @@
                 },
                 {
                   "type": "condition",
-                  "format": "else",
-                  "else": {
+                  "variant": "else",
+                  "consequent": {
                     "type": "literal",
                     "variant": "text",
                     "value": "4"
@@ -18094,13 +18076,12 @@
             },
             "right": {
               "type": "expression",
-              "format": "binary",
               "variant": "case",
-              "condition": [
+              "expression": [
                 {
                   "type": "condition",
-                  "format": "when",
-                  "when": {
+                  "variant": "when",
+                  "condition": {
                     "type": "expression",
                     "format": "binary",
                     "variant": "operation",
@@ -18135,7 +18116,7 @@
                       "value": "06"
                     }
                   },
-                  "then": {
+                  "consequent": {
                     "type": "literal",
                     "variant": "text",
                     "value": "1"
@@ -18143,8 +18124,8 @@
                 },
                 {
                   "type": "condition",
-                  "format": "else",
-                  "else": {
+                  "variant": "else",
+                  "consequent": {
                     "type": "literal",
                     "variant": "text",
                     "value": "2"
@@ -18225,13 +18206,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -18247,7 +18227,7 @@
                     "value": "0"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "identifier",
                   "variant": "column",
                   "name": "v_operation.f_quantity"
@@ -18255,8 +18235,8 @@
               },
               {
                 "type": "condition",
-                "format": "else",
-                "else": {
+                "variant": "else",
+                "consequent": {
                   "type": "literal",
                   "variant": "decimal",
                   "value": "0"
@@ -18267,13 +18247,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -18289,7 +18268,7 @@
                     "value": "0"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "identifier",
                   "variant": "column",
                   "name": "v_operation.f_quantity"
@@ -18297,8 +18276,8 @@
               },
               {
                 "type": "condition",
-                "format": "else",
-                "else": {
+                "variant": "else",
+                "consequent": {
                   "type": "literal",
                   "variant": "decimal",
                   "value": "0"
@@ -18345,13 +18324,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -18367,7 +18345,7 @@
                     "value": "0"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "identifier",
                   "variant": "column",
                   "name": "v_operation.f_currentamount"
@@ -18375,8 +18353,8 @@
               },
               {
                 "type": "condition",
-                "format": "else",
-                "else": {
+                "variant": "else",
+                "consequent": {
                   "type": "literal",
                   "variant": "decimal",
                   "value": "0"
@@ -18387,13 +18365,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -18409,7 +18386,7 @@
                     "value": "0"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "identifier",
                   "variant": "column",
                   "name": "v_operation.f_currentamount"
@@ -18417,8 +18394,8 @@
               },
               {
                 "type": "condition",
-                "format": "else",
-                "else": {
+                "variant": "else",
+                "consequent": {
                   "type": "literal",
                   "variant": "decimal",
                   "value": "0"
@@ -18636,18 +18613,17 @@
         "result": [
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "literal",
                   "variant": "text",
                   "value": "C"
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Courant"
@@ -18655,13 +18631,13 @@
               },
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "literal",
                   "variant": "text",
                   "value": "D"
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Carte de crédit"
@@ -18669,13 +18645,13 @@
               },
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "literal",
                   "variant": "text",
                   "value": "A"
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Actif"
@@ -18683,13 +18659,13 @@
               },
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "literal",
                   "variant": "text",
                   "value": "I"
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Investissement"
@@ -18697,13 +18673,13 @@
               },
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "literal",
                   "variant": "text",
                   "value": "W"
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Portefeuille"
@@ -18711,13 +18687,13 @@
               },
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "literal",
                   "variant": "text",
                   "value": "L"
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Prêt"
@@ -18725,20 +18701,20 @@
               },
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "literal",
                   "variant": "text",
                   "value": "O"
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Autre"
                 }
               }
             ],
-            "expression": {
+            "discriminant": {
               "type": "identifier",
               "variant": "column",
               "name": "t_type"
@@ -18881,13 +18857,12 @@
             "result": [
               {
                 "type": "expression",
-                "format": "binary",
                 "variant": "case",
-                "condition": [
+                "expression": [
                   {
                     "type": "condition",
-                    "format": "when",
-                    "when": {
+                    "variant": "when",
+                    "condition": {
                       "type": "expression",
                       "format": "binary",
                       "variant": "operation",
@@ -18903,7 +18878,7 @@
                         "value": ""
                       }
                     },
-                    "then": {
+                    "consequent": {
                       "type": "identifier",
                       "variant": "column",
                       "name": "u.t_symbol"
@@ -18911,8 +18886,8 @@
                   },
                   {
                     "type": "condition",
-                    "format": "else",
-                    "else": {
+                    "variant": "else",
+                    "consequent": {
                       "type": "identifier",
                       "variant": "column",
                       "name": "u.t_name"
@@ -19564,13 +19539,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -19586,7 +19560,7 @@
                     "value": ""
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "identifier",
                   "variant": "column",
                   "name": "op.t_comment"
@@ -19594,8 +19568,8 @@
               },
               {
                 "type": "condition",
-                "format": "else",
-                "else": {
+                "variant": "else",
+                "consequent": {
                   "type": "identifier",
                   "variant": "column",
                   "name": "sop.t_comment"
@@ -19624,13 +19598,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -19646,7 +19619,7 @@
                     "value": "0"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "-"
@@ -19654,8 +19627,8 @@
               },
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -19671,7 +19644,7 @@
                     "value": "0"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": ""
@@ -19679,8 +19652,8 @@
               },
               {
                 "type": "condition",
-                "format": "else",
-                "else": {
+                "variant": "else",
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "+"
@@ -19691,13 +19664,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -19713,7 +19685,7 @@
                     "value": "0"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Dépense"
@@ -19721,8 +19693,8 @@
               },
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -19738,7 +19710,7 @@
                     "value": "0"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": ""
@@ -19746,8 +19718,8 @@
               },
               {
                 "type": "condition",
-                "format": "else",
-                "else": {
+                "variant": "else",
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Revenu"
@@ -20098,13 +20070,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "unary",
                   "variant": "exists",
@@ -20166,7 +20137,7 @@
                   },
                   "operator": "exists"
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Vous n'êtes pas autorisé à détruire ce suiveur car utilisé par des opérations rapprochées"
@@ -20437,13 +20408,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "unary",
                   "variant": "exists",
@@ -20505,7 +20475,7 @@
                   },
                   "operator": "exists"
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Vous n'êtes pas autorisé à détruire ce tiers car utilisé par des opérations rapprochées"
@@ -20698,13 +20668,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "unary",
                   "variant": "exists",
@@ -20799,7 +20768,7 @@
                   },
                   "operator": "exists"
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Vous n'êtes pas autorisé à détruire cette catégorie car utilisée par des opérations rapprochées"
@@ -21177,13 +21146,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -21199,7 +21167,7 @@
                     "value": "Y"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Y"
@@ -21207,8 +21175,8 @@
               },
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "unary",
                   "variant": "exists",
@@ -21282,7 +21250,7 @@
                   },
                   "operator": "exists"
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "C"
@@ -21290,8 +21258,8 @@
               },
               {
                 "type": "condition",
-                "format": "else",
-                "else": {
+                "variant": "else",
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "N"
@@ -21302,13 +21270,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -21324,7 +21291,7 @@
                     "value": "0"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "-"
@@ -21332,8 +21299,8 @@
               },
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -21349,7 +21316,7 @@
                     "value": "0"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": ""
@@ -21357,8 +21324,8 @@
               },
               {
                 "type": "condition",
-                "format": "else",
-                "else": {
+                "variant": "else",
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "+"
@@ -21369,13 +21336,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -21391,7 +21357,7 @@
                     "value": "0"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Dépense"
@@ -21399,8 +21365,8 @@
               },
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -21416,7 +21382,7 @@
                     "value": "0"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": ""
@@ -21424,8 +21390,8 @@
               },
               {
                 "type": "condition",
-                "format": "else",
-                "else": {
+                "variant": "else",
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Revenu"
@@ -21937,13 +21903,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -21965,7 +21930,7 @@
                     "operator": "-"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Négatif"
@@ -21973,8 +21938,8 @@
               },
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -21990,7 +21955,7 @@
                     "value": "1"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Positif"
@@ -21998,8 +21963,8 @@
               },
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -22015,7 +21980,7 @@
                     "value": "0"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Tous"
@@ -22036,13 +22001,12 @@
             },
             "right": {
               "type": "expression",
-              "format": "binary",
               "variant": "case",
-              "condition": [
+              "expression": [
                 {
                   "type": "condition",
-                  "format": "when",
-                  "when": {
+                  "variant": "when",
+                  "condition": {
                     "type": "expression",
                     "format": "binary",
                     "variant": "operation",
@@ -22058,7 +22022,7 @@
                       "value": "N"
                     }
                   },
-                  "then": {
+                  "consequent": {
                     "type": "literal",
                     "variant": "text",
                     "value": "%"
@@ -22066,8 +22030,8 @@
                 },
                 {
                   "type": "condition",
-                  "format": "else",
-                  "else": {
+                  "variant": "else",
+                  "consequent": {
                     "type": "statement",
                     "variant": "select",
                     "result": [
@@ -22108,13 +22072,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -22130,7 +22093,7 @@
                     "value": "N"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Suivant"
@@ -22138,8 +22101,8 @@
               },
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -22155,7 +22118,7 @@
                     "value": "C"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Courant"
@@ -22163,8 +22126,8 @@
               },
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -22180,7 +22143,7 @@
                     "value": "Y"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "Année"
@@ -22406,13 +22369,12 @@
             },
             "right": {
               "type": "expression",
-              "format": "binary",
               "variant": "case",
-              "condition": [
+              "expression": [
                 {
                   "type": "condition",
-                  "format": "when",
-                  "when": {
+                  "variant": "when",
+                  "condition": {
                     "type": "expression",
                     "format": "binary",
                     "variant": "operation",
@@ -22428,7 +22390,7 @@
                       "value": "0"
                     }
                   },
-                  "then": {
+                  "consequent": {
                     "type": "literal",
                     "variant": "text",
                     "value": ""
@@ -22436,8 +22398,8 @@
                 },
                 {
                   "type": "condition",
-                  "format": "when",
-                  "when": {
+                  "variant": "when",
+                  "condition": {
                     "type": "expression",
                     "format": "binary",
                     "variant": "operation",
@@ -22453,7 +22415,7 @@
                       "value": "10"
                     }
                   },
-                  "then": {
+                  "consequent": {
                     "type": "expression",
                     "format": "binary",
                     "variant": "operation",
@@ -22472,8 +22434,8 @@
                 },
                 {
                   "type": "condition",
-                  "format": "else",
-                  "else": {
+                  "variant": "else",
+                  "consequent": {
                     "type": "expression",
                     "format": "binary",
                     "variant": "operation",
@@ -24132,13 +24094,12 @@
               },
               "value": {
                 "type": "expression",
-                "format": "binary",
                 "variant": "case",
-                "condition": [
+                "expression": [
                   {
                     "type": "condition",
-                    "format": "when",
-                    "when": {
+                    "variant": "when",
+                    "condition": {
                       "type": "expression",
                       "format": "binary",
                       "variant": "operation",
@@ -24198,7 +24159,7 @@
                         }
                       }
                     },
-                    "then": {
+                    "consequent": {
                       "type": "identifier",
                       "variant": "column",
                       "name": "new.t_name"
@@ -24206,8 +24167,8 @@
                   },
                   {
                     "type": "condition",
-                    "format": "else",
-                    "else": {
+                    "variant": "else",
+                    "consequent": {
                       "type": "expression",
                       "format": "binary",
                       "variant": "operation",
@@ -24341,13 +24302,12 @@
               },
               "value": {
                 "type": "expression",
-                "format": "binary",
                 "variant": "case",
-                "condition": [
+                "expression": [
                   {
                     "type": "condition",
-                    "format": "when",
-                    "when": {
+                    "variant": "when",
+                    "condition": {
                       "type": "expression",
                       "format": "binary",
                       "variant": "operation",
@@ -24407,7 +24367,7 @@
                         }
                       }
                     },
-                    "then": {
+                    "consequent": {
                       "type": "identifier",
                       "variant": "column",
                       "name": "new.t_name"
@@ -24415,8 +24375,8 @@
                   },
                   {
                     "type": "condition",
-                    "format": "else",
-                    "else": {
+                    "variant": "else",
+                    "consequent": {
                       "type": "expression",
                       "format": "binary",
                       "variant": "operation",

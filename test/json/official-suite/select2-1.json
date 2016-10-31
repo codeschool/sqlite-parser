@@ -991,13 +991,12 @@
       "where": [
         {
           "type": "expression",
-          "format": "binary",
           "variant": "case",
-          "condition": [
+          "expression": [
             {
               "type": "condition",
-              "format": "when",
-              "when": {
+              "variant": "when",
+              "condition": {
                 "type": "expression",
                 "format": "binary",
                 "variant": "operation",
@@ -1024,7 +1023,7 @@
                   }
                 }
               },
-              "then": {
+              "consequent": {
                 "type": "literal",
                 "variant": "decimal",
                 "value": "1"
@@ -1067,13 +1066,12 @@
       "where": [
         {
           "type": "expression",
-          "format": "binary",
           "variant": "case",
-          "condition": [
+          "expression": [
             {
               "type": "condition",
-              "format": "when",
-              "when": {
+              "variant": "when",
+              "condition": {
                 "type": "expression",
                 "format": "binary",
                 "variant": "operation",
@@ -1100,7 +1098,7 @@
                   }
                 }
               },
-              "then": {
+              "consequent": {
                 "type": "literal",
                 "variant": "decimal",
                 "value": "0"
@@ -1108,8 +1106,8 @@
             },
             {
               "type": "condition",
-              "format": "else",
-              "else": {
+              "variant": "else",
+              "consequent": {
                 "type": "literal",
                 "variant": "decimal",
                 "value": "1"

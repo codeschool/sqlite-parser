@@ -312,7 +312,12 @@
       "condition": [
         {
           "type": "condition",
-          "condition": "if not exists"
+          "variant": "if",
+          "condition": {
+            "type": "expression",
+            "variant": "exists",
+            "operator": "not exists"
+          }
         }
       ]
     },
@@ -328,7 +333,12 @@
       "condition": [
         {
           "type": "condition",
-          "condition": "if exists"
+          "variant": "if",
+          "condition": {
+            "type": "expression",
+            "variant": "exists",
+            "operator": "exists"
+          }
         }
       ]
     },

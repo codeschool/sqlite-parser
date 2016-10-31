@@ -902,7 +902,12 @@
       "condition": [
         {
           "type": "condition",
-          "condition": "if exists"
+          "variant": "if",
+          "condition": {
+            "type": "expression",
+            "variant": "exists",
+            "operator": "exists"
+          }
         }
       ]
     },
@@ -918,7 +923,12 @@
       "condition": [
         {
           "type": "condition",
-          "condition": "if exists"
+          "variant": "if",
+          "condition": {
+            "type": "expression",
+            "variant": "exists",
+            "operator": "exists"
+          }
         }
       ]
     },
@@ -1116,18 +1126,17 @@
         "result": [
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "literal",
                   "variant": "decimal",
                   "value": "1"
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "blob",
                   "value": "0000000000"
@@ -1135,13 +1144,13 @@
               },
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "literal",
                   "variant": "decimal",
                   "value": "2"
                 },
-                "then": {
+                "consequent": {
                   "type": "function",
                   "name": {
                     "type": "identifier",
@@ -1163,15 +1172,15 @@
               },
               {
                 "type": "condition",
-                "format": "else",
-                "else": {
+                "variant": "else",
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "xyzzy"
                 }
               }
             ],
-            "expression": {
+            "discriminant": {
               "type": "identifier",
               "variant": "column",
               "name": "a"
@@ -1235,7 +1244,12 @@
       "condition": [
         {
           "type": "condition",
-          "condition": "if exists"
+          "variant": "if",
+          "condition": {
+            "type": "expression",
+            "variant": "exists",
+            "operator": "exists"
+          }
         }
       ]
     },
