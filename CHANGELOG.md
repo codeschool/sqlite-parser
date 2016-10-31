@@ -24,74 +24,74 @@ All notable changes to this project will be documented in this file.
 
   ``` json
   {
-  "type": "expression",
-  "variant": "case",
-  "expression": [
-    {
-      "type": "condition",
-      "variant": "when",
-      "condition": {
-        "type": "expression",
-        "format": "binary",
-        "variant": "operation",
-        "operation": "=",
-        "left": {
+    "type": "expression",
+    "variant": "case",
+    "expression": [
+      {
+        "type": "condition",
+        "variant": "when",
+        "condition": {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "0"
+          }
+        },
+        "consequent": {
           "type": "identifier",
           "variant": "column",
-          "name": "a"
-        },
-        "right": {
-          "type": "literal",
-          "variant": "decimal",
-          "value": "0"
+          "name": "a1"
         }
       },
-      "consequent": {
-        "type": "identifier",
-        "variant": "column",
-        "name": "a1"
-      }
-    },
-    {
-      "type": "condition",
-      "variant": "when",
-      "condition": {
-        "type": "expression",
-        "format": "binary",
-        "variant": "operation",
-        "operation": "=",
-        "left": {
+      {
+        "type": "condition",
+        "variant": "when",
+        "condition": {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        },
+        "consequent": {
           "type": "identifier",
           "variant": "column",
-          "name": "a"
-        },
-        "right": {
-          "type": "literal",
-          "variant": "decimal",
-          "value": "1"
+          "name": "b1"
         }
       },
-      "consequent": {
-        "type": "identifier",
-        "variant": "column",
-        "name": "b1"
+      {
+        "type": "condition",
+        "variant": "else",
+        "consequent": {
+          "type": "identifier",
+          "variant": "column",
+          "name": "c1"
+        }
       }
-    },
-    {
-      "type": "condition",
-      "variant": "else",
-      "consequent": {
-        "type": "identifier",
-        "variant": "column",
-        "name": "c1"
-      }
+    ],
+    "discriminant": {
+      "type": "identifier",
+      "variant": "column",
+      "name": "acc"
     }
-  ],
-  "discriminant": {
-    "type": "identifier",
-    "variant": "column",
-    "name": "acc"
-  }
   }
   ```
 
