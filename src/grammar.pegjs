@@ -151,7 +151,7 @@ type_definition_types
  */
 datatype_custom "Custom Datatype Name"
   = t:( name ) r:( datatype_word_tail )* {
-    const variant = foldString([ t, r ]);
+    const variant = foldStringKey([ t, r ]);
     let affinity = 'numeric';
     if (/int/i.test(variant)) {
       affinity = 'integer';
@@ -415,7 +415,7 @@ expression_exists "EXISTS Expression"
   }
 expression_exists_ne "EXISTS Keyword"
   = n:( expression_is_not )? x:( EXISTS ) o
-  { return foldString([ n, x ]); }
+  { return foldStringKey([ n, x ]); }
 
 expression_raise "RAISE Expression"
   = s:( RAISE ) o sym_popen o a:( expression_raise_args ) o sym_pclose
@@ -466,10 +466,10 @@ expression_wrapped
 
 expression_recur
   = expression_wrapped
+  / expression_exists
   / expression_cast
   / expression_case
   / expression_raise
-  / expression_exists
   / expression_root
 
 expression_unary_collate
@@ -500,7 +500,7 @@ expression_unary_op
   = sym_tilde
   / sym_minus
   / sym_plus
-  / expression_is_not
+  / $( expression_is_not !EXISTS )
 
 expression_collate "COLLATE Expression"
   = c:( column_collate ) {
@@ -594,15 +594,14 @@ expression_case "CASE Expression"
   {
     return Object.assign({
       'type': 'expression',
-      'format': 'binary',
       'variant': keyNode(t),
-      'condition': flattenAll([ w, s ])
+      'expression': flattenAll([ w, s ])
     }, e);
   }
 case_expression
   = !WHEN e:( expression ) {
     return {
-      'expression': e
+      'discriminant': e
     };
   }
 expression_case_when "WHEN Clause"
@@ -610,9 +609,9 @@ expression_case_when "WHEN Clause"
   {
     return {
       'type': 'condition',
-      'format': keyNode(s),
-      'when': w,
-      'then': t
+      'variant': keyNode(s),
+      'condition': w,
+      'consequent': t
     };
   }
 expression_case_else "ELSE Clause"
@@ -620,8 +619,8 @@ expression_case_else "ELSE Clause"
   {
     return {
       'type': 'condition',
-      'format': keyNode(s),
-      'else': e
+      'variant': keyNode(s),
+      'consequent': e
     };
   }
 
@@ -673,7 +672,7 @@ expression_between_tail
   { return composeBinary(f, [ rest ]); }
 expression_is_not
   = n:( NOT ) o
-  { return textNode(n); }
+  { return keyNode(n); }
 
 expression_in "IN Expression"
   = n:( expression_is_not )? i:( IN ) o e:( expression_in_target )
@@ -741,7 +740,9 @@ function_call_args "Function Call Arguments"
       }
     };
   }
-  / d:( args_list_distinct )? e:( expression_list ) {
+  / d:( args_list_distinct )? e:( expression_list ) & {
+    return !isOkay(d) || e['expression'].length > 0;
+  } {
     return {
       'args': Object.assign(e, d)
     };
@@ -775,7 +776,7 @@ stmt_modifier "QUERY PLAN"
 
 modifier_query "QUERY PLAN Keyword"
   = q:( QUERY ) o p:( PLAN ) o
-  { return foldString([ q, p ]); }
+  { return foldStringKey([ q, p ]); }
 
 stmt_nodes
   = stmt_crud
@@ -885,7 +886,7 @@ stmt_alter "ALTER TABLE Statement"
 
 alter_start "ALTER TABLE Keyword"
   = a:( ALTER ) o t:( TABLE ) o
-  { return foldString([ a, t ]); }
+  { return foldStringKey([ a, t ]); }
 
 alter_action
   = alter_action_rename
@@ -1436,11 +1437,11 @@ alias "Alias"
 
 join_operator "JOIN Operator"
   = n:( join_operator_natural )? o t:( join_operator_types )? j:( JOIN )
-  { return foldString([ n, t, j ]); }
+  { return foldStringKey([ n, t, j ]); }
 
 join_operator_natural
   = n:( NATURAL ) o
-  { return textNode(n); }
+  { return keyNode(n); }
 
 join_operator_types
   = operator_types_hand
@@ -1454,15 +1455,15 @@ join_operator_types
  */
 operator_types_hand
   = t:( LEFT / RIGHT / FULL ) o o:( types_hand_outer )?
-  { return foldString([ t, o ]); }
+  { return foldStringKey([ t, o ]); }
 
 types_hand_outer
   = t:( OUTER ) o
-  { return textNode(t); }
+  { return keyNode(t); }
 
 operator_types_misc
   = t:( INNER / CROSS ) o
-  { return textNode(t); }
+  { return keyNode(t); }
 
 join_condition "JOIN Constraint"
   = c:( join_condition_on / join_condition_using ) o
@@ -1664,7 +1665,7 @@ operator_compound "Compound Operator"
 
 compound_union "UNION Operator"
   = s:( UNION ) o a:( compound_union_all )?
-  { return foldString([ s, a ]); }
+  { return foldStringKey([ s, a ]); }
 
 compound_union_all
   = a:( ALL ) o
@@ -1814,7 +1815,12 @@ create_core_ine "IF NOT EXISTS Modifier"
     return {
       'condition': makeArray({
         'type': 'condition',
-        'condition': foldStringKey([ i, n, e ])
+        'variant': keyNode(i),
+        'condition': {
+          'type': 'expression',
+          'variant': keyNode(e),
+          'operator': foldStringKey([ n, e ])
+        }
       })
     };
   }
@@ -1982,7 +1988,7 @@ constraint_null_types "UNIQUE Column Constraint"
 
 constraint_null_value "NULL Column Constraint"
   = n:( expression_is_not )? l:( NULL )
-  { return foldString([ n, l ]); }
+  { return foldStringKey([ n, l ]); }
 
 column_constraint_check "CHECK Column Constraint"
   = constraint_check
@@ -2060,11 +2066,11 @@ primary_start
 
 primary_start_normal "PRIMARY KEY Keyword"
   = p:( PRIMARY ) o k:( KEY )
-  { return foldString([ p, k ]); }
+  { return foldStringKey([ p, k ]); }
 
 primary_start_unique "UNIQUE Keyword"
   = u:( UNIQUE )
-  { return textNode(u); }
+  { return keyNode(u); }
 
 primary_columns
   = sym_popen f:( primary_column ) o b:( primary_column_tail )* sym_pclose {
@@ -2217,15 +2223,15 @@ action_on_action "FOREIGN KEY Action"
 
 on_action_set
   = s:( SET ) o v:( NULL / DEFAULT ) o
-  { return foldString([ s, v ]); }
+  { return foldStringKey([ s, v ]); }
 
 on_action_cascade
   = c:( CASCADE / RESTRICT ) o
-  { return textNode(c); }
+  { return keyNode(c); }
 
 on_action_none
   = n:( NO ) o a:( ACTION ) o
-  { return foldString([ n, a ]); }
+  { return foldStringKey([ n, a ]); }
 
 /**
  * @note Not sure what kind of name this should be.
@@ -2249,7 +2255,7 @@ foreign_deferrable "DEFERRABLE Clause"
 
 deferrable_initially
   = i:( INITIALLY ) o d:( DEFERRED / IMMEDIATE ) o
-  { return foldString([ i, d ]); }
+  { return foldStringKey([ i, d ]); }
 
 table_source_select
   = s:( create_as_select )
@@ -2352,7 +2358,7 @@ trigger_apply_mods
 
 trigger_apply_instead
   = i:( INSTEAD ) o o:( OF )
-  { return foldString([ i, o ]); }
+  { return foldStringKey([ i, o ]); }
 
 trigger_do "Conditional Action"
   = trigger_do_on
@@ -2538,7 +2544,7 @@ stmt_drop "DROP Statement"
   }
 
 drop_start "DROP Keyword"
-  = s:( DROP ) o t:( drop_types ) i:( drop_conditions )?
+  = s:( DROP ) o t:( drop_types ) i:( drop_ie )?
   {
      return Object.assign({
        'variant': keyNode(s),
@@ -2551,20 +2557,19 @@ drop_types "DROP Type"
   = t:( TABLE / INDEX / TRIGGER / VIEW ) o
   { return keyNode(t); }
 
-drop_conditions
-  = c:( drop_ie )
-  {
-    return {
-      'condition': makeArray(c)
-    };
-  }
-
 drop_ie "IF EXISTS Keyword"
   = i:( IF ) o e:( EXISTS ) o
   {
     return {
-      'type': 'condition',
-      'condition': foldStringKey([ i, e ])
+      'condition': [{
+        'type': 'condition',
+        'variant': keyNode(i),
+        'condition': {
+          'type': 'expression',
+          'variant': keyNode(e),
+          'operator': keyNode(e)
+        }
+      }]
     };
   }
 
@@ -2642,7 +2647,7 @@ id_database "Database Identifier"
     };
   }
 
-id_function
+id_function "Function Identifier"
   = d:( id_table_qualified )? n:( id_name ) {
     return {
       'type': 'identifier',
@@ -2702,7 +2707,7 @@ id_collation "Collation Identifier"
     };
   }
 
-id_savepoint "Savepoint Indentifier"
+id_savepoint "Savepoint Identifier"
   = n:( id_name )
   {
     return {

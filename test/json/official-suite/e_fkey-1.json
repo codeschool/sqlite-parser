@@ -6471,48 +6471,42 @@
       "when": {
         "type": "expression",
         "format": "unary",
-        "variant": "operation",
+        "variant": "exists",
         "expression": {
-          "type": "expression",
-          "format": "unary",
-          "variant": "exists",
-          "expression": {
-            "type": "statement",
-            "variant": "select",
-            "result": [
-              {
+          "type": "statement",
+          "variant": "select",
+          "result": [
+            {
+              "type": "identifier",
+              "variant": "column",
+              "name": "a"
+            }
+          ],
+          "from": {
+            "type": "identifier",
+            "variant": "table",
+            "name": "king"
+          },
+          "where": [
+            {
+              "type": "expression",
+              "format": "binary",
+              "variant": "operation",
+              "operation": "=",
+              "left": {
                 "type": "identifier",
                 "variant": "column",
                 "name": "a"
+              },
+              "right": {
+                "type": "identifier",
+                "variant": "column",
+                "name": "new.c"
               }
-            ],
-            "from": {
-              "type": "identifier",
-              "variant": "table",
-              "name": "king"
-            },
-            "where": [
-              {
-                "type": "expression",
-                "format": "binary",
-                "variant": "operation",
-                "operation": "=",
-                "left": {
-                  "type": "identifier",
-                  "variant": "column",
-                  "name": "a"
-                },
-                "right": {
-                  "type": "identifier",
-                  "variant": "column",
-                  "name": "new.c"
-                }
-              }
-            ]
-          },
-          "operator": "exists"
+            }
+          ]
         },
-        "operator": "not"
+        "operator": "not exists"
       }
     },
     {

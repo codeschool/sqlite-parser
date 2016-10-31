@@ -2750,13 +2750,12 @@
               "expression": [
                 {
                   "type": "expression",
-                  "format": "binary",
                   "variant": "case",
-                  "condition": [
+                  "expression": [
                     {
                       "type": "condition",
-                      "format": "when",
-                      "when": {
+                      "variant": "when",
+                      "condition": {
                         "type": "expression",
                         "format": "binary",
                         "variant": "operation",
@@ -2772,7 +2771,7 @@
                           "value": "EGYPT"
                         }
                       },
-                      "then": {
+                      "consequent": {
                         "type": "identifier",
                         "variant": "column",
                         "name": "volume"
@@ -2780,8 +2779,8 @@
                     },
                     {
                       "type": "condition",
-                      "format": "else",
-                      "else": {
+                      "variant": "else",
+                      "consequent": {
                         "type": "literal",
                         "variant": "decimal",
                         "value": "0"

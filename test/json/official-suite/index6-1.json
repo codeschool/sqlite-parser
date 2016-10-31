@@ -161,13 +161,12 @@
         "result": [
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -194,7 +193,7 @@
                     "value": "0"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "identifier",
                   "variant": "column",
                   "name": "value"
@@ -593,13 +592,12 @@
           },
           "value": {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -626,7 +624,7 @@
                     "value": "0"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "identifier",
                   "variant": "column",
                   "name": "b"

@@ -314,7 +314,12 @@
       "condition": [
         {
           "type": "condition",
-          "condition": "if exists"
+          "variant": "if",
+          "condition": {
+            "type": "expression",
+            "variant": "exists",
+            "operator": "exists"
+          }
         }
       ]
     },
@@ -1055,7 +1060,12 @@
       "condition": [
         {
           "type": "condition",
-          "condition": "if exists"
+          "variant": "if",
+          "condition": {
+            "type": "expression",
+            "variant": "exists",
+            "operator": "exists"
+          }
         }
       ]
     },
@@ -5423,29 +5433,30 @@
                       "right": {
                         "type": "expression",
                         "format": "unary",
-                        "variant": "operation",
+                        "variant": "exists",
                         "expression": {
-                          "type": "expression",
-                          "format": "unary",
-                          "variant": "exists",
-                          "expression": {
-                            "type": "statement",
-                            "variant": "select",
-                            "result": [
-                              {
-                                "type": "literal",
-                                "variant": "decimal",
-                                "value": "1"
-                              }
-                            ],
-                            "from": {
-                              "type": "identifier",
-                              "variant": "table",
-                              "name": "digits",
-                              "alias": "lp"
-                            },
-                            "where": [
-                              {
+                          "type": "statement",
+                          "variant": "select",
+                          "result": [
+                            {
+                              "type": "literal",
+                              "variant": "decimal",
+                              "value": "1"
+                            }
+                          ],
+                          "from": {
+                            "type": "identifier",
+                            "variant": "table",
+                            "name": "digits",
+                            "alias": "lp"
+                          },
+                          "where": [
+                            {
+                              "type": "expression",
+                              "format": "binary",
+                              "variant": "operation",
+                              "operation": "or",
+                              "left": {
                                 "type": "expression",
                                 "format": "binary",
                                 "variant": "operation",
@@ -5454,68 +5465,57 @@
                                   "type": "expression",
                                   "format": "binary",
                                   "variant": "operation",
-                                  "operation": "or",
+                                  "operation": "=",
                                   "left": {
-                                    "type": "expression",
-                                    "format": "binary",
-                                    "variant": "operation",
-                                    "operation": "=",
-                                    "left": {
+                                    "type": "identifier",
+                                    "variant": "column",
+                                    "name": "z.z"
+                                  },
+                                  "right": {
+                                    "type": "function",
+                                    "name": {
                                       "type": "identifier",
-                                      "variant": "column",
-                                      "name": "z.z"
+                                      "variant": "function",
+                                      "name": "substr"
                                     },
-                                    "right": {
-                                      "type": "function",
-                                      "name": {
-                                        "type": "identifier",
-                                        "variant": "function",
-                                        "name": "substr"
-                                      },
-                                      "args": {
-                                        "type": "expression",
-                                        "variant": "list",
-                                        "expression": [
-                                          {
-                                            "type": "identifier",
-                                            "variant": "column",
-                                            "name": "s"
-                                          },
-                                          {
+                                    "args": {
+                                      "type": "expression",
+                                      "variant": "list",
+                                      "expression": [
+                                        {
+                                          "type": "identifier",
+                                          "variant": "column",
+                                          "name": "s"
+                                        },
+                                        {
+                                          "type": "expression",
+                                          "format": "binary",
+                                          "variant": "operation",
+                                          "operation": "+",
+                                          "left": {
                                             "type": "expression",
                                             "format": "binary",
                                             "variant": "operation",
-                                            "operation": "+",
+                                            "operation": "*",
                                             "left": {
                                               "type": "expression",
                                               "format": "binary",
                                               "variant": "operation",
-                                              "operation": "*",
+                                              "operation": "/",
                                               "left": {
                                                 "type": "expression",
                                                 "format": "binary",
                                                 "variant": "operation",
-                                                "operation": "/",
+                                                "operation": "-",
                                                 "left": {
-                                                  "type": "expression",
-                                                  "format": "binary",
-                                                  "variant": "operation",
-                                                  "operation": "-",
-                                                  "left": {
-                                                    "type": "identifier",
-                                                    "variant": "column",
-                                                    "name": "ind"
-                                                  },
-                                                  "right": {
-                                                    "type": "literal",
-                                                    "variant": "decimal",
-                                                    "value": "1"
-                                                  }
+                                                  "type": "identifier",
+                                                  "variant": "column",
+                                                  "name": "ind"
                                                 },
                                                 "right": {
                                                   "type": "literal",
                                                   "variant": "decimal",
-                                                  "value": "9"
+                                                  "value": "1"
                                                 }
                                               },
                                               "right": {
@@ -5525,124 +5525,23 @@
                                               }
                                             },
                                             "right": {
-                                              "type": "identifier",
-                                              "variant": "column",
-                                              "name": "lp"
-                                            }
-                                          },
-                                          {
-                                            "type": "literal",
-                                            "variant": "decimal",
-                                            "value": "1"
-                                          }
-                                        ]
-                                      }
-                                    }
-                                  },
-                                  "right": {
-                                    "type": "expression",
-                                    "format": "binary",
-                                    "variant": "operation",
-                                    "operation": "=",
-                                    "left": {
-                                      "type": "identifier",
-                                      "variant": "column",
-                                      "name": "z.z"
-                                    },
-                                    "right": {
-                                      "type": "function",
-                                      "name": {
-                                        "type": "identifier",
-                                        "variant": "function",
-                                        "name": "substr"
-                                      },
-                                      "args": {
-                                        "type": "expression",
-                                        "variant": "list",
-                                        "expression": [
-                                          {
-                                            "type": "identifier",
-                                            "variant": "column",
-                                            "name": "s"
-                                          },
-                                          {
-                                            "type": "expression",
-                                            "format": "binary",
-                                            "variant": "operation",
-                                            "operation": "+",
-                                            "left": {
-                                              "type": "expression",
-                                              "format": "binary",
-                                              "variant": "operation",
-                                              "operation": "+",
-                                              "left": {
-                                                "type": "expression",
-                                                "format": "binary",
-                                                "variant": "operation",
-                                                "operation": "%",
-                                                "left": {
-                                                  "type": "expression",
-                                                  "format": "binary",
-                                                  "variant": "operation",
-                                                  "operation": "-",
-                                                  "left": {
-                                                    "type": "identifier",
-                                                    "variant": "column",
-                                                    "name": "ind"
-                                                  },
-                                                  "right": {
-                                                    "type": "literal",
-                                                    "variant": "decimal",
-                                                    "value": "1"
-                                                  }
-                                                },
-                                                "right": {
-                                                  "type": "literal",
-                                                  "variant": "decimal",
-                                                  "value": "9"
-                                                }
-                                              },
-                                              "right": {
-                                                "type": "expression",
-                                                "format": "binary",
-                                                "variant": "operation",
-                                                "operation": "*",
-                                                "left": {
-                                                  "type": "expression",
-                                                  "format": "binary",
-                                                  "variant": "operation",
-                                                  "operation": "-",
-                                                  "left": {
-                                                    "type": "identifier",
-                                                    "variant": "column",
-                                                    "name": "lp"
-                                                  },
-                                                  "right": {
-                                                    "type": "literal",
-                                                    "variant": "decimal",
-                                                    "value": "1"
-                                                  }
-                                                },
-                                                "right": {
-                                                  "type": "literal",
-                                                  "variant": "decimal",
-                                                  "value": "9"
-                                                }
-                                              }
-                                            },
-                                            "right": {
                                               "type": "literal",
                                               "variant": "decimal",
-                                              "value": "1"
+                                              "value": "9"
                                             }
                                           },
-                                          {
-                                            "type": "literal",
-                                            "variant": "decimal",
-                                            "value": "1"
+                                          "right": {
+                                            "type": "identifier",
+                                            "variant": "column",
+                                            "name": "lp"
                                           }
-                                        ]
-                                      }
+                                        },
+                                        {
+                                          "type": "literal",
+                                          "variant": "decimal",
+                                          "value": "1"
+                                        }
+                                      ]
                                     }
                                   }
                                 },
@@ -5686,61 +5585,124 @@
                                               "type": "expression",
                                               "format": "binary",
                                               "variant": "operation",
-                                              "operation": "+",
+                                              "operation": "%",
                                               "left": {
                                                 "type": "expression",
                                                 "format": "binary",
                                                 "variant": "operation",
-                                                "operation": "*",
+                                                "operation": "-",
                                                 "left": {
-                                                  "type": "expression",
-                                                  "format": "binary",
-                                                  "variant": "operation",
-                                                  "operation": "%",
-                                                  "left": {
-                                                    "type": "expression",
-                                                    "format": "binary",
-                                                    "variant": "operation",
-                                                    "operation": "/",
-                                                    "left": {
-                                                      "type": "expression",
-                                                      "format": "binary",
-                                                      "variant": "operation",
-                                                      "operation": "-",
-                                                      "left": {
-                                                        "type": "identifier",
-                                                        "variant": "column",
-                                                        "name": "ind"
-                                                      },
-                                                      "right": {
-                                                        "type": "literal",
-                                                        "variant": "decimal",
-                                                        "value": "1"
-                                                      }
-                                                    },
-                                                    "right": {
-                                                      "type": "literal",
-                                                      "variant": "decimal",
-                                                      "value": "3"
-                                                    }
-                                                  },
-                                                  "right": {
-                                                    "type": "literal",
-                                                    "variant": "decimal",
-                                                    "value": "3"
-                                                  }
+                                                  "type": "identifier",
+                                                  "variant": "column",
+                                                  "name": "ind"
                                                 },
                                                 "right": {
                                                   "type": "literal",
                                                   "variant": "decimal",
-                                                  "value": "3"
+                                                  "value": "1"
                                                 }
                                               },
                                               "right": {
+                                                "type": "literal",
+                                                "variant": "decimal",
+                                                "value": "9"
+                                              }
+                                            },
+                                            "right": {
+                                              "type": "expression",
+                                              "format": "binary",
+                                              "variant": "operation",
+                                              "operation": "*",
+                                              "left": {
                                                 "type": "expression",
                                                 "format": "binary",
                                                 "variant": "operation",
-                                                "operation": "*",
+                                                "operation": "-",
+                                                "left": {
+                                                  "type": "identifier",
+                                                  "variant": "column",
+                                                  "name": "lp"
+                                                },
+                                                "right": {
+                                                  "type": "literal",
+                                                  "variant": "decimal",
+                                                  "value": "1"
+                                                }
+                                              },
+                                              "right": {
+                                                "type": "literal",
+                                                "variant": "decimal",
+                                                "value": "9"
+                                              }
+                                            }
+                                          },
+                                          "right": {
+                                            "type": "literal",
+                                            "variant": "decimal",
+                                            "value": "1"
+                                          }
+                                        },
+                                        {
+                                          "type": "literal",
+                                          "variant": "decimal",
+                                          "value": "1"
+                                        }
+                                      ]
+                                    }
+                                  }
+                                }
+                              },
+                              "right": {
+                                "type": "expression",
+                                "format": "binary",
+                                "variant": "operation",
+                                "operation": "=",
+                                "left": {
+                                  "type": "identifier",
+                                  "variant": "column",
+                                  "name": "z.z"
+                                },
+                                "right": {
+                                  "type": "function",
+                                  "name": {
+                                    "type": "identifier",
+                                    "variant": "function",
+                                    "name": "substr"
+                                  },
+                                  "args": {
+                                    "type": "expression",
+                                    "variant": "list",
+                                    "expression": [
+                                      {
+                                        "type": "identifier",
+                                        "variant": "column",
+                                        "name": "s"
+                                      },
+                                      {
+                                        "type": "expression",
+                                        "format": "binary",
+                                        "variant": "operation",
+                                        "operation": "+",
+                                        "left": {
+                                          "type": "expression",
+                                          "format": "binary",
+                                          "variant": "operation",
+                                          "operation": "+",
+                                          "left": {
+                                            "type": "expression",
+                                            "format": "binary",
+                                            "variant": "operation",
+                                            "operation": "+",
+                                            "left": {
+                                              "type": "expression",
+                                              "format": "binary",
+                                              "variant": "operation",
+                                              "operation": "*",
+                                              "left": {
+                                                "type": "expression",
+                                                "format": "binary",
+                                                "variant": "operation",
+                                                "operation": "%",
                                                 "left": {
                                                   "type": "expression",
                                                   "format": "binary",
@@ -5765,46 +5727,13 @@
                                                   "right": {
                                                     "type": "literal",
                                                     "variant": "decimal",
-                                                    "value": "27"
+                                                    "value": "3"
                                                   }
                                                 },
                                                 "right": {
                                                   "type": "literal",
                                                   "variant": "decimal",
-                                                  "value": "27"
-                                                }
-                                              }
-                                            },
-                                            "right": {
-                                              "type": "identifier",
-                                              "variant": "column",
-                                              "name": "lp"
-                                            }
-                                          },
-                                          "right": {
-                                            "type": "expression",
-                                            "format": "binary",
-                                            "variant": "operation",
-                                            "operation": "*",
-                                            "left": {
-                                              "type": "expression",
-                                              "format": "binary",
-                                              "variant": "operation",
-                                              "operation": "/",
-                                              "left": {
-                                                "type": "expression",
-                                                "format": "binary",
-                                                "variant": "operation",
-                                                "operation": "-",
-                                                "left": {
-                                                  "type": "identifier",
-                                                  "variant": "column",
-                                                  "name": "lp"
-                                                },
-                                                "right": {
-                                                  "type": "literal",
-                                                  "variant": "decimal",
-                                                  "value": "1"
+                                                  "value": "3"
                                                 }
                                               },
                                               "right": {
@@ -5814,27 +5743,102 @@
                                               }
                                             },
                                             "right": {
-                                              "type": "literal",
-                                              "variant": "decimal",
-                                              "value": "6"
+                                              "type": "expression",
+                                              "format": "binary",
+                                              "variant": "operation",
+                                              "operation": "*",
+                                              "left": {
+                                                "type": "expression",
+                                                "format": "binary",
+                                                "variant": "operation",
+                                                "operation": "/",
+                                                "left": {
+                                                  "type": "expression",
+                                                  "format": "binary",
+                                                  "variant": "operation",
+                                                  "operation": "-",
+                                                  "left": {
+                                                    "type": "identifier",
+                                                    "variant": "column",
+                                                    "name": "ind"
+                                                  },
+                                                  "right": {
+                                                    "type": "literal",
+                                                    "variant": "decimal",
+                                                    "value": "1"
+                                                  }
+                                                },
+                                                "right": {
+                                                  "type": "literal",
+                                                  "variant": "decimal",
+                                                  "value": "27"
+                                                }
+                                              },
+                                              "right": {
+                                                "type": "literal",
+                                                "variant": "decimal",
+                                                "value": "27"
+                                              }
                                             }
+                                          },
+                                          "right": {
+                                            "type": "identifier",
+                                            "variant": "column",
+                                            "name": "lp"
                                           }
                                         },
-                                        {
-                                          "type": "literal",
-                                          "variant": "decimal",
-                                          "value": "1"
+                                        "right": {
+                                          "type": "expression",
+                                          "format": "binary",
+                                          "variant": "operation",
+                                          "operation": "*",
+                                          "left": {
+                                            "type": "expression",
+                                            "format": "binary",
+                                            "variant": "operation",
+                                            "operation": "/",
+                                            "left": {
+                                              "type": "expression",
+                                              "format": "binary",
+                                              "variant": "operation",
+                                              "operation": "-",
+                                              "left": {
+                                                "type": "identifier",
+                                                "variant": "column",
+                                                "name": "lp"
+                                              },
+                                              "right": {
+                                                "type": "literal",
+                                                "variant": "decimal",
+                                                "value": "1"
+                                              }
+                                            },
+                                            "right": {
+                                              "type": "literal",
+                                              "variant": "decimal",
+                                              "value": "3"
+                                            }
+                                          },
+                                          "right": {
+                                            "type": "literal",
+                                            "variant": "decimal",
+                                            "value": "6"
+                                          }
                                         }
-                                      ]
-                                    }
+                                      },
+                                      {
+                                        "type": "literal",
+                                        "variant": "decimal",
+                                        "value": "1"
+                                      }
+                                    ]
                                   }
                                 }
                               }
-                            ]
-                          },
-                          "operator": "exists"
+                            }
+                          ]
                         },
-                        "operator": "not"
+                        "operator": "not exists"
                       }
                     }
                   ]
@@ -5857,7 +5861,12 @@
       "condition": [
         {
           "type": "condition",
-          "condition": "if exists"
+          "variant": "if",
+          "condition": {
+            "type": "expression",
+            "variant": "exists",
+            "operator": "exists"
+          }
         }
       ]
     },

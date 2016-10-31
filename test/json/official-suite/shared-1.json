@@ -1482,13 +1482,12 @@
       "result": [
         {
           "type": "expression",
-          "format": "binary",
           "variant": "case",
-          "condition": [
+          "expression": [
             {
               "type": "condition",
-              "format": "when",
-              "when": {
+              "variant": "when",
+              "condition": {
                 "type": "expression",
                 "format": "binary",
                 "variant": "operation",
@@ -1504,7 +1503,7 @@
                   "value": "4"
                 }
               },
-              "then": {
+              "consequent": {
                 "type": "statement",
                 "variant": "select",
                 "result": [
@@ -1523,8 +1522,8 @@
             },
             {
               "type": "condition",
-              "format": "else",
-              "else": {
+              "variant": "else",
+              "consequent": {
                 "type": "literal",
                 "variant": "decimal",
                 "value": "0"

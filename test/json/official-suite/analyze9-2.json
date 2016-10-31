@@ -1371,13 +1371,12 @@
           "expression": [
             {
               "type": "expression",
-              "format": "binary",
               "variant": "case",
-              "condition": [
+              "expression": [
                 {
                   "type": "condition",
-                  "format": "when",
-                  "when": {
+                  "variant": "when",
+                  "condition": {
                     "type": "expression",
                     "format": "binary",
                     "variant": "operation",
@@ -1393,7 +1392,7 @@
                       "value": "80"
                     }
                   },
-                  "then": {
+                  "consequent": {
                     "type": "literal",
                     "variant": "text",
                     "value": "one"
@@ -1401,8 +1400,8 @@
                 },
                 {
                   "type": "condition",
-                  "format": "else",
-                  "else": {
+                  "variant": "else",
+                  "consequent": {
                     "type": "literal",
                     "variant": "text",
                     "value": "two"
@@ -1610,13 +1609,12 @@
         "result": [
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -1654,7 +1652,7 @@
                     }
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "B"
@@ -1662,8 +1660,8 @@
               },
               {
                 "type": "condition",
-                "format": "else",
-                "else": {
+                "variant": "else",
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "A"
@@ -1678,13 +1676,12 @@
           },
           {
             "type": "expression",
-            "format": "binary",
             "variant": "case",
-            "condition": [
+            "expression": [
               {
                 "type": "condition",
-                "format": "when",
-                "when": {
+                "variant": "when",
+                "condition": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -1700,7 +1697,7 @@
                     "value": "51"
                   }
                 },
-                "then": {
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "one"
@@ -1708,8 +1705,8 @@
               },
               {
                 "type": "condition",
-                "format": "else",
-                "else": {
+                "variant": "else",
+                "consequent": {
                   "type": "literal",
                   "variant": "text",
                   "value": "two"
@@ -2743,13 +2740,12 @@
                     },
                     {
                       "type": "expression",
-                      "format": "binary",
                       "variant": "case",
-                      "condition": [
+                      "expression": [
                         {
                           "type": "condition",
-                          "format": "when",
-                          "when": {
+                          "variant": "when",
+                          "condition": {
                             "type": "expression",
                             "format": "binary",
                             "variant": "operation",
@@ -2765,7 +2761,7 @@
                               "value": "y"
                             }
                           },
-                          "then": {
+                          "consequent": {
                             "type": "literal",
                             "variant": "text",
                             "value": "n"
@@ -2773,8 +2769,8 @@
                         },
                         {
                           "type": "condition",
-                          "format": "else",
-                          "else": {
+                          "variant": "else",
+                          "consequent": {
                             "type": "literal",
                             "variant": "text",
                             "value": "y"

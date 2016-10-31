@@ -642,7 +642,12 @@
       "condition": [
         {
           "type": "condition",
-          "condition": "if not exists"
+          "variant": "if",
+          "condition": {
+            "type": "expression",
+            "variant": "exists",
+            "operator": "not exists"
+          }
         }
       ]
     },
@@ -693,7 +698,12 @@
       "condition": [
         {
           "type": "condition",
-          "condition": "if not exists"
+          "variant": "if",
+          "condition": {
+            "type": "expression",
+            "variant": "exists",
+            "operator": "not exists"
+          }
         }
       ]
     },
@@ -717,116 +727,110 @@
         {
           "type": "expression",
           "format": "unary",
-          "variant": "operation",
+          "variant": "exists",
           "expression": {
-            "type": "expression",
-            "format": "unary",
-            "variant": "exists",
-            "expression": {
+            "type": "statement",
+            "variant": "compound",
+            "statement": {
               "type": "statement",
-              "variant": "compound",
-              "statement": {
-                "type": "statement",
-                "variant": "select",
-                "result": [
-                  {
+              "variant": "select",
+              "result": [
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "t2.pk"
+                }
+              ],
+              "from": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "tag",
+                "alias": "t2"
+              },
+              "where": [
+                {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "=",
+                  "left": {
                     "type": "identifier",
                     "variant": "column",
-                    "name": "t2.pk"
-                  }
-                ],
-                "from": {
-                  "type": "identifier",
-                  "variant": "table",
-                  "name": "tag",
-                  "alias": "t2"
-                },
-                "where": [
-                  {
-                    "type": "expression",
-                    "format": "binary",
-                    "variant": "operation",
-                    "operation": "=",
-                    "left": {
-                      "type": "identifier",
-                      "variant": "column",
-                      "name": "t2.fk"
-                    },
-                    "right": {
-                      "type": "identifier",
-                      "variant": "column",
-                      "name": "p.pk"
-                    }
-                  }
-                ]
-              },
-              "compound": [
-                {
-                  "type": "compound",
-                  "variant": "except",
-                  "statement": {
-                    "type": "statement",
-                    "variant": "select",
-                    "result": [
-                      {
-                        "type": "identifier",
-                        "variant": "column",
-                        "name": "t3.pk"
-                      }
-                    ],
-                    "from": {
-                      "type": "identifier",
-                      "variant": "table",
-                      "name": "tag",
-                      "alias": "t3"
-                    },
-                    "where": [
-                      {
-                        "type": "expression",
-                        "format": "binary",
-                        "variant": "operation",
-                        "operation": "and",
-                        "left": {
-                          "type": "expression",
-                          "format": "binary",
-                          "variant": "operation",
-                          "operation": "=",
-                          "left": {
-                            "type": "identifier",
-                            "variant": "column",
-                            "name": "t3.fk"
-                          },
-                          "right": {
-                            "type": "identifier",
-                            "variant": "column",
-                            "name": "p.pk"
-                          }
-                        },
-                        "right": {
-                          "type": "expression",
-                          "format": "binary",
-                          "variant": "operation",
-                          "operation": "like",
-                          "right": {
-                            "type": "literal",
-                            "variant": "text",
-                            "value": "%foo%"
-                          },
-                          "left": {
-                            "type": "identifier",
-                            "variant": "column",
-                            "name": "t3.name"
-                          }
-                        }
-                      }
-                    ]
+                    "name": "t2.fk"
+                  },
+                  "right": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "p.pk"
                   }
                 }
               ]
             },
-            "operator": "exists"
+            "compound": [
+              {
+                "type": "compound",
+                "variant": "except",
+                "statement": {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "t3.pk"
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "tag",
+                    "alias": "t3"
+                  },
+                  "where": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "and",
+                      "left": {
+                        "type": "expression",
+                        "format": "binary",
+                        "variant": "operation",
+                        "operation": "=",
+                        "left": {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "t3.fk"
+                        },
+                        "right": {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "p.pk"
+                        }
+                      },
+                      "right": {
+                        "type": "expression",
+                        "format": "binary",
+                        "variant": "operation",
+                        "operation": "like",
+                        "right": {
+                          "type": "literal",
+                          "variant": "text",
+                          "value": "%foo%"
+                        },
+                        "left": {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "t3.name"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           },
-          "operator": "not"
+          "operator": "not exists"
         }
       ]
     },
@@ -1033,116 +1037,110 @@
         {
           "type": "expression",
           "format": "unary",
-          "variant": "operation",
+          "variant": "exists",
           "expression": {
-            "type": "expression",
-            "format": "unary",
-            "variant": "exists",
-            "expression": {
+            "type": "statement",
+            "variant": "compound",
+            "statement": {
               "type": "statement",
-              "variant": "compound",
-              "statement": {
-                "type": "statement",
-                "variant": "select",
-                "result": [
-                  {
+              "variant": "select",
+              "result": [
+                {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "t2.pk"
+                }
+              ],
+              "from": {
+                "type": "identifier",
+                "variant": "table",
+                "name": "tag",
+                "alias": "t2"
+              },
+              "where": [
+                {
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "=",
+                  "left": {
                     "type": "identifier",
                     "variant": "column",
-                    "name": "t2.pk"
-                  }
-                ],
-                "from": {
-                  "type": "identifier",
-                  "variant": "table",
-                  "name": "tag",
-                  "alias": "t2"
-                },
-                "where": [
-                  {
-                    "type": "expression",
-                    "format": "binary",
-                    "variant": "operation",
-                    "operation": "=",
-                    "left": {
-                      "type": "identifier",
-                      "variant": "column",
-                      "name": "t2.fk"
-                    },
-                    "right": {
-                      "type": "identifier",
-                      "variant": "column",
-                      "name": "p.pk"
-                    }
-                  }
-                ]
-              },
-              "compound": [
-                {
-                  "type": "compound",
-                  "variant": "except",
-                  "statement": {
-                    "type": "statement",
-                    "variant": "select",
-                    "result": [
-                      {
-                        "type": "identifier",
-                        "variant": "column",
-                        "name": "t3.pk"
-                      }
-                    ],
-                    "from": {
-                      "type": "identifier",
-                      "variant": "table",
-                      "name": "tag",
-                      "alias": "t3"
-                    },
-                    "where": [
-                      {
-                        "type": "expression",
-                        "format": "binary",
-                        "variant": "operation",
-                        "operation": "and",
-                        "left": {
-                          "type": "expression",
-                          "format": "binary",
-                          "variant": "operation",
-                          "operation": "=",
-                          "left": {
-                            "type": "identifier",
-                            "variant": "column",
-                            "name": "t3.fk"
-                          },
-                          "right": {
-                            "type": "identifier",
-                            "variant": "column",
-                            "name": "p.pk"
-                          }
-                        },
-                        "right": {
-                          "type": "expression",
-                          "format": "binary",
-                          "variant": "operation",
-                          "operation": "like",
-                          "right": {
-                            "type": "literal",
-                            "variant": "text",
-                            "value": "%foo%"
-                          },
-                          "left": {
-                            "type": "identifier",
-                            "variant": "column",
-                            "name": "t3.name"
-                          }
-                        }
-                      }
-                    ]
+                    "name": "t2.fk"
+                  },
+                  "right": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "p.pk"
                   }
                 }
               ]
             },
-            "operator": "exists"
+            "compound": [
+              {
+                "type": "compound",
+                "variant": "except",
+                "statement": {
+                  "type": "statement",
+                  "variant": "select",
+                  "result": [
+                    {
+                      "type": "identifier",
+                      "variant": "column",
+                      "name": "t3.pk"
+                    }
+                  ],
+                  "from": {
+                    "type": "identifier",
+                    "variant": "table",
+                    "name": "tag",
+                    "alias": "t3"
+                  },
+                  "where": [
+                    {
+                      "type": "expression",
+                      "format": "binary",
+                      "variant": "operation",
+                      "operation": "and",
+                      "left": {
+                        "type": "expression",
+                        "format": "binary",
+                        "variant": "operation",
+                        "operation": "=",
+                        "left": {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "t3.fk"
+                        },
+                        "right": {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "p.pk"
+                        }
+                      },
+                      "right": {
+                        "type": "expression",
+                        "format": "binary",
+                        "variant": "operation",
+                        "operation": "like",
+                        "right": {
+                          "type": "literal",
+                          "variant": "text",
+                          "value": "%foo%"
+                        },
+                        "left": {
+                          "type": "identifier",
+                          "variant": "column",
+                          "name": "t3.name"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           },
-          "operator": "not"
+          "operator": "not exists"
         }
       ]
     },
@@ -1240,13 +1238,12 @@
       "result": [
         {
           "type": "expression",
-          "format": "binary",
           "variant": "case",
-          "condition": [
+          "expression": [
             {
               "type": "condition",
-              "format": "when",
-              "when": {
+              "variant": "when",
+              "condition": {
                 "type": "expression",
                 "format": "binary",
                 "variant": "operation",
@@ -1262,7 +1259,7 @@
                   "value": "0"
                 }
               },
-              "then": {
+              "consequent": {
                 "type": "literal",
                 "variant": "decimal",
                 "value": "0"
@@ -1270,8 +1267,8 @@
             },
             {
               "type": "condition",
-              "format": "else",
-              "else": {
+              "variant": "else",
+              "consequent": {
                 "type": "expression",
                 "format": "binary",
                 "variant": "operation",
@@ -1408,13 +1405,12 @@
       "result": [
         {
           "type": "expression",
-          "format": "binary",
           "variant": "case",
-          "condition": [
+          "expression": [
             {
               "type": "condition",
-              "format": "when",
-              "when": {
+              "variant": "when",
+              "condition": {
                 "type": "expression",
                 "format": "binary",
                 "variant": "operation",
@@ -1430,7 +1426,7 @@
                   "value": "0"
                 }
               },
-              "then": {
+              "consequent": {
                 "type": "literal",
                 "variant": "text",
                 "value": "zero"
@@ -1438,8 +1434,8 @@
             },
             {
               "type": "condition",
-              "format": "else",
-              "else": {
+              "variant": "else",
+              "consequent": {
                 "type": "expression",
                 "format": "binary",
                 "variant": "operation",

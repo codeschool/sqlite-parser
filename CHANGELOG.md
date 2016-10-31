@@ -3,6 +3,212 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+## [v1.0.0-rc2] - 2016-10-30
+### Changed
+- **BREAKING CHANGE** All named values for properties such as `variant`, `format`, and `type` should always be lowercase, even when uppercase in the input SQL (e.g., `variant` is now `natural join` instead of `NATURAL JOIN` in the AST).
+
+- **BREAKING CHANGE** New format for `CASE` expression AST nodes:
+  - `variant` `when` has a `condition` and a `consequent`
+  - `variant` `else` has just a `consequent`
+  - the outer `expression` is now `variant` `case` instead of `binary`
+  - instead of taking whatever is provided between `CASE` and `WHEN` (e.g., `CASE foo WHEN ...`) and calling that the expression, it is now added as the `discriminant`
+
+  ``` sql
+  select
+      case acc
+        when a = 0 then a1
+        when a = 1 then b1
+        else c1
+      end
+  ```
+
+  ``` json
+  {
+    "type": "expression",
+    "variant": "case",
+    "expression": [
+      {
+        "type": "condition",
+        "variant": "when",
+        "condition": {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "0"
+          }
+        },
+        "consequent": {
+          "type": "identifier",
+          "variant": "column",
+          "name": "a1"
+        }
+      },
+      {
+        "type": "condition",
+        "variant": "when",
+        "condition": {
+          "type": "expression",
+          "format": "binary",
+          "variant": "operation",
+          "operation": "=",
+          "left": {
+            "type": "identifier",
+            "variant": "column",
+            "name": "a"
+          },
+          "right": {
+            "type": "literal",
+            "variant": "decimal",
+            "value": "1"
+          }
+        },
+        "consequent": {
+          "type": "identifier",
+          "variant": "column",
+          "name": "b1"
+        }
+      },
+      {
+        "type": "condition",
+        "variant": "else",
+        "consequent": {
+          "type": "identifier",
+          "variant": "column",
+          "name": "c1"
+        }
+      }
+    ],
+    "discriminant": {
+      "type": "identifier",
+      "variant": "column",
+      "name": "acc"
+    }
+  }
+  ```
+
+- **BREAKING CHANGE** New format for `EXISTS` expression nodes. Use `expression` node in `condition` for `IF NOT EXISTS`. `NOT EXISTS`, and `EXISTS` modifiers instead of a string value.
+  - `CREATE TABLE` statement
+
+    ``` sql
+    create table if not exists foo(id int)
+    ```
+
+    ``` json
+    {
+      "type": "statement",
+      "name": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "foo"
+      },
+      "variant": "create",
+      "format": "table",
+      "definition": [
+        {
+          "type": "definition",
+          "variant": "column",
+          "name": "id",
+          "definition": [],
+          "datatype": {
+            "type": "datatype",
+            "variant": "int",
+            "affinity": "integer"
+          }
+        }
+      ],
+      "condition": [
+        {
+          "type": "condition",
+          "variant": "if",
+          "condition": {
+            "type": "expression",
+            "variant": "exists",
+            "operator": "not exists"
+          }
+        }
+      ]
+    }
+    ```
+
+  - `DROP TABLE` statement
+
+    ``` sql
+    drop table if exists foo
+    ```
+
+    ``` json
+    {
+      "type": "statement",
+      "target": {
+        "type": "identifier",
+        "variant": "table",
+        "name": "foo"
+      },
+      "variant": "drop",
+      "format": "table",
+      "condition": [
+        {
+          "type": "condition",
+          "variant": "if",
+          "condition": {
+            "type": "expression",
+            "variant": "exists",
+            "operator": "exists"
+          }
+        }
+      ]
+    }
+    ```
+
+  - `NOT EXISTS` expression
+
+    ``` sql
+    select a
+    where not exists (select b)
+    ```
+
+    ``` json
+    {
+      "type": "statement",
+      "variant": "select",
+      "result": [
+        {
+          "type": "identifier",
+          "variant": "column",
+          "name": "a"
+        }
+      ],
+      "where": [
+        {
+          "type": "expression",
+          "format": "unary",
+          "variant": "exists",
+          "expression": {
+            "type": "statement",
+            "variant": "select",
+            "result": [
+              {
+                "type": "identifier",
+                "variant": "column",
+                "name": "b"
+              }
+            ]
+          },
+          "operator": "not exists"
+        }
+      ]
+    }
+    ```
+
 ## [v1.0.0-rc1] - 2016-10-16
 ### Added
 - The root node of the AST now has `type` and `variant` properties:
@@ -1032,7 +1238,8 @@ part of table names, column names, aliases, etc... This also addresses issues th
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v1.0.0-rc1...HEAD
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v1.0.0-rc2...HEAD
+[v1.0.0-rc2]: https://github.com/codeschool/sqlite-parser/compare/v1.0.0-rc1...v1.0.0-rc2
 [v1.0.0-rc1]: https://github.com/codeschool/sqlite-parser/compare/v0.14.5...v1.0.0-rc1
 [v0.14.5]: https://github.com/codeschool/sqlite-parser/compare/v0.14.4...v0.14.5
 [v0.14.4]: https://github.com/codeschool/sqlite-parser/compare/v0.14.3...v0.14.4

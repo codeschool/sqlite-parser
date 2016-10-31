@@ -395,7 +395,7 @@ module.exports = function(grunt) {
     'copy:release',
     'usebanner:release'
   ]);
-  // Create minified browser bundle of parser at dist/sqlite-parser.js
+  // Create minified browserified bundle of parser at dist/sqlite-parser.js
   grunt.registerTask('browser', [
     'demobuild',
     'clean:browser',

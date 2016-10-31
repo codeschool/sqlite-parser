@@ -454,13 +454,12 @@
             },
             "right": {
               "type": "expression",
-              "format": "binary",
               "variant": "case",
-              "condition": [
+              "expression": [
                 {
                   "type": "condition",
-                  "format": "when",
-                  "when": {
+                  "variant": "when",
+                  "condition": {
                     "type": "expression",
                     "format": "binary",
                     "variant": "operation",
@@ -476,7 +475,7 @@
                       "name": "y.b"
                     }
                   },
-                  "then": {
+                  "consequent": {
                     "type": "literal",
                     "variant": "text",
                     "value": "=="
@@ -484,8 +483,8 @@
                 },
                 {
                   "type": "condition",
-                  "format": "else",
-                  "else": {
+                  "variant": "else",
+                  "consequent": {
                     "type": "literal",
                     "variant": "text",
                     "value": "<>"
@@ -560,7 +559,12 @@
       "condition": [
         {
           "type": "condition",
-          "condition": "if exists"
+          "variant": "if",
+          "condition": {
+            "type": "expression",
+            "variant": "exists",
+            "operator": "exists"
+          }
         }
       ]
     },
@@ -932,7 +936,12 @@
       "condition": [
         {
           "type": "condition",
-          "condition": "if exists"
+          "variant": "if",
+          "condition": {
+            "type": "expression",
+            "variant": "exists",
+            "operator": "exists"
+          }
         }
       ]
     },

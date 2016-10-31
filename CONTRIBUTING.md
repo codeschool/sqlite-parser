@@ -117,6 +117,11 @@ grunt release
   grunt dist
   ```
 
+- Create minified browserified bundle of parser at `dist/sqlite-parser.js`
+  ```
+  grunt browser
+  ```
+
 - Create new version of command line utility at `bin/sqlite-parser`
   ```
   grunt bin
