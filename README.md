@@ -20,7 +20,17 @@ to see it in action.
 npm install sqlite-parser
 ```
 
-### Install as a global module
+### Beta version available
+
+Try out the latest and greatest (currently `v1.0.0-rc2`)! Currently, the
+`sqlite-parser` CLI tool and streaming parser API are only available when
+installing this module with the `beta` tag.
+
+```
+npm install sqlite-parser@beta
+```
+
+### Install as a global module **(v1.0.0 beta only)**
 
 Use the command-line interface of the parser by installing it as a global module.
 The `sqlite-parser` command is then available to use to parse input SQL files and
@@ -28,7 +38,7 @@ write the results to stdout or a JSON file. Additional usage
 instructions and options available through `sqlite-parser --help`.
 
 ```
-npm i -g sqlite-parser
+npm i -g sqlite-parser@beta
 ```
 
 ## Basic Usage
@@ -57,7 +67,7 @@ sqliteParser(query, function (err, ast) {
 });
 ```
 
-## Use parser on Node streams *(experimental)*
+## Use parser on Node streams *(experimental)* **(v1.0.0 beta only)**
 
 This library also includes *experimental* support as a
 [stream transform](https://nodejs.org/api/stream.html) that can accept a
