@@ -1522,6 +1522,7 @@ function peg$parse(input, options) {
     function(m, a) {
         return Object.assign({
           'type': 'module',
+          'variant': 'virtual',
           'name': m
         }, a);
       },
