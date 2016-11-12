@@ -130,6 +130,12 @@ module.exports = function(grunt) {
         expand: true,
         cwd: '.tmp/',
         dest: 'demo/'
+      },
+      browser: {
+        src: 'sqlite-parser.js',
+        dest: 'dist/',
+        expand: true,
+        cwd: '.tmp/'
       }
     },
 
@@ -337,8 +343,8 @@ module.exports = function(grunt) {
       },
       browser: {
         files: [{
-          src: 'dist/sqlite-parser.js',
-          dest: 'dist/sqlite-parser.js'
+          src: '.tmp/sqlite-parser.js',
+          dest: '.tmp/sqlite-parser.js'
         }]
       },
       bin: {
@@ -372,7 +378,13 @@ module.exports = function(grunt) {
       ],
       releaseall: [
         [ 'clean:release', 'copy:release', 'usebanner:release' ],
-        [ 'clean:browser', 'browserify:browser', 'uglify:browser', 'usebanner:browser' ],
+        [
+          'clean:browser',
+          'browserify:browser',
+          // 'uglify:browser',
+          'copy:browser',
+          'usebanner:browser'
+        ],
       ]
     }
   });
@@ -401,7 +413,8 @@ module.exports = function(grunt) {
     'clean:browser',
     'browserify:browser',
     'replace:browser',
-    'uglify:browser',
+    // 'uglify:browser',
+    'copy:browser',
     'usebanner:browser'
   ]);
   // Create new version of command line utility at bin/sqlite-parser
