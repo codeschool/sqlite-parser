@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased][unreleased]
 
+## [v1.0.0-rc3] - 2016-11-12
+### Changed
+- `RangeError: Maximum call stack size exceeded` generated when running the uglified bundle (`dist/sqlite-parser.js`) in the browser, so I am skipping the minification step and only publishing the browserified bundle.
+
 ## [v1.0.0-rc2] - 2016-10-30
 ### Changed
 - **BREAKING CHANGE** All named values for properties such as `variant`, `format`, and `type` should always be lowercase, even when uppercase in the input SQL (e.g., `variant` is now `natural join` instead of `NATURAL JOIN` in the AST).
@@ -1238,7 +1242,8 @@ part of table names, column names, aliases, etc... This also addresses issues th
 ### Added
 - First working version of sqlite-parser
 
-[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v1.0.0-rc2...HEAD
+[unreleased]: https://github.com/codeschool/sqlite-parser/compare/v1.0.0-rc3...HEAD
+[v1.0.0-rc3]: https://github.com/codeschool/sqlite-parser/compare/v1.0.0-rc2...v1.0.0-rc3
 [v1.0.0-rc2]: https://github.com/codeschool/sqlite-parser/compare/v1.0.0-rc1...v1.0.0-rc2
 [v1.0.0-rc1]: https://github.com/codeschool/sqlite-parser/compare/v0.14.5...v1.0.0-rc1
 [v0.14.5]: https://github.com/codeschool/sqlite-parser/compare/v0.14.4...v0.14.5
