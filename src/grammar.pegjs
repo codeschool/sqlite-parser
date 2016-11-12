@@ -2478,6 +2478,7 @@ virtual_module
   {
     return Object.assign({
       'type': 'module',
+      'variant': 'virtual',
       'name': m
     }, a);
   }

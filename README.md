@@ -22,7 +22,7 @@ npm install sqlite-parser
 
 ### Beta version available
 
-Try out the latest and greatest (currently `v1.0.0-rc2`)! Currently, the
+Try out the latest and greatest (currently `v1.0.0-rc3`)! Currently, the
 `sqlite-parser` CLI tool and streaming parser API are only available when
 installing this module with the `beta` tag.
 
@@ -194,4 +194,4 @@ the parser will attempt to describe the area of concern
 ## Contributing
 
 Contributions are welcome! You can get started by checking out the
-[contributing guidelines](https://github.com/codeschool/sqlite-parser/blob/master/CHANGELOG.md).
+[contributing guidelines](https://github.com/codeschool/sqlite-parser/blob/master/CONTRIBUTING.md).
