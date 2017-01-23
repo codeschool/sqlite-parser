@@ -812,29 +812,29 @@
               "type": "expression",
               "format": "binary",
               "variant": "operation",
-              "operation": "and",
+              "operation": "or",
               "left": {
                 "type": "expression",
                 "format": "binary",
                 "variant": "operation",
-                "operation": "or",
+                "operation": "=",
                 "left": {
-                  "type": "expression",
-                  "format": "binary",
-                  "variant": "operation",
-                  "operation": "=",
-                  "left": {
-                    "type": "identifier",
-                    "variant": "column",
-                    "name": "flavors.flavor"
-                  },
-                  "right": {
-                    "type": "identifier",
-                    "variant": "column",
-                    "name": "tllist.flavor"
-                  }
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "flavors.flavor"
                 },
                 "right": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "tllist.flavor"
+                }
+              },
+              "right": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "and",
+                "left": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -849,22 +849,22 @@
                     "variant": "null",
                     "value": "null"
                   }
-                }
-              },
-              "right": {
-                "type": "expression",
-                "format": "binary",
-                "variant": "operation",
-                "operation": "=",
-                "left": {
-                  "type": "identifier",
-                  "variant": "column",
-                  "name": "tllist.flavor"
                 },
                 "right": {
-                  "type": "literal",
-                  "variant": "text",
-                  "value": ""
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "=",
+                  "left": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "tllist.flavor"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "variant": "text",
+                    "value": ""
+                  }
                 }
               }
             }
@@ -1089,29 +1089,29 @@
               "type": "expression",
               "format": "binary",
               "variant": "operation",
-              "operation": "and",
+              "operation": "or",
               "left": {
                 "type": "expression",
                 "format": "binary",
                 "variant": "operation",
-                "operation": "or",
+                "operation": "=",
                 "left": {
-                  "type": "expression",
-                  "format": "binary",
-                  "variant": "operation",
-                  "operation": "=",
-                  "left": {
-                    "type": "identifier",
-                    "variant": "column",
-                    "name": "flavors.flavor"
-                  },
-                  "right": {
-                    "type": "identifier",
-                    "variant": "column",
-                    "name": "tllist.flavor"
-                  }
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "flavors.flavor"
                 },
                 "right": {
+                  "type": "identifier",
+                  "variant": "column",
+                  "name": "tllist.flavor"
+                }
+              },
+              "right": {
+                "type": "expression",
+                "format": "binary",
+                "variant": "operation",
+                "operation": "and",
+                "left": {
                   "type": "expression",
                   "format": "binary",
                   "variant": "operation",
@@ -1126,22 +1126,22 @@
                     "variant": "null",
                     "value": "null"
                   }
-                }
-              },
-              "right": {
-                "type": "expression",
-                "format": "binary",
-                "variant": "operation",
-                "operation": "=",
-                "left": {
-                  "type": "identifier",
-                  "variant": "column",
-                  "name": "tllist.flavor"
                 },
                 "right": {
-                  "type": "literal",
-                  "variant": "text",
-                  "value": ""
+                  "type": "expression",
+                  "format": "binary",
+                  "variant": "operation",
+                  "operation": "=",
+                  "left": {
+                    "type": "identifier",
+                    "variant": "column",
+                    "name": "tllist.flavor"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "variant": "text",
+                    "value": ""
+                  }
                 }
               }
             }
