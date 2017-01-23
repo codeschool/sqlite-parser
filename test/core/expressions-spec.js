@@ -58,6 +58,10 @@ describe('expressions', function() {
     tree.equals(this, done);
   });
 
+  it('expression grouping 9', function(done) {
+    tree.equals(this, done);
+  });
+
   it('expression parenthesis 1', function(done) {
     tree.equals(this, done);
   });

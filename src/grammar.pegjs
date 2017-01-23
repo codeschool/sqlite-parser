@@ -692,12 +692,17 @@ expression_list_or_select
   = sym_popen e:( stmt_select_full / expression_list ) o sym_pclose
   { return e; }
 
-expression
+expression_and
   = f:( expression_postfix ) rest:( o expression_and_op o expression_postfix )*
   { return composeBinary(f, rest); }
 expression_and_op
   = AND
-  / OR
+
+expression
+  = f:( expression_and ) rest:( o expression_or_op o expression_and )*
+  { return composeBinary(f, rest); }
+expression_or_op
+  = OR
 
 /* END: Unary and Binary Expression */
 
