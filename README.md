@@ -57,6 +57,10 @@ sqliteParser(query, function (err, ast) {
 });
 ```
 
+### Parsing with case preserved
+
+Set `global.SQLITE_PARSER_PRESERVE_CASE = true;` to enable case preservation.
+
 ## Use parser on Node streams *(experimental)* **(since v1.0.0)**
 
 This library also includes *experimental* support as a

@@ -54,8 +54,13 @@
     return nodeToString(node).trim();
   }
 
-  function keyNode(node) {
-    return textNode(node).toLowerCase();
+  function keyNode(node, isIdentifier) {
+    const f = textNode(node);
+    if (global.SQLITE_PARSER_PRESERVE_CASE && isIdentifier) {
+      return f;
+    }
+
+    return f.toLowerCase();
   }
 
   function isArrayOkay(arr) {
@@ -2859,7 +2864,12 @@ name_char
 
 unicode_char
   = u:( "\\u" ) s:( [a-f0-9]i+ ) {
-  return foldStringWord([ u, s ]).toLowerCase();
+  const f = foldStringWord([ u, s ]);
+  if (global.SQLITE_PARSER_PRESERVE_CASE) {
+    return f;
+  }
+
+  return f.toLowerCase();
 }
 
 /**
@@ -2879,7 +2889,7 @@ name_quoted
 
 name_unquoted
   = !( reserved_words / number_digit ) n:( unicode_char / name_char )+ {
-    return keyNode(n);
+    return keyNode(n, true);
   }
 
 /**
