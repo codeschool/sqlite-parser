@@ -28,7 +28,7 @@
   }
 
   function foldStringKey(parts) {
-    return foldString(parts).toLowerCase();
+    return foldString(parts);
   }
 
   function flattenAll(arr) {
@@ -55,7 +55,7 @@
   }
 
   function keyNode(node) {
-    return textNode(node).toLowerCase();
+    return textNode(node);
   }
 
   function isArrayOkay(arr) {
@@ -2859,7 +2859,7 @@ name_char
 
 unicode_char
   = u:( "\\u" ) s:( [a-f0-9]i+ ) {
-  return foldStringWord([ u, s ]).toLowerCase();
+  return foldStringWord([ u, s ]);
 }
 
 /**

@@ -1792,7 +1792,7 @@ function peg$parse(input, options) {
     /^[a-f0-9]/i,
     peg$classExpectation([["a", "f"], ["0", "9"]], false, true),
     function(u, s) {
-      return foldStringWord([ u, s ]).toLowerCase();
+      return foldStringWord([ u, s ]);
     },
     function(n) {
        return keyNode(n);
@@ -3187,7 +3187,7 @@ function peg$parse(input, options) {
     }
 
     function foldStringKey(parts) {
-      return foldString(parts).toLowerCase();
+      return foldString(parts);
     }
 
     function flattenAll(arr) {
@@ -3214,7 +3214,7 @@ function peg$parse(input, options) {
     }
 
     function keyNode(node) {
-      return textNode(node).toLowerCase();
+      return textNode(node);
     }
 
     function isArrayOkay(arr) {
