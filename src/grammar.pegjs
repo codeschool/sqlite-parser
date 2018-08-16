@@ -28,7 +28,7 @@
   }
 
   function foldStringKey(parts) {
-    return foldString(parts).toLowerCase();
+    return foldString(parts);
   }
 
   function flattenAll(arr) {
@@ -55,7 +55,7 @@
   }
 
   function keyNode(node) {
-    return textNode(node).toLowerCase();
+    return textNode(node);
   }
 
   function isArrayOkay(arr) {
@@ -2855,11 +2855,11 @@ datatype_none "BLOB Datatype Name"
  *  identifier or alias.
  */
 name_char
-  = [a-z0-9\$\_]i
+  = [a-z0-9\$\_:]i
 
 unicode_char
   = u:( "\\u" ) s:( [a-f0-9]i+ ) {
-  return foldStringWord([ u, s ]).toLowerCase();
+  return foldStringWord([ u, s ]);
 }
 
 /**
