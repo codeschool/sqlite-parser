@@ -2855,7 +2855,7 @@ datatype_none "BLOB Datatype Name"
  *  identifier or alias.
  */
 name_char
-  = [a-z0-9\$\_]i
+  = [a-z0-9\$\_:]i
 
 unicode_char
   = u:( "\\u" ) s:( [a-f0-9]i+ ) {
