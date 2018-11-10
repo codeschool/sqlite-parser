@@ -56,7 +56,7 @@
 
   function keyNode(node, isIdentifier) {
     const f = textNode(node);
-    if (global.SQLITE_PARSER_PRESERVE_CASE && isIdentifier) {
+    if (options.preserveCase && isIdentifier) {
       return f;
     }
 
@@ -2865,7 +2865,7 @@ name_char
 unicode_char
   = u:( "\\u" ) s:( [a-f0-9]i+ ) {
   const f = foldStringWord([ u, s ]);
-  if (global.SQLITE_PARSER_PRESERVE_CASE) {
+  if (options.preserveCase) {
     return f;
   }
 

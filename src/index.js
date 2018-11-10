@@ -15,9 +15,12 @@ export default function sqliteParser(source, options, callback) {
     }
   }
   const isAsync = typeof callback === 'function';
-  const opts = { 'tracer': t, 'startRule': 'start' };
+  const opts = { 'tracer': t, 'startRule': 'start', 'preserveCase': false };
   if (options && options.streaming) {
     opts['startRule'] = 'start_streaming';
+  }
+  if (options && options.preserveCase) {
+    opts['preserveCase'] = true;
   }
   if (isAsync) {
     // Async

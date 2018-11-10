@@ -1793,7 +1793,7 @@ function peg$parse(input, options) {
     peg$classExpectation([["a", "f"], ["0", "9"]], false, true),
     function(u, s) {
       const f = foldStringWord([ u, s ]);
-      if (global.SQLITE_PARSER_PRESERVE_CASE) {
+      if (options.preserveCase) {
         return f;
       }
 
@@ -3223,7 +3223,7 @@ function peg$parse(input, options) {
 
     function keyNode(node, isIdentifier) {
       const f = textNode(node);
-      if (global.SQLITE_PARSER_PRESERVE_CASE && isIdentifier) {
+      if (options.preserveCase && isIdentifier) {
         return f;
       }
 

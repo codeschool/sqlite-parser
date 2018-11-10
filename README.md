@@ -57,9 +57,10 @@ sqliteParser(query, function (err, ast) {
 });
 ```
 
-### Parsing with case preserved
+### Preserving identifier case
 
-Set `global.SQLITE_PARSER_PRESERVE_CASE = true;` to enable case preservation.
+Pass `{ preserveCase: true }` as the second argument to the default (function)
+import of the `sqlite-parser` package.
 
 ## Use parser on Node streams *(experimental)* **(since v1.0.0)**
 
