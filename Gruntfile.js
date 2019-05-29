@@ -98,7 +98,8 @@ module.exports = function(grunt) {
           },
           alias: {
             './streaming': './.tmp/streaming-shim.js'
-          }
+          },
+	  plugin: [['browserify-derequire']],
         },
         src: ['.tmp/index.js'],
         dest: '.tmp/sqlite-parser.js'
